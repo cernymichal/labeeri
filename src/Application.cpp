@@ -6,11 +6,10 @@
 #include <imgui_impl_opengl3.h>
 #include <stdio.h>
 
+#include "imgui_windows/MenuWindow.h"
+#include "imgui_windows/LogWindow.h"
 #include "log.h"
-
-static void glfw_error_callback(int error, const char* description) {
-	fprintf(stderr, "GLFW Error %d: %s\n", error, description);
-}
+#include "Viewport.h"
 
 Application::Application() {
 }
@@ -18,21 +17,51 @@ Application::Application() {
 void Application::start() {
 	LAB_LOGH1("Application::start()");
 
+	setupGLFW();
+	setupImGui();
+
+	m_viewport = std::make_unique<Viewport>(*this);
+
+	m_imguiWindows.push_back(std::make_unique<MenuWindow>(*this));
+	m_imguiWindows.push_back(std::make_unique<LogWindow>(*this));
+
+	mainLoop();
+
+	cleanup();
+}
+
+GLFWwindow* Application::window() const
+{
+	return m_window;
+}
+
+std::pair<int, int> Application::frameBufferSize() const
+{
+	int width, height;
+	glfwGetFramebufferSize(m_window, &width, &height);
+	return { width, height };
+}
+
+static void glfw_error_callback(int error, const char* description) {
+	fprintf(stderr, "GLFW Error %d: %s\n", error, description);
+}
+
+void Application::setupGLFW()
+{
 	glfwSetErrorCallback(glfw_error_callback);
 
 	// Initialize the library
 	if (!glfwInit())
 		throw std::runtime_error("glfwInit failed");
 
-	// GL 3.0 + GLSL 130
-	const char* glsl_version = "#version 130";
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-	// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+	// GL version hints
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GL_VERSION_MAJOR);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION_MINOR);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);     // 3.2+ only
 	// glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 
 	// Create window with graphics context
-	m_window = glfwCreateWindow(1600, 1200, "Hello World", NULL, NULL);
+	m_window = glfwCreateWindow(1600, 1200, "labeeri", NULL, NULL);
 	if (!m_window) {
 		glfwTerminate();
 		throw std::runtime_error("glfwCreateWindow failed");
@@ -41,38 +70,39 @@ void Application::start() {
 	// Make the window's context current
 	glfwMakeContextCurrent(m_window);
 
-	glfwSwapInterval(1);  // Enable vsync
+	// Enable vsync
+	glfwSwapInterval(1);
+}
 
-	// Setup Dear ImGui context
+void Application::setupImGui()
+{
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	m_ImGuiContext = &ImGui::GetIO();
-	(void)*m_ImGuiContext;
-	m_ImGuiContext->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-	m_ImGuiContext->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-	m_ImGuiContext->ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
-	m_ImGuiContext->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport / Platform Windows
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport / Platform Windows
 	// io.ConfigViewportsNoAutoMerge = true;
 	// io.ConfigViewportsNoTaskBarIcon = true;
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
-	// ImGui::StyleColorsLight();
 
 	// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 	ImGuiStyle& style = ImGui::GetStyle();
-	if (m_ImGuiContext->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
 		style.WindowRounding = 0.0f;
 		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 	}
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplGlfw_InitForOpenGL(m_window, true);
-	ImGui_ImplOpenGL3_Init(glsl_version);
+	ImGui_ImplOpenGL3_Init(GLSL_VERSION);
+}
 
-	ImVec4 clear_color = ImVec4(1.0f, 0.0f, 1.0f, 1.00f);
-
-	// Loop until the user closes the window
+void Application::mainLoop()
+{
 	while (!glfwWindowShouldClose(m_window)) {
 		// Poll and handle events (inputs, window resize, etc.)
 		// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -84,24 +114,20 @@ void Application::start() {
 		// Start the Dear ImGui frame
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
+
 		ImGui::NewFrame();
-
-		menuWindow();
-		logWindow();
-
-		// Rendering
+		for (auto& window : m_imguiWindows)
+			window->render();
 		ImGui::Render();
-		int display_w, display_h;
-		glfwGetFramebufferSize(m_window, &display_w, &display_h);
-		glViewport(0, 0, display_w, display_h);
-		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-		glClear(GL_COLOR_BUFFER_BIT);
+
+		m_viewport->render();
+
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		// Update and Render additional Platform Windows
 		// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
 		//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-		if (m_ImGuiContext->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
@@ -110,48 +136,14 @@ void Application::start() {
 
 		glfwSwapBuffers(m_window);
 	}
+}
 
-	// Cleanup
+void Application::cleanup()
+{
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
-}
-
-void Application::menuWindow() {
-	ImGui::Begin("Menu");
-
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / m_ImGuiContext->Framerate, m_ImGuiContext->Framerate);
-
-	ImGui::End();
-}
-
-void Application::logWindow() {
-	ImGui::Begin("Log");
-
-	bool autoScrollChanged = ImGui::Checkbox("Auto-scroll", &m_autoScroll);
-	ImGui::SameLine(ImGui::GetWindowWidth() - 100);
-	if (ImGui::SmallButton("Clear"))
-		LAB_LOGSTREAM.str("");
-	ImGui::SameLine();
-	if (ImGui::SmallButton("Copy"))
-		glfwSetClipboardString(m_window, LAB_LOGSTREAM.str().c_str());
-
-	ImGui::Separator();
-
-	ImGui::BeginChild("Log content");
-
-	ImGui::TextUnformatted(LAB_LOGSTREAM.str().c_str());
-
-	if (ImGui::GetScrollY() != ImGui::GetScrollMaxY() && !autoScrollChanged)
-		m_autoScroll = false;
-
-	if (m_autoScroll)
-		ImGui::SetScrollHereY(1.0f);
-
-	ImGui::EndChild();
-
-	ImGui::End();
 }

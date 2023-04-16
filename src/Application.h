@@ -1,7 +1,17 @@
 #pragma once
 
+#include <utility>
+#include <list>
+#include <memory>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
+
+#include "Renderable.h"
+
+// GL 4.3 + GLSL 430
+inline const int GL_VERSION_MAJOR = 4;
+inline const int GL_VERSION_MINOR = 3;
+inline const char* const GLSL_VERSION = "#version 430";
 
 /**
  * @brief TODO
@@ -21,15 +31,35 @@ public:
 	/**
 	 * @brief TODO
 	 */
-	void menuWindow();
+	GLFWwindow* window() const;
 
 	/**
 	 * @brief TODO
 	 */
-	void logWindow();
+	std::pair<int, int> frameBufferSize() const;
 
 private:
 	GLFWwindow* m_window = nullptr;
-	ImGuiIO* m_ImGuiContext = nullptr;
-	bool m_autoScroll = true;
+	std::list<std::unique_ptr<Renderable>> m_imguiWindows;
+	std::unique_ptr<Renderable> m_viewport;
+
+	/**
+	 * @brief TODO
+	 */
+	void setupGLFW();
+
+	/**
+	 * @brief TODO
+	 */
+	void setupImGui();
+
+	/**
+	 * @brief TODO
+	 */
+	void mainLoop();
+
+	/**
+	 * @brief TODO
+	 */
+	void cleanup();
 };
