@@ -137,6 +137,9 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\imgui_windows\LogWindow.cpp" />
+    <ClCompile Include="src\scene\Entity.cpp" />
+    <ClCompile Include="src\scene\Scene.cpp" />
+    <ClCompile Include="src\scene\Transform.cpp" />
     <ClCompile Include="src\Viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +148,10 @@
     <ClInclude Include="src\log.h" />
     <ClInclude Include="src\imgui_windows\LogWindow.h" />
     <ClInclude Include="src\Renderable.h" />
+    <ClInclude Include="src\scene\Entity.h" />
+    <ClInclude Include="src\scene\Scene.h" />
+    <ClInclude Include="src\scene\Transform.h" />
+    <ClInclude Include="src\shaders\Material.h" />
     <ClInclude Include="src\Viewport.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

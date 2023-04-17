@@ -3,7 +3,7 @@
 #include "Application.h"
 
 int main(int argc, char** argv) {
-	Application().start();
+    Application().start();
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

@@ -7,17 +7,17 @@ class Application;
  */
 class Renderable {
 public:
-	/**
-	 * @brief TODO
-	 */
-	Renderable(Application& application) : m_application(application) {
-	}
+    /**
+     * @brief TODO
+     */
+    Renderable(Application& application) : m_application(application) {
+    }
 
-	/**
-	 * @brief TODO
-	 */
-	virtual void render() = 0;
+    /**
+     * @brief TODO
+     */
+    virtual void render() = 0;
 
 protected:
-	Application& m_application;
+    Application& m_application;
 };

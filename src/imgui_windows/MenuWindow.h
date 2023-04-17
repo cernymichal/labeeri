@@ -5,16 +5,15 @@
 /**
  * @brief TODO
  */
-class MenuWindow : public Renderable
-{
+class MenuWindow : public Renderable {
 public:
-	/**
-	 * @brief TODO
-	 */
-	MenuWindow(Application& application);
+    /**
+     * @brief TODO
+     */
+    MenuWindow(Application& application);
 
-	/**
-	 * @brief TODO
-	 */
-	void render() override;
+    /**
+     * @brief TODO
+     */
+    void render() override;
 };

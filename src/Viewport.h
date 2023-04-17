@@ -5,18 +5,15 @@
 /**
  * @brief TODO
  */
-class Viewport :public Renderable {
+class Viewport : public Renderable {
 public:
-	/**
-	 * @brief TODO
-	 */
-	Viewport(Application& application);
+    /**
+     * @brief TODO
+     */
+    Viewport(Application& application);
 
-	/**
-	 * @brief TODO
-	 */
-	void render() override;
-
-private:
+    /**
+     * @brief TODO
+     */
+    void render() override;
 };
-

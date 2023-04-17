@@ -5,19 +5,18 @@
 /**
  * @brief TODO
  */
-class LogWindow : public Renderable
-{
+class LogWindow : public Renderable {
 public:
-	/**
-	 * @brief TODO
-	 */
-	LogWindow(Application& application);
+    /**
+     * @brief TODO
+     */
+    LogWindow(Application& application);
 
-	/**
-	 * @brief TODO
-	 */
-	void render() override;
+    /**
+     * @brief TODO
+     */
+    void render() override;
 
 private:
-	bool m_autoScroll = true;
+    bool m_autoScroll = true;
 };

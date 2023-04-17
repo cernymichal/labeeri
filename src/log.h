@@ -26,18 +26,18 @@ inline std::ostringstream LAB_LOGSTREAM;
  */
 #define LAB_LOG(x) LAB_LOGSTREAM << x << std::endl
 
- /**
-  * @brief log message as a large header
-  *
-  * @param[in] x printable value
-  */
+/**
+ * @brief log message as a large header
+ *
+ * @param[in] x printable value
+ */
 #define LAB_LOGH1(x) LAB_LOGSTREAM << "\n\n" \
                                    << "==================== " << x << " ====================" << std::endl
 
-  /**
-   * @brief log message as a header
-   *
-   * @param[in] x printable value
-   */
+/**
+ * @brief log message as a header
+ *
+ * @param[in] x printable value
+ */
 #define LAB_LOGH2(x) LAB_LOGSTREAM << "\n" \
                                    << "=> " << x << std::endl

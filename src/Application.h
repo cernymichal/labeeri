@@ -1,10 +1,11 @@
 #pragma once
 
-#include <utility>
-#include <list>
-#include <memory>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
+
+#include <list>
+#include <memory>
+#include <utility>
 
 #include "Renderable.h"
 
@@ -18,48 +19,48 @@ inline const char* const GLSL_VERSION = "#version 430";
  */
 class Application {
 public:
-	/**
-	 * @brief TODO
-	 */
-	Application();
+    /**
+     * @brief TODO
+     */
+    Application();
 
-	/**
-	 * @brief TODO
-	 */
-	void start();
+    /**
+     * @brief TODO
+     */
+    void start();
 
-	/**
-	 * @brief TODO
-	 */
-	GLFWwindow* window() const;
+    /**
+     * @brief TODO
+     */
+    GLFWwindow* window() const;
 
-	/**
-	 * @brief TODO
-	 */
-	std::pair<int, int> frameBufferSize() const;
+    /**
+     * @brief TODO
+     */
+    std::pair<int, int> frameBufferSize() const;
 
 private:
-	GLFWwindow* m_window = nullptr;
-	std::list<std::unique_ptr<Renderable>> m_imguiWindows;
-	std::unique_ptr<Renderable> m_viewport;
+    GLFWwindow* m_window = nullptr;
+    std::list<std::unique_ptr<Renderable>> m_imguiWindows;
+    std::unique_ptr<Renderable> m_viewport;
 
-	/**
-	 * @brief TODO
-	 */
-	void setupGLFW();
+    /**
+     * @brief TODO
+     */
+    void setupGLFW();
 
-	/**
-	 * @brief TODO
-	 */
-	void setupImGui();
+    /**
+     * @brief TODO
+     */
+    void setupImGui();
 
-	/**
-	 * @brief TODO
-	 */
-	void mainLoop();
+    /**
+     * @brief TODO
+     */
+    void mainLoop();
 
-	/**
-	 * @brief TODO
-	 */
-	void cleanup();
+    /**
+     * @brief TODO
+     */
+    void cleanup();
 };
