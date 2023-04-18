@@ -2,10 +2,18 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+constexpr auto MAX_PROGRAM_SHADER_COUNT = 16;
+
 Shader::Shader(GLuint program) : m_program(program) {
 }
 
 Shader::~Shader() {
+    int shaderCount = 0;
+    GLuint shaders[MAX_PROGRAM_SHADER_COUNT];
+    glGetAttachedShaders(m_program, MAX_PROGRAM_SHADER_COUNT, &shaderCount, shaders);
+    for (int i = 0; i < shaderCount; i++)
+        glDeleteShader(shaders[i]);
+
     glDeleteProgram(m_program);
 }
 
@@ -35,7 +43,7 @@ void Material::bindUniforms(double time, const glm::mat4& modelMatrix, const glm
         glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
     glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelRotationMatrix));
 
-    glUniform1f(m_shader->getUniformLocation("time"), time);
+    glUniform1f(m_shader->getUniformLocation("time"), (float)time);
     glUniformMatrix4fv(m_shader->getUniformLocation("PVM_matrix"), 1, GL_FALSE, glm::value_ptr(PVM));
     glUniformMatrix4fv(m_shader->getUniformLocation("view_matrix"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
     glUniformMatrix4fv(m_shader->getUniformLocation("model_matrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));

@@ -13,9 +13,9 @@
 #include "scene/Scene.h"
 
 // GL 4.3 + GLSL 430
-inline const int GL_VERSION_MAJOR = 4;
-inline const int GL_VERSION_MINOR = 3;
-inline const char* const GLSL_VERSION = "#version 430";
+constexpr auto GL_VERSION_MAJOR = 4;
+constexpr auto GL_VERSION_MINOR = 3;
+constexpr auto GLSL_VERSION = "#version 430";
 
 /**
  * @brief TODO

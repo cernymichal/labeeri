@@ -23,6 +23,12 @@ void Application::start() {
     auto cameraEntity = std::make_shared<Entity>();
     m_scene->addEntity(cameraEntity);
     m_viewport->m_camera = std::make_shared<Camera>(cameraEntity->transform());
+    cameraEntity->m_onUpdate = [this](Entity& self, float deltaTime) {
+        LAB_LOG("Update");
+    };
+    cameraEntity->m_onFixedUpdate = [this](Entity& self) {
+        LAB_LOG("FixedUpdate");
+    };
 
     m_imguiWindows.push_back(std::make_unique<MenuWindow>(*this));
     m_imguiWindows.push_back(std::make_unique<LogWindow>(*this));
@@ -110,9 +116,6 @@ void Application::setupImGui() {
 void Application::mainLoop() {
     LAB_LOGH1("Application::mainLoop()");
 
-    double currentTime = glfwGetTime();
-    double lastTime = currentTime;
-
     while (!glfwWindowShouldClose(m_window)) {
         // Poll and handle events (inputs, window resize, etc.)
         // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -121,12 +124,10 @@ void Application::mainLoop() {
         // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
         glfwPollEvents();
 
-        currentTime = glfwGetTime();
+        double currentTime = glfwGetTime();
 
-        scene().update(currentTime, currentTime - lastTime);
+        scene().update(currentTime);
         render();
-
-        lastTime = currentTime;
     }
 }
 

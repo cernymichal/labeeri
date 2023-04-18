@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-inline const double FIXED_UPDATE_INTERVAL = 1.0 / 100.0; // 100 Hz
+constexpr auto FIXED_UPDATE_INTERVAL = (1.0 / 50.0);  // 50 Hz
 
 class Scene {
 public:
@@ -34,7 +34,7 @@ public:
     /**
      * @brief TODO
      */
-    void update(double currentTime, double deltaTime);
+    void update(double currentTime);
 
 private:
     std::list<std::shared_ptr<Entity>> m_entities;

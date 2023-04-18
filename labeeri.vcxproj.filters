@@ -45,6 +45,9 @@
     <ClCompile Include="src\shaders\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\load.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h">
@@ -80,5 +83,12 @@
     <ClInclude Include="src\shaders\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\load.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\shaders\basic.vert" />
+    <None Include="src\shaders\basic.frag" />
   </ItemGroup>
 </Project>
