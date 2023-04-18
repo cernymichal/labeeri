@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <list>
 #include <memory>
 
 class Entity;
@@ -15,6 +16,11 @@ public:
      * @brief TODO
      */
     Transform();
+
+    /**
+     * @brief TODO
+     */
+    ~Transform();
 
     /**
      * @brief TODO
@@ -44,6 +50,11 @@ public:
     /**
      * @brief TODO
      */
+    glm::vec3 worldPosition();
+
+    /**
+     * @brief TODO
+     */
     glm::quat rotation() const;
 
     /**
@@ -54,26 +65,38 @@ public:
     /**
      * @brief TODO
      */
-    const glm::mat4& modelMatrix() const;
+    const glm::mat4& modelMatrix();
 
 private:
     glm::vec3 m_position = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::quat m_rotation = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
     glm::vec3 m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
-    bool m_destroyed = false;
 
-    glm::mat4 m_localModelMatrix;
-    glm::mat4 m_globalModelMatrix;
+    glm::mat4 m_modelMatrix = glm::mat4(1.0);
+    bool m_modelMatrixValid = true;
+
+    std::shared_ptr<Transform> m_parent;
+    std::list<Transform*> m_children;
 
     /**
      * @brief TODO
      */
-    std::shared_ptr<Transform> m_parent;
+    bool modelMatrixValid() const;
 
     /**
      * @brief TODO
      */
     void updateModelMatrix();
+
+    /**
+     * @brief TODO
+     */
+    void removeParent();
+
+    /**
+     * @brief TODO
+     */
+    void destroy();
 
     friend Entity;
 };

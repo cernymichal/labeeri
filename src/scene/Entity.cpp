@@ -4,7 +4,7 @@ Entity::Entity() {
 }
 
 Entity::~Entity() {
-    m_transform->m_destroyed = true;
+    m_transform->destroy();
 }
 
 const std::shared_ptr<Transform>& Entity::transform() const {
