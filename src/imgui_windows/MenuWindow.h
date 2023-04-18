@@ -16,4 +16,7 @@ public:
      * @brief TODO
      */
     void render() override;
+
+private:
+    bool m_VSync = true;
 };

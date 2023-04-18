@@ -12,6 +12,17 @@ void Transform::setPosition(const glm::vec3& position) {
     m_modelMatrixValid = false;
 }
 
+void Transform::setWorldPosition(const glm::vec3& position) {
+    if (!m_parent) {
+        setPosition(position);
+        return;
+    }
+
+    glm::mat4 parentInverseModelMatrix = glm::inverse(m_parent->modelMatrix());
+    glm::vec3 localPosition = glm::vec3(parentInverseModelMatrix * glm::vec4(position, 1.0f));
+    setPosition(localPosition);
+}
+
 void Transform::setRotation(const glm::quat& rotation) {
     m_rotation = rotation;
     m_modelMatrixValid = false;
@@ -36,9 +47,7 @@ void Transform::setParent(const std::shared_ptr<Transform>& parent) {
 
     m_parent->m_children.push_back(this);
 
-    glm::mat4 parentInverseModelMatrix = glm::inverse(m_parent->modelMatrix());
-    glm::vec3 localPosition = glm::vec3(parentInverseModelMatrix * glm::vec4(m_position, 1.0f));
-    setPosition(localPosition);
+    setWorldPosition(position());
 }
 
 glm::vec3 Transform::position() const {
@@ -62,6 +71,24 @@ const glm::mat4& Transform::modelMatrix() {
         updateModelMatrix();
 
     return m_modelMatrix;
+}
+
+glm::vec3 Transform::forward() {
+    return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f)));
+}
+
+glm::vec3 Transform::up() {
+    return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f)));
+}
+
+glm::vec3 Transform::right() {
+    return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f)));
+}
+
+Transform& Transform::operator=(Transform& other) {
+    setWorldPosition(other.worldPosition());
+    setPosition(other.position());
+    setRotation(other.rotation());
 }
 
 bool Transform::modelMatrixValid() const {
@@ -104,5 +131,5 @@ void Transform::destroy() {
         child->setParent(m_parent);
 
     m_children.clear();
-	removeParent();
+    removeParent();
 }

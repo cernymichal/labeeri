@@ -3,16 +3,45 @@
 #include "Application.h"
 #include "log.h"
 
+Camera::Camera(const std::shared_ptr<Transform>& transform) : m_transform(transform) {
+}
+
+const std::shared_ptr<Transform>& Camera::transform() const {
+    // TODO: insert return statement here
+}
+
+glm::mat4 Camera::viewMatrix() const {
+    glm::vec3 cameraPosition = m_transform->worldPosition();
+    glm::vec3 center = cameraPosition + m_transform->forward();
+
+    return glm::lookAt(cameraPosition, center, m_transform->up());
+}
+
+glm::mat4 Camera::projectionMatrix(int viewportWidth, int viewportHeight) const {
+    float aspectRatio = (float)viewportWidth / (float)viewportWidth;
+
+    return glm::perspective(glm::radians(m_FOV), aspectRatio, m_near, m_far);
+}
+
 Viewport::Viewport(Application& application) : Renderable(application) {
     LAB_LOGH2("Viewport::Viewport()");
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 }
 
 void Viewport::render() {
-    auto [display_w, display_h] = m_application.frameBufferSize();
+    auto [width, height] = m_application.frameBufferSize();
+    glViewport(0, 0, width, height);
 
-    ImVec4 clear_color = ImVec4(1.0f, 0.0f, 1.0f, 1.00f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glViewport(0, 0, display_w, display_h);
-    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
+    auto viewMatrix = m_camera->viewMatrix();
+    auto projectionMatrix = m_camera->projectionMatrix(width, height);
+
+    for (auto& entity : m_application.scene().entities()) {
+        if (entity->m_model)
+            entity->m_model->draw(m_application.scene().time(), entity->transform()->modelMatrix(), viewMatrix, projectionMatrix);
+    }
 }

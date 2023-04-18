@@ -3,10 +3,10 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-#include "Viewport.h"
 #include "imgui_windows/LogWindow.h"
 #include "imgui_windows/MenuWindow.h"
 #include "log.h"
+#include "scene/Entity.h"
 
 Application::Application() {
 }
@@ -17,7 +17,12 @@ void Application::start() {
     setupGLFW();
     setupImGui();
 
+    m_scene = std::make_unique<Scene>();
     m_viewport = std::make_unique<Viewport>(*this);
+
+    auto cameraEntity = std::make_shared<Entity>();
+    m_scene->addEntity(cameraEntity);
+    m_viewport->m_camera = std::make_shared<Camera>(cameraEntity->transform());
 
     m_imguiWindows.push_back(std::make_unique<MenuWindow>(*this));
     m_imguiWindows.push_back(std::make_unique<LogWindow>(*this));
@@ -25,6 +30,10 @@ void Application::start() {
     mainLoop();
 
     cleanup();
+}
+
+Scene& Application::scene() const {
+    return *m_scene;
 }
 
 GLFWwindow* Application::window() const {
@@ -67,7 +76,7 @@ void Application::setupGLFW() {
     glfwMakeContextCurrent(m_window);
 
     // Enable vsync
-    glfwSwapInterval(1);
+    // glfwSwapInterval(1);
 }
 
 void Application::setupImGui() {
@@ -101,6 +110,9 @@ void Application::setupImGui() {
 void Application::mainLoop() {
     LAB_LOGH1("Application::mainLoop()");
 
+    double currentTime = glfwGetTime();
+    double lastTime = currentTime;
+
     while (!glfwWindowShouldClose(m_window)) {
         // Poll and handle events (inputs, window resize, etc.)
         // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -109,31 +121,40 @@ void Application::mainLoop() {
         // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
         glfwPollEvents();
 
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
+        currentTime = glfwGetTime();
 
-        ImGui::NewFrame();
-        for (auto& window : m_imguiWindows)
-            window->render();
-        ImGui::Render();
+        scene().update(currentTime, currentTime - lastTime);
+        render();
 
-        m_viewport->render();
-
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        // Update and Render additional Platform Windows
-        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-        //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-        if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-            GLFWwindow* backup_current_context = glfwGetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            glfwMakeContextCurrent(backup_current_context);
-        }
-
-        glfwSwapBuffers(m_window);
+        lastTime = currentTime;
     }
+}
+
+void Application::render() {
+    // Start the Dear ImGui frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+
+    ImGui::NewFrame();
+    for (auto& window : m_imguiWindows)
+        window->render();
+    ImGui::Render();
+
+    m_viewport->render();
+
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    // Update and Render additional Platform Windows
+    // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+    //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        glfwMakeContextCurrent(backup_current_context);
+    }
+
+    glfwSwapBuffers(m_window);
 }
 
 void Application::cleanup() {

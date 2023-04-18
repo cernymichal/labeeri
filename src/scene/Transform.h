@@ -30,6 +30,11 @@ public:
     /**
      * @brief TODO
      */
+    void setWorldPosition(const glm::vec3& position);
+
+    /**
+     * @brief TODO
+     */
     void setRotation(const glm::quat& rotation);
 
     /**
@@ -66,6 +71,27 @@ public:
      * @brief TODO
      */
     const glm::mat4& modelMatrix();
+
+    /**
+     * @brief TODO
+     */
+
+    glm::vec3 forward();
+
+    /**
+     * @brief TODO
+     */
+    glm::vec3 up();
+
+    /**
+     * @brief TODO
+     */
+    glm::vec3 right();
+
+    /**
+     * @brief TODO
+     */
+    Transform& operator=(Transform& other);
 
 private:
     glm::vec3 m_position = glm::vec3(0.0f, 0.0f, 0.0f);
