@@ -4,20 +4,27 @@
 
 constexpr auto MAX_PROGRAM_SHADER_COUNT = 16;
 
-Shader::Shader(GLuint program) : m_program(program) {
+ShaderProgram::ShaderProgram(GLuint program) : m_program(program) {
 }
 
-Shader::~Shader() {
+ShaderProgram::ShaderProgram(ShaderProgram&& other) noexcept : m_program(other.m_program) {
+    other.m_program = 0;
+}
+
+ShaderProgram::~ShaderProgram() {
+    // individual shaders are deleted when the program is linked
+    /*
     int shaderCount = 0;
     GLuint shaders[MAX_PROGRAM_SHADER_COUNT];
     glGetAttachedShaders(m_program, MAX_PROGRAM_SHADER_COUNT, &shaderCount, shaders);
     for (int i = 0; i < shaderCount; i++)
         glDeleteShader(shaders[i]);
+    */
 
     glDeleteProgram(m_program);
 }
 
-GLint Shader::getUniformLocation(const char* name) {
+GLint ShaderProgram::getUniformLocation(const char* name) {
     auto iter = m_uniforms.find(name);
 
     if (iter != m_uniforms.end())
@@ -30,7 +37,11 @@ GLint Shader::getUniformLocation(const char* name) {
     return location;
 }
 
-Material::Material(const std::shared_ptr<Shader>& shader) : m_shader(shader) {
+ShaderProgram::operator GLint() const {
+    return m_program;
+}
+
+Material::Material(const std::shared_ptr<ShaderProgram>& shader) : m_shader(shader) {
 }
 
 void Material::bindUniforms(double time, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {

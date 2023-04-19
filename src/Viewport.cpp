@@ -7,7 +7,7 @@ Camera::Camera(const std::shared_ptr<Transform>& transform) : m_transform(transf
 }
 
 const std::shared_ptr<Transform>& Camera::transform() const {
-    // TODO: insert return statement here
+    return m_transform;
 }
 
 glm::mat4 Camera::viewMatrix() const {

@@ -9,26 +9,37 @@
 /**
  * @brief TODO
  */
-class Shader {
+class ShaderProgram {
 public:
-    const GLuint m_program;
+    /**
+     * @brief TODO
+     */
+    ShaderProgram(GLuint program);
+
+    ShaderProgram(const ShaderProgram&) = delete;
 
     /**
      * @brief TODO
      */
-    Shader(GLuint program);
+    ShaderProgram(ShaderProgram&& other) noexcept;
 
     /**
      * @brief TODO
      */
-    ~Shader();
+    ~ShaderProgram();
 
     /**
      * @brief TODO
      */
     GLint getUniformLocation(const char* name);
 
+    /**
+     * @brief TODO
+     */
+    operator GLint() const;
+
 private:
+    GLuint m_program;
     std::unordered_map<const char*, GLint> m_uniforms;
 };
 
@@ -37,12 +48,12 @@ private:
  */
 class Material {
 public:
-    std::shared_ptr<Shader> m_shader;
+    std::shared_ptr<ShaderProgram> m_shader;
 
     /**
      * @brief TODO
      */
-    Material(const std::shared_ptr<Shader>& shader);
+    Material(const std::shared_ptr<ShaderProgram>& shader);
 
     /**
      * @brief TODO

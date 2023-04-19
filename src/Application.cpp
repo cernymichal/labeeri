@@ -5,6 +5,7 @@
 
 #include "imgui_windows/LogWindow.h"
 #include "imgui_windows/MenuWindow.h"
+#include "load.h"
 #include "log.h"
 #include "scene/Entity.h"
 
@@ -15,6 +16,7 @@ void Application::start() {
     LAB_LOGH2("Application::start()");
 
     setupGLFW();
+    setupGL();
     setupImGui();
 
     m_scene = std::make_unique<Scene>();
@@ -23,12 +25,20 @@ void Application::start() {
     auto cameraEntity = std::make_shared<Entity>();
     m_scene->addEntity(cameraEntity);
     m_viewport->m_camera = std::make_shared<Camera>(cameraEntity->transform());
+    /*
     cameraEntity->m_onUpdate = [this](Entity& self, float deltaTime) {
         LAB_LOG("Update");
     };
     cameraEntity->m_onFixedUpdate = [this](Entity& self) {
         LAB_LOG("FixedUpdate");
     };
+    */
+
+    try {
+        LAB_LOG(load::shaderProgram("src/shaders/basic.vert", "src/shaders/basic.frag"));
+    }
+    catch (const std::exception&) {
+    }
 
     m_imguiWindows.push_back(std::make_unique<MenuWindow>(*this));
     m_imguiWindows.push_back(std::make_unique<LogWindow>(*this));
@@ -83,6 +93,14 @@ void Application::setupGLFW() {
 
     // Enable vsync
     // glfwSwapInterval(1);
+}
+
+void Application::setupGL() {
+    LAB_LOGH2("Application::setupGL()");
+
+    GLenum status = glewInit();
+    if (status != GLEW_OK)
+        throw std::runtime_error("glewInit failed");
 }
 
 void Application::setupImGui() {

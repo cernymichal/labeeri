@@ -20,7 +20,7 @@ Model::Model(std::shared_ptr<Material> material, std::shared_ptr<Mesh> mesh) : m
 }
 
 void Model::draw(double time, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const {
-    glUseProgram(m_material->m_shader->m_program);
+    glUseProgram(*m_material->m_shader);
 
     m_material->bindUniforms(time, modelMatrix, viewMatrix, projectionMatrix);
     m_mesh->draw();

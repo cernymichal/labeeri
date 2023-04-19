@@ -62,6 +62,11 @@ private:
     /**
      * @brief TODO
      */
+    void setupGL();
+
+    /**
+     * @brief TODO
+     */
     void setupImGui();
 
     /**

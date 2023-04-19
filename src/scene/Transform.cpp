@@ -89,6 +89,7 @@ Transform& Transform::operator=(Transform& other) {
     setWorldPosition(other.worldPosition());
     setPosition(other.position());
     setRotation(other.rotation());
+    return *this;
 }
 
 bool Transform::modelMatrixValid() const {

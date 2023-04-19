@@ -7,7 +7,7 @@
 
 namespace load {
 
-Shader shader(const char* vertexPath, const char* fragmentPath);
+ShaderProgram shaderProgram(const char* vertexPath, const char* fragmentPath);
 
 Mesh mesh(const char* filePath);
 
