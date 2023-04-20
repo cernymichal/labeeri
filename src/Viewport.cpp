@@ -17,8 +17,8 @@ glm::mat4 Camera::viewMatrix() const {
     return glm::lookAt(cameraPosition, center, m_transform->up());
 }
 
-glm::mat4 Camera::projectionMatrix(int viewportWidth, int viewportHeight) const {
-    float aspectRatio = (float)viewportWidth / (float)viewportWidth;
+glm::mat4 Camera::projectionMatrix(int width, int height) const {
+    float aspectRatio = (float)width / (float)height;
 
     return glm::perspective(glm::radians(m_FOV), aspectRatio, m_near, m_far);
 }
@@ -33,9 +33,9 @@ Viewport::Viewport(Application& application) : Renderable(application) {
 
 void Viewport::render() {
     auto [width, height] = m_application.frameBufferSize();
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, width, height);  // TODO move to callback
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // TODO remove color clear
 
     auto viewMatrix = m_camera->viewMatrix();
     auto projectionMatrix = m_camera->projectionMatrix(width, height);

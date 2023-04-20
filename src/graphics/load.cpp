@@ -171,7 +171,8 @@ Mesh loadMesh(const char* filePath) {
         glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(float) * vertexCount, 3 * sizeof(float) * vertexCount, assimpMesh->mNormals);
     // UVs
     if (assimpMesh->HasTextureCoords(0)) {
-        std::vector<float> UVs(2UL * vertexCount);
+        std::vector<float> UVs;
+        UVs.reserve((size_t)vertexCount * 2);
 
         for (size_t i = 0; i < vertexCount; i++) {
             aiVector3D vector = (assimpMesh->mTextureCoords[0])[i];
@@ -186,7 +187,9 @@ Mesh loadMesh(const char* filePath) {
 
     // EBO
     {
-        std::vector<unsigned int> indices(3UL * assimpMesh->mNumFaces);
+        std::vector<unsigned int> indices;
+        indices.reserve((size_t)assimpMesh->mNumFaces * 3);
+
         for (size_t i = 0; i < assimpMesh->mNumFaces; i++) {
             indices.push_back(assimpMesh->mFaces[i].mIndices[0]);
             indices.push_back(assimpMesh->mFaces[i].mIndices[1]);

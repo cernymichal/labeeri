@@ -8,9 +8,9 @@
  */
 class Camera {
 public:
-    float m_FOV = 90.0f;
+    float m_FOV = 95.0f;
     float m_near = 0.1f;
-    float m_far = 10.0f;
+    float m_far = 50.0f;
 
     /**
      * @brief TODO

@@ -26,6 +26,9 @@ void Application::start() {
         auto cameraEntity = std::make_shared<Entity>();
         m_scene->addEntity(cameraEntity);
         m_viewport->m_camera = std::make_shared<Camera>(cameraEntity->transform());
+        cameraEntity->transform()->setPosition(glm::vec3(3, 3, 3));
+        cameraEntity->transform()->setRotation(glm::vec3(0, glm::radians(45.0f), 0));
+        cameraEntity->transform()->setRotation(cameraEntity->transform()->rotation() * glm::quat(glm::vec3(glm::radians(-40.0f), 0, 0)));
 
         auto cube = std::make_shared<Entity>();
         cube->m_model = Models::basicCube();
