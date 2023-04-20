@@ -2,6 +2,8 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+#include "../log.h"
+
 constexpr auto MAX_PROGRAM_SHADER_COUNT = 16;
 
 ShaderProgram::ShaderProgram(GLuint program) : m_program(program) {
@@ -59,4 +61,6 @@ void Material::bindUniforms(double time, const glm::mat4& modelMatrix, const glm
     glUniformMatrix4fv(m_shader->getUniformLocation("view_matrix"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
     glUniformMatrix4fv(m_shader->getUniformLocation("model_matrix"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
     glUniformMatrix4fv(m_shader->getUniformLocation("normal_matrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
+
+    LAB_LOG_OGL_ERROR();
 }

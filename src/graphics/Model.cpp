@@ -1,10 +1,20 @@
 #include "Model.h"
 
+#include "../log.h"
+
 Mesh::Mesh(GLuint vertexArrayObject, GLuint vertexBufferObject, GLuint elementBufferObject, uint32_t triangleCount)
     : m_elementBufferObject(elementBufferObject), m_vertexBufferObject(vertexBufferObject), m_vertexArrayObject(vertexArrayObject), m_triangleCount(triangleCount) {
 }
 
+Mesh::Mesh(Mesh&& other) noexcept
+    : m_elementBufferObject(other.m_elementBufferObject), m_vertexBufferObject(other.m_vertexBufferObject), m_vertexArrayObject(other.m_vertexArrayObject), m_triangleCount(other.m_triangleCount) {
+    other.m_moved = true;
+}
+
 Mesh::~Mesh() {
+    if (m_moved)
+        return;
+
     glDeleteVertexArrays(1, &m_vertexArrayObject);
     glDeleteBuffers(1, &m_elementBufferObject);
     glDeleteBuffers(1, &m_vertexBufferObject);
@@ -14,6 +24,8 @@ void Mesh::draw() const {
     glBindVertexArray(m_vertexArrayObject);
     glDrawElements(GL_TRIANGLES, m_triangleCount * 3, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
+
+    LAB_LOG_OGL_ERROR();
 }
 
 Model::Model(std::shared_ptr<Material> material, std::shared_ptr<Mesh> mesh) : m_material(material), m_mesh(mesh) {
@@ -26,4 +38,6 @@ void Model::draw(double time, const glm::mat4& modelMatrix, const glm::mat4& vie
     m_mesh->draw();
 
     glUseProgram(0);
+
+    LAB_LOG_OGL_ERROR();
 }

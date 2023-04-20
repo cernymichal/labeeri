@@ -4,6 +4,9 @@
 
 constexpr auto FIXED_UPDATE_INTERVAL = (1.0 / 50.0);  // 50 Hz
 
+/**
+ * @brief TODO
+ */
 class Scene {
 public:
     /**

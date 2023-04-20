@@ -41,3 +41,13 @@ inline std::ostringstream LAB_LOGSTREAM;
  */
 #define LAB_LOGH2(x) LAB_LOGSTREAM << "\n" \
                                    << "=> " << x << std::endl
+
+/**
+ * @brief TODO
+ */
+#define LAB_LOG_OGL_ERROR() LAB_DEBUG_ONLY(logOGLError(__FILE__, __LINE__))
+
+/**
+ * @brief TODO
+ */
+void logOGLError(const char* file, int line);

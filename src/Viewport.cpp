@@ -44,4 +44,6 @@ void Viewport::render() {
         if (entity->m_model)
             entity->m_model->draw(m_application.scene().time(), entity->transform()->modelMatrix(), viewMatrix, projectionMatrix);
     }
+
+    LAB_LOG_OGL_ERROR();
 }

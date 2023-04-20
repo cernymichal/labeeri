@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "../shaders/Model.h"
+#include "../graphics/Model.h"
 #include "Transform.h"
 
 /**

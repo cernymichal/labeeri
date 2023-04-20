@@ -3,9 +3,9 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include "generic.h"
 #include "imgui_windows/LogWindow.h"
 #include "imgui_windows/MenuWindow.h"
-#include "load.h"
 #include "log.h"
 #include "scene/Entity.h"
 
@@ -22,22 +22,52 @@ void Application::start() {
     m_scene = std::make_unique<Scene>();
     m_viewport = std::make_unique<Viewport>(*this);
 
-    auto cameraEntity = std::make_shared<Entity>();
-    m_scene->addEntity(cameraEntity);
-    m_viewport->m_camera = std::make_shared<Camera>(cameraEntity->transform());
-    /*
-    cameraEntity->m_onUpdate = [this](Entity& self, float deltaTime) {
-        LAB_LOG("Update");
-    };
-    cameraEntity->m_onFixedUpdate = [this](Entity& self) {
-        LAB_LOG("FixedUpdate");
-    };
-    */
+    {
+        auto cameraEntity = std::make_shared<Entity>();
+        m_scene->addEntity(cameraEntity);
+        m_viewport->m_camera = std::make_shared<Camera>(cameraEntity->transform());
 
-    try {
-        LAB_LOG(load::shaderProgram("src/shaders/basic.vert", "src/shaders/basic.frag"));
-    }
-    catch (const std::exception&) {
+        auto cube = std::make_shared<Entity>();
+        cube->m_model = Models::basicCube();
+        cube->m_onFixedUpdate = [this](Entity& self) {
+            self.transform()->setPosition(self.transform()->position() + glm::vec3(0.01, 0, 0));
+        };
+        m_scene->addEntity(cube);
+
+        cube = std::make_shared<Entity>();
+        cube->m_model = Models::basicCube();
+        cube->m_onFixedUpdate = [this](Entity& self) {
+            self.transform()->setPosition(self.transform()->position() + glm::vec3(-0.01, 0, 0));
+        };
+        m_scene->addEntity(cube);
+
+        cube = std::make_shared<Entity>();
+        cube->m_model = Models::basicCube();
+        cube->m_onFixedUpdate = [this](Entity& self) {
+            self.transform()->setPosition(self.transform()->position() + glm::vec3(0, 0.01, 0));
+        };
+        m_scene->addEntity(cube);
+
+        cube = std::make_shared<Entity>();
+        cube->m_model = Models::basicCube();
+        cube->m_onFixedUpdate = [this](Entity& self) {
+            self.transform()->setPosition(self.transform()->position() + glm::vec3(0, -0.01, 0));
+        };
+        m_scene->addEntity(cube);
+
+        cube = std::make_shared<Entity>();
+        cube->m_model = Models::basicCube();
+        cube->m_onFixedUpdate = [this](Entity& self) {
+            self.transform()->setPosition(self.transform()->position() + glm::vec3(0, 0, 0.01));
+        };
+        m_scene->addEntity(cube);
+
+        cube = std::make_shared<Entity>();
+        cube->m_model = Models::basicCube();
+        cube->m_onFixedUpdate = [this](Entity& self) {
+            self.transform()->setPosition(self.transform()->position() + glm::vec3(0, 0, -0.01));
+        };
+        m_scene->addEntity(cube);
     }
 
     m_imguiWindows.push_back(std::make_unique<MenuWindow>(*this));
@@ -79,7 +109,7 @@ void Application::setupGLFW() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GL_VERSION_MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION_MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+    // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);         // 3.0+ only
 
     // Create window with graphics context
     m_window = glfwCreateWindow(1600, 1200, "labeeri", NULL, NULL);
@@ -98,9 +128,13 @@ void Application::setupGLFW() {
 void Application::setupGL() {
     LAB_LOGH2("Application::setupGL()");
 
+    glewExperimental = GL_TRUE;
     GLenum status = glewInit();
     if (status != GLEW_OK)
         throw std::runtime_error("glewInit failed");
+
+    LAB_LOG("Renderer: " << glGetString(GL_RENDERER));
+    LAB_LOG("OpenGL version: " << glGetString(GL_VERSION));
 }
 
 void Application::setupImGui() {

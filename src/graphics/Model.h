@@ -19,6 +19,13 @@ public:
      */
     Mesh(GLuint vertexArrayObject, GLuint vertexBufferObject, GLuint elementBufferObject, uint32_t triangleCount);
 
+    Mesh(const Mesh&) = delete;
+
+    /**
+     * @brief TODO
+     */
+    Mesh(Mesh&& other) noexcept;
+
     /**
      * @brief TODO
      */
@@ -28,9 +35,13 @@ public:
      * @brief TODO
      */
     void draw() const;
+
+private:
+    bool m_moved = false;
 };
 
 class Model {
+public:
     std::shared_ptr<Material> m_material;
     std::shared_ptr<Mesh> m_mesh;
 
@@ -39,6 +50,7 @@ class Model {
      */
     Model(std::shared_ptr<Material> material, std::shared_ptr<Mesh> mesh);
 
+private:
     /**
      * @brief TODO
      */
