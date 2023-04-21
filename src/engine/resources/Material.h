@@ -6,6 +6,8 @@
 #include <memory>
 #include <unordered_map>
 
+namespace labeeri::engine {
+
 /**
  * @brief TODO
  */
@@ -65,3 +67,5 @@ public:
      */
     virtual void bindUniforms(double time, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 };
+
+}  // namespace labeeri::engine

@@ -2,9 +2,13 @@
 
 #include <imgui.h>
 
+#include <stdexcept>
+
 #include "../Application.h"
 
-MenuWindow::MenuWindow(Application& application) : Renderable(application) {
+namespace labeeri::engine {
+
+MenuWindow::MenuWindow(Application& app) : Renderable(app) {
     glfwSwapInterval(m_VSync ? 1 : 0);
 }
 
@@ -15,10 +19,17 @@ void MenuWindow::render() {
     if (vSyncChanged)
         glfwSwapInterval(m_VSync ? 1 : 0);
 
+    bool throwException = ImGui::Button("Exception");
+
     ImGui::Separator();
 
     auto framerate = ImGui::GetIO().Framerate;
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / framerate, framerate);
 
     ImGui::End();
+
+    if (throwException)
+        throw std::runtime_error("Exception thrown from MenuWindow");
 }
+
+}  // namespace labeeri::engine

@@ -2,6 +2,8 @@
 
 #include "../Renderable.h"
 
+namespace labeeri::engine {
+
 /**
  * @brief TODO
  */
@@ -10,7 +12,7 @@ public:
     /**
      * @brief TODO
      */
-    MenuWindow(Application& application);
+    MenuWindow(Application& app);
 
     /**
      * @brief TODO
@@ -20,3 +22,5 @@ public:
 private:
     bool m_VSync = true;
 };
+
+}  // namespace labeeri::engine

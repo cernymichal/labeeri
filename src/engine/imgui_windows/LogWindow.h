@@ -2,6 +2,8 @@
 
 #include "../Renderable.h"
 
+namespace labeeri::engine {
+
 /**
  * @brief TODO
  */
@@ -10,7 +12,7 @@ public:
     /**
      * @brief TODO
      */
-    LogWindow(Application& application);
+    LogWindow(Application& app);
 
     /**
      * @brief TODO
@@ -20,3 +22,5 @@ public:
 private:
     bool m_autoScroll = true;
 };
+
+}  // namespace labeeri::engine

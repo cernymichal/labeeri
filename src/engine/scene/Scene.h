@@ -2,6 +2,8 @@
 
 #include "Entity.h"
 
+namespace labeeri::engine {
+
 constexpr auto FIXED_UPDATE_INTERVAL = (1.0 / 50.0);  // 50 Hz
 
 /**
@@ -45,3 +47,5 @@ private:
     double m_time = 0.0f;
     double m_fixedUpdateTimeAccumulator = 0.0f;
 };
+
+}  // namespace labeeri::engine

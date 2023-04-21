@@ -5,7 +5,9 @@
 #include "../Application.h"
 #include "../log.h"
 
-LogWindow::LogWindow(Application& application) : Renderable(application) {
+namespace labeeri::engine {
+
+LogWindow::LogWindow(Application& app) : Renderable(app) {
 }
 
 void LogWindow::render() {
@@ -17,7 +19,7 @@ void LogWindow::render() {
         LAB_LOGSTREAM.str("");
     ImGui::SameLine();
     if (ImGui::SmallButton("Copy"))
-        glfwSetClipboardString(m_application.window(), LAB_LOGSTREAM.str().c_str());
+        glfwSetClipboardString(m_app.window(), LAB_LOGSTREAM.str().c_str());
 
     ImGui::Separator();
 
@@ -35,3 +37,5 @@ void LogWindow::render() {
 
     ImGui::End();
 }
+
+}  // namespace labeeri::engine

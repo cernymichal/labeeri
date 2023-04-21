@@ -136,34 +136,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\generic.cpp" />
-    <ClCompile Include="src\graphics\load.cpp" />
-    <ClCompile Include="src\imgui_windows\MenuWindow.cpp" />
-    <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\log.cpp" />
+    <ClCompile Include="src\labeeri\Game.cpp" />
+    <ClCompile Include="src\engine\resources\resources.cpp" />
+    <ClCompile Include="src\engine\resources\load.cpp" />
+    <ClCompile Include="src\engine\imgui_windows\MenuWindow.cpp" />
+    <ClCompile Include="src\engine\Application.cpp" />
+    <ClCompile Include="src\engine\log.cpp" />
+    <ClCompile Include="src\labeeri\scenes.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\imgui_windows\LogWindow.cpp" />
-    <ClCompile Include="src\scene\Entity.cpp" />
-    <ClCompile Include="src\scene\Scene.cpp" />
-    <ClCompile Include="src\scene\Transform.cpp" />
-    <ClCompile Include="src\graphics\Material.cpp" />
-    <ClCompile Include="src\graphics\Model.cpp" />
-    <ClCompile Include="src\Viewport.cpp" />
+    <ClCompile Include="src\engine\imgui_windows\LogWindow.cpp" />
+    <ClCompile Include="src\engine\scene\Entity.cpp" />
+    <ClCompile Include="src\engine\scene\Scene.cpp" />
+    <ClCompile Include="src\engine\scene\Transform.cpp" />
+    <ClCompile Include="src\engine\resources\Material.cpp" />
+    <ClCompile Include="src\engine\resources\Model.cpp" />
+    <ClCompile Include="src\engine\Viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\generic.h" />
-    <ClInclude Include="src\graphics\load.h" />
-    <ClInclude Include="src\imgui_windows\MenuWindow.h" />
-    <ClInclude Include="src\Application.h" />
-    <ClInclude Include="src\log.h" />
-    <ClInclude Include="src\imgui_windows\LogWindow.h" />
-    <ClInclude Include="src\Renderable.h" />
-    <ClInclude Include="src\scene\Entity.h" />
-    <ClInclude Include="src\scene\Scene.h" />
-    <ClInclude Include="src\scene\Transform.h" />
-    <ClInclude Include="src\graphics\Material.h" />
-    <ClInclude Include="src\graphics\Model.h" />
-    <ClInclude Include="src\Viewport.h" />
+    <ClInclude Include="src\labeeri\Game.h" />
+    <ClInclude Include="src\engine.h" />
+    <ClInclude Include="src\engine\resources\resources.h" />
+    <ClInclude Include="src\engine\resources\load.h" />
+    <ClInclude Include="src\engine\imgui_windows\MenuWindow.h" />
+    <ClInclude Include="src\engine\Application.h" />
+    <ClInclude Include="src\engine\log.h" />
+    <ClInclude Include="src\engine\imgui_windows\LogWindow.h" />
+    <ClInclude Include="src\engine\Renderable.h" />
+    <ClInclude Include="src\engine\scene\Entity.h" />
+    <ClInclude Include="src\engine\scene\Scene.h" />
+    <ClInclude Include="src\engine\scene\Transform.h" />
+    <ClInclude Include="src\engine\resources\Material.h" />
+    <ClInclude Include="src\engine\resources\Model.h" />
+    <ClInclude Include="src\engine\Viewport.h" />
+    <ClInclude Include="src\labeeri\scenes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\shaders\basic.frag" />

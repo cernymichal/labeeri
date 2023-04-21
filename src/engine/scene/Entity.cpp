@@ -1,5 +1,7 @@
 #include "Entity.h"
 
+namespace labeeri::engine {
+
 Entity::Entity() {
 }
 
@@ -20,3 +22,5 @@ void Entity::update(double deltaTime) {
     if (m_onUpdate)
         m_onUpdate(*this, deltaTime);
 }
+
+}  // namespace labeeri::engine

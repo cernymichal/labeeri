@@ -4,7 +4,7 @@
 
 #include "../log.h"
 
-constexpr auto MAX_PROGRAM_SHADER_COUNT = 16;
+namespace labeeri::engine {
 
 ShaderProgram::ShaderProgram(GLuint program) : m_program(program) {
 }
@@ -64,3 +64,5 @@ void Material::bindUniforms(double time, const glm::mat4& modelMatrix, const glm
 
     LAB_LOG_OGL_ERROR();
 }
+
+}  // namespace labeeri::engine

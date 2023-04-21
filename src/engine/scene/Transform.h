@@ -5,6 +5,8 @@
 #include <list>
 #include <memory>
 
+namespace labeeri::engine {
+
 class Entity;
 
 /**
@@ -126,3 +128,5 @@ private:
 
     friend Entity;
 };
+
+}  // namespace labeeri::engine

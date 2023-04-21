@@ -1,6 +1,9 @@
 #include "Model.h"
 
 #include "../log.h"
+#include "resources.h"
+
+namespace labeeri::engine {
 
 Mesh::Mesh(GLuint vertexArrayObject, GLuint vertexBufferObject, GLuint elementBufferObject, uint32_t triangleCount)
     : m_elementBufferObject(elementBufferObject), m_vertexBufferObject(vertexBufferObject), m_vertexArrayObject(vertexArrayObject), m_triangleCount(triangleCount) {
@@ -32,7 +35,11 @@ Model::Model(std::shared_ptr<Material> material, std::shared_ptr<Mesh> mesh) : m
 }
 
 void Model::draw(double time, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const {
-    glUseProgram(*m_material->m_shader);
+    auto shader = m_material->m_shader;
+    if (!shader)
+        shader = Shaders::basic();
+
+    glUseProgram(*shader);
 
     m_material->bindUniforms(time, modelMatrix, viewMatrix, projectionMatrix);
     m_mesh->draw();
@@ -41,3 +48,5 @@ void Model::draw(double time, const glm::mat4& modelMatrix, const glm::mat4& vie
 
     LAB_LOG_OGL_ERROR();
 }
+
+}  // namespace labeeri::engine

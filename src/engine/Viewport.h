@@ -3,6 +3,8 @@
 #include "Renderable.h"
 #include "scene/Transform.h"
 
+namespace labeeri::engine {
+
 /**
  * @brief TODO
  */
@@ -46,10 +48,12 @@ public:
     /**
      * @brief TODO
      */
-    Viewport(Application& application);
+    Viewport(Application& app);
 
     /**
      * @brief TODO
      */
     void render() override;
 };
+
+}  // namespace labeeri::engine

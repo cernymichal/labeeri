@@ -3,86 +3,66 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-#include "generic.h"
 #include "imgui_windows/LogWindow.h"
 #include "imgui_windows/MenuWindow.h"
 #include "log.h"
+#include "resources/resources.h"
 #include "scene/Entity.h"
 
-Application::Application() {
-}
+namespace labeeri::engine {
 
-void Application::start() {
-    LAB_LOGH2("Application::start()");
+struct ImGuiFrame {
+    ImGuiFrame() {
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+
+        ImGui::NewFrame();
+    }
+
+    ~ImGuiFrame() {
+        ImGui::EndFrame();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        // Update and Render additional Platform Windows
+        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+        //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+        if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
+    }
+};
+
+Application::Application() {
+    LAB_LOGH2("Application::Application()");
 
     setupGLFW();
     setupGL();
     setupImGui();
 
-    m_scene = std::make_unique<Scene>();
     m_viewport = std::make_unique<Viewport>(*this);
-
-    {
-        auto cameraEntity = std::make_shared<Entity>();
-        m_scene->addEntity(cameraEntity);
-        m_viewport->m_camera = std::make_shared<Camera>(cameraEntity->transform());
-        cameraEntity->transform()->setPosition(glm::vec3(3, 3, 3));
-        cameraEntity->transform()->setRotation(glm::vec3(0, glm::radians(45.0f), 0));
-        cameraEntity->transform()->setRotation(cameraEntity->transform()->rotation() * glm::quat(glm::vec3(glm::radians(-40.0f), 0, 0)));
-
-        auto cube = std::make_shared<Entity>();
-        cube->m_model = Models::basicCube();
-        cube->m_onFixedUpdate = [this](Entity& self) {
-            self.transform()->setPosition(self.transform()->position() + glm::vec3(0.01, 0, 0));
-        };
-        m_scene->addEntity(cube);
-
-        cube = std::make_shared<Entity>();
-        cube->m_model = Models::basicCube();
-        cube->m_onFixedUpdate = [this](Entity& self) {
-            self.transform()->setPosition(self.transform()->position() + glm::vec3(-0.01, 0, 0));
-        };
-        m_scene->addEntity(cube);
-
-        cube = std::make_shared<Entity>();
-        cube->m_model = Models::basicCube();
-        cube->m_onFixedUpdate = [this](Entity& self) {
-            self.transform()->setPosition(self.transform()->position() + glm::vec3(0, 0.01, 0));
-        };
-        m_scene->addEntity(cube);
-
-        cube = std::make_shared<Entity>();
-        cube->m_model = Models::basicCube();
-        cube->m_onFixedUpdate = [this](Entity& self) {
-            self.transform()->setPosition(self.transform()->position() + glm::vec3(0, -0.01, 0));
-        };
-        m_scene->addEntity(cube);
-
-        cube = std::make_shared<Entity>();
-        cube->m_model = Models::basicCube();
-        cube->m_onFixedUpdate = [this](Entity& self) {
-            self.transform()->setPosition(self.transform()->position() + glm::vec3(0, 0, 0.01));
-        };
-        m_scene->addEntity(cube);
-
-        cube = std::make_shared<Entity>();
-        cube->m_model = Models::basicCube();
-        cube->m_onFixedUpdate = [this](Entity& self) {
-            self.transform()->setPosition(self.transform()->position() + glm::vec3(0, 0, -0.01));
-        };
-        m_scene->addEntity(cube);
-    }
 
     m_imguiWindows.push_back(std::make_unique<MenuWindow>(*this));
     m_imguiWindows.push_back(std::make_unique<LogWindow>(*this));
-
-    mainLoop();
-
-    cleanup();
 }
 
-Scene& Application::scene() const {
-    return *m_scene;
+Application::~Application() {
+    LAB_LOGH2("Application::~Application()");
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(m_window);
+    glfwTerminate();
+}
+
+std::shared_ptr<Camera>& Application::camera() const {
+    return m_viewport->m_camera;
 }
 
 GLFWwindow* Application::window() const {
@@ -93,6 +73,10 @@ std::pair<int, int> Application::frameBufferSize() const {
     int width, height;
     glfwGetFramebufferSize(m_window, &width, &height);
     return {width, height};
+}
+
+bool Application::closed() const {
+    return m_closed;
 }
 
 static void glfw_error_callback(int error, const char* description) {
@@ -168,9 +152,10 @@ void Application::setupImGui() {
     ImGui_ImplOpenGL3_Init(GLSL_VERSION);
 }
 
-void Application::mainLoop() {
-    LAB_LOGH1("Application::mainLoop()");
+void Application::run() {
+    LAB_LOGH2("Application::run()");
 
+    double previousUpdateTime = glfwGetTime();
     while (!glfwWindowShouldClose(m_window)) {
         // Poll and handle events (inputs, window resize, etc.)
         // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -180,46 +165,27 @@ void Application::mainLoop() {
         glfwPollEvents();
 
         double currentTime = glfwGetTime();
+        double deltaTime = currentTime - previousUpdateTime;
+        previousUpdateTime = currentTime;
 
-        scene().update(currentTime);
+        if (m_scene)
+            m_scene->update(deltaTime);
         render();
     }
+
+    m_closed = true;
 }
 
 void Application::render() {
-    // Start the Dear ImGui frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-
-    ImGui::NewFrame();
-    for (auto& window : m_imguiWindows)
-        window->render();
-    ImGui::Render();
-
     m_viewport->render();
 
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    // Update and Render additional Platform Windows
-    // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-    //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-        GLFWwindow* backup_current_context = glfwGetCurrentContext();
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-        glfwMakeContextCurrent(backup_current_context);
+    {
+        ImGuiFrame frame;
+        for (auto& window : m_imguiWindows)
+            window->render();
     }
 
     glfwSwapBuffers(m_window);
 }
 
-void Application::cleanup() {
-    LAB_LOGH2("Application::cleanup()");
-
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
-    glfwDestroyWindow(m_window);
-    glfwTerminate();
-}
+}  // namespace labeeri::engine

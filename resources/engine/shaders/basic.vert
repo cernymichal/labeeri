@@ -1,8 +1,8 @@
 #version 430
 
-layout(location = 0) in vec3 position;
-layout(location = 1) in vec3 normal;
-layout(location = 2) in vec2 UV;
+layout(location = 0) in vec3 position_in;
+layout(location = 1) in vec3 normal_in;
+layout(location = 2) in vec2 UV_in;
 
 uniform float time;
 
@@ -11,11 +11,11 @@ uniform mat4 view_matrix;
 uniform mat4 model_matrix;
 uniform mat4 normal_matrix;
 
-smooth out vec3 normal_out;
-smooth out vec2 UV_out;
+smooth out vec3 normal;
+smooth out vec2 UV;
 
 void main() {
-    gl_Position = PVM_matrix * vec4(position, 1);
-    normal_out = normalize((view_matrix * normal_matrix * vec4(normal, 0.0)).xyz);
-    UV_out = UV;
+    gl_Position = PVM_matrix * vec4(position_in, 1);
+    normal = normalize((view_matrix * normal_matrix * vec4(normal_in, 0.0)).xyz);
+    UV = UV_in;
 }

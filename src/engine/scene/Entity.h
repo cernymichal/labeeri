@@ -2,8 +2,10 @@
 
 #include <functional>
 
-#include "../graphics/Model.h"
+#include "../resources/Model.h"
 #include "Transform.h"
+
+namespace labeeri::engine {
 
 /**
  * @brief TODO
@@ -39,3 +41,5 @@ private:
 
     friend class Scene;
 };
+
+}  // namespace labeeri::engine

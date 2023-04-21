@@ -1,5 +1,7 @@
 #pragma once
 
+namespace labeeri::engine {
+
 class Application;
 
 /**
@@ -10,7 +12,7 @@ public:
     /**
      * @brief TODO
      */
-    Renderable(Application& application) : m_application(application) {
+    Renderable(Application& app) : m_app(app) {
     }
 
     /**
@@ -19,5 +21,7 @@ public:
     virtual void render() = 0;
 
 protected:
-    Application& m_application;
+    Application& m_app;
 };
+
+}  // namespace labeeri::engine

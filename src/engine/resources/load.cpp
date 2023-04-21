@@ -9,8 +9,10 @@
 #include <fstream>
 #include <sstream>
 
-#include "../generic.h"
 #include "../log.h"
+#include "resources.h"
+
+namespace labeeri::engine {
 
 struct Shader {
     Shader(GLuint shader) : m_shader(shader) {
@@ -207,9 +209,9 @@ Mesh loadMesh(const char* filePath) {
     if (!shader)
         throw std::runtime_error("No basic shader for default attribute positions");
 
-    GLuint positionLocation = glGetAttribLocation(*shader, "position");
-    GLuint normalLocation = glGetAttribLocation(*shader, "normal");
-    GLuint UVLocation = glGetAttribLocation(*shader, "UV");
+    GLuint positionLocation = glGetAttribLocation(*shader, "position_in");
+    GLuint normalLocation = glGetAttribLocation(*shader, "normal_in");
+    GLuint UVLocation = glGetAttribLocation(*shader, "UV_in");
 
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -234,3 +236,5 @@ Mesh loadMesh(const char* filePath) {
 
     return Mesh(VAO, VBO, EBO, faceCount);
 }
+
+}  // namespace labeeri::engine

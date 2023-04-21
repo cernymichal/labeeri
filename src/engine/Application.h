@@ -12,6 +12,8 @@
 #include "Viewport.h"
 #include "scene/Scene.h"
 
+namespace labeeri::engine {
+
 // GL 4.3 + GLSL 430
 constexpr auto GL_VERSION_MAJOR = 4;
 constexpr auto GL_VERSION_MINOR = 3;
@@ -22,6 +24,8 @@ constexpr auto GLSL_VERSION = "#version 430";
  */
 class Application {
 public:
+    std::shared_ptr<Scene> m_scene;
+
     /**
      * @brief TODO
      */
@@ -30,12 +34,17 @@ public:
     /**
      * @brief TODO
      */
-    void start();
+    ~Application();
 
     /**
      * @brief TODO
      */
-    Scene& scene() const;
+    void run();
+
+    /**
+     * @brief TODO
+     */
+    std::shared_ptr<Camera>& camera() const;
 
     /**
      * @brief TODO
@@ -47,12 +56,16 @@ public:
      */
     std::pair<int, int> frameBufferSize() const;
 
-private:
-    std::unique_ptr<Scene> m_scene;
+    /**
+     * @brief TODO
+     */
+    bool closed() const;
 
+private:
     GLFWwindow* m_window = nullptr;
     std::list<std::unique_ptr<Renderable>> m_imguiWindows;
     std::unique_ptr<Viewport> m_viewport;
+    bool m_closed = false;
 
     /**
      * @brief TODO
@@ -72,15 +85,7 @@ private:
     /**
      * @brief TODO
      */
-    void mainLoop();
-
-    /**
-     * @brief TODO
-     */
     void render();
-
-    /**
-     * @brief TODO
-     */
-    void cleanup();
 };
+
+}  // namespace labeeri::engine

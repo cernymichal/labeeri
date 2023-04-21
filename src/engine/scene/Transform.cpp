@@ -1,5 +1,7 @@
 #include "Transform.h"
 
+namespace labeeri::engine {
+
 Transform::Transform() {
 }
 
@@ -134,3 +136,5 @@ void Transform::destroy() {
     m_children.clear();
     removeParent();
 }
+
+}  // namespace labeeri::engine

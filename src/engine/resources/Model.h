@@ -4,6 +4,8 @@
 
 #include "Material.h"
 
+namespace labeeri::engine {
+
 /**
  * @brief TODO
  */
@@ -58,3 +60,5 @@ private:
 
     friend class Viewport;
 };
+
+}  // namespace labeeri::engine
