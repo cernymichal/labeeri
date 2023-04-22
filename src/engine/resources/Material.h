@@ -1,11 +1,5 @@
 #pragma once
 
-#include <GL/glew.h>
-
-#include <glm/glm.hpp>
-#include <memory>
-#include <unordered_map>
-
 namespace labeeri::engine {
 
 /**
@@ -16,7 +10,7 @@ public:
     /**
      * @brief TODO
      */
-    ShaderProgram(GLuint program);
+    ShaderProgram(LAB_GL_HANDLE program);
 
     ShaderProgram(const ShaderProgram&) = delete;
 
@@ -33,16 +27,16 @@ public:
     /**
      * @brief TODO
      */
-    GLint getUniformLocation(const char* name);
+    LAB_GL_INT getUniformLocation(const char* name);
 
     /**
      * @brief TODO
      */
-    operator GLint() const;
+    operator LAB_GL_HANDLE() const;
 
 private:
-    GLuint m_program;
-    std::unordered_map<const char*, GLint> m_uniforms;
+    LAB_GL_HANDLE m_program;
+    std::unordered_map<const char*, LAB_GL_HANDLE> m_uniforms;
 };
 
 /**

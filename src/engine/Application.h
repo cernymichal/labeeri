@@ -1,16 +1,14 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <imgui.h>
-
-#include <list>
-#include <memory>
-#include <utility>
-
-#include "Renderable.h"
+#include "IRenderable.h"
 #include "Viewport.h"
 #include "scene/Scene.h"
+
+#define LAB_APP labeeri::engine::Application::get()
+#define LAB_CURRENT_SCENE LAB_APP.m_scene
+#define LAB_CURRENT_CAMERA LAB_APP.camera()
+
+struct GLFWwindow;
 
 namespace labeeri::engine {
 
@@ -29,12 +27,11 @@ public:
     /**
      * @brief TODO
      */
-    Application();
+    static Application& get();
 
-    /**
-     * @brief TODO
-     */
-    ~Application();
+    Application(const Application&) = delete;
+
+    Application& operator=(const Application&) = delete;
 
     /**
      * @brief TODO
@@ -63,9 +60,19 @@ public:
 
 private:
     GLFWwindow* m_window = nullptr;
-    std::list<std::unique_ptr<Renderable>> m_imguiWindows;
+    std::list<std::unique_ptr<IRenderable>> m_imguiWindows;
     std::unique_ptr<Viewport> m_viewport;
     bool m_closed = false;
+
+    /**
+     * @brief TODO
+     */
+    Application();
+
+    /**
+     * @brief TODO
+     */
+    ~Application();
 
     /**
      * @brief TODO

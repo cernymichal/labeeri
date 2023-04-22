@@ -1,10 +1,5 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <list>
-#include <memory>
-
 namespace labeeri::engine {
 
 class Entity;

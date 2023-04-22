@@ -1,13 +1,14 @@
 #include "LogWindow.h"
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <imgui.h>
 
 #include "../Application.h"
-#include "../log.h"
 
 namespace labeeri::engine {
 
-LogWindow::LogWindow(Application& app) : Renderable(app) {
+LogWindow::LogWindow() {
 }
 
 void LogWindow::render() {
@@ -19,7 +20,7 @@ void LogWindow::render() {
         LAB_LOGSTREAM.str("");
     ImGui::SameLine();
     if (ImGui::SmallButton("Copy"))
-        glfwSetClipboardString(m_app.window(), LAB_LOGSTREAM.str().c_str());
+        glfwSetClipboardString(LAB_APP.window(), LAB_LOGSTREAM.str().c_str());
 
     ImGui::Separator();
 

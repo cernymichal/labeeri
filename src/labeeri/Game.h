@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../engine.h"
-
 namespace labeeri {
 
 /**
@@ -12,15 +10,12 @@ public:
     /**
      * @brief TODO
      */
-    Game(engine::Application& app);
+    Game();
 
     /**
      * @brief TODO
      */
     void setup();
-
-private:
-    engine::Application& m_app;
 };
 
 }  // namespace labeeri

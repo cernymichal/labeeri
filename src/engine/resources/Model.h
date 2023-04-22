@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstdint>
-
 #include "Material.h"
 
 namespace labeeri::engine {
@@ -11,15 +9,15 @@ namespace labeeri::engine {
  */
 class Mesh {
 public:
-    const GLuint m_vertexArrayObject;
-    const GLuint m_vertexBufferObject;
-    const GLuint m_elementBufferObject;
+    const LAB_GL_HANDLE m_vertexArrayObject;
+    const LAB_GL_HANDLE m_vertexBufferObject;
+    const LAB_GL_HANDLE m_elementBufferObject;
     const uint32_t m_triangleCount;
 
     /**
      * @brief TODO
      */
-    Mesh(GLuint vertexArrayObject, GLuint vertexBufferObject, GLuint elementBufferObject, uint32_t triangleCount);
+    Mesh(LAB_GL_HANDLE vertexArrayObject, LAB_GL_HANDLE vertexBufferObject, LAB_GL_HANDLE elementBufferObject, uint32_t triangleCount);
 
     Mesh(const Mesh&) = delete;
 

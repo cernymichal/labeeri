@@ -92,6 +92,9 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -109,6 +112,9 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,6 +133,9 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,17 +160,22 @@
     <ClCompile Include="src\engine\resources\Material.cpp" />
     <ClCompile Include="src\engine\resources\Model.cpp" />
     <ClCompile Include="src\engine\Viewport.cpp" />
+    <ClCompile Include="src\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_LAB_DEBUG|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\labeeri\Game.h" />
     <ClInclude Include="src\engine.h" />
+    <ClInclude Include="src\labeeri\Game.h" />
     <ClInclude Include="src\engine\resources\resources.h" />
     <ClInclude Include="src\engine\resources\load.h" />
     <ClInclude Include="src\engine\imgui_windows\MenuWindow.h" />
     <ClInclude Include="src\engine\Application.h" />
     <ClInclude Include="src\engine\log.h" />
     <ClInclude Include="src\engine\imgui_windows\LogWindow.h" />
-    <ClInclude Include="src\engine\Renderable.h" />
+    <ClInclude Include="src\engine\IRenderable.h" />
     <ClInclude Include="src\engine\scene\Entity.h" />
     <ClInclude Include="src\engine\scene\Scene.h" />
     <ClInclude Include="src\engine\scene\Transform.h" />
@@ -169,6 +183,7 @@
     <ClInclude Include="src\engine\resources\Model.h" />
     <ClInclude Include="src\engine\Viewport.h" />
     <ClInclude Include="src\labeeri\scenes.h" />
+    <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\shaders\basic.frag" />

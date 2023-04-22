@@ -1,11 +1,13 @@
 #include "Application.h"
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
 #include "imgui_windows/LogWindow.h"
 #include "imgui_windows/MenuWindow.h"
-#include "log.h"
 #include "resources/resources.h"
 #include "scene/Entity.h"
 
@@ -37,6 +39,11 @@ struct ImGuiFrame {
     }
 };
 
+Application& Application::get() {
+    static Application instance;
+    return instance;
+}
+
 Application::Application() {
     LAB_LOGH2("Application::Application()");
 
@@ -44,10 +51,10 @@ Application::Application() {
     setupGL();
     setupImGui();
 
-    m_viewport = std::make_unique<Viewport>(*this);
+    m_viewport = std::make_unique<Viewport>();
 
-    m_imguiWindows.push_back(std::make_unique<MenuWindow>(*this));
-    m_imguiWindows.push_back(std::make_unique<LogWindow>(*this));
+    m_imguiWindows.push_back(std::make_unique<MenuWindow>());
+    m_imguiWindows.push_back(std::make_unique<LogWindow>());
 }
 
 Application::~Application() {
@@ -59,6 +66,9 @@ Application::~Application() {
 
     glfwDestroyWindow(m_window);
     glfwTerminate();
+
+    LAB_LOG_OGL_ERROR();
+    LAB_DEBUG_ONLY(std::cout << LAB_LOGSTREAM_STR << std::endl);
 }
 
 std::shared_ptr<Camera>& Application::camera() const {

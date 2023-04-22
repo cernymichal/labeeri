@@ -2,6 +2,8 @@
 
 #include "GL/glew.h"
 
+namespace labeeri::engine {
+
 void logOGLError(const char* file, int line) {
     for (GLenum error = glGetError(); error != GL_NO_ERROR; error = glGetError()) {
         std::string errorStr = "UNKNOWN";
@@ -27,3 +29,5 @@ void logOGLError(const char* file, int line) {
         LAB_LOG("OpenGL error: " << errorStr << " in " << file << " at line " << line);
     }
 }
+
+}  // namespace labeeri::engine

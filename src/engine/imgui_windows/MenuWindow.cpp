@@ -1,14 +1,14 @@
 #include "MenuWindow.h"
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <imgui.h>
-
-#include <stdexcept>
 
 #include "../Application.h"
 
 namespace labeeri::engine {
 
-MenuWindow::MenuWindow(Application& app) : Renderable(app) {
+MenuWindow::MenuWindow() {
     glfwSwapInterval(m_VSync ? 1 : 0);
 }
 

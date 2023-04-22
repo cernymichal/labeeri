@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Renderable.h"
+#include "IRenderable.h"
 #include "scene/Transform.h"
 
 namespace labeeri::engine {
@@ -41,14 +41,14 @@ private:
 /**
  * @brief TODO
  */
-class Viewport : public Renderable {
+class Viewport : public IRenderable {
 public:
     std::shared_ptr<Camera> m_camera;
 
     /**
      * @brief TODO
      */
-    Viewport(Application& app);
+    Viewport();
 
     /**
      * @brief TODO

@@ -1,18 +1,18 @@
 #pragma once
 
-#include "../Renderable.h"
+#include "../IRenderable.h"
 
 namespace labeeri::engine {
 
 /**
  * @brief TODO
  */
-class LogWindow : public Renderable {
+class LogWindow : public IRenderable {
 public:
     /**
      * @brief TODO
      */
-    LogWindow(Application& app);
+    LogWindow();
 
     /**
      * @brief TODO

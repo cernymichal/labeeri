@@ -1,12 +1,10 @@
 #include "Material.h"
 
-#include <glm/gtc/type_ptr.hpp>
-
-#include "../log.h"
+#include <GL/glew.h>
 
 namespace labeeri::engine {
 
-ShaderProgram::ShaderProgram(GLuint program) : m_program(program) {
+ShaderProgram::ShaderProgram(LAB_GL_HANDLE program) : m_program(program) {
 }
 
 ShaderProgram::ShaderProgram(ShaderProgram&& other) noexcept : m_program(other.m_program) {
@@ -26,7 +24,7 @@ ShaderProgram::~ShaderProgram() {
     glDeleteProgram(m_program);
 }
 
-GLint ShaderProgram::getUniformLocation(const char* name) {
+LAB_GL_INT ShaderProgram::getUniformLocation(const char* name) {
     auto iter = m_uniforms.find(name);
 
     if (iter != m_uniforms.end())
@@ -39,7 +37,7 @@ GLint ShaderProgram::getUniformLocation(const char* name) {
     return location;
 }
 
-ShaderProgram::operator GLint() const {
+ShaderProgram::operator LAB_GL_HANDLE() const {
     return m_program;
 }
 

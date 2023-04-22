@@ -1,24 +1,18 @@
-#include <iostream>
-
+#include "engine/Application.h"
 #include "labeeri/Game.h"
 
 int main(int argc, char** argv) {
-    labeeri::engine::Application app;
-
-    while (!app.closed()) {
+    while (!LAB_APP.closed()) {
         try {
-            labeeri::Game game(app);
+            labeeri::Game game;
             game.setup();
-            app.run();
+            LAB_APP.run();
         }
         catch (const std::exception& e) {
             LAB_LOGH1("EXCEPTION CAUGHT");
             LAB_LOG(e.what());
         }
     }
-
-    LAB_LOG_OGL_ERROR();
-    LAB_DEBUG_ONLY(std::cout << LAB_LOGSTREAM_STR << std::endl);
 
     return EXIT_SUCCESS;
 }

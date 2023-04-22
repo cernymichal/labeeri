@@ -4,12 +4,10 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
-#include <algorithm>
 #include <assimp/Importer.hpp>
 #include <fstream>
 #include <sstream>
 
-#include "../log.h"
 #include "resources.h"
 
 namespace labeeri::engine {
