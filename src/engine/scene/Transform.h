@@ -2,6 +2,10 @@
 
 namespace labeeri::engine {
 
+constexpr auto LAB_FORWARD = glm::vec3(0.0f, 0.0f, -1.0f);
+constexpr auto LAB_UP = glm::vec3(0.0f, 1.0f, 0.0f);
+constexpr auto LAB_RIGHT = glm::vec3(1.0f, 0.0f, 0.0f);
+
 class Entity;
 
 /**
@@ -27,7 +31,17 @@ public:
     /**
      * @brief TODO
      */
+    void move(const glm::vec3& offset);
+
+    /**
+     * @brief TODO
+     */
     void setWorldPosition(const glm::vec3& position);
+
+    /**
+     * @brief TODO
+     */
+    void moveWorld(const glm::vec3& offset);
 
     /**
      * @brief TODO
@@ -37,7 +51,17 @@ public:
     /**
      * @brief TODO
      */
+    void rotate(const glm::quat& offset);
+
+    /**
+     * @brief TODO
+     */
     void setScale(const glm::vec3& scale);
+
+    /**
+     * @brief TODO
+     */
+    void scale(const glm::vec3& amount);
 
     /**
      * @brief TODO

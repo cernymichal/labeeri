@@ -1,5 +1,9 @@
 #pragma once
 
+using LAB_GL_UINT = unsigned int;  // so that we dont have to include glew everywhere
+using LAB_GL_INT = int;
+using LAB_GL_HANDLE = LAB_GL_UINT;
+
 namespace labeeri::engine {
 
 /**

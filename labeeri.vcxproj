@@ -145,6 +145,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\Entities.cpp" />
+    <ClCompile Include="src\engine\scene\Camera.cpp" />
+    <ClCompile Include="src\engine\scene\Movement.cpp" />
     <ClCompile Include="src\labeeri\Game.cpp" />
     <ClCompile Include="src\engine\resources\resources.cpp" />
     <ClCompile Include="src\engine\resources\load.cpp" />
@@ -168,6 +171,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine.h" />
+    <ClInclude Include="src\engine\Entities.h" />
+    <ClInclude Include="src\engine\keys.h" />
+    <ClInclude Include="src\engine\scene\Camera.h" />
+    <ClInclude Include="src\engine\scene\Input.h" />
+    <ClInclude Include="src\engine\scene\Movement.h" />
     <ClInclude Include="src\labeeri\Game.h" />
     <ClInclude Include="src\engine\resources\resources.h" />
     <ClInclude Include="src\engine\resources\load.h" />
@@ -188,6 +196,8 @@
   <ItemGroup>
     <None Include="resources\engine\shaders\basic.frag" />
     <None Include="resources\engine\shaders\basic.vert" />
+    <None Include="resources\engine\shaders\texture_only.frag" />
+    <None Include="resources\engine\shaders\texture_only.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

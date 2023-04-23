@@ -180,7 +180,7 @@ Mesh loadMesh(const char* filePath) {
             UVs.push_back(vector.y);
         }
 
-        glBufferSubData(GL_ARRAY_BUFFER, 6 * sizeof(float) * vertexCount, sizeof(float) * vertexCount, &UVs[0]);
+        glBufferSubData(GL_ARRAY_BUFFER, 6 * sizeof(float) * vertexCount, sizeof(float) * UVs.size(), &UVs[0]);
     }
 
     LAB_LOG_OGL_ERROR();

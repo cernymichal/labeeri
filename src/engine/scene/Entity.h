@@ -1,6 +1,9 @@
 #pragma once
 
 #include "../resources/Model.h"
+#include "Camera.h"
+#include "Input.h"
+#include "Movement.h"
 #include "Transform.h"
 
 namespace labeeri::engine {
@@ -10,7 +13,11 @@ namespace labeeri::engine {
  */
 class Entity {
 public:
+    bool m_enabled = true;
     std::shared_ptr<Model> m_model;
+    std::shared_ptr<Input> m_input;
+    std::shared_ptr<Movement> m_movement;
+    std::shared_ptr<Camera> m_camera;
 
     std::function<void(Entity&)> m_onFixedUpdate;
     std::function<void(Entity&, double)> m_onUpdate;

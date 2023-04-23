@@ -56,13 +56,20 @@ public:
     /**
      * @brief TODO
      */
+    void setVSync(bool enabled);
+
+    /**
+     * @brief TODO
+     */
     bool closed() const;
 
 private:
+    bool m_closed = false;
     GLFWwindow* m_window = nullptr;
     std::list<std::unique_ptr<IRenderable>> m_imguiWindows;
     std::unique_ptr<Viewport> m_viewport;
-    bool m_closed = false;
+
+    glm::dvec2 m_mousePosition;
 
     /**
      * @brief TODO
@@ -93,6 +100,31 @@ private:
      * @brief TODO
      */
     void render();
+
+    /**
+     * @brief TODO
+     */
+    static void glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height);
+
+    /**
+     * @brief TODO
+     */
+    static void glfwKeyboardCallback(GLFWwindow* window, int key, int scanCode, int action, int mods);
+
+    /**
+     * @brief TODO
+     */
+    static void glfwCursorPosCallback(GLFWwindow* window, double x, double y);
+
+    /**
+     * @brief TODO
+     */
+    static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+
+    /**
+     * @brief TODO
+     */
+    static void glfwScrollCallback(GLFWwindow* window, double deltaX, double deltaY);
 };
 
 }  // namespace labeeri::engine

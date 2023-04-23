@@ -14,6 +14,10 @@ void Transform::setPosition(const glm::vec3& position) {
     m_modelMatrixValid = false;
 }
 
+void Transform::move(const glm::vec3& offset) {
+    setPosition(position() + glm::vec3(modelMatrix() * glm::vec4(offset, 0.0f)));
+}
+
 void Transform::setWorldPosition(const glm::vec3& position) {
     if (!m_parent) {
         setPosition(position);
@@ -25,14 +29,26 @@ void Transform::setWorldPosition(const glm::vec3& position) {
     setPosition(localPosition);
 }
 
+void Transform::moveWorld(const glm::vec3& offset) {
+    setWorldPosition(worldPosition() + offset);
+}
+
 void Transform::setRotation(const glm::quat& rotation) {
     m_rotation = rotation;
     m_modelMatrixValid = false;
 }
 
+void Transform::rotate(const glm::quat& offset) {
+    setRotation(m_rotation * offset);
+}
+
 void Transform::setScale(const glm::vec3& scale) {
     m_scale = scale;
     m_modelMatrixValid = false;
+}
+
+void Transform::scale(const glm::vec3& amount) {
+    setScale(m_scale * amount);
 }
 
 void Transform::setParent(const std::shared_ptr<Transform>& parent) {
@@ -76,15 +92,15 @@ const glm::mat4& Transform::modelMatrix() {
 }
 
 glm::vec3 Transform::forward() {
-    return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f)));
+    return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(LAB_FORWARD, 0.0f)));
 }
 
 glm::vec3 Transform::up() {
-    return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f)));
+    return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(LAB_UP, 0.0f)));
 }
 
 glm::vec3 Transform::right() {
-    return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f)));
+    return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(LAB_RIGHT, 0.0f)));
 }
 
 Transform& Transform::operator=(Transform& other) {

@@ -9,9 +9,13 @@ Game::Game() {
 }
 
 void Game::setup() {
-    auto [scene, camera] = defaultScene();
+    auto scene = defaultScene();
+
+    auto flycam = engine::Entities::Flycam();
+    scene->addEntity(flycam);
+
     LAB_CURRENT_SCENE = scene;
-    LAB_CURRENT_CAMERA = camera;
+    LAB_CURRENT_CAMERA = flycam->m_camera;
 }
 
 }  // namespace labeeri

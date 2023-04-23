@@ -39,6 +39,10 @@ struct ImGuiFrame {
     }
 };
 
+static void glfwErrorCallback(int error, const char* description) {
+    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
+}
+
 Application& Application::get() {
     static Application instance;
     return instance;
@@ -64,10 +68,11 @@ Application::~Application() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
+    LAB_LOG_OGL_ERROR();
+
     glfwDestroyWindow(m_window);
     glfwTerminate();
-
-    LAB_LOG_OGL_ERROR();
+    
     LAB_DEBUG_ONLY(std::cout << LAB_LOGSTREAM_STR << std::endl);
 }
 
@@ -85,18 +90,18 @@ std::pair<int, int> Application::frameBufferSize() const {
     return {width, height};
 }
 
-bool Application::closed() const {
-    return m_closed;
+void Application::setVSync(bool enabled) {
+    glfwSwapInterval(enabled ? 1 : 0);
 }
 
-static void glfw_error_callback(int error, const char* description) {
-    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
+bool Application::closed() const {
+    return m_closed;
 }
 
 void Application::setupGLFW() {
     LAB_LOGH2("Application::setupGLFW()");
 
-    glfwSetErrorCallback(glfw_error_callback);
+    glfwSetErrorCallback(glfwErrorCallback);
 
     // Initialize the library
     if (!glfwInit())
@@ -118,8 +123,11 @@ void Application::setupGLFW() {
     // Make the window's context current
     glfwMakeContextCurrent(m_window);
 
-    // Enable vsync
-    // glfwSwapInterval(1);
+    glfwSetFramebufferSizeCallback(m_window, glfwFramebufferSizeCallback);
+    glfwSetKeyCallback(m_window, glfwKeyboardCallback);
+    glfwSetCursorPosCallback(m_window, glfwCursorPosCallback);
+    glfwSetMouseButtonCallback(m_window, glfwMouseButtonCallback);
+    glfwSetScrollCallback(m_window, glfwScrollCallback);
 }
 
 void Application::setupGL() {
@@ -196,6 +204,52 @@ void Application::render() {
     }
 
     glfwSwapBuffers(m_window);
+}
+
+void Application::glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height) {
+    LAB_APP.m_viewport->resize(width, height);
+    LAB_APP.render();
+}
+
+void Application::glfwKeyboardCallback(GLFWwindow* window, int key, int scanCode, int action, int mods) {
+    if (ImGui::GetIO().WantCaptureKeyboard && static_cast<KeyAction>(action) != KeyAction::Release)
+        return;
+
+    for (auto& entity : LAB_APP.m_scene->entities()) {
+        if (entity->m_enabled && entity->m_input && entity->m_input->m_onKeyboard)
+            entity->m_input->m_onKeyboard(*entity, static_cast<Keyboard>(key), scanCode, static_cast<KeyAction>(action), mods);
+    }
+}
+
+void Application::glfwCursorPosCallback(GLFWwindow* window, double x, double y) {
+    glm::dvec2 newPosition(x, y);
+    glm::dvec2 delta = newPosition - LAB_APP.m_mousePosition;
+    LAB_APP.m_mousePosition = newPosition;
+
+    for (auto& entity : LAB_APP.m_scene->entities()) {
+        if (entity->m_enabled && entity->m_input && entity->m_input->m_onMouseMove)
+            entity->m_input->m_onMouseMove(*entity, newPosition, delta);
+    }
+}
+
+void Application::glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    if (ImGui::GetIO().WantCaptureMouse && static_cast<KeyAction>(action) != KeyAction::Release)
+        return;
+
+    for (auto& entity : LAB_APP.m_scene->entities()) {
+        if (entity->m_enabled && entity->m_input && entity->m_input->m_onMouseButton)
+            entity->m_input->m_onMouseButton(*entity, static_cast<MouseButton>(button), static_cast<KeyAction>(action), mods);
+    }
+}
+
+void Application::glfwScrollCallback(GLFWwindow* window, double deltaX, double deltaY) {
+    if (ImGui::GetIO().WantCaptureMouse)
+        return;
+
+    for (auto& entity : LAB_APP.m_scene->entities()) {
+        if (entity->m_enabled && entity->m_input && entity->m_input->m_onMouseScroll)
+            entity->m_input->m_onMouseScroll(*entity, deltaY);
+    }
 }
 
 }  // namespace labeeri::engine
