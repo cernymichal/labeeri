@@ -14,6 +14,8 @@ using LAB_GL_HANDLE = LAB_GL_UINT;
 
 namespace labeeri::Engine {
 
+constexpr auto INITIAL_WINDOW_SIZE = glm::uvec2(1600, 1200);
+
 // GL 4.3 + GLSL 430
 constexpr auto GL_VERSION_MAJOR = 4;
 constexpr auto GL_VERSION_MINOR = 3;

@@ -10,7 +10,7 @@ namespace labeeri::Engine {
  */
 class KeyboardEvent : public Event {
 public:
-    inline Keyboard key() const {
+    inline KeyboardKey key() const {
         return m_key;
     }
 
@@ -25,11 +25,11 @@ public:
     EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Input) | static_cast<int>(EventCategory::Keyboard))
 
 protected:
-    Keyboard m_key;
+    KeyboardKey m_key;
     int m_scanCode;
     int m_mods;
 
-    KeyboardEvent(Keyboard key, int scanCode, int mods)
+    KeyboardEvent(KeyboardKey key, int scanCode, int mods)
         : m_key(key), m_scanCode(scanCode), m_mods(mods) {
     }
 };
@@ -39,7 +39,7 @@ protected:
  */
 class KeyboardPressEvent : public KeyboardEvent {
 public:
-    KeyboardPressEvent(Keyboard key, int scanCode, int mods)
+    KeyboardPressEvent(KeyboardKey key, int scanCode, int mods)
         : KeyboardEvent(key, scanCode, mods) {
     }
 
@@ -51,7 +51,7 @@ public:
  */
 class KeyboardReleaseEvent : public KeyboardEvent {
 public:
-    KeyboardReleaseEvent(Keyboard key, int scanCode, int mods)
+    KeyboardReleaseEvent(KeyboardKey key, int scanCode, int mods)
         : KeyboardEvent(key, scanCode, mods) {
     }
 
@@ -63,7 +63,7 @@ public:
  */
 class KeyboardRepeatEvent : public KeyboardEvent {
 public:
-    KeyboardRepeatEvent(Keyboard key, int scanCode, int mods)
+    KeyboardRepeatEvent(KeyboardKey key, int scanCode, int mods)
         : KeyboardEvent(key, scanCode, mods) {
     }
 

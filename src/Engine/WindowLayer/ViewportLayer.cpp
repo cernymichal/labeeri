@@ -61,7 +61,7 @@ bool ViewportLayer::onMouseButtonPress(const MouseButtonPressEvent& e) {
 }
 
 bool ViewportLayer::onKeyboardPress(const KeyboardPressEvent& e) {
-    if (e.key() == Keyboard::Escape && LAB_APP.focus() == ApplicationFocus::Viewport) {
+    if (e.key() == KeyboardKey::Escape && LAB_APP.focus() == ApplicationFocus::Viewport) {
         LAB_APP.focusUI();
         return true;
     }

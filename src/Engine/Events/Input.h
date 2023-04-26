@@ -21,7 +21,7 @@ enum class KeyAction : uint8_t {
 /**
  * @brief TODO
  */
-enum class Keyboard : int {
+enum class KeyboardKey : int {
     /* The unknown key */
     Unknown = -1,
 

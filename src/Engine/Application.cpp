@@ -86,7 +86,7 @@ void Application::setupGLFW() {
     // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);         // 3.0+ only
 
     // Create window with graphics context
-    m_window = glfwCreateWindow(1600, 1200, "labeeri", NULL, NULL);
+    m_window = glfwCreateWindow(INITIAL_WINDOW_SIZE.x, INITIAL_WINDOW_SIZE.y, "labeeri", NULL, NULL);
     if (!m_window) {
         glfwTerminate();
         throw std::runtime_error("glfwCreateWindow failed");
@@ -126,6 +126,8 @@ void Application::emitEvent(Event& e) {
 void Application::emitEvent(ApplicationRenderEvent& e) {
     for (auto& layer : std::ranges::views::reverse(m_layers))
         layer->onEvent(e);
+
+    glfwSwapBuffers(m_window);
 }
 
 void Application::run() {
@@ -156,8 +158,6 @@ void Application::run() {
         // emit render
         ApplicationRenderEvent renderEvent;
         emitEvent(renderEvent);
-
-        glfwSwapBuffers(m_window);
     }
 
     m_closed = true;
@@ -177,7 +177,7 @@ void Application::glfwFramebufferSizeCallback(GLFWwindow* window, int width, int
 }
 
 void Application::glfwKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods) {
-    auto key = static_cast<Keyboard>(keyInt);
+    auto key = static_cast<KeyboardKey>(keyInt);
     auto action = static_cast<KeyAction>(actionInt);
 
     switch (action) {

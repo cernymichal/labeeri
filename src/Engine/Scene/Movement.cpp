@@ -2,19 +2,19 @@
 
 namespace labeeri::Engine {
 
-glm::vec3 directionFromKey(Keyboard key) {
+glm::vec3 directionFromKey(KeyboardKey key) {
     glm::vec3 direction(0.0f);
-    if (key == Keyboard::W)
+    if (key == KeyboardKey::W)
         direction = LAB_FORWARD;
-    else if (key == Keyboard::S)
+    else if (key == KeyboardKey::S)
         direction = -LAB_FORWARD;
-    else if (key == Keyboard::A)
+    else if (key == KeyboardKey::A)
         direction = -LAB_RIGHT;
-    else if (key == Keyboard::D)
+    else if (key == KeyboardKey::D)
         direction = LAB_RIGHT;
-    else if (key == Keyboard::Space)
+    else if (key == KeyboardKey::Space)
         direction = LAB_UP;
-    else if (key == Keyboard::LeftControl)
+    else if (key == KeyboardKey::LeftControl)
         direction = -LAB_UP;
 
     return direction;
