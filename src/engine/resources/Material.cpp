@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 ShaderProgram::ShaderProgram(LAB_GL_HANDLE program) : m_program(program) {
 }
@@ -63,4 +63,4 @@ void Material::bindUniforms(double time, const glm::mat4& modelMatrix, const glm
     LAB_LOG_OGL_ERROR();
 }
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

@@ -95,6 +95,9 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <UseStandardPreprocessor>
+      </UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -115,6 +118,10 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <UseStandardPreprocessor>
+      </UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,6 +143,10 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <UseStandardPreprocessor>
+      </UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,24 +156,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\Entities.cpp" />
-    <ClCompile Include="src\engine\scene\Camera.cpp" />
-    <ClCompile Include="src\engine\scene\Movement.cpp" />
-    <ClCompile Include="src\labeeri\Game.cpp" />
-    <ClCompile Include="src\engine\resources\resources.cpp" />
-    <ClCompile Include="src\engine\resources\load.cpp" />
-    <ClCompile Include="src\engine\imgui_windows\MenuWindow.cpp" />
-    <ClCompile Include="src\engine\Application.cpp" />
-    <ClCompile Include="src\engine\log.cpp" />
-    <ClCompile Include="src\labeeri\scenes.cpp" />
+    <ClCompile Include="src\Engine\Entities.cpp" />
+    <ClCompile Include="src\Engine\Scene\Look.cpp" />
+    <ClCompile Include="src\Engine\WindowLayer\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Engine\Scene\Camera.cpp" />
+    <ClCompile Include="src\Engine\Scene\Movement.cpp" />
+    <ClCompile Include="src\Engine\WindowLayer\SceneLayer.cpp" />
+    <ClCompile Include="src\Game\Game.cpp" />
+    <ClCompile Include="src\Engine\Resources\Resources.cpp" />
+    <ClCompile Include="src\Engine\Resources\Load.cpp" />
+    <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\MenuWindow.cpp" />
+    <ClCompile Include="src\Engine\Application.cpp" />
+    <ClCompile Include="src\Engine\Log.cpp" />
+    <ClCompile Include="src\Game\Scenes.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\engine\imgui_windows\LogWindow.cpp" />
-    <ClCompile Include="src\engine\scene\Entity.cpp" />
-    <ClCompile Include="src\engine\scene\Scene.cpp" />
-    <ClCompile Include="src\engine\scene\Transform.cpp" />
-    <ClCompile Include="src\engine\resources\Material.cpp" />
-    <ClCompile Include="src\engine\resources\Model.cpp" />
-    <ClCompile Include="src\engine\Viewport.cpp" />
+    <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\LogWindow.cpp" />
+    <ClCompile Include="src\Engine\Scene\Entity.cpp" />
+    <ClCompile Include="src\Engine\Scene\Scene.cpp" />
+    <ClCompile Include="src\Engine\Scene\Transform.cpp" />
+    <ClCompile Include="src\Engine\Resources\Material.cpp" />
+    <ClCompile Include="src\Engine\Resources\Model.cpp" />
+    <ClCompile Include="src\Engine\WindowLayer\ViewportLayer.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_LAB_DEBUG|x64'">Create</PrecompiledHeader>
@@ -170,27 +184,36 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine.h" />
-    <ClInclude Include="src\engine\Entities.h" />
-    <ClInclude Include="src\engine\keys.h" />
-    <ClInclude Include="src\engine\scene\Camera.h" />
-    <ClInclude Include="src\engine\scene\Input.h" />
-    <ClInclude Include="src\engine\scene\Movement.h" />
-    <ClInclude Include="src\labeeri\Game.h" />
-    <ClInclude Include="src\engine\resources\resources.h" />
-    <ClInclude Include="src\engine\resources\load.h" />
-    <ClInclude Include="src\engine\imgui_windows\MenuWindow.h" />
-    <ClInclude Include="src\engine\Application.h" />
-    <ClInclude Include="src\engine\log.h" />
-    <ClInclude Include="src\engine\imgui_windows\LogWindow.h" />
-    <ClInclude Include="src\engine\IRenderable.h" />
-    <ClInclude Include="src\engine\scene\Entity.h" />
-    <ClInclude Include="src\engine\scene\Scene.h" />
-    <ClInclude Include="src\engine\scene\Transform.h" />
-    <ClInclude Include="src\engine\resources\Material.h" />
-    <ClInclude Include="src\engine\resources\Model.h" />
-    <ClInclude Include="src\engine\Viewport.h" />
-    <ClInclude Include="src\labeeri\scenes.h" />
+    <ClInclude Include="src\Engine\API.h" />
+    <ClInclude Include="src\Engine\Entities.h" />
+    <ClInclude Include="src\Engine\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\Engine\Events\Event.h" />
+    <ClInclude Include="src\Engine\Events\IEventReceiver.h" />
+    <ClInclude Include="src\Engine\Events\Input.h" />
+    <ClInclude Include="src\Engine\Events\KeyboardEvent.h" />
+    <ClInclude Include="src\Engine\Events\MouseEvent.h" />
+    <ClInclude Include="src\Engine\Scene\Look.h" />
+    <ClInclude Include="src\Engine\Utils.h" />
+    <ClInclude Include="src\Engine\WindowLayer\ImGuiLayer.h" />
+    <ClInclude Include="src\Engine\Scene\Camera.h" />
+    <ClInclude Include="src\Engine\Scene\Movement.h" />
+    <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\IImGuiWindow.h" />
+    <ClInclude Include="src\Engine\WindowLayer\SceneLayer.h" />
+    <ClInclude Include="src\Game\Game.h" />
+    <ClInclude Include="src\Engine\Resources\Resources.h" />
+    <ClInclude Include="src\Engine\Resources\Load.h" />
+    <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\MenuWindow.h" />
+    <ClInclude Include="src\Engine\Application.h" />
+    <ClInclude Include="src\Engine\Log.h" />
+    <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\LogWindow.h" />
+    <ClInclude Include="src\Engine\WindowLayer\IWindowLayer.h" />
+    <ClInclude Include="src\Engine\Scene\Entity.h" />
+    <ClInclude Include="src\Engine\Scene\Scene.h" />
+    <ClInclude Include="src\Engine\Scene\Transform.h" />
+    <ClInclude Include="src\Engine\Resources\Material.h" />
+    <ClInclude Include="src\Engine\Resources\Model.h" />
+    <ClInclude Include="src\Engine\WindowLayer\ViewportLayer.h" />
+    <ClInclude Include="src\Game\Scenes.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>

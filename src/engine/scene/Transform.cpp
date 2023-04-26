@@ -1,6 +1,6 @@
 #include "Transform.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 Transform::Transform() {
 }
@@ -30,7 +30,7 @@ void Transform::setWorldPosition(const glm::vec3& position) {
 }
 
 void Transform::moveWorld(const glm::vec3& offset) {
-    setWorldPosition(worldPosition() + offset);
+    setPosition(position() + offset);
 }
 
 void Transform::setRotation(const glm::quat& rotation) {
@@ -153,4 +153,4 @@ void Transform::destroy() {
     removeParent();
 }
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

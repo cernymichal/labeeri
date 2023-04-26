@@ -1,15 +1,14 @@
 #pragma once
 
-#include "Entity.h"
+#include "Engine/Events/ApplicationEvent.h"
+#include "Engine/Scene/Entity.h"
 
-namespace labeeri::engine {
-
-constexpr auto FIXED_UPDATE_INTERVAL = (1.0 / 50.0);  // 50 Hz
+namespace labeeri::Engine {
 
 /**
  * @brief TODO
  */
-class Scene {
+class Scene : IEventReceiver {
 public:
     /**
      * @brief TODO
@@ -36,16 +35,18 @@ public:
      */
     const std::list<std::shared_ptr<Entity>>& entities() const;
 
-    /**
-     * @brief TODO
-     */
-    void update(double currentTime);
+    virtual void onEvent(Event& e) override;
 
 private:
     std::list<std::shared_ptr<Entity>> m_entities;
 
     double m_time = 0.0f;
-    double m_fixedUpdateTimeAccumulator = 0.0f;
+
+    bool onUpdate(const ApplicationUpdateEvent& e);
+
+    bool onFixedUpdate(const ApplicationFixedUpdateEvent& e);
+
+    bool onInput(Event& e);
 };
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

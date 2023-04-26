@@ -1,6 +1,6 @@
 #pragma once
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 constexpr auto LAB_FORWARD = glm::vec3(0.0f, 0.0f, -1.0f);
 constexpr auto LAB_UP = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -148,4 +148,4 @@ private:
     friend Entity;
 };
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

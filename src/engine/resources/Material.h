@@ -1,10 +1,6 @@
 #pragma once
 
-using LAB_GL_UINT = unsigned int;  // so that we dont have to include glew everywhere
-using LAB_GL_INT = int;
-using LAB_GL_HANDLE = LAB_GL_UINT;
-
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 /**
  * @brief TODO
@@ -66,4 +62,4 @@ public:
     virtual void bindUniforms(double time, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 };
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

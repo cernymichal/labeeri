@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../resources/Model.h"
-#include "Camera.h"
-#include "Input.h"
-#include "Movement.h"
-#include "Transform.h"
+#include "Engine/Resources/Model.h"
+#include "Engine/Scene/Camera.h"
+#include "Engine/Scene/Look.h"
+#include "Engine/Scene/Movement.h"
+#include "Engine/Scene/Transform.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 /**
  * @brief TODO
@@ -15,7 +15,7 @@ class Entity {
 public:
     bool m_enabled = true;
     std::shared_ptr<Model> m_model;
-    std::shared_ptr<Input> m_input;
+    std::shared_ptr<Look> m_look;
     std::shared_ptr<Movement> m_movement;
     std::shared_ptr<Camera> m_camera;
 
@@ -47,4 +47,4 @@ private:
     friend class Scene;
 };
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

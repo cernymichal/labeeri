@@ -1,23 +1,21 @@
 #include "MenuWindow.h"
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <imgui.h>
 
-#include "../Application.h"
+#include "Engine/Application.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 MenuWindow::MenuWindow() {
-    glfwSwapInterval(m_VSync ? 1 : 0);
+    Application::setVSync(m_VSync);
 }
 
-void MenuWindow::render() {
+void MenuWindow::draw() {
     ImGui::Begin("Menu");
 
     bool vSyncChanged = ImGui::Checkbox("VSync", &m_VSync);
     if (vSyncChanged)
-        glfwSwapInterval(m_VSync ? 1 : 0);
+        Application::setVSync(m_VSync);
 
     bool throwException = ImGui::Button("Exception");
 
@@ -32,4 +30,4 @@ void MenuWindow::render() {
         throw std::runtime_error("Exception thrown from MenuWindow");
 }
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

@@ -1,7 +1,7 @@
 #include "Game.h"
 
-#include "../engine.h"
-#include "scenes.h"
+#include "Engine/API.h"
+#include "Game/Scenes.h"
 
 namespace labeeri {
 
@@ -11,7 +11,7 @@ Game::Game() {
 void Game::setup() {
     auto scene = defaultScene();
 
-    auto flycam = engine::Entities::Flycam();
+    auto flycam = Engine::Entities::Flycam();
     scene->addEntity(flycam);
 
     LAB_CURRENT_SCENE = scene;

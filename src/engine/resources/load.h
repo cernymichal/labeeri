@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Material.h"
-#include "Model.h"
+#include "Engine/Resources/Material.h"
+#include "Engine/Resources/Model.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 /**
  * @brief TODO
@@ -15,4 +15,4 @@ ShaderProgram loadShaderProgram(const char* vertexPath, const char* fragmentPath
  */
 Mesh loadMesh(const char* filePath);
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

@@ -1,9 +1,9 @@
-#include "resources.h"
+#include "Resources.h"
 
-#include "load.h"
-#include "resources.h"
+#include "Engine/Resources/Load.h"
+#include "Engine/Resources/Resources.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 const std::shared_ptr<ShaderProgram>& Shaders::basic() {
     static std::shared_ptr<ShaderProgram> shader;
@@ -80,4 +80,4 @@ const std::shared_ptr<Model>& Models::basicSphere() {
     return model;
 }
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "scene/Camera.h"
-#include "scene/Entity.h"
+#include "Engine/Scene/Camera.h"
+#include "Engine/Scene/Entity.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 /**
  * @brief TODO
@@ -13,7 +13,7 @@ public:
     /**
      * @brief TODO
      */
-    static std::shared_ptr<Entity> Flycam(float speed = 1.0);
+    static std::shared_ptr<Entity> Flycam(float speed = 4.0, double sensitivity = 0.002);
 };
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

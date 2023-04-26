@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../engine.h"
+#include "Engine/API.h"
 
 namespace labeeri {
 
 /**
  * @brief TODO
  */
-std::shared_ptr<engine::Scene> defaultScene();
+std::shared_ptr<Engine::Scene> defaultScene();
 
 }  // namespace labeeri

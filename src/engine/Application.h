@@ -1,37 +1,40 @@
 #pragma once
 
-#include "IRenderable.h"
-#include "Viewport.h"
-#include "scene/Scene.h"
-
-#define LAB_APP labeeri::engine::Application::get()
-#define LAB_CURRENT_SCENE LAB_APP.m_scene
-#define LAB_CURRENT_CAMERA LAB_APP.camera()
+#include "Engine/Scene/Scene.h"
+#include "Engine/WindowLayer/IWindowLayer.h"
+#include "Engine/WindowLayer/SceneLayer.h"
+#include "Engine/WindowLayer/ViewportLayer.h"
 
 struct GLFWwindow;
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
-// GL 4.3 + GLSL 430
-constexpr auto GL_VERSION_MAJOR = 4;
-constexpr auto GL_VERSION_MINOR = 3;
-constexpr auto GLSL_VERSION = "#version 430";
+enum class ApplicationFocus : uint8_t {
+    UI,
+    Viewport
+};
 
 /**
  * @brief TODO
  */
 class Application {
 public:
-    std::shared_ptr<Scene> m_scene;
-
     /**
      * @brief TODO
      */
-    static Application& get();
+    static inline Application& get() {
+        static Application instance;
+        return instance;
+    }
 
     Application(const Application&) = delete;
 
     Application& operator=(const Application&) = delete;
+
+    /**
+     * @brief TODO
+     */
+    void initialize();
 
     /**
      * @brief TODO
@@ -41,34 +44,65 @@ public:
     /**
      * @brief TODO
      */
-    std::shared_ptr<Camera>& camera() const;
+    inline GLFWwindow* window() const {
+        return m_window;
+    }
 
     /**
      * @brief TODO
      */
-    GLFWwindow* window() const;
+    glm::uvec2 frameBufferSize() const;
 
     /**
      * @brief TODO
      */
-    std::pair<int, int> frameBufferSize() const;
+    static void setVSync(bool enabled);
 
     /**
      * @brief TODO
      */
-    void setVSync(bool enabled);
+    inline std::shared_ptr<Camera>& camera() const {
+        return m_viewportLayer->m_camera;
+    }
 
     /**
      * @brief TODO
      */
-    bool closed() const;
+    inline std::shared_ptr<Scene>& scene() const {
+        return m_sceneLayer->m_scene;
+    }
+
+    /**
+     * @brief TODO
+     */
+    inline ApplicationFocus focus() const {
+        return m_focus;
+    }
+
+    /**
+     * @brief TODO
+     */
+    void focusUI();
+
+    /**
+     * @brief TODO
+     */
+    void focusViewport();
+
+    /**
+     * @brief TODO
+     */
+    inline bool closed() const {
+        return m_closed;
+    }
 
 private:
     bool m_closed = false;
+    ApplicationFocus m_focus = ApplicationFocus::UI;
     GLFWwindow* m_window = nullptr;
-    std::list<std::unique_ptr<IRenderable>> m_imguiWindows;
-    std::unique_ptr<Viewport> m_viewport;
-
+    std::list<std::unique_ptr<IWindowLayer>> m_layers;
+    ViewportLayer* m_viewportLayer;
+    SceneLayer* m_sceneLayer;
     glm::dvec2 m_mousePosition;
 
     /**
@@ -94,12 +128,17 @@ private:
     /**
      * @brief TODO
      */
-    void setupImGui();
+    void emitEvent(Event& e);
 
     /**
      * @brief TODO
      */
-    void render();
+    void emitEvent(ApplicationRenderEvent& e);
+
+    /**
+     * @brief TODO
+     */
+    static void glfwErrorCallback(int error, const char* description);
 
     /**
      * @brief TODO
@@ -109,7 +148,7 @@ private:
     /**
      * @brief TODO
      */
-    static void glfwKeyboardCallback(GLFWwindow* window, int key, int scanCode, int action, int mods);
+    static void glfwKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods);
 
     /**
      * @brief TODO
@@ -119,7 +158,7 @@ private:
     /**
      * @brief TODO
      */
-    static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+    static void glfwMouseButtonCallback(GLFWwindow* window, int buttonInt, int actionInt, int mods);
 
     /**
      * @brief TODO
@@ -127,4 +166,4 @@ private:
     static void glfwScrollCallback(GLFWwindow* window, double deltaX, double deltaY);
 };
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

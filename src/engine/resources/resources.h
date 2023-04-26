@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Material.h"
-#include "Model.h"
+#include "Engine/Resources/Material.h"
+#include "Engine/Resources/Model.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 /**
  * @brief TODO
@@ -55,4 +55,4 @@ struct Models {
     static const std::shared_ptr<Model>& basicSphere();
 };
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

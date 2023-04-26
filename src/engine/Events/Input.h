@@ -1,20 +1,26 @@
 #pragma once
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
-enum class KeyAction : int {
+/**
+ * @brief TODO
+ */
+enum class KeyAction : uint8_t {
     Release = 0,
     Press = 1,
     Repeat = 2
 };
 
-#define LAB_MOD_SHIFT 0x0001
-#define LAB_MOD_CONTROL 0x0002
-#define LAB_MOD_ALT 0x0004
-#define LAB_MOD_SUPER 0x0008
-#define LAB_MOD_CAPS_LOCK 0x0010
-#define LAB_MOD_NUM_LOCK 0x0020
+#define LAB_MOD_SHIFT LAB_BIT(0)
+#define LAB_MOD_CONTROL LAB_BIT(1)
+#define LAB_MOD_ALT LAB_BIT(2)
+#define LAB_MOD_SUPER LAB_BIT(3)
+#define LAB_MOD_CAPS_LOCK LAB_BIT(4)
+#define LAB_MOD_NUM_LOCK LAB_BIT(5)
 
+/**
+ * @brief TODO
+ */
 enum class Keyboard : int {
     /* The unknown key */
     Unknown = -1,
@@ -144,7 +150,10 @@ enum class Keyboard : int {
     Menu = 348
 };
 
-enum class MouseButton : int {
+/**
+ * @brief TODO
+ */
+enum class MouseButton : uint8_t {
     Button1 = 0,
     Button2 = 1,
     Button3 = 2,
@@ -158,4 +167,4 @@ enum class MouseButton : int {
     Middle = 2
 };
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

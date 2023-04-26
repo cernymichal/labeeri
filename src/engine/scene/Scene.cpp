@@ -1,8 +1,9 @@
 #include "Scene.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 Scene::Scene() {
+    LAB_LOGH2("Scene::Scene()");
 }
 
 double Scene::time() const {
@@ -21,25 +22,44 @@ const std::list<std::shared_ptr<Entity>>& Scene::entities() const {
     return m_entities;
 }
 
-void Scene::update(double deltaTime) {
-    m_fixedUpdateTimeAccumulator += deltaTime;
+void Scene::onEvent(Event& e) {
+    e.dispatch<ApplicationUpdateEvent>(LAB_BIND_EVENT_FUNC(Scene::onUpdate));
+    e.dispatch<ApplicationFixedUpdateEvent>(LAB_BIND_EVENT_FUNC(Scene::onFixedUpdate));
 
-    if (m_fixedUpdateTimeAccumulator >= FIXED_UPDATE_INTERVAL) {
-        double fixedUpdateDeltaTime = deltaTime / floor(m_fixedUpdateTimeAccumulator / FIXED_UPDATE_INTERVAL);
-        while (m_fixedUpdateTimeAccumulator >= FIXED_UPDATE_INTERVAL) {
-            m_time += fixedUpdateDeltaTime;
+    if (e.isInCategory(EventCategory::Input) && !e.m_handled)
+        onInput(e);
+}
 
-            for (const auto& entity : m_entities)
-                entity->fixedUpdate();
-
-            m_fixedUpdateTimeAccumulator -= FIXED_UPDATE_INTERVAL;
-        }
-    }
-    else
-        m_time += deltaTime;
+bool Scene::onUpdate(const ApplicationUpdateEvent& e) {
+    double deltaTime = e.deltaTime();
+    m_time += deltaTime;
 
     for (const auto& entity : m_entities)
         entity->update(deltaTime);
+
+    return false;
 }
 
-}  // namespace labeeri::engine
+bool Scene::onFixedUpdate(const ApplicationFixedUpdateEvent& e) {
+    for (const auto& entity : m_entities)
+        entity->fixedUpdate();
+
+    return false;
+}
+
+bool Scene::onInput(Event& e) {
+    for (auto& entity : entities()) {
+        if (!entity->m_enabled)
+            continue;
+
+        if (entity->m_movement)
+            entity->m_movement->onEvent(e);
+
+        if (entity->m_look)
+            entity->m_look->onEvent(e);
+    }
+
+    return true;
+}
+
+}  // namespace labeeri::Engine

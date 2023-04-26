@@ -15,129 +15,165 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\Application.cpp">
+    <ClCompile Include="src\Engine\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\imgui_windows\MenuWindow.cpp">
+    <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\MenuWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\imgui_windows\LogWindow.cpp">
+    <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\LogWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\Viewport.cpp">
+    <ClCompile Include="src\Engine\WindowLayer\ViewportLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\scene\Scene.cpp">
+    <ClCompile Include="src\Engine\Scene\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\scene\Entity.cpp">
+    <ClCompile Include="src\Engine\Scene\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\scene\Transform.cpp">
+    <ClCompile Include="src\Engine\Scene\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\resources\Model.cpp">
+    <ClCompile Include="src\Engine\Resources\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\resources\Material.cpp">
+    <ClCompile Include="src\Engine\Resources\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\resources\load.cpp">
+    <ClCompile Include="src\Engine\Resources\Load.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\resources\resources.cpp">
+    <ClCompile Include="src\Engine\Resources\Resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\log.cpp">
+    <ClCompile Include="src\Engine\Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\labeeri\Game.cpp">
+    <ClCompile Include="src\Game\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\labeeri\scenes.cpp">
+    <ClCompile Include="src\Game\Scenes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\Entities.cpp">
+    <ClCompile Include="src\Engine\Entities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\scene\Camera.cpp">
+    <ClCompile Include="src\Engine\Scene\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\scene\Movement.cpp">
+    <ClCompile Include="src\Engine\Scene\Movement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\WindowLayer\ImGuiLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\WindowLayer\SceneLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Look.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\Application.h">
+    <ClInclude Include="src\Engine\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\log.h">
+    <ClInclude Include="src\Engine\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\imgui_windows\MenuWindow.h">
+    <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\MenuWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\imgui_windows\LogWindow.h">
+    <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\LogWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\IRenderable.h">
+    <ClInclude Include="src\Engine\WindowLayer\IWindowLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\Viewport.h">
+    <ClInclude Include="src\Engine\WindowLayer\ViewportLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\Scene.h">
+    <ClInclude Include="src\Engine\Scene\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\Entity.h">
+    <ClInclude Include="src\Engine\Scene\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\resources\Material.h">
+    <ClInclude Include="src\Engine\Resources\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\Transform.h">
+    <ClInclude Include="src\Engine\Scene\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\resources\Model.h">
+    <ClInclude Include="src\Engine\Resources\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\resources\load.h">
+    <ClInclude Include="src\Engine\Resources\Load.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\resources\resources.h">
+    <ClInclude Include="src\Engine\Resources\Resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\labeeri\Game.h">
+    <ClInclude Include="src\Game\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\labeeri\scenes.h">
+    <ClInclude Include="src\Game\Scenes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine.h">
+    <ClInclude Include="src\Engine\API.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\Entities.h">
+    <ClInclude Include="src\Engine\Entities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\Camera.h">
+    <ClInclude Include="src\Engine\Scene\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\Input.h">
+    <ClInclude Include="src\Engine\Events\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\keys.h">
+    <ClInclude Include="src\Engine\Scene\Movement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\Movement.h">
+    <ClInclude Include="src\Engine\WindowLayer\ImGuiLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\IImGuiWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Events\Event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Events\KeyboardEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Events\MouseEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Events\ApplicationEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Events\IEventReceiver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\WindowLayer\SceneLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Look.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

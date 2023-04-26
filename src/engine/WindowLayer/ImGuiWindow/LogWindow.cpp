@@ -4,14 +4,14 @@
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 
-#include "../Application.h"
+#include "Engine/Application.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 LogWindow::LogWindow() {
 }
 
-void LogWindow::render() {
+void LogWindow::draw() {
     ImGui::Begin("Log");
 
     bool autoScrollChanged = ImGui::Checkbox("Auto-scroll", &m_autoScroll);
@@ -39,4 +39,4 @@ void LogWindow::render() {
     ImGui::End();
 }
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

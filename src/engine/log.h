@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 #ifdef LAB_DEBUG
 
@@ -34,12 +34,12 @@ inline std::ostringstream LAB_LOGSTREAM;
  *
  * @param[in] x printable value
  */
-#define LAB_LOG(x) labeeri::engine::LAB_LOGSTREAM << x << std::endl
+#define LAB_LOG(x) labeeri::Engine::LAB_LOGSTREAM << x << std::endl
 
 /**
  * @brief TODO
  */
-#define LAB_LOGSTREAM_STR labeeri::engine::LAB_LOGSTREAM.str()
+#define LAB_LOGSTREAM_STR labeeri::Engine::LAB_LOGSTREAM.str()
 
 #endif
 
@@ -62,11 +62,11 @@ inline std::ostringstream LAB_LOGSTREAM;
 /**
  * @brief TODO
  */
-#define LAB_LOG_OGL_ERROR() LAB_DEBUG_ONLY(labeeri::engine::logOGLError(__FILE__, __LINE__))
+#define LAB_LOG_OGL_ERROR() LAB_DEBUG_ONLY(labeeri::Engine::logOGLError(__FILE__, __LINE__))
 
 /**
  * @brief TODO
  */
 void logOGLError(const char* file, int line);
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

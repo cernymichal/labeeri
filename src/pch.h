@@ -4,6 +4,7 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <ranges>
 #include <stdexcept>
 #include <utility>
 
@@ -20,4 +21,4 @@
 #include <glm/gtx/quaternion.hpp>
 
 // labeeri
-#include "engine/log.h"
+#include "Engine/Utils.h"

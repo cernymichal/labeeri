@@ -2,100 +2,72 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 
-#include "imgui_windows/LogWindow.h"
-#include "imgui_windows/MenuWindow.h"
-#include "resources/resources.h"
-#include "scene/Entity.h"
+#include "Engine/Events/ApplicationEvent.h"
+#include "Engine/Events/KeyboardEvent.h"
+#include "Engine/Events/MouseEvent.h"
+#include "Engine/Resources/Resources.h"
+#include "Engine/Scene/Entity.h"
+#include "Engine/WindowLayer/ImGuiLayer.h"
+#include "Engine/WindowLayer/SceneLayer.h"
+#include "Engine/WindowLayer/ViewportLayer.h"
 
-namespace labeeri::engine {
-
-struct ImGuiFrame {
-    ImGuiFrame() {
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-
-        ImGui::NewFrame();
-    }
-
-    ~ImGuiFrame() {
-        ImGui::EndFrame();
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        // Update and Render additional Platform Windows
-        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-        //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-        if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-            GLFWwindow* backup_current_context = glfwGetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            glfwMakeContextCurrent(backup_current_context);
-        }
-    }
-};
-
-static void glfwErrorCallback(int error, const char* description) {
-    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
-}
-
-Application& Application::get() {
-    static Application instance;
-    return instance;
-}
+namespace labeeri::Engine {
 
 Application::Application() {
     LAB_LOGH2("Application::Application()");
 
     setupGLFW();
     setupGL();
-    setupImGui();
-
-    m_viewport = std::make_unique<Viewport>();
-
-    m_imguiWindows.push_back(std::make_unique<MenuWindow>());
-    m_imguiWindows.push_back(std::make_unique<LogWindow>());
 }
 
 Application::~Application() {
     LAB_LOGH2("Application::~Application()");
 
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    m_layers.clear();
 
     LAB_LOG_OGL_ERROR();
 
     glfwDestroyWindow(m_window);
     glfwTerminate();
-    
+
     LAB_DEBUG_ONLY(std::cout << LAB_LOGSTREAM_STR << std::endl);
 }
 
-std::shared_ptr<Camera>& Application::camera() const {
-    return m_viewport->m_camera;
+void Application::initialize() {
+    LAB_LOGH2("Application::initialize()");
+
+    m_layers.push_back(std::make_unique<ImGuiLayer>());
+    m_layers.push_back(std::make_unique<ViewportLayer>());
+    m_viewportLayer = dynamic_cast<ViewportLayer*>(m_layers.back().get());
+    m_layers.push_back(std::make_unique<SceneLayer>());
+    m_sceneLayer = dynamic_cast<SceneLayer*>(m_layers.back().get());
 }
 
-GLFWwindow* Application::window() const {
-    return m_window;
-}
-
-std::pair<int, int> Application::frameBufferSize() const {
+glm::uvec2 Application::frameBufferSize() const {
     int width, height;
     glfwGetFramebufferSize(m_window, &width, &height);
-    return {width, height};
+    return glm::uvec2(width, height);
 }
 
 void Application::setVSync(bool enabled) {
     glfwSwapInterval(enabled ? 1 : 0);
 }
 
-bool Application::closed() const {
-    return m_closed;
+void Application::focusUI() {
+    if (closed())
+        return;
+
+    m_focus = ApplicationFocus::UI;
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void Application::focusViewport() {
+    if (closed())
+        return;
+
+    m_focus = ApplicationFocus::Viewport;
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void Application::setupGLFW() {
@@ -142,82 +114,88 @@ void Application::setupGL() {
     LAB_LOG("OpenGL version: " << glGetString(GL_VERSION));
 }
 
-void Application::setupImGui() {
-    LAB_LOGH2("Application::setupImGui()");
+void Application::emitEvent(Event& e) {
+    for (auto& layer : m_layers) {
+        layer->onEvent(e);
 
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport / Platform Windows
-    // io.ConfigViewportsNoAutoMerge = true;
-    // io.ConfigViewportsNoTaskBarIcon = true;
-
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-
-    // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-    ImGuiStyle& style = ImGui::GetStyle();
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-        style.WindowRounding = 0.0f;
-        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        if (e.m_handled)
+            break;
     }
+}
 
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
-    ImGui_ImplOpenGL3_Init(GLSL_VERSION);
+void Application::emitEvent(ApplicationRenderEvent& e) {
+    for (auto& layer : std::ranges::views::reverse(m_layers))
+        layer->onEvent(e);
 }
 
 void Application::run() {
     LAB_LOGH2("Application::run()");
 
     double previousUpdateTime = glfwGetTime();
+    double fixedUpdateTimeAccumulator = 0;
     while (!glfwWindowShouldClose(m_window)) {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
         glfwPollEvents();
 
         double currentTime = glfwGetTime();
         double deltaTime = currentTime - previousUpdateTime;
         previousUpdateTime = currentTime;
+        fixedUpdateTimeAccumulator += deltaTime;
 
-        if (m_scene)
-            m_scene->update(deltaTime);
-        render();
+        // emit fixed updates
+        while (fixedUpdateTimeAccumulator >= FIXED_UPDATE_INTERVAL) {
+            ApplicationFixedUpdateEvent fixedUpdateEvent;
+            emitEvent(fixedUpdateEvent);
+
+            fixedUpdateTimeAccumulator -= FIXED_UPDATE_INTERVAL;
+        }
+
+        // emit update
+        ApplicationUpdateEvent updateEvent(deltaTime);
+        emitEvent(updateEvent);
+
+        // emit render
+        ApplicationRenderEvent renderEvent;
+        emitEvent(renderEvent);
+
+        glfwSwapBuffers(m_window);
     }
 
     m_closed = true;
 }
 
-void Application::render() {
-    m_viewport->render();
-
-    {
-        ImGuiFrame frame;
-        for (auto& window : m_imguiWindows)
-            window->render();
-    }
-
-    glfwSwapBuffers(m_window);
+void Application::glfwErrorCallback(int error, const char* description) {
+    LAB_LOG("GLFW Error " << error << ": " << description);
 }
 
 void Application::glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height) {
-    LAB_APP.m_viewport->resize(width, height);
-    LAB_APP.render();
+    WindowResizeEvent resizeEvent(glm::uvec2(width, height));
+    LAB_APP.emitEvent(resizeEvent);
+
+    // rerender
+    ApplicationRenderEvent renderEvent;
+    LAB_APP.emitEvent(renderEvent);
 }
 
-void Application::glfwKeyboardCallback(GLFWwindow* window, int key, int scanCode, int action, int mods) {
-    if (ImGui::GetIO().WantCaptureKeyboard && static_cast<KeyAction>(action) != KeyAction::Release)
-        return;
+void Application::glfwKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods) {
+    auto key = static_cast<Keyboard>(keyInt);
+    auto action = static_cast<KeyAction>(actionInt);
 
-    for (auto& entity : LAB_APP.m_scene->entities()) {
-        if (entity->m_enabled && entity->m_input && entity->m_input->m_onKeyboard)
-            entity->m_input->m_onKeyboard(*entity, static_cast<Keyboard>(key), scanCode, static_cast<KeyAction>(action), mods);
+    switch (action) {
+        case KeyAction::Press: {
+            KeyboardPressEvent event(key, scanCode, mods);
+            LAB_APP.emitEvent(event);
+            break;
+        }
+        case KeyAction::Repeat: {
+            KeyboardRepeatEvent event(key, scanCode, mods);
+            LAB_APP.emitEvent(event);
+            break;
+        }
+        case KeyAction::Release: {
+            KeyboardReleaseEvent event(key, scanCode, mods);
+            LAB_APP.emitEvent(event);
+            break;
+        }
     }
 }
 
@@ -226,30 +204,31 @@ void Application::glfwCursorPosCallback(GLFWwindow* window, double x, double y) 
     glm::dvec2 delta = newPosition - LAB_APP.m_mousePosition;
     LAB_APP.m_mousePosition = newPosition;
 
-    for (auto& entity : LAB_APP.m_scene->entities()) {
-        if (entity->m_enabled && entity->m_input && entity->m_input->m_onMouseMove)
-            entity->m_input->m_onMouseMove(*entity, newPosition, delta);
-    }
+    MouseMoveEvent event(newPosition, delta);
+    LAB_APP.emitEvent(event);
 }
 
-void Application::glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-    if (ImGui::GetIO().WantCaptureMouse && static_cast<KeyAction>(action) != KeyAction::Release)
-        return;
+void Application::glfwMouseButtonCallback(GLFWwindow* window, int buttonInt, int actionInt, int mods) {
+    auto button = static_cast<MouseButton>(buttonInt);
+    auto action = static_cast<KeyAction>(actionInt);
 
-    for (auto& entity : LAB_APP.m_scene->entities()) {
-        if (entity->m_enabled && entity->m_input && entity->m_input->m_onMouseButton)
-            entity->m_input->m_onMouseButton(*entity, static_cast<MouseButton>(button), static_cast<KeyAction>(action), mods);
+    switch (action) {
+        case KeyAction::Press: {
+            MouseButtonPressEvent event(button, mods);
+            LAB_APP.emitEvent(event);
+            break;
+        }
+        case KeyAction::Release: {
+            MouseButtonReleaseEvent event(button, mods);
+            LAB_APP.emitEvent(event);
+            break;
+        }
     }
 }
 
 void Application::glfwScrollCallback(GLFWwindow* window, double deltaX, double deltaY) {
-    if (ImGui::GetIO().WantCaptureMouse)
-        return;
-
-    for (auto& entity : LAB_APP.m_scene->entities()) {
-        if (entity->m_enabled && entity->m_input && entity->m_input->m_onMouseScroll)
-            entity->m_input->m_onMouseScroll(*entity, deltaY);
-    }
+    MouseScrollEvent event(deltaY);
+    LAB_APP.emitEvent(event);
 }
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

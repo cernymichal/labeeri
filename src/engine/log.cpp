@@ -1,8 +1,8 @@
-#include "log.h"
+#include "Log.h"
 
 #include "GL/glew.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 void logOGLError(const char* file, int line) {
     for (GLenum error = glGetError(); error != GL_NO_ERROR; error = glGetError()) {
@@ -30,4 +30,4 @@ void logOGLError(const char* file, int line) {
     }
 }
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

@@ -1,4 +1,4 @@
-#include "load.h"
+#include "Load.h"
 
 #include <GL/glew.h>
 #include <assimp/postprocess.h>
@@ -8,9 +8,9 @@
 #include <fstream>
 #include <sstream>
 
-#include "resources.h"
+#include "Engine/Resources/Resources.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 struct Shader {
     Shader(GLuint shader) : m_shader(shader) {
@@ -235,4 +235,4 @@ Mesh loadMesh(const char* filePath) {
     return Mesh(VAO, VBO, EBO, faceCount);
 }
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

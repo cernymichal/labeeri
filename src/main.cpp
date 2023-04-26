@@ -1,7 +1,8 @@
-#include "engine/Application.h"
-#include "labeeri/Game.h"
+#include "Engine/Application.h"
+#include "Game/Game.h"
 
 int main(int argc, char** argv) {
+    LAB_APP.initialize();
     while (!LAB_APP.closed()) {
         try {
             labeeri::Game game;

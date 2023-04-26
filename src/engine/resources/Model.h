@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Material.h"
+#include "Engine/Resources/Material.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 /**
  * @brief TODO
@@ -56,7 +56,7 @@ private:
      */
     void draw(double time, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const;
 
-    friend class Viewport;
+    friend class ViewportLayer;
 };
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

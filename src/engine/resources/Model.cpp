@@ -2,9 +2,9 @@
 
 #include <GL/glew.h>
 
-#include "resources.h"
+#include "Engine/Resources/Resources.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 Mesh::Mesh(LAB_GL_HANDLE vertexArrayObject, LAB_GL_HANDLE vertexBufferObject, LAB_GL_HANDLE elementBufferObject, uint32_t triangleCount)
     : m_elementBufferObject(elementBufferObject), m_vertexBufferObject(vertexBufferObject), m_vertexArrayObject(vertexArrayObject), m_triangleCount(triangleCount) {
@@ -50,4 +50,4 @@ void Model::draw(double time, const glm::mat4& modelMatrix, const glm::mat4& vie
     LAB_LOG_OGL_ERROR();
 }
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine

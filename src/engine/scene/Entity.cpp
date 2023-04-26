@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-namespace labeeri::engine {
+namespace labeeri::Engine {
 
 Entity::Entity() {
 }
@@ -32,4 +32,4 @@ void Entity::update(double deltaTime) {
         m_movement->update(deltaTime);
 }
 
-}  // namespace labeeri::engine
+}  // namespace labeeri::Engine
