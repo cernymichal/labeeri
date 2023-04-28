@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Engine/Events/Event.h"
+#include "Engine/Events/IEvent.h"
 
 namespace labeeri::Engine {
 
 /**
  * @brief TODO
  */
-class WindowResizeEvent : public Event {
+class WindowResizeEvent : public IEvent {
 public:
     WindowResizeEvent(const glm::uvec2& windowSize) : m_windowSize(windowSize) {
     }
@@ -27,7 +27,7 @@ private:
 /**
  * @brief TODO
  */
-class ApplicationRenderEvent : public Event {
+class ApplicationRenderEvent : public IEvent {
 public:
     EVENT_CLASS_TYPE(ApplicationRender)
 
@@ -37,7 +37,7 @@ public:
 /**
  * @brief TODO
  */
-class ApplicationUpdateEvent : public Event {
+class ApplicationUpdateEvent : public IEvent {
 public:
     ApplicationUpdateEvent(double deltaTime) : m_deltaTime(deltaTime) {
     }
@@ -57,7 +57,7 @@ private:
 /**
  * @brief TODO
  */
-class ApplicationFixedUpdateEvent : public Event {
+class ApplicationFixedUpdateEvent : public IEvent {
 public:
     EVENT_CLASS_TYPE(ApplicationFixedUpdate)
 

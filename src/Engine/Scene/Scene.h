@@ -35,7 +35,7 @@ public:
      */
     const std::list<std::shared_ptr<Entity>>& entities() const;
 
-    virtual void onEvent(Event& e) override;
+    virtual void onEvent(IEvent& e) override;
 
 private:
     std::list<std::shared_ptr<Entity>> m_entities;
@@ -46,7 +46,7 @@ private:
 
     bool onFixedUpdate(const ApplicationFixedUpdateEvent& e);
 
-    bool onInput(Event& e);
+    bool onInput(IEvent& e);
 };
 
 }  // namespace labeeri::Engine

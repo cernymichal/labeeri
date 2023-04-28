@@ -23,14 +23,14 @@ public:
     /**
      * @brief TODO
      */
-    void onEvent(Event& e) override;
+    void onEvent(IEvent& e) override;
 
 private:
     std::list<std::unique_ptr<IImGuiWindow>> m_windows;
 
     void setupImGui();
 
-    bool onRender(const Event& e);
+    bool onRender(const IEvent& e);
 };
 
 }  // namespace labeeri::Engine

@@ -22,7 +22,7 @@ const std::list<std::shared_ptr<Entity>>& Scene::entities() const {
     return m_entities;
 }
 
-void Scene::onEvent(Event& e) {
+void Scene::onEvent(IEvent& e) {
     e.dispatch<ApplicationUpdateEvent>(LAB_BIND_EVENT_FUNC(Scene::onUpdate));
     e.dispatch<ApplicationFixedUpdateEvent>(LAB_BIND_EVENT_FUNC(Scene::onFixedUpdate));
 
@@ -47,7 +47,7 @@ bool Scene::onFixedUpdate(const ApplicationFixedUpdateEvent& e) {
     return false;
 }
 
-bool Scene::onInput(Event& e) {
+bool Scene::onInput(IEvent& e) {
     for (auto& entity : entities()) {
         if (!entity->m_enabled)
             continue;

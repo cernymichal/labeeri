@@ -1,7 +1,6 @@
 #include "Model.h"
 
-#include <GL/glew.h>
-
+#include "Engine/Renderer/IRenderer.h"
 #include "Engine/Resources/Resources.h"
 
 namespace labeeri::Engine {
@@ -19,33 +18,23 @@ Mesh::~Mesh() {
     if (m_moved)
         return;
 
-    glDeleteVertexArrays(1, &m_vertexArrayObject);
-    glDeleteBuffers(1, &m_elementBufferObject);
-    glDeleteBuffers(1, &m_vertexBufferObject);
-}
-
-void Mesh::draw() const {
-    glBindVertexArray(m_vertexArrayObject);
-    glDrawElements(GL_TRIANGLES, m_triangleCount * 3, GL_UNSIGNED_INT, nullptr);
-    //glBindVertexArray(0);
-
-    LAB_LOG_OGL_ERROR();
+    LAB_RENDERER->deleteMesh(*this);
 }
 
 Model::Model(std::shared_ptr<Material> material, std::shared_ptr<Mesh> mesh) : m_material(material), m_mesh(mesh) {
 }
 
-void Model::draw(double time, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const {
+void Model::draw(const glm::mat4& modelMatrix) const {
     auto& shader = m_material->m_shader;
     if (!shader)
         shader = Shaders::basic();
 
-    glUseProgram(*shader);
+    LAB_RENDERER->useShaderProgram(shader);
+    LAB_RENDERER->bindMesh(*m_mesh);
+    LAB_RENDERER->bindPVM(modelMatrix);
+    m_material->bindUniforms();
 
-    m_material->bindUniforms(time, modelMatrix, viewMatrix, projectionMatrix);
-    m_mesh->draw();
-
-    // glUseProgram(0);
+    LAB_RENDERER->drawMesh(*m_mesh);
 
     LAB_LOG_OGL_ERROR();
 }

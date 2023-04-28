@@ -27,7 +27,7 @@ void Movement::update(double deltaTime) {
     m_transform->move(m_velocity * static_cast<float>(deltaTime));
 }
 
-void Movement::onEvent(Event& e) {
+void Movement::onEvent(IEvent& e) {
     e.dispatch<KeyboardPressEvent>(LAB_BIND_EVENT_FUNC(Movement::onKeyboardPress));
     e.dispatch<KeyboardReleaseEvent>(LAB_BIND_EVENT_FUNC(Movement::onKeyboardRelease));
 }

@@ -16,7 +16,7 @@ public:
     /**
      * @brief TODO
      */
-    void onEvent(Event& e) override;
+    void onEvent(IEvent& e) override;
 };
 
 }  // namespace labeeri::Engine

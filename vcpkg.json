@@ -3,12 +3,15 @@
   "version-string": "0.1.0",
   "dependencies": [
     "glfw3",
-    "glew",
     "glm",
     "assimp",
     {
+      "name": "glad",
+      "features": [ "gl-api-43" ]
+    },
+    {
       "name": "imgui",
-      "features": ["docking-experimental", "glfw-binding", "opengl3-binding"]
+      "features": [ "docking-experimental", "glfw-binding", "opengl3-binding" ]
     }
   ]
 }

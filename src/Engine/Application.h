@@ -44,19 +44,12 @@ public:
     /**
      * @brief TODO
      */
-    inline GLFWwindow* window() const {
-        return m_window;
-    }
+    void emitEvent(IEvent& e);
 
     /**
      * @brief TODO
      */
-    glm::uvec2 frameBufferSize() const;
-
-    /**
-     * @brief TODO
-     */
-    static void setVSync(bool enabled);
+    void emitEvent(ApplicationRenderEvent& e);
 
     /**
      * @brief TODO
@@ -99,71 +92,16 @@ public:
 private:
     bool m_closed = false;
     ApplicationFocus m_focus = ApplicationFocus::UI;
-    GLFWwindow* m_window = nullptr;
     std::list<std::unique_ptr<IWindowLayer>> m_layers;
-    ViewportLayer* m_viewportLayer;
-    SceneLayer* m_sceneLayer;
-    glm::dvec2 m_mousePosition;
+    ViewportLayer* m_viewportLayer = nullptr;
+    SceneLayer* m_sceneLayer = nullptr;
 
     /**
      * @brief TODO
      */
     Application();
 
-    /**
-     * @brief TODO
-     */
     ~Application();
-
-    /**
-     * @brief TODO
-     */
-    void setupGLFW();
-
-    /**
-     * @brief TODO
-     */
-    void setupGL();
-
-    /**
-     * @brief TODO
-     */
-    void emitEvent(Event& e);
-
-    /**
-     * @brief TODO
-     */
-    void emitEvent(ApplicationRenderEvent& e);
-
-    /**
-     * @brief TODO
-     */
-    static void glfwErrorCallback(int error, const char* description);
-
-    /**
-     * @brief TODO
-     */
-    static void glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height);
-
-    /**
-     * @brief TODO
-     */
-    static void glfwKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods);
-
-    /**
-     * @brief TODO
-     */
-    static void glfwCursorPosCallback(GLFWwindow* window, double x, double y);
-
-    /**
-     * @brief TODO
-     */
-    static void glfwMouseButtonCallback(GLFWwindow* window, int buttonInt, int actionInt, int mods);
-
-    /**
-     * @brief TODO
-     */
-    static void glfwScrollCallback(GLFWwindow* window, double deltaX, double deltaY);
 };
 
 }  // namespace labeeri::Engine

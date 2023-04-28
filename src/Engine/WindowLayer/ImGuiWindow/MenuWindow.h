@@ -20,7 +20,7 @@ public:
     void draw() override;
 
 private:
-    bool m_VSync = true;
+    bool m_VSync;
 };
 
 }  // namespace labeeri::Engine

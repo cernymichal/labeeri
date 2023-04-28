@@ -5,6 +5,8 @@ smooth in vec2 UV;
 
 uniform float time;
 
+out vec4 fragColor;
+
 void main() {
-    gl_FragColor = vec4(0.9, 0.0, 0.9, 1.0);
+    fragColor = vec4(0.9, 0.0, 0.9, 1.0);
 }

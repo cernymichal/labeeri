@@ -3,11 +3,12 @@
 #include <imgui.h>
 
 #include "Engine/Application.h"
+#include "Engine/Window/IWindow.h"
 
 namespace labeeri::Engine {
 
 MenuWindow::MenuWindow() {
-    Application::setVSync(m_VSync);
+    m_VSync = LAB_WINDOW->VSync();
 }
 
 void MenuWindow::draw() {
@@ -15,7 +16,7 @@ void MenuWindow::draw() {
 
     bool vSyncChanged = ImGui::Checkbox("VSync", &m_VSync);
     if (vSyncChanged)
-        Application::setVSync(m_VSync);
+        LAB_WINDOW->setVSync(m_VSync);
 
     bool throwException = ImGui::Button("Exception");
 

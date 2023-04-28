@@ -2,8 +2,6 @@
 
 #include <sstream>
 
-namespace labeeri::Engine {
-
 #ifdef LAB_DEBUG
 
 #define LAB_DEBUG_ONLY(x) x
@@ -23,23 +21,14 @@ namespace labeeri::Engine {
 
 #define LAB_LOG(x) std::cout << x << std::endl
 
-#define LAB_LOGSTREAM_STR ""
-
 #else
-
-inline std::ostringstream LAB_LOGSTREAM;
 
 /**
  * @brief log message
  *
  * @param[in] x printable value
  */
-#define LAB_LOG(x) labeeri::Engine::LAB_LOGSTREAM << x << std::endl
-
-/**
- * @brief TODO
- */
-#define LAB_LOGSTREAM_STR labeeri::Engine::LAB_LOGSTREAM.str()
+#define LAB_LOG(x) labeeri::Engine::LOG_STREAM << x << std::endl
 
 #endif
 
@@ -62,7 +51,16 @@ inline std::ostringstream LAB_LOGSTREAM;
 /**
  * @brief TODO
  */
+#define LAB_LOGH3(x) LAB_LOG("- " << x)
+
+/**
+ * @brief TODO
+ */
 #define LAB_LOG_OGL_ERROR() LAB_DEBUG_ONLY(labeeri::Engine::logOGLError(__FILE__, __LINE__))
+
+namespace labeeri::Engine {
+
+inline std::ostringstream LOG_STREAM;
 
 /**
  * @brief TODO

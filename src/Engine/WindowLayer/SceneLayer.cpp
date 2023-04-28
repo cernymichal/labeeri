@@ -4,7 +4,7 @@
 
 namespace labeeri::Engine {
 
-void SceneLayer::onEvent(Event& e) {
+void SceneLayer::onEvent(IEvent& e) {
     if (!m_scene)
         return;
 

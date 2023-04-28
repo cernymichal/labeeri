@@ -4,13 +4,15 @@
 
 #define LAB_BIT(x) (1 << x)
 
-using LAB_GL_UINT = unsigned int;  // so that we dont have to include glew everywhere
+using LAB_GL_UINT = unsigned int;  // so that we dont have to include GLAD everywhere
 using LAB_GL_INT = int;
 using LAB_GL_HANDLE = LAB_GL_UINT;
 
 #define LAB_APP labeeri::Engine::Application::get()
 #define LAB_CURRENT_SCENE LAB_APP.scene()
 #define LAB_CURRENT_CAMERA LAB_APP.camera()
+#define LAB_WINDOW labeeri::Engine::IWindow::get()
+#define LAB_RENDERER labeeri::Engine::IRenderer::get()
 
 namespace labeeri::Engine {
 

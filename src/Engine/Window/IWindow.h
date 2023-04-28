@@ -1,0 +1,83 @@
+#pragma once
+
+namespace labeeri::Engine {
+
+class Application;
+
+enum class CursorMode : uint8_t {
+    Normal,
+    Hidden,
+    Disabled
+};
+
+class IWindow {
+public:
+    /**
+     * @brief TODO
+     */
+    virtual ~IWindow() = default;
+
+    /**
+     * @brief TODO
+     */
+    virtual double currentTime() const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual glm::uvec2 frameBufferSize() const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual bool VSync() const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void setVSync(bool enabled) = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual bool shouldClose() const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void swapBuffers() const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void pollEvents() const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void setCursorMode(CursorMode mode) const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void setClipboardContent(const char* content) const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void* procAddressGetter() const = 0;
+
+    /**
+     * @brief TODO
+     */
+    static inline IWindow* get() {
+        return s_window.get();
+    }
+
+private:
+    static std::unique_ptr<IWindow> s_window;
+
+    friend Application;
+};
+
+}  // namespace labeeri::Engine

@@ -21,7 +21,7 @@ public:
      */
     void update(double deltaTime);
 
-    void onEvent(Event& e) override;
+    void onEvent(IEvent& e) override;
 
 private:
     glm::vec3 m_velocity = glm::vec3(0.0f);

@@ -2,6 +2,8 @@
 
 smooth in vec2 UV;
 
+out vec4 fragColor;
+
 void main() {
-    gl_FragColor = vec4(UV.x, UV.y, 0.0, 1.0);
+    fragColor = vec4(UV.x, UV.y, 0.0, 1.0);
 }

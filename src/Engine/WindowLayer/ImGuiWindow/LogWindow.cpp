@@ -1,10 +1,9 @@
 #include "LogWindow.h"
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <imgui.h>
 
 #include "Engine/Application.h"
+#include "Engine/Window/IWindow.h"
 
 namespace labeeri::Engine {
 
@@ -17,16 +16,16 @@ void LogWindow::draw() {
     bool autoScrollChanged = ImGui::Checkbox("Auto-scroll", &m_autoScroll);
     ImGui::SameLine(ImGui::GetWindowWidth() - 100);
     if (ImGui::SmallButton("Clear"))
-        LAB_LOGSTREAM.str("");
+        LOG_STREAM.str("");
     ImGui::SameLine();
     if (ImGui::SmallButton("Copy"))
-        glfwSetClipboardString(LAB_APP.window(), LAB_LOGSTREAM.str().c_str());
+        LAB_WINDOW->setClipboardContent(LOG_STREAM.str().c_str());
 
     ImGui::Separator();
 
     ImGui::BeginChild("Log content");
 
-    ImGui::TextUnformatted(LAB_LOGSTREAM.str().c_str());
+    ImGui::TextUnformatted(LOG_STREAM.str().c_str());
 
     if (ImGui::GetScrollY() != ImGui::GetScrollMaxY() && !autoScrollChanged)
         m_autoScroll = false;

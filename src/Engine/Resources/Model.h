@@ -31,11 +31,6 @@ public:
      */
     ~Mesh();
 
-    /**
-     * @brief TODO
-     */
-    void draw() const;
-
 private:
     bool m_moved = false;
 };
@@ -54,7 +49,7 @@ private:
     /**
      * @brief TODO
      */
-    void draw(double time, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const;
+    void draw(const glm::mat4& modelMatrix) const;
 
     friend class ViewportLayer;
 };

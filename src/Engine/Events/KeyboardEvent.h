@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Events/Event.h"
+#include "Engine/Events/IEvent.h"
 #include "Engine/Events/Input.h"
 
 namespace labeeri::Engine {
@@ -8,7 +8,7 @@ namespace labeeri::Engine {
 /**
  * @brief TODO
  */
-class KeyboardEvent : public Event {
+class KeyboardEvent : public IEvent {
 public:
     inline KeyboardKey key() const {
         return m_key;

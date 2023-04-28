@@ -5,7 +5,7 @@ namespace labeeri::Engine {
 Look::Look(const std::shared_ptr<Transform>& transform, double sensitivity) : m_transform(transform), m_sensitivity(sensitivity) {
 }
 
-void Look::onEvent(Event& e) {
+void Look::onEvent(IEvent& e) {
     e.dispatch<MouseMoveEvent>(LAB_BIND_EVENT_FUNC(Look::onMouseMove));
 }
 

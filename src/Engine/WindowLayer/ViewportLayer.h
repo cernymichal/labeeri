@@ -20,10 +20,12 @@ public:
      */
     ViewportLayer();
 
-    virtual void onEvent(Event& e) override;
+    virtual void onEvent(IEvent& e) override;
 
 private:
     glm::uvec2 m_size;
+
+    void setupGL();
 
     bool onRender(const ApplicationRenderEvent& e);
 

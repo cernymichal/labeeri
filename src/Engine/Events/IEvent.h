@@ -44,11 +44,11 @@ enum class EventCategory : int {
 /**
  * @brief TODO
  */
-class Event {
+class IEvent {
 public:
     bool m_handled = false;
 
-    virtual ~Event() = default;
+    virtual ~IEvent() = default;
 
     /**
      * @brief TODO
@@ -85,7 +85,7 @@ public:
     }
 };
 
-inline std::ostream& operator<<(std::ostream& stream, const Event& event) {
+inline std::ostream& operator<<(std::ostream& stream, const IEvent& event) {
     return stream << event.name();
 }
 

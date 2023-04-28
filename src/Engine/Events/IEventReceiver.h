@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Events/Event.h"
+#include "Engine/Events/IEvent.h"
 
 namespace labeeri::Engine {
 
@@ -12,7 +12,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual void onEvent(Event& e) = 0;
+    virtual void onEvent(IEvent& e) = 0;
 };
 
 }  // namespace labeeri::Engine

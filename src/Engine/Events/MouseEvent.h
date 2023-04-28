@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Events/Event.h"
+#include "Engine/Events/IEvent.h"
 #include "Engine/Events/Input.h"
 
 namespace labeeri::Engine {
@@ -8,7 +8,7 @@ namespace labeeri::Engine {
 /**
  * @brief TODO
  */
-class MouseMoveEvent : public Event {
+class MouseMoveEvent : public IEvent {
 public:
     MouseMoveEvent(const glm::dvec2& postition, const glm::dvec2& delta)
         : m_position(postition), m_delta(delta) {
@@ -34,7 +34,7 @@ protected:
 /**
  * @brief TODO
  */
-class MouseScrollEvent : public Event {
+class MouseScrollEvent : public IEvent {
 public:
     MouseScrollEvent(double delta) : m_delta(delta) {
     }
@@ -54,7 +54,7 @@ protected:
 /**
  * @brief TODO
  */
-class MouseButtonEvent : public Event {
+class MouseButtonEvent : public IEvent {
 public:
     inline MouseButton button() const {
         return m_button;

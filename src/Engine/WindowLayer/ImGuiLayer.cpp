@@ -1,14 +1,15 @@
 #include "ImGuiLayer.h"
 
+#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
 #include "Engine/Application.h"
 #include "Engine/Events/ApplicationEvent.h"
+#include "Engine/Window/GLFWWindow.h"
 #include "Engine/WindowLayer/ImGuiWindow/LogWindow.h"
 #include "Engine/WindowLayer/ImGuiWindow/MenuWindow.h"
-#include "GLFW/glfw3.h"
 
 namespace labeeri::Engine {
 
@@ -54,6 +55,8 @@ ImGuiLayer::~ImGuiLayer() {
 }
 
 void ImGuiLayer::setupImGui() {
+    LAB_LOGH3("ImGuiLayer::setupImGui()");
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -75,11 +78,13 @@ void ImGuiLayer::setupImGui() {
     }
 
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(LAB_APP.window(), true);
+    ImGui_ImplGlfw_InitForOpenGL(dynamic_cast<GLFWWindow*>(LAB_WINDOW)->windowObject(), true);
     ImGui_ImplOpenGL3_Init(GLSL_VERSION);
+
+    LAB_LOG_OGL_ERROR();
 }
 
-void ImGuiLayer::onEvent(Event& e) {
+void ImGuiLayer::onEvent(IEvent& e) {
     if ((e.isInCategory(EventCategory::Keyboard) && ImGui::GetIO().WantCaptureKeyboard) || (e.isInCategory(EventCategory::Mouse) && ImGui::GetIO().WantCaptureMouse)) {
         e.m_handled = true;
         return;
@@ -88,7 +93,7 @@ void ImGuiLayer::onEvent(Event& e) {
     e.dispatch<ApplicationRenderEvent>(LAB_BIND_EVENT_FUNC(ImGuiLayer::onRender));
 }
 
-bool ImGuiLayer::onRender(const Event& e) {
+bool ImGuiLayer::onRender(const IEvent& e) {
     ImGuiFrame frame;
     for (auto& window : m_windows)
         window->draw();

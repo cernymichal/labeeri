@@ -59,7 +59,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual void bindUniforms(double time, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
+    virtual void bindUniforms() ;
 };
 
 }  // namespace labeeri::Engine
