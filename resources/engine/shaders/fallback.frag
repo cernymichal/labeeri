@@ -1,10 +1,5 @@
 #version 430
 
-smooth in vec3 normal;
-smooth in vec2 UV;
-
-uniform float time;
-
 out vec4 fragColor;
 
 void main() {

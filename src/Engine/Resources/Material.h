@@ -1,55 +1,21 @@
 #pragma once
 
+#include "Engine/Renderer/ShaderProgram.h"
+#include "Engine/Renderer/Texture.h"
+
 namespace labeeri::Engine {
-
-/**
- * @brief TODO
- */
-class ShaderProgram {
-public:
-    /**
-     * @brief TODO
-     */
-    ShaderProgram(LAB_GL_HANDLE program);
-
-    ShaderProgram(const ShaderProgram&) = delete;
-
-    /**
-     * @brief TODO
-     */
-    ShaderProgram(ShaderProgram&& other) noexcept;
-
-    /**
-     * @brief TODO
-     */
-    ~ShaderProgram();
-
-    /**
-     * @brief TODO
-     */
-    LAB_GL_INT getUniformLocation(const char* name);
-
-    /**
-     * @brief TODO
-     */
-    operator LAB_GL_HANDLE() const;
-
-private:
-    LAB_GL_HANDLE m_program;
-    std::unordered_map<const char*, LAB_GL_HANDLE> m_uniforms;
-};
 
 /**
  * @brief TODO
  */
 class Material {
 public:
-    std::shared_ptr<ShaderProgram> m_shader;
+    ShaderProgramRef m_shader;
 
     /**
      * @brief TODO
      */
-    Material(const std::shared_ptr<ShaderProgram>& shader);
+    Material(const ShaderProgramRef& shader);
 
     /**
      * @brief TODO
@@ -59,7 +25,33 @@ public:
     /**
      * @brief TODO
      */
-    virtual void bindUniforms() ;
+    virtual void bindUniforms() const = 0;
+};
+
+using MaterialRef = std::shared_ptr<Material>;
+
+/**
+ * @brief TODO
+ */
+class FlatMaterial : public Material {
+public:
+    TextureRef m_texture = nullptr;
+    glm::vec3 m_color = FALLBACK_COLOR;
+
+    /**
+     * @brief TODO
+     */
+    FlatMaterial(const ShaderProgramRef& shader, const glm::vec3& color = FALLBACK_COLOR);
+
+    /**
+     * @brief TODO
+     */
+    FlatMaterial(const ShaderProgramRef& shader, const TextureRef& texture);
+
+    /**
+     * @brief TODO
+     */
+    virtual void bindUniforms() const override;
 };
 
 }  // namespace labeeri::Engine

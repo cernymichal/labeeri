@@ -98,6 +98,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <UseStandardPreprocessor>
       </UseStandardPreprocessor>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,6 +123,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <UseStandardPreprocessor>
       </UseStandardPreprocessor>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,6 +150,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <UseStandardPreprocessor>
       </UseStandardPreprocessor>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -160,6 +163,9 @@
     <ClCompile Include="src\Engine\Entities.cpp" />
     <ClCompile Include="src\Engine\Renderer\GLRenderer.cpp" />
     <ClCompile Include="src\Engine\Renderer\IRenderer.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Mesh.cpp" />
+    <ClCompile Include="src\Engine\Renderer\ShaderProgram.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Texture.cpp" />
     <ClCompile Include="src\Engine\Scene\Look.cpp" />
     <ClCompile Include="src\Engine\Window\GLFWWindow.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiLayer.cpp" />
@@ -172,7 +178,6 @@
     <ClCompile Include="src\Engine\Resources\Load.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\MenuWindow.cpp" />
     <ClCompile Include="src\Engine\Application.cpp" />
-    <ClCompile Include="src\Engine\Log.cpp" />
     <ClCompile Include="src\Game\Scenes.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\LogWindow.cpp" />
@@ -199,6 +204,9 @@
     <ClInclude Include="src\Engine\Events\MouseEvent.h" />
     <ClInclude Include="src\Engine\Renderer\GLRenderer.h" />
     <ClInclude Include="src\Engine\Renderer\IRenderer.h" />
+    <ClInclude Include="src\Engine\Renderer\Mesh.h" />
+    <ClInclude Include="src\Engine\Renderer\ShaderProgram.h" />
+    <ClInclude Include="src\Engine\Renderer\Texture.h" />
     <ClInclude Include="src\Engine\Scene\Look.h" />
     <ClInclude Include="src\Engine\Utils.h" />
     <ClInclude Include="src\Engine\Window\GLFWWindow.h" />
@@ -226,10 +234,10 @@
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\engine\shaders\basic.frag" />
-    <None Include="resources\engine\shaders\basic.vert" />
-    <None Include="resources\engine\shaders\texture_only.frag" />
-    <None Include="resources\engine\shaders\texture_only.vert" />
+    <None Include="resources\engine\shaders\fallback.frag" />
+    <None Include="resources\engine\shaders\fallback.vert" />
+    <None Include="resources\engine\shaders\flat.frag" />
+    <None Include="resources\engine\shaders\flat.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

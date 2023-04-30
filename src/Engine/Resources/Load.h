@@ -8,11 +8,16 @@ namespace labeeri::Engine {
 /**
  * @brief TODO
  */
-ShaderProgram loadShaderProgram(const char* vertexPath, const char* fragmentPath);
+ShaderProgramRef loadShaderProgram(const char* vertexPath, const char* fragmentPath);
 
 /**
  * @brief TODO
  */
-Mesh loadMesh(const char* filePath);
+MeshRef loadMesh(const char* filePath);
+
+/**
+ * @brief TODO
+ */
+TextureRef loadTexture(const char* filePath);
 
 }  // namespace labeeri::Engine

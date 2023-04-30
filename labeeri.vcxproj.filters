@@ -51,9 +51,6 @@
     <ClCompile Include="src\Engine\Resources\Resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Log.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -91,6 +88,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\GLRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -200,11 +206,20 @@
     <ClInclude Include="src\Engine\Renderer\GLRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\ShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\engine\shaders\basic.frag" />
-    <None Include="resources\engine\shaders\basic.vert" />
-    <None Include="resources\engine\shaders\texture_only.vert" />
-    <None Include="resources\engine\shaders\texture_only.frag" />
+    <None Include="resources\engine\shaders\flat.vert" />
+    <None Include="resources\engine\shaders\flat.frag" />
+    <None Include="resources\engine\shaders\fallback.vert" />
+    <None Include="resources\engine\shaders\fallback.frag" />
   </ItemGroup>
 </Project>

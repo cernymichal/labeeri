@@ -22,7 +22,7 @@ Application::~Application() {
 
     m_layers.clear();
 
-    LAB_LOG_OGL_ERROR();
+    LAB_LOG_RENDERAPI_ERROR();
 
     IWindow::s_window = nullptr;
 

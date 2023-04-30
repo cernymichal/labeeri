@@ -39,7 +39,7 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
 
     LAB_RENDERER->endScene();
 
-    LAB_LOG_OGL_ERROR();
+    LAB_LOG_RENDERAPI_ERROR();
 
     return false;
 }

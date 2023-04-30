@@ -1,60 +1,34 @@
 #include "scenes.h"
 
+using namespace labeeri::Engine;
+
 namespace labeeri {
 
-std::shared_ptr<Engine::Scene> labeeri::defaultScene() {
-    auto scene = std::make_shared<Engine::Scene>();
+std::shared_ptr<Scene> labeeri::defaultScene() {
+    auto scene = std::make_shared<Scene>();
 
-    /*
-    auto cameraEntity = std::make_shared<Engine::Entity>();
-    cameraEntity->transform()->setPosition(glm::vec3(3, 3, 3));
-    cameraEntity->transform()->setRotation(glm::vec3(0, glm::radians(45.0f), 0));
-    cameraEntity->transform()->setRotation(cameraEntity->transform()->rotation() * glm::quat(glm::vec3(glm::radians(-40.0f), 0, 0)));
-    scene->addEntity(cameraEntity);
-    auto camera = std::make_shared<Engine::Camera>(cameraEntity->transform());
-    */
+    auto material = copyShared(Materials::UVTest());
+    material->m_texture = loadTexture("resources/labeeri/textures/catguy.jpg");
 
-    auto sphere = std::make_shared<Engine::Entity>();
-    sphere->m_model = Engine::Models::basicSphere();
-    sphere->m_onFixedUpdate = [](Engine::Entity& self) {
-        self.transform()->setPosition(self.transform()->position() + glm::vec3(0.01, 0, 0));
+    auto sphere = std::make_shared<Entity>();
+    sphere->transform()->setPosition(glm::vec3(1.0, -1.2, -2.2));
+    sphere->m_model = copyShared(Models::basicSphere());
+    sphere->m_model->m_material = material;
+    sphere->m_onUpdate = [](Entity& self, double deltaTime) {
+        self.transform()->move(glm::vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.01f, 0));
+        self.transform()->rotate(glm::vec3(0, glm::radians(-15.0f), 0) * (float)deltaTime);
     };
     scene->addEntity(sphere);
 
-    sphere = std::make_shared<Engine::Entity>();
-    sphere->m_model = Engine::Models::basicSphere();
-    sphere->m_onFixedUpdate = [](Engine::Entity& self) {
-        self.transform()->setPosition(self.transform()->position() + glm::vec3(-0.01, 0, 0));
+    auto cube = std::make_shared<Entity>();
+    cube->transform()->setPosition(glm::vec3(-1.0, 0, -2));
+    cube->m_model = copyShared(Models::basicCube());
+    cube->m_model->m_material = material;
+    cube->m_onUpdate = [](Entity& self, double deltaTime) {
+        self.transform()->move(glm::vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.002f, 0));
+        self.transform()->rotate(glm::vec3(0, glm::radians(20.0f), 0) * (float)deltaTime);
     };
-    scene->addEntity(sphere);
-
-    sphere = std::make_shared<Engine::Entity>();
-    sphere->m_model = Engine::Models::basicSphere();
-    sphere->m_onFixedUpdate = [](Engine::Entity& self) {
-        self.transform()->setPosition(self.transform()->position() + glm::vec3(0, 0.01, 0));
-    };
-    scene->addEntity(sphere);
-
-    sphere = std::make_shared<Engine::Entity>();
-    sphere->m_model = Engine::Models::basicSphere();
-    sphere->m_onFixedUpdate = [](Engine::Entity& self) {
-        self.transform()->setPosition(self.transform()->position() + glm::vec3(0, -0.01, 0));
-    };
-    scene->addEntity(sphere);
-
-    sphere = std::make_shared<Engine::Entity>();
-    sphere->m_model = Engine::Models::basicSphere();
-    sphere->m_onFixedUpdate = [](Engine::Entity& self) {
-        self.transform()->setPosition(self.transform()->position() + glm::vec3(0, 0, 0.01));
-    };
-    scene->addEntity(sphere);
-
-    sphere = std::make_shared<Engine::Entity>();
-    sphere->m_model = Engine::Models::basicSphere();
-    sphere->m_onFixedUpdate = [](Engine::Entity& self) {
-        self.transform()->setPosition(self.transform()->position() + glm::vec3(0, 0, -0.01));
-    };
-    scene->addEntity(sphere);
+    scene->addEntity(cube);
 
     return scene;
 }

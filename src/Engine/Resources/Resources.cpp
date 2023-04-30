@@ -4,13 +4,12 @@
 #include "Engine/Resources/Resources.h"
 
 namespace labeeri::Engine {
-
-const std::shared_ptr<ShaderProgram>& Shaders::basic() {
-    static std::shared_ptr<ShaderProgram> shader;
+const ShaderProgramRef& Shaders::fallback() {
+    static ShaderProgramRef shader;
 
     if (!shader) {
         try {
-            shader = std::make_shared<ShaderProgram>(loadShaderProgram("resources/engine/shaders/basic.vert", "resources/engine/shaders/basic.frag"));
+            shader = loadShaderProgram("resources/engine/shaders/fallback.vert", "resources/engine/shaders/fallback.frag");
         }
         catch (const std::exception&) {
         }
@@ -19,63 +18,100 @@ const std::shared_ptr<ShaderProgram>& Shaders::basic() {
     return shader;
 }
 
-const std::shared_ptr<Material>& Materials::basic() {
-    static std::shared_ptr<Material> material;
+const ShaderProgramRef& Shaders::flat() {
+    static ShaderProgramRef shader;
 
-    if (!material && Shaders::basic())
-        material = std::make_shared<Material>(Shaders::basic());
+    if (!shader) {
+        try {
+            shader = loadShaderProgram("resources/engine/shaders/flat.vert", "resources/engine/shaders/flat.frag");
+        }
+        catch (const std::exception&) {
+        }
+    }
+
+    return shader;
+}
+
+const MeshRef& Meshes::cube() {
+    static MeshRef mesh;
+
+    if (!mesh) {
+        try {
+            mesh = loadMesh("resources/engine/models/cube.obj");
+        }
+        catch (const std::exception&) {
+        }
+    }
+
+    return mesh;
+}
+
+const MeshRef& Meshes::sphere() {
+    static MeshRef mesh;
+
+    if (!mesh) {
+        try {
+            mesh = loadMesh("resources/engine/models/sphere.obj");
+        }
+        catch (const std::exception&) {
+        }
+    }
+
+    return mesh;
+}
+
+const TextureRef& Textures::test() {
+    static TextureRef texture;
+
+    if (!texture) {
+        try {
+            texture = loadTexture("resources/engine/textures/uv_test.png");
+        }
+        catch (const std::exception&) {
+        }
+    }
+
+    return texture;
+}
+
+const std::shared_ptr<FlatMaterial>& Materials::flatGrey() {
+    static std::shared_ptr<FlatMaterial> material;
+
+    if (!material && Shaders::flat())
+        material = std::make_shared<FlatMaterial>(Shaders::flat(), glm::vec3(0.8f));
 
     return material;
 }
 
-const std::shared_ptr<Mesh>& Meshes::cube() {
-    static std::shared_ptr<Mesh> mesh;
+const std::shared_ptr<FlatMaterial>& Materials::UVTest() {
+    static std::shared_ptr<FlatMaterial> material;
 
-    if (!mesh) {
-        try {
-            mesh = std::make_shared<Mesh>(loadMesh("resources/engine/models/cube.obj"));
-        }
-        catch (const std::exception&) {
-        }
-    }
+    if (!material && Shaders::flat())
+        material = std::make_shared<FlatMaterial>(Shaders::flat(), Textures::test());
 
-    return mesh;
+    return material;
 }
 
-const std::shared_ptr<Mesh>& Meshes::sphere() {
-    static std::shared_ptr<Mesh> mesh;
-
-    if (!mesh) {
-        try {
-            mesh = std::make_shared<Mesh>(loadMesh("resources/engine/models/sphere.obj"));
-        }
-        catch (const std::exception&) {
-        }
-    }
-
-    return mesh;
-}
-
-const std::shared_ptr<Model>& Models::basicCube() {
-    static std::shared_ptr<Model> model;
+const ModelRef& Models::basicCube() {
+    static ModelRef model;
 
     if (!model)
         model = std::make_shared<Model>(nullptr, nullptr);
 
     if (!model->m_material || !model->m_mesh)
-        *model = Model(Materials::basic(), Meshes::cube());
+        *model = Model(Materials::flatGrey(), Meshes::cube());
 
     return model;
 }
 
-const std::shared_ptr<Model>& Models::basicSphere() {
-    static std::shared_ptr<Model> model;
+const ModelRef& Models::basicSphere() {
+    static ModelRef model;
 
     if (!model)
         model = std::make_shared<Model>(nullptr, nullptr);
 
     if (!model->m_material || !model->m_mesh)
-        *model = Model(Materials::basic(), Meshes::sphere());
+        *model = Model(Materials::flatGrey(), Meshes::sphere());
 
     return model;
 }

@@ -37,15 +37,17 @@ public:
 
     virtual bool shouldClose() const override;
 
-    virtual void swapBuffers() const override;
+    virtual void swapBuffers() override;
 
-    virtual void pollEvents() const override;
+    virtual void pollEvents() override;
 
-    virtual void setCursorMode(CursorMode mode) const override;
+    virtual void setCursorMode(CursorMode mode) override;
 
     virtual void setClipboardContent(const char* content) const override;
 
     virtual void* procAddressGetter() const override;
+
+    virtual void makeCurrent() override;
 
 private:
     GLFWwindow* m_window = nullptr;

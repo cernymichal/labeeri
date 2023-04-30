@@ -5,6 +5,7 @@
     "glfw3",
     "glm",
     "assimp",
+    "stb",
     {
       "name": "glad",
       "features": [ "gl-api-43" ]

@@ -45,17 +45,17 @@ public:
     /**
      * @brief TODO
      */
-    virtual void swapBuffers() const = 0;
+    virtual void swapBuffers() = 0;
 
     /**
      * @brief TODO
      */
-    virtual void pollEvents() const = 0;
+    virtual void pollEvents() = 0;
 
     /**
      * @brief TODO
      */
-    virtual void setCursorMode(CursorMode mode) const = 0;
+    virtual void setCursorMode(CursorMode mode) = 0;
 
     /**
      * @brief TODO
@@ -66,6 +66,11 @@ public:
      * @brief TODO
      */
     virtual void* procAddressGetter() const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void makeCurrent() = 0;
 
     /**
      * @brief TODO

@@ -47,15 +47,15 @@ bool GLFWWindow::shouldClose() const {
     return glfwWindowShouldClose(m_window);
 }
 
-void GLFWWindow::swapBuffers() const {
+void GLFWWindow::swapBuffers() {
     glfwSwapBuffers(m_window);
 }
 
-void GLFWWindow::pollEvents() const {
+void GLFWWindow::pollEvents() {
     glfwPollEvents();
 }
 
-void GLFWWindow::setCursorMode(CursorMode mode) const {
+void GLFWWindow::setCursorMode(CursorMode mode) {
     int glfwMode = GLFW_CURSOR_NORMAL;
     switch (mode) {
         case CursorMode::Normal:
@@ -78,6 +78,10 @@ void GLFWWindow::setClipboardContent(const char* content) const {
 
 void* GLFWWindow::procAddressGetter() const {
     return glfwGetProcAddress;
+}
+
+void GLFWWindow::makeCurrent() {
+    glfwMakeContextCurrent(m_window);
 }
 
 void GLFWWindow::setupGLFW() {

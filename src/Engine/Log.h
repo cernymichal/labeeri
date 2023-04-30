@@ -2,6 +2,9 @@
 
 #include <sstream>
 
+#define STR_MACRO_INNER(x) #x
+#define STR_MACRO(x) STR_MACRO_INNER(x)
+
 #ifdef LAB_DEBUG
 
 #define LAB_DEBUG_ONLY(x) x
@@ -37,8 +40,8 @@
  *
  * @param[in] x printable value
  */
-#define LAB_LOGH1(x) LAB_LOG("\n\n" \
-                             << "==================== " << x << " ====================")
+#define LAB_LOGH1(x) LAB_LOG("\n===============================================================================\n" \
+                             << "                           " << x)
 
 /**
  * @brief log message as a header
@@ -56,15 +59,10 @@
 /**
  * @brief TODO
  */
-#define LAB_LOG_OGL_ERROR() LAB_DEBUG_ONLY(labeeri::Engine::logOGLError(__FILE__, __LINE__))
+#define LAB_LOG_RENDERAPI_ERROR() LAB_DEBUG_ONLY(LAB_RENDERER->logError(__FILE__ ":" STR_MACRO(__LINE__)))
 
 namespace labeeri::Engine {
 
 inline std::ostringstream LOG_STREAM;
-
-/**
- * @brief TODO
- */
-void logOGLError(const char* file, int line);
 
 }  // namespace labeeri::Engine

@@ -12,17 +12,12 @@ struct Shaders {
     /**
      * @brief TODO
      */
-    static const std::shared_ptr<ShaderProgram>& basic();
-};
+    static const ShaderProgramRef& fallback();
 
-/**
- * @brief TODO
- */
-struct Materials {
     /**
      * @brief TODO
      */
-    static const std::shared_ptr<Material>& basic();
+    static const ShaderProgramRef& flat();
 };
 
 /**
@@ -32,12 +27,37 @@ struct Meshes {
     /**
      * @brief TODO
      */
-    static const std::shared_ptr<Mesh>& cube();
+    static const MeshRef& cube();
 
     /**
      * @brief TODO
      */
-    static const std::shared_ptr<Mesh>& sphere();
+    static const MeshRef& sphere();
+};
+
+/**
+ * @brief TODO
+ */
+struct Textures {
+    /**
+     * @brief TODO
+     */
+    static const TextureRef& test();
+};
+
+/**
+ * @brief TODO
+ */
+struct Materials {
+    /**
+     * @brief TODO
+     */
+    static const std::shared_ptr<FlatMaterial>& flatGrey();
+
+    /**
+     * @brief TODO
+     */
+    static const std::shared_ptr<FlatMaterial>& UVTest();
 };
 
 /**
@@ -47,12 +67,12 @@ struct Models {
     /**
      * @brief TODO
      */
-    static const std::shared_ptr<Model>& basicCube();
+    static const ModelRef& basicCube();
 
     /**
      * @brief TODO
      */
-    static const std::shared_ptr<Model>& basicSphere();
+    static const ModelRef& basicSphere();
 };
 
 }  // namespace labeeri::Engine

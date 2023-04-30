@@ -1,7 +1,9 @@
 #include "Load.h"
 
+#define STB_IMAGE_IMPLEMENTATION
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+#include <stb_image.h>
 
 #include <assimp/Importer.hpp>
 #include <fstream>
@@ -25,16 +27,18 @@ std::string loadShader(const char* path) {
     return contentBuffer.str();
 }
 
-ShaderProgram loadShaderProgram(const char* vertexPath, const char* fragmentPath) {
+ShaderProgramRef loadShaderProgram(const char* vertexPath, const char* fragmentPath) {
     LAB_LOGH3("Loading shader program from " << vertexPath << " and " << fragmentPath);
 
     std::string vertexShaderSource = loadShader(vertexPath);
     std::string fragmentShaderSource = loadShader(fragmentPath);
 
-    return LAB_RENDERER->createShaderProgram({{ShaderType::Vertex, vertexShaderSource.c_str()}, {ShaderType::Fragment, fragmentShaderSource.c_str()}});
+    ShaderProgram program = LAB_RENDERER->createShaderProgram({{ShaderType::Vertex, vertexShaderSource.c_str()}, {ShaderType::Fragment, fragmentShaderSource.c_str()}});
+
+    return std::make_shared<ShaderProgram>(std::move(program));
 }
 
-Mesh loadMesh(const char* filePath) {
+MeshRef loadMesh(const char* filePath) {
     LAB_LOGH3("Loading mesh " << filePath);
 
     Assimp::Importer importer;
@@ -90,7 +94,31 @@ Mesh loadMesh(const char* filePath) {
         indices.push_back(assimpMesh->mFaces[i].mIndices[2]);
     }
 
-    return LAB_RENDERER->createMesh(vertices, vertexCount, normals, UVPtrs, &indices[0], faceCount);
+    LAB_LOG("Data loaded");
+
+    Mesh mesh = LAB_RENDERER->createMesh(vertices, vertexCount, normals, UVPtrs, &indices[0], faceCount);
+
+    return std::make_shared<Mesh>(std::move(mesh));
+}
+
+TextureRef loadTexture(const char* filePath) {
+    LAB_LOGH3("Loading texture " << filePath);
+
+    stbi_set_flip_vertically_on_load(true);
+
+    glm::ivec2 size;
+    int channels;
+    unsigned char* data = stbi_load(filePath, &size.x, &size.y, &channels, 0);
+    if (!data) {
+        LAB_LOG("Failed to load texture " << filePath);
+        throw std::runtime_error("Failed to load texture");
+    }
+
+    Texture texture = LAB_RENDERER->createTexture(TextureType::Texture2D, channels == 4 ? TextureFormat::RGBA : TextureFormat::RGB, data, size);
+
+    stbi_image_free(data);
+
+    return std::make_shared<Texture>(std::move(texture));
 }
 
 }  // namespace labeeri::Engine

@@ -52,7 +52,7 @@ Shader compileShader(const char* source, ShaderType shaderType) {
     GLint status;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 
-    LAB_LOG_OGL_ERROR();
+    LAB_LOG_RENDERAPI_ERROR();
 
     if (status == GL_TRUE) {
         LAB_LOG(typeStr << " shader compiled");
@@ -97,6 +97,63 @@ void linkShaderProgram(GLuint program) {
     delete[] strInfoLog;
 
     throw std::runtime_error("Failed to link shader program");
+}
+
+int textureTypeGL(TextureType type) {
+    switch (type) {
+        case TextureType::Texture2D:
+            return GL_TEXTURE_2D;
+        case TextureType::Rectangle:
+            return GL_TEXTURE_RECTANGLE;
+        default:
+            throw std::runtime_error("Unknown texture type");
+    }
+}
+
+int textureFormatGL(TextureFormat format) {
+    switch (format) {
+        case TextureFormat::Red:
+            return GL_RED;
+        case TextureFormat::RGB:
+            return GL_RGB;
+        case TextureFormat::RGBA:
+            return GL_RGBA;
+        case TextureFormat::Depth:
+            return GL_DEPTH_COMPONENT;
+        default:
+            throw std::runtime_error("Unknown texture format");
+    }
+}
+
+std::pair<int, int> textureFilterGL(TextureFilter filter, bool usingMipmap) {
+    int minFilterGL, magFilterGL;
+    switch (filter) {
+        case TextureFilter::Nearest:
+            minFilterGL = usingMipmap ? GL_NEAREST_MIPMAP_LINEAR : GL_NEAREST;
+            magFilterGL = GL_NEAREST;
+            break;
+        case TextureFilter::Linear:
+            minFilterGL = usingMipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR;
+            magFilterGL = GL_LINEAR;
+            break;
+        default:
+            throw std::runtime_error("Unknown texture filtering mode");
+    }
+
+    return {minFilterGL, magFilterGL};
+}
+
+int textureWrapGL(TextureWrap wrap) {
+    switch (wrap) {
+        case TextureWrap::ClampToEdge:
+            return GL_CLAMP_TO_EDGE;
+        case TextureWrap::Repeat:
+            return GL_REPEAT;
+        case TextureWrap::MirroredRepeat:
+            return GL_MIRRORED_REPEAT;
+        default:
+            throw std::runtime_error("Unknown texture wrapping mode");
+    }
 }
 
 GLRenderer::GLRenderer() {
@@ -144,25 +201,30 @@ void GLRenderer::beginScene(double time, const glm::mat4& viewMatrix, const glm:
 void GLRenderer::endScene() {
 }
 
-void GLRenderer::useShaderProgram(const std::shared_ptr<ShaderProgram>& shaderProgram) {
+void GLRenderer::useShaderProgram(const ShaderProgramRef& shaderProgram) {
     m_currentShaderProgram = shaderProgram;
     glUseProgram(*m_currentShaderProgram);
 
-    bindUniform("time", (float)m_time);
-    bindUniform("view_matrix", m_viewMatrix);
+    bindUniform("u_time", (float)m_time);
+    bindUniform("u_view_matrix", m_viewMatrix);
 }
 
 void GLRenderer::bindUniform(const char* name, float value) {
-    glUniform1f(getUniformLocation(*m_currentShaderProgram, name), value);
+    glUniform1f(m_currentShaderProgram->getUniformLocation(name), value);
+}
+
+void GLRenderer::bindUniform(const char* name, int value) {
+    glUniform1i(m_currentShaderProgram->getUniformLocation(name), value);
 }
 
 void GLRenderer::bindUniform(const char* name, const glm::mat4& value) {
-    glUniformMatrix4fv(getUniformLocation(*m_currentShaderProgram, name), 1, GL_FALSE, glm::value_ptr(value));
+    glUniformMatrix4fv(m_currentShaderProgram->getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
 }
 
 void GLRenderer::bindUniform(const char* name, const glm::vec3& value) {
-    glUniform3fv(getUniformLocation(*m_currentShaderProgram, name), 1, glm::value_ptr(value));
+    glUniform3fv(m_currentShaderProgram->getUniformLocation(name), 1, glm::value_ptr(value));
 }
+
 
 void GLRenderer::bindPVM(const glm::mat4& modelMatrix) {
     glm::mat4 PVM = m_projectionMatrix * m_viewMatrix * modelMatrix;
@@ -174,9 +236,9 @@ void GLRenderer::bindPVM(const glm::mat4& modelMatrix) {
         glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
     glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelRotationMatrix));
 
-    bindUniform("PVM_matrix", PVM);
-    bindUniform("model_matrix", modelMatrix);
-    bindUniform("normal_matrix", normalMatrix);
+    bindUniform("u_PVM_matrix", PVM);
+    bindUniform("u_model_matrix", modelMatrix);
+    bindUniform("u_normal_matrix", normalMatrix);
 }
 
 LAB_GL_INT GLRenderer::getUniformLocation(ShaderProgram& shaderProgram, const char* name) {
@@ -199,7 +261,7 @@ ShaderProgram GLRenderer::createShaderProgram(const std::vector<std::pair<Shader
         glAttachShader(program, compiledShader);
     }
 
-    LAB_LOG_OGL_ERROR();
+    LAB_LOG_RENDERAPI_ERROR();
 
     linkShaderProgram(program);
 
@@ -236,23 +298,23 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
         LAB_LOG("Uploaded UV map");
     }
 
-    LAB_LOG_OGL_ERROR();
+    LAB_LOG_RENDERAPI_ERROR();
 
     // EBO
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * faceCount * 3, indices, GL_STATIC_DRAW);
 
-    LAB_LOG_OGL_ERROR();
+    LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Uploaded " << faceCount << " faces");
 
-    auto shader = Shaders::basic();
+    auto shader = Shaders::flat();
     if (!shader)
-        throw std::runtime_error("No basic shader for default attribute positions");
+        throw std::runtime_error("No flat shader for default attribute positions");
 
-    GLuint positionLocation = glGetAttribLocation(*shader, "position_in");
-    GLuint normalLocation = glGetAttribLocation(*shader, "normal_in");
-    GLuint UVLocation = glGetAttribLocation(*shader, "UV_in");
+    GLuint positionLocation = glGetAttribLocation(*shader, "in_position");
+    GLuint normalLocation = glGetAttribLocation(*shader, "in_normal");
+    GLuint UVLocation = glGetAttribLocation(*shader, "in_UV");
 
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -260,7 +322,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    LAB_LOG_OGL_ERROR();
+    LAB_LOG_RENDERAPI_ERROR();
 
     glEnableVertexAttribArray(positionLocation);
     glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -271,7 +333,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
     glEnableVertexAttribArray(UVLocation);
     glVertexAttribPointer(UVLocation, 2, GL_FLOAT, GL_FALSE, 0, (void*)(6 * sizeof(float) * vertexCount));
 
-    LAB_LOG_OGL_ERROR();
+    LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Attribute pointers created");
 
     glBindVertexArray(0);
@@ -280,9 +342,69 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
 }
 
 void GLRenderer::deleteMesh(Mesh& mesh) const {
-	glDeleteVertexArrays(1, &mesh.m_vertexArrayObject);
-	glDeleteBuffers(1, &mesh.m_vertexBufferObject);
-	glDeleteBuffers(1, &mesh.m_elementBufferObject);
+    glDeleteVertexArrays(1, &mesh.m_vertexArrayObject);
+    glDeleteBuffers(1, &mesh.m_vertexBufferObject);
+    glDeleteBuffers(1, &mesh.m_elementBufferObject);
+}
+
+Texture GLRenderer::createTexture(TextureType type, TextureFormat format, unsigned char* data, glm::uvec2 size, bool generateMipmap, TextureFilter filter, TextureWrap wrap) const {
+    int typeGL = textureTypeGL(type);
+    int formatGL = textureFormatGL(format);
+    auto [minFilterGL, magFilterGL] = textureFilterGL(filter, generateMipmap);
+    int wrapGL = textureWrapGL(wrap);
+
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(typeGL, texture);
+
+    glTexParameteri(typeGL, GL_TEXTURE_WRAP_S, wrapGL);
+    glTexParameteri(typeGL, GL_TEXTURE_WRAP_T, wrapGL);
+    glTexParameteri(typeGL, GL_TEXTURE_MIN_FILTER, minFilterGL);
+    glTexParameteri(typeGL, GL_TEXTURE_MAG_FILTER, magFilterGL);
+
+    glTexImage2D(typeGL, 0, formatGL, size.x, size.y, 0, formatGL, GL_UNSIGNED_BYTE, data);
+    if (generateMipmap)
+        glGenerateMipmap(typeGL);
+
+    glBindTexture(typeGL, 0);
+
+    return Texture(texture);
+}
+
+void GLRenderer::bindTexture(TextureType type, const Texture& texture, unsigned slot) const {
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(textureTypeGL(type), texture);
+}
+
+void GLRenderer::deleteTexture(Texture& texure) const {
+    GLuint texureGL = texure;
+    glDeleteTextures(1, &texureGL);
+}
+
+void GLRenderer::logError(const char* location) const {
+    for (GLenum error = glGetError(); error != GL_NO_ERROR; error = glGetError()) {
+        std::string errorStr = "UNKNOWN";
+        switch (error) {
+            case GL_INVALID_ENUM:
+                errorStr = "GL_INVALID_ENUM";
+                break;
+            case GL_INVALID_VALUE:
+                errorStr = "GL_INVALID_VALUE";
+                break;
+            case GL_INVALID_OPERATION:
+                errorStr = "GL_INVALID_OPERATION";
+                break;
+            case GL_INVALID_FRAMEBUFFER_OPERATION:
+                errorStr = "GL_INVALID_FRAMEBUFFER_OPERATION";
+                break;
+            case GL_OUT_OF_MEMORY:
+                errorStr = "GL_OUT_OF_MEMORY";
+                break;
+            default:;
+        }
+
+        LAB_LOG("OpenGL error: " << errorStr << " at " << location);
+    }
 }
 
 }  // namespace labeeri::Engine

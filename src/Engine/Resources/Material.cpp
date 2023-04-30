@@ -4,38 +4,26 @@
 
 namespace labeeri::Engine {
 
-ShaderProgram::ShaderProgram(LAB_GL_HANDLE program) : m_program(program) {
+Material::Material(const ShaderProgramRef& shader) : m_shader(shader) {
 }
 
-ShaderProgram::ShaderProgram(ShaderProgram&& other) noexcept : m_program(other.m_program) {
-    other.m_program = 0;
+FlatMaterial::FlatMaterial(const ShaderProgramRef& shader, const glm::vec3& color)
+    : Material(shader), m_color(color), m_texture(nullptr) {
 }
 
-ShaderProgram::~ShaderProgram() {
-    LAB_RENDERER->deleteShaderProgram(*this);
+FlatMaterial::FlatMaterial(const ShaderProgramRef& shader, const TextureRef& texture)
+    : Material(shader), m_color(FALLBACK_COLOR), m_texture(texture) {
 }
 
-LAB_GL_INT ShaderProgram::getUniformLocation(const char* name) {
-    auto iter = m_uniforms.find(name);
+void FlatMaterial::bindUniforms() const {
+    bool usingTexture = m_texture != nullptr;
 
-    if (iter != m_uniforms.end())
-        return (*iter).second;
+    LAB_RENDERER->bindUniform("u_using_texture", usingTexture);
 
-    LAB_GL_INT location = LAB_RENDERER->getUniformLocation(*this, name);
-    if (location != -1)
-        m_uniforms[name] = location;
-
-    return location;
-}
-
-ShaderProgram::operator LAB_GL_HANDLE() const {
-    return m_program;
-}
-
-Material::Material(const std::shared_ptr<ShaderProgram>& shader) : m_shader(shader) {
-}
-
-void Material::bindUniforms() {
+    if (usingTexture)
+        LAB_RENDERER->bindTexture(TextureType::Texture2D, *m_texture);
+    else
+        LAB_RENDERER->bindUniform("u_color", m_color);
 }
 
 }  // namespace labeeri::Engine

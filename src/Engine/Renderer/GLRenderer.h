@@ -24,9 +24,11 @@ public:
 
     virtual void endScene() override;
 
-    virtual void useShaderProgram(const std::shared_ptr<ShaderProgram>& shaderProgram) override;
+    virtual void useShaderProgram(const ShaderProgramRef& shaderProgram) override;
 
     virtual void bindUniform(const char* name, float value) override;
+
+    virtual void bindUniform(const char* name, int value) override;
 
     virtual void bindUniform(const char* name, const glm::mat4& value) override;
 
@@ -48,8 +50,16 @@ public:
 
     virtual void deleteMesh(Mesh& mesh) const override;
 
+    virtual Texture createTexture(TextureType type, TextureFormat format, unsigned char* data, glm::uvec2 size, bool generateMipmap, TextureFilter filter, TextureWrap wrap) const override;
+
+    virtual void bindTexture(TextureType type, const Texture& texture, unsigned slot) const override;
+
+    virtual void deleteTexture(Texture& texure) const override;
+
+    virtual void logError(const char* location) const override;
+
 private:
-    std::shared_ptr<ShaderProgram> m_currentShaderProgram;
+    ShaderProgramRef m_currentShaderProgram;
     double m_time = 0.0;
     glm::mat4 m_viewMatrix = glm::mat4(1.0);
     glm::mat4 m_projectionMatrix = glm::mat4(1.0);

@@ -25,4 +25,11 @@ constexpr auto GLSL_VERSION = "#version 430";
 
 constexpr auto FIXED_UPDATE_INTERVAL = (1.0 / 50.0);  // 50 Hz
 
+constexpr auto FALLBACK_COLOR = glm::vec3(0.9, 0.0, 0.9);
+
+template <typename T>
+std::shared_ptr<T> copyShared(const std::shared_ptr<T>& ptr) {
+    return std::make_shared<T>(*ptr);
+}
+
 }  // namespace labeeri::Engine

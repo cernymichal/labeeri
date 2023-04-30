@@ -1,12 +1,12 @@
 #include "ImGuiLayer.h"
 
-#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
 #include "Engine/Application.h"
 #include "Engine/Events/ApplicationEvent.h"
+#include "Engine/Renderer/IRenderer.h"
 #include "Engine/Window/GLFWWindow.h"
 #include "Engine/WindowLayer/ImGuiWindow/LogWindow.h"
 #include "Engine/WindowLayer/ImGuiWindow/MenuWindow.h"
@@ -31,10 +31,9 @@ struct ImGuiFrame {
         // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
         //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
         if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-            GLFWwindow* backup_current_context = glfwGetCurrentContext();
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
-            glfwMakeContextCurrent(backup_current_context);
+            LAB_WINDOW->makeCurrent();
         }
     }
 };
@@ -81,7 +80,7 @@ void ImGuiLayer::setupImGui() {
     ImGui_ImplGlfw_InitForOpenGL(dynamic_cast<GLFWWindow*>(LAB_WINDOW)->windowObject(), true);
     ImGui_ImplOpenGL3_Init(GLSL_VERSION);
 
-    LAB_LOG_OGL_ERROR();
+    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void ImGuiLayer::onEvent(IEvent& e) {
