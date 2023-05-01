@@ -325,9 +325,9 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
     LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Uploaded " << faceCount << " faces");
 
-    auto shader = Shaders::flat();
+    auto shader = Shaders::fallback();
     if (!shader)
-        throw std::runtime_error("No flat shader for default attribute positions");
+        throw std::runtime_error("No fallback shader for default attribute positions");
 
     GLuint positionLocation = glGetAttribLocation(*shader, "in_position");
     GLuint normalLocation = glGetAttribLocation(*shader, "in_normal");

@@ -77,6 +77,7 @@ void GLFWWindow::setFullscreen(bool enabled) {
 
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
     glfwSetWindowMonitor(m_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+    glfwSwapInterval(m_VSync ? 1 : 0);
 }
 
 bool GLFWWindow::shouldClose() const {

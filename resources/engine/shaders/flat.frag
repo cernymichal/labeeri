@@ -1,13 +1,10 @@
 #version 430
 
-smooth in vec3 normal;
 smooth in vec2 UV;
 
-uniform float u_time;
-
-uniform bool u_using_texture;
 uniform vec3 u_color;
 uniform sampler2D u_texture;
+uniform bool u_using_texture;
 
 out vec4 fragColor;
 
