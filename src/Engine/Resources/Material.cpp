@@ -26,10 +26,10 @@ void FlatMaterial::bindUniforms() const {
         LAB_RENDERER->bindUniform("u_color", m_color);
 }
 
-PhongMaterial::PhongMaterial(const ShaderProgramRef& shader) : Material(shader) {
+ShadedMaterial::ShadedMaterial(const ShaderProgramRef& shader) : Material(shader) {
 }
 
-void PhongMaterial::bindUniforms() const {
+void ShadedMaterial::bindUniforms() const {
     bool usingDiffuseMap = m_diffuseMap != nullptr;
     LAB_RENDERER->bindUniform("u_material.using_diffuse_map", usingDiffuseMap);
     if (usingDiffuseMap)

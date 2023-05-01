@@ -179,15 +179,15 @@ void GLRenderer::setViewportSize(glm::uvec2 size) {
 }
 
 void GLRenderer::clear(int buffers) {
-    int glBuffers = 0;
+    int buffersGL = 0;
     if (buffers & static_cast<int>(ClearBuffer::Color))
-        glBuffers |= GL_COLOR_BUFFER_BIT;
+        buffersGL |= GL_COLOR_BUFFER_BIT;
     if (buffers & static_cast<int>(ClearBuffer::Depth))
-        glBuffers |= GL_DEPTH_BUFFER_BIT;
+        buffersGL |= GL_DEPTH_BUFFER_BIT;
     if (buffers & static_cast<int>(ClearBuffer::Stencil))
-        glBuffers |= GL_STENCIL_BUFFER_BIT;
+        buffersGL |= GL_STENCIL_BUFFER_BIT;
 
-    glClear(glBuffers);
+    glClear(buffersGL);
 }
 
 void GLRenderer::setClearColor(const glm::vec4& color) {
@@ -217,7 +217,10 @@ void GLRenderer::useShaderProgram(const ShaderProgramRef& shaderProgram) {
     bindUniform("u_time", (float)m_time);
     bindUniform("u_camera_position", m_cameraPosition);
     bindUniform("u_view_matrix", m_viewMatrix);
-    bindLights();
+
+    bindDirectionalLights();
+    bindPointLights();
+    bindSpotLights();
 }
 
 void GLRenderer::bindUniform(const char* name, float value) {
@@ -255,12 +258,16 @@ LAB_GL_INT GLRenderer::getUniformLocation(ShaderProgram& shaderProgram, const ch
     return glGetUniformLocation(shaderProgram, name);
 }
 
-void GLRenderer::bindMesh(const Mesh& mesh) {
-    glBindVertexArray(mesh.m_vertexArrayObject);
+void GLRenderer::bindMesh(const MeshRef& mesh) {
+    if (m_currentMesh == mesh)
+        return;
+
+    m_currentMesh = mesh;
+    glBindVertexArray(mesh->m_vertexArrayObject);
 }
 
-void GLRenderer::drawMesh(const Mesh& mesh) {
-    glDrawElements(GL_TRIANGLES, mesh.m_triangleCount * 3, GL_UNSIGNED_INT, nullptr);
+void GLRenderer::drawMesh() {
+    glDrawElements(GL_TRIANGLES, m_currentMesh->m_triangleCount * 3, GL_UNSIGNED_INT, nullptr);
 }
 
 ShaderProgram GLRenderer::createShaderProgram(const std::vector<std::pair<ShaderType, const char*>>& shaders) const {
@@ -392,22 +399,28 @@ void GLRenderer::deleteTexture(Texture& texure) const {
 }
 
 void GLRenderer::submitLight(const RendererDirectionalLight& light) {
-    if (m_directionalLights.size() >= MAX_DIRECTIONAL_LIGHTS)
+    if (m_directionalLights.size() >= MAX_DIRECTIONAL_LIGHTS) {
+        LAB_LOG("Directional light limit reached!");
         return;
+    }
 
     m_directionalLights.emplace_back(light);
 }
 
 void GLRenderer::submitLight(const RendererPointLight& light) {
-    if (m_pointLights.size() >= MAX_POINT_LIGHTS)
+    if (m_pointLights.size() >= MAX_POINT_LIGHTS) {
+        LAB_LOG("Point light limit reached!");
         return;
+    }
 
     m_pointLights.emplace_back(light);
 }
 
 void GLRenderer::submitLight(const RendererSpotLight& light) {
-    if (m_spotLights.size() >= MAX_SPOT_LIGHTS)
+    if (m_spotLights.size() >= MAX_SPOT_LIGHTS) {
+        LAB_LOG("Spot light limit reached!");
         return;
+    }
 
     m_spotLights.emplace_back(light);
 }
@@ -438,7 +451,10 @@ void GLRenderer::logError(const char* location) const {
     }
 }
 
-void GLRenderer::bindLights() {
+void GLRenderer::bindDirectionalLights() {
+    if (m_currentShaderProgram->getUniformLocation("u_directional_light_count") == -1)
+        return;
+
     bindUniform("u_directional_light_count", static_cast<int>(m_directionalLights.size()));
     for (int i = 0; i < m_directionalLights.size(); i++) {
         const auto& light = m_directionalLights[i];
@@ -452,6 +468,11 @@ void GLRenderer::bindLights() {
         location = structLocation + ".properties.specular";
         bindUniform(location.c_str(), light.properties.specular);
     }
+}
+
+void GLRenderer::bindPointLights() {
+    if (m_currentShaderProgram->getUniformLocation("u_point_light_count") == -1)
+        return;
 
     bindUniform("u_point_light_count", static_cast<int>(m_pointLights.size()));
     for (int i = 0; i < m_pointLights.size(); i++) {
@@ -472,6 +493,11 @@ void GLRenderer::bindLights() {
         location = structLocation + ".attenutaion.quadratic";
         bindUniform(location.c_str(), light.attenutaion.quadratic);
     }
+}
+
+void GLRenderer::bindSpotLights() {
+    if (m_currentShaderProgram->getUniformLocation("u_spot_light_count") == -1)
+        return;
 
     bindUniform("u_spot_light_count", static_cast<int>(m_spotLights.size()));
     for (int i = 0; i < m_spotLights.size(); i++) {

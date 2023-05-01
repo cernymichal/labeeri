@@ -38,9 +38,9 @@ public:
 
     virtual LAB_GL_INT getUniformLocation(ShaderProgram& shaderProgram, const char* name) override;
 
-    virtual void bindMesh(const Mesh& mesh) override;
+    virtual void bindMesh(const MeshRef& mesh) override;
 
-    virtual void drawMesh(const Mesh& mesh) override;
+    virtual void drawMesh() override;
 
     virtual ShaderProgram createShaderProgram(const std::vector<std::pair<ShaderType, const char*>>& shaders) const override;
 
@@ -66,6 +66,7 @@ public:
 
 private:
     ShaderProgramRef m_currentShaderProgram;
+    MeshRef m_currentMesh;
     double m_time = 0.0;
     glm::vec3 m_cameraPosition = glm::vec3(0.0f);
     glm::mat4 m_viewMatrix = glm::mat4(1.0);
@@ -75,7 +76,11 @@ private:
     std::vector<RendererPointLight> m_pointLights;
     std::vector<RendererSpotLight> m_spotLights;
 
-    void bindLights();
+    void bindDirectionalLights();
+
+    void bindPointLights();
+
+    void bindSpotLights();
 };
 
 }  // namespace labeeri::Engine

@@ -35,6 +35,12 @@ public:
 
     virtual void setVSync(bool enabled) override;
 
+    virtual bool fullscreen() const override {
+        return m_fullscreen;
+    }
+
+    virtual void setFullscreen(bool enabled) override;
+
     virtual bool shouldClose() const override;
 
     virtual void swapBuffers() override;
@@ -52,6 +58,9 @@ public:
 private:
     GLFWwindow* m_window = nullptr;
     bool m_VSync = true;
+    bool m_fullscreen = false;
+    glm::ivec2 m_windowedPosition;
+    glm::ivec2 m_windowedSize;
     static glm::dvec2 s_mousePosition;
 
     void setupGLFW();

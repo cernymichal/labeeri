@@ -68,6 +68,11 @@ bool ViewportLayer::onKeyboardPress(const KeyboardPressEvent& e) {
         return true;
     }
 
+    if (e.key() == KeyboardKey::F5) {
+        LAB_WINDOW->setFullscreen(!LAB_WINDOW->fullscreen());
+        return true;
+    }
+
     return false;
 }
 

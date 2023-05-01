@@ -97,11 +97,11 @@ const std::shared_ptr<FlatMaterial>& Materials::flatGrey() {
     return material;
 }
 
-const std::shared_ptr<PhongMaterial>& Materials::grey() {
-    static std::shared_ptr<PhongMaterial> material;
+const std::shared_ptr<ShadedMaterial>& Materials::grey() {
+    static std::shared_ptr<ShadedMaterial> material;
 
-    if (!material && Shaders::flat()) {
-        material = std::make_shared<PhongMaterial>(Shaders::phong());
+    if (!material && Shaders::phong()) {
+        material = std::make_shared<ShadedMaterial>(Shaders::phong());
         material->m_diffuse = glm::vec3(0.7f);
     }
 
@@ -124,7 +124,7 @@ const ModelRef& Models::basicCube() {
         model = std::make_shared<Model>(nullptr, nullptr);
 
     if (!model->m_material || !model->m_mesh)
-        *model = Model(Materials::flatGrey(), Meshes::cube());
+        *model = Model(Materials::grey(), Meshes::cube());
 
     return model;
 }
@@ -136,7 +136,7 @@ const ModelRef& Models::basicSphere() {
         model = std::make_shared<Model>(nullptr, nullptr);
 
     if (!model->m_material || !model->m_mesh)
-        *model = Model(Materials::flatGrey(), Meshes::sphere());
+        *model = Model(Materials::grey(), Meshes::sphere());
 
     return model;
 }

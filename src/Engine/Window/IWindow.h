@@ -40,6 +40,16 @@ public:
     /**
      * @brief TODO
      */
+    virtual bool fullscreen() const = 0;    
+
+    /**
+     * @brief TODO
+     */
+    virtual void setFullscreen(bool enabled) = 0;
+
+    /**
+     * @brief TODO
+     */
     virtual bool shouldClose() const = 0;
 
     /**

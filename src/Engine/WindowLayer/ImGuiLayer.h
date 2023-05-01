@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Events/KeyboardEvent.h"
 #include "Engine/WindowLayer/IWindowLayer.h"
 #include "Engine/WindowLayer/ImGuiWindow/IImGuiWindow.h"
 
@@ -31,6 +32,8 @@ private:
     void setupImGui();
 
     bool onRender(const IEvent& e);
+
+    bool onKeyboardPress(const KeyboardPressEvent& e);
 };
 
 }  // namespace labeeri::Engine

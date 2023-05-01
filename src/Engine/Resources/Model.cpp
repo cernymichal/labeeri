@@ -14,11 +14,11 @@ void Model::draw(const glm::mat4& modelMatrix) const {
         shader = Shaders::flat();
 
     LAB_RENDERER->useShaderProgram(shader);
-    LAB_RENDERER->bindMesh(*m_mesh);
+    LAB_RENDERER->bindMesh(m_mesh);
     LAB_RENDERER->bindPVM(modelMatrix);
     m_material->bindUniforms();
 
-    LAB_RENDERER->drawMesh(*m_mesh);
+    LAB_RENDERER->drawMesh();
 
     LAB_LOG_RENDERAPI_ERROR();
 }

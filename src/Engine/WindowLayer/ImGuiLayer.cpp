@@ -41,6 +41,9 @@ struct ImGuiFrame {
 ImGuiLayer::ImGuiLayer() {
     LAB_LOGH2("ImGuiLayer::ImGuiLayer()");
 
+    m_enabled = false;
+    LAB_DEBUG_ONLY(m_enabled = true);
+
     setupImGui();
 
     m_windows.push_back(std::make_unique<MenuWindow>());
@@ -90,12 +93,22 @@ void ImGuiLayer::onEvent(IEvent& e) {
     }
 
     e.dispatch<ApplicationRenderEvent>(LAB_BIND_EVENT_FUNC(ImGuiLayer::onRender));
+    e.dispatch<KeyboardPressEvent>(LAB_BIND_EVENT_FUNC(ImGuiLayer::onKeyboardPress));
 }
 
 bool ImGuiLayer::onRender(const IEvent& e) {
     ImGuiFrame frame;
     for (auto& window : m_windows)
         window->draw();
+
+    return false;
+}
+
+bool ImGuiLayer::onKeyboardPress(const KeyboardPressEvent& e) {
+    if (e.key() == KeyboardKey::F3) {
+        m_enabled = !m_enabled;
+        return true;
+    }
 
     return false;
 }

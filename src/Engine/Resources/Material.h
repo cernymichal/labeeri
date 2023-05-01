@@ -57,7 +57,7 @@ public:
 /**
  * @brief TODO
  */
-class PhongMaterial : public Material {
+class ShadedMaterial : public Material {
 public:
     glm::vec3 m_diffuse = FALLBACK_COLOR;
     TextureRef m_diffuseMap = nullptr;
@@ -69,7 +69,7 @@ public:
     /**
      * @brief TODO
      */
-    PhongMaterial(const ShaderProgramRef& shader);
+    ShadedMaterial(const ShaderProgramRef& shader);
 
     /**
      * @brief TODO

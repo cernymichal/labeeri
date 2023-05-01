@@ -62,7 +62,7 @@ struct Materials {
     /**
      * @brief TODO
      */
-    static const std::shared_ptr<PhongMaterial>& grey();
+    static const std::shared_ptr<ShadedMaterial>& grey();
 
     /**
      * @brief TODO

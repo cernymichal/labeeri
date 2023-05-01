@@ -43,6 +43,42 @@ void GLFWWindow::setVSync(bool enabled) {
     glfwSwapInterval(m_VSync ? 1 : 0);
 }
 
+void GLFWWindow::setFullscreen(bool enabled) {
+    if (m_fullscreen == enabled)
+        return;
+
+    m_fullscreen = enabled;
+
+    if (!m_fullscreen) {
+        glfwSetWindowMonitor(m_window, NULL, m_windowedPosition.x, m_windowedPosition.y, m_windowedSize.x, m_windowedSize.y, 0);
+        return;
+    }
+
+    // backup window position and size
+    glfwGetWindowPos(m_window, &m_windowedPosition.x, &m_windowedPosition.y);
+    glfwGetWindowSize(m_window, &m_windowedSize.x, &m_windowedSize.y);
+
+    // find current monitor
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    int monitorCount;
+    GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
+    for (int i = 0; i < monitorCount; i++) {
+        glm::ivec2 monitorPosition;
+        glfwGetMonitorPos(monitors[i], &monitorPosition.x, &monitorPosition.y);
+
+        const GLFWvidmode* mode = glfwGetVideoMode(monitors[i]);
+        glm::ivec2 monitorSize = glm::ivec2(mode->width, mode->height);
+
+        if (glm::all(glm::lessThan(m_windowedPosition - monitorPosition, monitorSize))) {
+            monitor = monitors[i];
+            break;
+        }
+    }
+
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+    glfwSetWindowMonitor(m_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+}
+
 bool GLFWWindow::shouldClose() const {
     return glfwWindowShouldClose(m_window);
 }

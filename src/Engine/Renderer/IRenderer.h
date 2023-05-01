@@ -113,12 +113,12 @@ public:
     /**
      * @brief TODO
      */
-    virtual void bindMesh(const Mesh& mesh) = 0;
+    virtual void bindMesh(const MeshRef& mesh) = 0;
 
     /**
      * @brief TODO
      */
-    virtual void drawMesh(const Mesh& mesh) = 0;
+    virtual void drawMesh() = 0;
 
     /**
      * @brief TODO

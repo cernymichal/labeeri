@@ -28,7 +28,7 @@ constexpr auto FIXED_UPDATE_INTERVAL = (1.0 / 50.0);  // 50 Hz
 constexpr auto FALLBACK_COLOR = glm::vec3(0.9, 0.0, 0.9);
 
 constexpr auto MAX_DIRECTIONAL_LIGHTS = 1;
-constexpr auto MAX_POINT_LIGHTS = 4;
+constexpr auto MAX_POINT_LIGHTS = 16;
 constexpr auto MAX_SPOT_LIGHTS = 4;
 
 template <typename T>

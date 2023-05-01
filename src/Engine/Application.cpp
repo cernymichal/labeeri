@@ -64,8 +64,10 @@ void Application::emitEvent(IEvent& e) {
 }
 
 void Application::emitEvent(ApplicationRenderEvent& e) {
-    for (auto& layer : std::ranges::views::reverse(m_layers))
-        layer->onEvent(e);
+    for (auto& layer : std::ranges::views::reverse(m_layers)) {
+        if (layer->enabled())
+            layer->onEvent(e);
+    }
 
     LAB_WINDOW->swapBuffers();
 }
