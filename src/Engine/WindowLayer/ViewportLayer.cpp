@@ -32,7 +32,8 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
 
     LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), m_camera->transform()->worldPosition(), viewMatrix, projectionMatrix);
 
-    LAB_RENDERER->submitLight(RendererDirectionalLight(glm::vec3(1.0, -10.0, -1.0), RendererLightProperties(glm::vec3(0.1), glm::vec3(0.9), glm::vec3(1.0))));
+    LAB_RENDERER->submitLight(RendererDirectionalLight(glm::vec3(1.0, -10.0, -5.0), RendererLightProperties(glm::vec3(0.1), glm::vec3(0.15, 0.15, 0.3), glm::vec3(0.15, 0.15, 0.3)*3.3f)));
+    LAB_RENDERER->submitLight(RendererPointLight(glm::vec3(5.0, 5.0, -5.0), RendererLightProperties(glm::vec3(0), glm::vec3(1.0, 0.9, 0.8), glm::vec3(1.0, 0.9, 0.8)), RendererLightAttenutaion(1.0, 0.027, 0.0028)));
 
     for (auto& entity : LAB_CURRENT_SCENE->entities()) {
         if (entity->m_model)

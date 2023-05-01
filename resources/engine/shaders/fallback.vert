@@ -12,11 +12,11 @@ uniform mat4 u_view_matrix;
 uniform mat4 u_model_matrix;
 uniform mat4 u_normal_matrix;
 
-smooth out vec3 normal;
+smooth out vec3 normal_ws;
 smooth out vec2 UV;
 
 void main() {
     gl_Position = u_PVM_matrix * vec4(in_position, 1);
-    normal = normalize((u_view_matrix * u_normal_matrix * vec4(in_normal, 0.0)).xyz);
+    normal_ws = normalize((u_normal_matrix * vec4(in_normal, 0.0)).xyz);
     UV = in_UV;
 }

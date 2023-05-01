@@ -4,6 +4,8 @@
 #define MAX_POINT_LIGHTS 16
 #define MAX_SPOT_LIGHTS 4
 
+#define BLINN
+
 struct Material {
 	vec3 diffuse;
 	sampler2D diffuse_map;
@@ -62,8 +64,8 @@ struct SpotLight {
 	Attenutaion attenutaion;
 };
 
-smooth in vec3 world_position;
-smooth in vec3 normal;
+smooth in vec3 position_ws;
+smooth in vec3 normal_ws;
 smooth in vec2 UV;
 
 uniform vec3 u_camera_position;
@@ -84,7 +86,7 @@ MaterialSample sample_material() {
 	result.diffuse = u_material.using_diffuse_map ? texture(u_material.diffuse_map, UV).xyz : u_material.diffuse;
 	result.specular = u_material.using_specular_map ? texture(u_material.specular_map, UV).xyz : u_material.specular;
 	result.shininess = u_material.shininess;
-	result.normal = normalize(normal);
+	result.normal = normalize(normal_ws);
 
 	return result;
 }
@@ -92,37 +94,37 @@ MaterialSample sample_material() {
 vec3 phong(LightProperties light, MaterialSample material, vec3 view_direction, vec3 light_direction) {
 	vec3 ambient = light.ambient * material.diffuse;
 
-	float visibility = max(dot(material.normal, -light_direction), 0.0);
-	vec3 diffuse = light.diffuse * material.diffuse * visibility;
+	vec3 diffuse = light.diffuse * material.diffuse * max(dot(material.normal, light_direction), 0.0);
 
+	float specular_visibility = step(0.0, dot(material.normal, light_direction));
 	#ifdef BLINN
 	vec3 half_direction = normalize(view_direction + light_direction);
-	vec3 specular = light.specular * material.specular * pow(max(dot(material.normal, half_direction), 0.0), material.shininess) * visibility;
+	vec3 specular = light.specular * material.specular * pow(max(dot(material.normal, half_direction), 0.0), material.shininess) * specular_visibility;
 	#else
-	vec3 reflect_direction = reflect(light_direction, material.normal);
-	vec3 specular = light.specular * material.specular * pow(max(dot(view_direction, reflect_direction), 0.0), material.shininess) * visibility;
+	vec3 reflect_direction = reflect(-light_direction, material.normal);
+	vec3 specular = light.specular * material.specular * pow(max(dot(view_direction, reflect_direction), 0.0), material.shininess) * specular_visibility;
 	#endif
 
 	return ambient + diffuse + specular;
 }
 
 vec3 calculate_directional_light(DirectionalLight light, MaterialSample material, vec3 view_direction) {
-	return phong(light.properties, material, view_direction, normalize(light.direction));
+	return phong(light.properties, material, view_direction, normalize(-light.direction));
 }
 
 vec3 calculate_point_light(PointLight light, MaterialSample material, vec3 view_direction) {
-	vec3 light_direction = normalize(light.position - world_position);
+	vec3 light_direction = normalize(light.position - position_ws);
 
-	float distance = length(light.position - world_position);
+	float distance = length(light.position - position_ws);
 	float attenuation = 1.0 / (light.attenutaion.constant + light.attenutaion.linear * distance + light.attenutaion.quadratic * (distance * distance));
 
 	return phong(light.properties, material, view_direction, light_direction) * attenuation;
 }
 
 vec3 calculate_spot_light(SpotLight light, MaterialSample material, vec3 view_direction) {
-	vec3 light_direction = normalize(light.position - world_position);
+	vec3 light_direction = normalize(light.position - position_ws);
 
-	float distance = length(light.position - world_position);
+	float distance = length(light.position - position_ws);
 	float attenuation = 1.0 / (light.attenutaion.constant + light.attenutaion.linear * distance + light.attenutaion.quadratic * (distance * distance));
 
 	float theta = dot(light_direction, normalize(-light.direction));
@@ -133,7 +135,7 @@ vec3 calculate_spot_light(SpotLight light, MaterialSample material, vec3 view_di
 }
 
 void main() {
-	vec3 view_direction = normalize(u_camera_position - world_position);
+	vec3 view_direction = normalize(u_camera_position - position_ws);
 	MaterialSample material_sample = sample_material();
 
 	vec3 result = vec3(0.0);

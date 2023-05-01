@@ -1,6 +1,6 @@
 #version 430
 
-smooth in vec3 normal;
+smooth in vec3 normal_ws;
 smooth in vec2 UV;
 
 uniform float u_time;
