@@ -215,11 +215,16 @@
     <ClInclude Include="src\Engine\Renderer\ShaderProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\shaders\flat.vert" />
     <None Include="resources\engine\shaders\flat.frag" />
     <None Include="resources\engine\shaders\fallback.vert" />
     <None Include="resources\engine\shaders\fallback.frag" />
+    <None Include="resources\engine\shaders\phong.frag" />
+    <None Include="resources\engine\shaders\phong.vert" />
   </ItemGroup>
 </Project>

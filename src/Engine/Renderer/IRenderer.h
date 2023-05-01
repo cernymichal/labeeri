@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Renderer/Light.h"
 #include "Engine/Renderer/Mesh.h"
 #include "Engine/Renderer/ShaderProgram.h"
 #include "Engine/Renderer/Texture.h"
@@ -67,7 +68,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual void beginScene(double time, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) = 0;
+    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) = 0;
 
     /**
      * @brief TODO
@@ -153,6 +154,21 @@ public:
      * @brief TODO
      */
     virtual void deleteTexture(Texture& texure) const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void submitLight(const RendererDirectionalLight& light) = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void submitLight(const RendererPointLight& light) = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void submitLight(const RendererSpotLight& light) = 0;
 
     /**
      * @brief TODO

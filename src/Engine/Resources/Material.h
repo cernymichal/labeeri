@@ -54,4 +54,27 @@ public:
     virtual void bindUniforms() const override;
 };
 
+/**
+ * @brief TODO
+ */
+class PhongMaterial : public Material {
+public:
+    glm::vec3 m_diffuse = FALLBACK_COLOR;
+    TextureRef m_diffuseMap = nullptr;
+    glm::vec3 m_specular = glm::vec3(0.5f);
+    TextureRef m_specularMap = nullptr;
+    float m_shininess = 32.0f;
+    TextureRef m_normalMap = nullptr;
+
+    /**
+     * @brief TODO
+     */
+    PhongMaterial(const ShaderProgramRef& shader);
+
+    /**
+     * @brief TODO
+     */
+    virtual void bindUniforms() const override;
+};
+
 }  // namespace labeeri::Engine

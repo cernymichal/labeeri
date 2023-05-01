@@ -20,7 +20,7 @@ public:
 
     virtual void setClearColor(const glm::vec4& color) override;
 
-    virtual void beginScene(double time, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) override;
+    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) override;
 
     virtual void endScene() override;
 
@@ -56,13 +56,26 @@ public:
 
     virtual void deleteTexture(Texture& texure) const override;
 
+    virtual void submitLight(const RendererDirectionalLight& light) override;
+
+    virtual void submitLight(const RendererPointLight& light) override;
+
+    virtual void submitLight(const RendererSpotLight& light) override;
+
     virtual void logError(const char* location) const override;
 
 private:
     ShaderProgramRef m_currentShaderProgram;
     double m_time = 0.0;
+    glm::vec3 m_cameraPosition = glm::vec3(0.0f);
     glm::mat4 m_viewMatrix = glm::mat4(1.0);
     glm::mat4 m_projectionMatrix = glm::mat4(1.0);
+
+    std::vector<RendererDirectionalLight> m_directionalLights;
+    std::vector<RendererPointLight> m_pointLights;
+    std::vector<RendererSpotLight> m_spotLights;
+
+    void bindLights();
 };
 
 }  // namespace labeeri::Engine

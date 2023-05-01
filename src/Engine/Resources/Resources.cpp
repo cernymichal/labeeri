@@ -32,6 +32,20 @@ const ShaderProgramRef& Shaders::flat() {
     return shader;
 }
 
+const ShaderProgramRef& Shaders::phong() {
+    static ShaderProgramRef shader;
+
+    if (!shader) {
+        try {
+            shader = loadShaderProgram("resources/engine/shaders/phong.vert", "resources/engine/shaders/phong.frag");
+        }
+        catch (const std::exception&) {
+        }
+    }
+
+    return shader;
+}
+
 const MeshRef& Meshes::cube() {
     static MeshRef mesh;
 
@@ -78,7 +92,18 @@ const std::shared_ptr<FlatMaterial>& Materials::flatGrey() {
     static std::shared_ptr<FlatMaterial> material;
 
     if (!material && Shaders::flat())
-        material = std::make_shared<FlatMaterial>(Shaders::flat(), glm::vec3(0.8f));
+        material = std::make_shared<FlatMaterial>(Shaders::flat(), glm::vec3(0.7f));
+
+    return material;
+}
+
+const std::shared_ptr<PhongMaterial>& Materials::grey() {
+    static std::shared_ptr<PhongMaterial> material;
+
+    if (!material && Shaders::flat()) {
+        material = std::make_shared<PhongMaterial>(Shaders::phong());
+        material->m_diffuse = glm::vec3(0.7f);
+    }
 
     return material;
 }

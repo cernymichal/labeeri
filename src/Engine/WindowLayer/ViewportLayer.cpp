@@ -30,7 +30,9 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     auto viewMatrix = m_camera->viewMatrix();
     auto projectionMatrix = m_camera->projectionMatrix(m_size);
 
-    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), viewMatrix, projectionMatrix);
+    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), m_camera->transform()->worldPosition(), viewMatrix, projectionMatrix);
+
+    LAB_RENDERER->submitLight(RendererDirectionalLight(glm::vec3(1.0, -10.0, -1.0), RendererLightProperties(glm::vec3(0.1), glm::vec3(0.9), glm::vec3(1.0))));
 
     for (auto& entity : LAB_CURRENT_SCENE->entities()) {
         if (entity->m_model)

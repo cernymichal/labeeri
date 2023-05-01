@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 
+#include <format>
+
 #include "Engine/Resources/Resources.h"
 #include "Engine/Window/IWindow.h"
 
@@ -192,21 +194,30 @@ void GLRenderer::setClearColor(const glm::vec4& color) {
     glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void GLRenderer::beginScene(double time, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
+void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
     m_time = time;
+    m_cameraPosition = cameraPosition;
     m_viewMatrix = viewMatrix;
     m_projectionMatrix = projectionMatrix;
 }
 
 void GLRenderer::endScene() {
+    m_directionalLights.clear();
+    m_pointLights.clear();
+    m_spotLights.clear();
 }
 
 void GLRenderer::useShaderProgram(const ShaderProgramRef& shaderProgram) {
+    if (m_currentShaderProgram == shaderProgram)
+        return;
+
     m_currentShaderProgram = shaderProgram;
     glUseProgram(*m_currentShaderProgram);
 
     bindUniform("u_time", (float)m_time);
+    bindUniform("u_camera_position", m_cameraPosition);
     bindUniform("u_view_matrix", m_viewMatrix);
+    bindLights();
 }
 
 void GLRenderer::bindUniform(const char* name, float value) {
@@ -224,7 +235,6 @@ void GLRenderer::bindUniform(const char* name, const glm::mat4& value) {
 void GLRenderer::bindUniform(const char* name, const glm::vec3& value) {
     glUniform3fv(m_currentShaderProgram->getUniformLocation(name), 1, glm::value_ptr(value));
 }
-
 
 void GLRenderer::bindPVM(const glm::mat4& modelMatrix) {
     glm::mat4 PVM = m_projectionMatrix * m_viewMatrix * modelMatrix;
@@ -381,6 +391,27 @@ void GLRenderer::deleteTexture(Texture& texure) const {
     glDeleteTextures(1, &texureGL);
 }
 
+void GLRenderer::submitLight(const RendererDirectionalLight& light) {
+    if (m_directionalLights.size() >= MAX_DIRECTIONAL_LIGHTS)
+        return;
+
+    m_directionalLights.emplace_back(light);
+}
+
+void GLRenderer::submitLight(const RendererPointLight& light) {
+    if (m_pointLights.size() >= MAX_POINT_LIGHTS)
+        return;
+
+    m_pointLights.emplace_back(light);
+}
+
+void GLRenderer::submitLight(const RendererSpotLight& light) {
+    if (m_spotLights.size() >= MAX_SPOT_LIGHTS)
+        return;
+
+    m_spotLights.emplace_back(light);
+}
+
 void GLRenderer::logError(const char* location) const {
     for (GLenum error = glGetError(); error != GL_NO_ERROR; error = glGetError()) {
         std::string errorStr = "UNKNOWN";
@@ -404,6 +435,68 @@ void GLRenderer::logError(const char* location) const {
         }
 
         LAB_LOG("OpenGL error: " << errorStr << " at " << location);
+    }
+}
+
+void GLRenderer::bindLights() {
+    bindUniform("u_directional_light_count", static_cast<int>(m_directionalLights.size()));
+    for (int i = 0; i < m_directionalLights.size(); i++) {
+        const auto& light = m_directionalLights[i];
+        const std::string structLocation = std::format("u_directional_lights[{}]", i);
+        std::string location = structLocation + ".direction";
+        bindUniform(location.c_str(), light.direction);
+        location = structLocation + ".properties.ambient";
+        bindUniform(location.c_str(), light.properties.ambient);
+        location = structLocation + ".properties.diffuse";
+        bindUniform(location.c_str(), light.properties.diffuse);
+        location = structLocation + ".properties.specular";
+        bindUniform(location.c_str(), light.properties.specular);
+    }
+
+    bindUniform("u_point_light_count", static_cast<int>(m_pointLights.size()));
+    for (int i = 0; i < m_pointLights.size(); i++) {
+        const auto& light = m_pointLights[i];
+        const std::string structLocation = std::format("u_point_lights[{}]", i);
+        std::string location = structLocation + ".position";
+        bindUniform(location.c_str(), light.position);
+        location = structLocation + ".properties.ambient";
+        bindUniform(location.c_str(), light.properties.ambient);
+        location = structLocation + ".properties.diffuse";
+        bindUniform(location.c_str(), light.properties.diffuse);
+        location = structLocation + ".properties.specular";
+        bindUniform(location.c_str(), light.properties.specular);
+        location = structLocation + ".attenutaion.constant";
+        bindUniform(location.c_str(), light.attenutaion.constant);
+        location = structLocation + ".attenutaion.linear";
+        bindUniform(location.c_str(), light.attenutaion.linear);
+        location = structLocation + ".attenutaion.quadratic";
+        bindUniform(location.c_str(), light.attenutaion.quadratic);
+    }
+
+    bindUniform("u_spot_light_count", static_cast<int>(m_spotLights.size()));
+    for (int i = 0; i < m_spotLights.size(); i++) {
+        const auto& light = m_spotLights[i];
+        const std::string structLocation = std::format("u_spot_lights[{}]", i);
+        std::string location = structLocation + ".position";
+        bindUniform(location.c_str(), light.position);
+        location = structLocation + ".direction";
+        bindUniform(location.c_str(), light.direction);
+        location = structLocation + ".cutOff";
+        bindUniform(location.c_str(), light.cutOff);
+        location = structLocation + ".outerCutOff";
+        bindUniform(location.c_str(), light.outerCutOff);
+        location = structLocation + ".properties.ambient";
+        bindUniform(location.c_str(), light.properties.ambient);
+        location = structLocation + ".properties.diffuse";
+        bindUniform(location.c_str(), light.properties.diffuse);
+        location = structLocation + ".properties.specular";
+        bindUniform(location.c_str(), light.properties.specular);
+        location = structLocation + ".attenutaion.constant";
+        bindUniform(location.c_str(), light.attenutaion.constant);
+        location = structLocation + ".attenutaion.linear";
+        bindUniform(location.c_str(), light.attenutaion.linear);
+        location = structLocation + ".attenutaion.quadratic";
+        bindUniform(location.c_str(), light.attenutaion.quadratic);
     }
 }
 

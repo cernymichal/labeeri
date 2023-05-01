@@ -27,7 +27,7 @@ public:
     /**
      * @brief TODO
      */
-    LAB_GL_INT getUniformLocation(const char* name);
+    LAB_GL_INT getUniformLocation(const std::string& name);
 
     /**
      * @brief TODO
@@ -36,7 +36,7 @@ public:
 
 private:
     LAB_GL_HANDLE m_program;
-    std::unordered_map<const char*, LAB_GL_HANDLE> m_uniforms;
+    std::unordered_map<std::string, LAB_GL_INT> m_uniforms;
 };
 
 using ShaderProgramRef = std::shared_ptr<ShaderProgram>;

@@ -18,6 +18,11 @@ struct Shaders {
      * @brief TODO
      */
     static const ShaderProgramRef& flat();
+
+    /**
+     * @brief TODO
+     */
+    static const ShaderProgramRef& phong();
 };
 
 /**
@@ -53,6 +58,11 @@ struct Materials {
      * @brief TODO
      */
     static const std::shared_ptr<FlatMaterial>& flatGrey();
+
+    /**
+     * @brief TODO
+     */
+    static const std::shared_ptr<PhongMaterial>& grey();
 
     /**
      * @brief TODO
