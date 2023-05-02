@@ -6,20 +6,17 @@ Scene::Scene() {
     LAB_LOGH2("Scene::Scene()");
 }
 
-double Scene::time() const {
-    return m_time;
-}
-
-void Scene::addEntity(const std::shared_ptr<Entity>& entity) {
+void Scene::addEntity(const EntityRef& entity) {
     m_entities.push_back(entity);
 }
 
-void Scene::removeEntity(const std::shared_ptr<Entity>& entity) {
-    m_entities.remove(entity);
+void Scene::addEntity(const EntityPack& entities) {
+    for (const auto& entity : entities)
+        m_entities.push_back(entity);
 }
 
-const std::list<std::shared_ptr<Entity>>& Scene::entities() const {
-    return m_entities;
+void Scene::removeEntity(const EntityRef& entity) {
+    m_entities.remove(entity);
 }
 
 void Scene::onEvent(IEvent& e) {

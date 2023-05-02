@@ -62,7 +62,7 @@ namespace Materials {
 /**
  * @brief TODO
  */
-const std::shared_ptr<FlatMaterial>& flatGrey();
+const std::shared_ptr<FlatMaterial>& flatWhite();
 
 /**
  * @brief TODO
@@ -77,6 +77,21 @@ const std::shared_ptr<FlatMaterial>& UVTest();
 };  // namespace Materials
 
 namespace Models {
+
+/**
+ * @brief TODO
+ */
+const ModelRef& whiteCube();
+
+/**
+ * @brief TODO
+ */
+const ModelRef& whiteSphere();
+
+/**
+ * @brief TODO
+ */
+const ModelRef& whiteCone();
 
 /**
  * @brief TODO

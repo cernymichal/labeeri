@@ -5,6 +5,9 @@
 
 namespace labeeri::Engine {
 
+/**
+ * @brief TODO
+ */
 class Model {
 public:
     MaterialRef m_material;

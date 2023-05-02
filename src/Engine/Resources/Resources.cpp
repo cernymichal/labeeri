@@ -116,11 +116,11 @@ const TextureRef& Textures::test() {
     return texture;
 }
 
-const std::shared_ptr<FlatMaterial>& Materials::flatGrey() {
+const std::shared_ptr<FlatMaterial>& Materials::flatWhite() {
     static std::shared_ptr<FlatMaterial> material;
 
     if (!material && Shaders::flat())
-        material = std::make_shared<FlatMaterial>(Shaders::flat(), glm::vec3(0.7f));
+        material = std::make_shared<FlatMaterial>(Shaders::flat(), glm::vec3(1.0f));
 
     return material;
 }
@@ -143,6 +143,42 @@ const std::shared_ptr<FlatMaterial>& Materials::UVTest() {
         material = std::make_shared<FlatMaterial>(Shaders::flat(), Textures::test());
 
     return material;
+}
+
+const ModelRef& Models::whiteCube() {
+    static ModelRef model;
+
+    if (!model)
+        model = std::make_shared<Model>(nullptr, nullptr);
+
+    if (!model->m_material || !model->m_mesh)
+        *model = Model(Materials::flatWhite(), Meshes::cube());
+
+    return model;
+}
+
+const ModelRef& Models::whiteSphere() {
+    static ModelRef model;
+
+    if (!model)
+        model = std::make_shared<Model>(nullptr, nullptr);
+
+    if (!model->m_material || !model->m_mesh)
+        *model = Model(Materials::flatWhite(), Meshes::sphere());
+
+    return model;
+}
+
+const ModelRef& Models::whiteCone() {
+    static ModelRef model;
+
+    if (!model)
+        model = std::make_shared<Model>(nullptr, nullptr);
+
+    if (!model->m_material || !model->m_mesh)
+        *model = Model(Materials::flatWhite(), Meshes::cone());
+
+    return model;
 }
 
 const ModelRef& Models::basicCube() {

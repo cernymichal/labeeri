@@ -16,22 +16,34 @@ public:
     /**
      * @brief TODO
      */
-    Camera(const std::shared_ptr<Transform>& transform);
+    Camera(const std::shared_ptr<Transform>& transform) : m_transform(transform) {
+    }
 
     /**
      * @brief TODO
      */
-    const std::shared_ptr<Transform>& transform() const;
+    inline const std::shared_ptr<Transform>& transform() const {
+        return m_transform;
+    }
 
     /**
      * @brief TODO
      */
-    glm::mat4 viewMatrix() const;
+    glm::mat4 viewMatrix() const {
+        glm::vec3 cameraPosition = m_transform->worldPosition();
+        glm::vec3 center = cameraPosition + m_transform->forward();
+
+        return glm::lookAt(cameraPosition, center, m_transform->up());
+    }
 
     /**
      * @brief TODO
      */
-    glm::mat4 projectionMatrix(glm::uvec2 viewportSize) const;
+    glm::mat4 projectionMatrix(glm::uvec2 viewportSize) const {
+        float aspectRatio = (float)viewportSize.x / (float)viewportSize.y;
+
+        return glm::perspective(glm::radians(m_FOV), aspectRatio, m_near, m_far);
+    }
 
 private:
     std::shared_ptr<Transform> m_transform;

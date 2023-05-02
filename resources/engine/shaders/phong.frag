@@ -28,7 +28,7 @@ struct MaterialSample {
 	vec3 normal;
 };
 
-struct Attenutaion {
+struct Attenuation {
 	float constant;
 	float linear;
 	float quadratic;
@@ -50,18 +50,18 @@ struct PointLight {
     vec3 position;
 
     LightProperties properties;
-	Attenutaion attenutaion;
+	Attenuation attenuation;
 };
 
 struct SpotLight {
 	vec3 position;
 	vec3 direction;
 
-	float cutOff;
+	float innerCutOff;
 	float outerCutOff;
 
     LightProperties properties;
-	Attenutaion attenutaion;
+	Attenuation attenuation;
 };
 
 smooth in vec3 position_ws;
@@ -116,7 +116,7 @@ vec3 calculate_point_light(PointLight light, MaterialSample material, vec3 view_
 	vec3 light_direction = normalize(light.position - position_ws);
 
 	float distance = length(light.position - position_ws);
-	float attenuation = 1.0 / (light.attenutaion.constant + light.attenutaion.linear * distance + light.attenutaion.quadratic * (distance * distance));
+	float attenuation = 1.0 / (light.attenuation.constant + light.attenuation.linear * distance + light.attenuation.quadratic * (distance * distance));
 
 	return phong(light.properties, material, view_direction, light_direction) * attenuation;
 }
@@ -125,10 +125,10 @@ vec3 calculate_spot_light(SpotLight light, MaterialSample material, vec3 view_di
 	vec3 light_direction = normalize(light.position - position_ws);
 
 	float distance = length(light.position - position_ws);
-	float attenuation = 1.0 / (light.attenutaion.constant + light.attenutaion.linear * distance + light.attenutaion.quadratic * (distance * distance));
+	float attenuation = 1.0 / (light.attenuation.constant + light.attenuation.linear * distance + light.attenuation.quadratic * (distance * distance));
 
 	float theta = dot(light_direction, normalize(-light.direction));
-	float epsilon = light.cutOff - light.outerCutOff;
+	float epsilon = light.innerCutOff - light.outerCutOff;
 	float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
 
 	return phong(light.properties, material, view_direction, light_direction) * attenuation * intensity;

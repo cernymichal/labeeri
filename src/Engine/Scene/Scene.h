@@ -18,27 +18,36 @@ public:
     /**
      * @brief TODO
      */
-    double time() const;
+    inline double time() const {
+        return m_time;
+    }
 
     /**
      * @brief TODO
      */
-    void addEntity(const std::shared_ptr<Entity>& entity);
+    void addEntity(const EntityRef& entity);
 
     /**
      * @brief TODO
      */
-    void removeEntity(const std::shared_ptr<Entity>& entity);
+    void addEntity(const EntityPack& entities);
 
     /**
      * @brief TODO
      */
-    const std::list<std::shared_ptr<Entity>>& entities() const;
+    void removeEntity(const EntityRef& entity);
+
+    /**
+     * @brief TODO
+     */
+    inline const std::list<EntityRef>& entities() const {
+        return m_entities;
+    }
 
     virtual void onEvent(IEvent& e) override;
 
 private:
-    std::list<std::shared_ptr<Entity>> m_entities;
+    std::list<EntityRef> m_entities;
 
     double m_time = 0.0f;
 

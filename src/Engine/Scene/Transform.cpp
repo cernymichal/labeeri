@@ -68,44 +68,31 @@ void Transform::setParent(const std::shared_ptr<Transform>& parent) {
     setWorldPosition(position());
 }
 
-glm::vec3 Transform::position() const {
-    return m_position;
-}
-
-glm::vec3 Transform::worldPosition() {
+glm::vec3 Transform::worldPosition() const {
     return glm::vec3(modelMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
-glm::quat Transform::rotation() const {
-    return m_rotation;
-}
-
-glm::vec3 Transform::scale() const {
-    return m_scale;
-}
-
-const glm::mat4& Transform::modelMatrix() {
+const glm::mat4& Transform::modelMatrix() const {
     if (!modelMatrixValid())
         updateModelMatrix();
 
     return m_modelMatrix;
 }
 
-glm::vec3 Transform::forward() {
+glm::vec3 Transform::forward() const {
     return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(LAB_FORWARD, 0.0f)));
 }
 
-glm::vec3 Transform::up() {
+glm::vec3 Transform::up() const {
     return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(LAB_UP, 0.0f)));
 }
 
-glm::vec3 Transform::right() {
+glm::vec3 Transform::right() const {
     return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(LAB_RIGHT, 0.0f)));
 }
 
 Transform& Transform::operator=(Transform& other) {
     setWorldPosition(other.worldPosition());
-    setPosition(other.position());
     setRotation(other.rotation());
     return *this;
 }
@@ -117,7 +104,7 @@ bool Transform::modelMatrixValid() const {
     return m_parent->modelMatrixValid() && m_modelMatrixValid;
 }
 
-void Transform::updateModelMatrix() {
+void Transform::updateModelMatrix() const {
     glm::mat4 localModelMatrix = glm::mat4(1.0f);
     localModelMatrix = glm::translate(localModelMatrix, m_position);
     localModelMatrix *= glm::mat4_cast(m_rotation);

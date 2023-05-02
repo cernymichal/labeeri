@@ -2,59 +2,88 @@
 
 namespace labeeri::Engine {
 
-struct RendererLightAttenutaion {
-    float constant;
-    float linear;
-    float quadratic;
+/**
+ * @brief TODO
+ */
+struct LightAttenuation {
+    float constant = 1.0f;
+    float linear = 0.09f;
+    float quadratic = 0.032f;
 
-    RendererLightAttenutaion(float constant, float linear, float quadratic)
+    LightAttenuation() {
+    }
+
+    LightAttenuation(float constant, float linear, float quadratic)
         : constant(constant), linear(linear), quadratic(quadratic) {
     }
 };
 
-struct RendererLightProperties {
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
+/**
+ * @brief TODO
+ */
+struct LightProperties {
+    glm::vec3 ambient = glm::vec3(1.0, 0.97, 0.98) * 0.05f;
+    glm::vec3 diffuse = glm::vec3(1.0, 0.97, 0.98);  // 6400K
+    glm::vec3 specular = glm::vec3(1.0);
 
-    RendererLightProperties(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
+    LightProperties() {
+    }
+
+    LightProperties(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
         : ambient(ambient), diffuse(diffuse), specular(specular) {
+    }
+
+    inline LightProperties operator*(float factor) const {
+        LightProperties result(*this);
+        result.ambient *= factor;
+        result.diffuse *= factor;
+        result.specular *= factor;
+        return result;
     }
 };
 
+/**
+ * @brief TODO
+ */
 struct RendererDirectionalLight {
     glm::vec3 direction;
 
-    RendererLightProperties properties;
+    LightProperties properties;
 
-    RendererDirectionalLight(const glm::vec3& direction, const RendererLightProperties& properties)
+    RendererDirectionalLight(const glm::vec3& direction, const LightProperties& properties)
         : direction(direction), properties(properties) {
     }
 };
 
+/**
+ * @brief TODO
+ */
 struct RendererPointLight {
     glm::vec3 position;
 
-    RendererLightProperties properties;
-    RendererLightAttenutaion attenutaion;
+    LightProperties properties;
+    LightAttenuation attenuation;
 
-    RendererPointLight(const glm::vec3& position, const RendererLightProperties& properties, const RendererLightAttenutaion& attenutaion)
-        : position(position), properties(properties), attenutaion(attenutaion) {
+    RendererPointLight(const glm::vec3& position, const LightProperties& properties, const LightAttenuation& attenuation)
+        : position(position), properties(properties), attenuation(attenuation) {
     }
 };
 
+/**
+ * @brief TODO
+ */
 struct RendererSpotLight {
     glm::vec3 position;
     glm::vec3 direction;
 
-    float cutOff;
+    float innerCutOff;
     float outerCutOff;
 
-    RendererLightProperties properties;
-    RendererLightAttenutaion attenutaion;
+    LightProperties properties;
+    LightAttenuation attenuation;
 
-    RendererSpotLight(const glm::vec3& position, const glm::vec3& direction, float cutOff, float outerCutOff, const RendererLightProperties& properties, const RendererLightAttenutaion& attenutaion)
-        : position(position), direction(direction), cutOff(cutOff), outerCutOff(outerCutOff), properties(properties), attenutaion(attenutaion) {
+    RendererSpotLight(const glm::vec3& position, const glm::vec3& direction, float innerCutOff, float outerCutOff, const LightProperties& properties, const LightAttenuation& attenuation)
+        : position(position), direction(direction), innerCutOff(innerCutOff), outerCutOff(outerCutOff), properties(properties), attenuation(attenuation) {
     }
 };
 

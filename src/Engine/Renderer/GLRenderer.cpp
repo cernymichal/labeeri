@@ -486,12 +486,12 @@ void GLRenderer::bindPointLights() {
         bindUniform(location.c_str(), light.properties.diffuse);
         location = structLocation + ".properties.specular";
         bindUniform(location.c_str(), light.properties.specular);
-        location = structLocation + ".attenutaion.constant";
-        bindUniform(location.c_str(), light.attenutaion.constant);
-        location = structLocation + ".attenutaion.linear";
-        bindUniform(location.c_str(), light.attenutaion.linear);
-        location = structLocation + ".attenutaion.quadratic";
-        bindUniform(location.c_str(), light.attenutaion.quadratic);
+        location = structLocation + ".attenuation.constant";
+        bindUniform(location.c_str(), light.attenuation.constant);
+        location = structLocation + ".attenuation.linear";
+        bindUniform(location.c_str(), light.attenuation.linear);
+        location = structLocation + ".attenuation.quadratic";
+        bindUniform(location.c_str(), light.attenuation.quadratic);
     }
 }
 
@@ -507,8 +507,8 @@ void GLRenderer::bindSpotLights() {
         bindUniform(location.c_str(), light.position);
         location = structLocation + ".direction";
         bindUniform(location.c_str(), light.direction);
-        location = structLocation + ".cutOff";
-        bindUniform(location.c_str(), light.cutOff);
+        location = structLocation + ".innerCutOff";
+        bindUniform(location.c_str(), light.innerCutOff);
         location = structLocation + ".outerCutOff";
         bindUniform(location.c_str(), light.outerCutOff);
         location = structLocation + ".properties.ambient";
@@ -517,12 +517,12 @@ void GLRenderer::bindSpotLights() {
         bindUniform(location.c_str(), light.properties.diffuse);
         location = structLocation + ".properties.specular";
         bindUniform(location.c_str(), light.properties.specular);
-        location = structLocation + ".attenutaion.constant";
-        bindUniform(location.c_str(), light.attenutaion.constant);
-        location = structLocation + ".attenutaion.linear";
-        bindUniform(location.c_str(), light.attenutaion.linear);
-        location = structLocation + ".attenutaion.quadratic";
-        bindUniform(location.c_str(), light.attenutaion.quadratic);
+        location = structLocation + ".attenuation.constant";
+        bindUniform(location.c_str(), light.attenuation.constant);
+        location = structLocation + ".attenuation.linear";
+        bindUniform(location.c_str(), light.attenuation.linear);
+        location = structLocation + ".attenuation.quadratic";
+        bindUniform(location.c_str(), light.attenuation.quadratic);
     }
 }
 

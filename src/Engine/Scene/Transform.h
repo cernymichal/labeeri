@@ -71,43 +71,70 @@ public:
     /**
      * @brief TODO
      */
-    glm::vec3 position() const;
+    inline const std::shared_ptr<Transform>& parent() const {
+        return m_parent;
+    }
 
     /**
      * @brief TODO
      */
-    glm::vec3 worldPosition();
+    inline const std::list<Transform*>& children() const {
+        return m_children;
+    }
 
     /**
      * @brief TODO
      */
-    glm::quat rotation() const;
+    inline const std::shared_ptr<Entity>& entity() const {
+        return m_entity.lock();
+    }
 
     /**
      * @brief TODO
      */
-    glm::vec3 scale() const;
+    inline glm::vec3 position() const {
+        return m_position;
+    }
 
     /**
      * @brief TODO
      */
-    const glm::mat4& modelMatrix();
+    glm::vec3 worldPosition() const;
+
+    /**
+     * @brief TODO
+     */
+    inline glm::quat rotation() const {
+        return m_rotation;
+    }
+
+    /**
+     * @brief TODO
+     */
+    inline glm::vec3 scale() const {
+        return m_scale;
+    }
+
+    /**
+     * @brief TODO
+     */
+    const glm::mat4& modelMatrix() const;
 
     /**
      * @brief TODO
      */
 
-    glm::vec3 forward();
+    glm::vec3 forward() const;
 
     /**
      * @brief TODO
      */
-    glm::vec3 up();
+    glm::vec3 up() const;
 
     /**
      * @brief TODO
      */
-    glm::vec3 right();
+    glm::vec3 right() const;
 
     /**
      * @brief TODO
@@ -119,11 +146,13 @@ private:
     glm::quat m_rotation = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
     glm::vec3 m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-    glm::mat4 m_modelMatrix = glm::mat4(1.0);
-    bool m_modelMatrixValid = true;
+    mutable glm::mat4 m_modelMatrix = glm::mat4(1.0);
+    mutable bool m_modelMatrixValid = true;
 
     std::shared_ptr<Transform> m_parent;
     std::list<Transform*> m_children;
+
+    std::weak_ptr<Entity> m_entity;
 
     /**
      * @brief TODO
@@ -133,7 +162,7 @@ private:
     /**
      * @brief TODO
      */
-    void updateModelMatrix();
+    void updateModelMatrix() const;
 
     /**
      * @brief TODO
