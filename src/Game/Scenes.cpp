@@ -7,13 +7,18 @@ namespace labeeri {
 std::shared_ptr<Scene> labeeri::defaultScene() {
     auto scene = std::make_shared<Scene>();
 
+    auto ground = std::make_shared<Entity>();
+    ground->transform()->setScale(glm::vec3(50.0));
+    ground->m_model = Models::basicPlane();
+    scene->addEntity(ground);
+
     auto material = copyShared(Materials::grey());
     material->m_diffuseMap = loadTexture("resources/labeeri/textures/catguy.jpg");
     material->m_specular = glm::vec3(0.6);
     material->m_shininess = 128.0;
 
     auto sphere = std::make_shared<Entity>();
-    sphere->transform()->setPosition(glm::vec3(1.0, -1.2, -2.2));
+    sphere->transform()->setPosition(glm::vec3(1.0, 2.0, -2.2));
     sphere->m_model = copyShared(Models::basicSphere());
     sphere->m_model->m_material = material;
     sphere->m_onUpdate = [](Entity& self, double deltaTime) {
@@ -23,7 +28,7 @@ std::shared_ptr<Scene> labeeri::defaultScene() {
     scene->addEntity(sphere);
 
     auto cube = std::make_shared<Entity>();
-    cube->transform()->setPosition(glm::vec3(-1.0, 0, -2));
+    cube->transform()->setPosition(glm::vec3(-1.0, 3.0, -2));
     cube->m_model = copyShared(Models::basicCube());
     cube->m_model->m_material = material;
     cube->m_onUpdate = [](Entity& self, double deltaTime) {

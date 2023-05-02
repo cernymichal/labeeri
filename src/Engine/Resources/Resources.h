@@ -5,84 +5,99 @@
 
 namespace labeeri::Engine {
 
+namespace Shaders {
 /**
  * @brief TODO
  */
-struct Shaders {
-    /**
-     * @brief TODO
-     */
-    static const ShaderProgramRef& fallback();
-
-    /**
-     * @brief TODO
-     */
-    static const ShaderProgramRef& flat();
-
-    /**
-     * @brief TODO
-     */
-    static const ShaderProgramRef& phong();
-};
+const ShaderProgramRef& fallback();
 
 /**
  * @brief TODO
  */
-struct Meshes {
-    /**
-     * @brief TODO
-     */
-    static const MeshRef& cube();
-
-    /**
-     * @brief TODO
-     */
-    static const MeshRef& sphere();
-};
+const ShaderProgramRef& flat();
 
 /**
  * @brief TODO
  */
-struct Textures {
-    /**
-     * @brief TODO
-     */
-    static const TextureRef& test();
-};
+const ShaderProgramRef& phong();
+
+};  // namespace Shaders
+
+namespace Meshes {
 
 /**
  * @brief TODO
  */
-struct Materials {
-    /**
-     * @brief TODO
-     */
-    static const std::shared_ptr<FlatMaterial>& flatGrey();
-
-    /**
-     * @brief TODO
-     */
-    static const std::shared_ptr<ShadedMaterial>& grey();
-
-    /**
-     * @brief TODO
-     */
-    static const std::shared_ptr<FlatMaterial>& UVTest();
-};
+const MeshRef& cube();
 
 /**
  * @brief TODO
  */
-struct Models {
-    /**
-     * @brief TODO
-     */
-    static const ModelRef& basicCube();
+const MeshRef& sphere();
 
-    /**
-     * @brief TODO
-     */
-    static const ModelRef& basicSphere();
-};
+/**
+ * @brief TODO
+ */
+const MeshRef& plane();
+
+/**
+ * @brief TODO
+ */
+const MeshRef& cone();
+};  // namespace Meshes
+
+/**
+ * @brief TODO
+ */
+namespace Textures {
+/**
+ * @brief TODO
+ */
+const TextureRef& test();
+
+};  // namespace Textures
+
+namespace Materials {
+
+/**
+ * @brief TODO
+ */
+const std::shared_ptr<FlatMaterial>& flatGrey();
+
+/**
+ * @brief TODO
+ */
+const std::shared_ptr<ShadedMaterial>& grey();
+
+/**
+ * @brief TODO
+ */
+const std::shared_ptr<FlatMaterial>& UVTest();
+
+};  // namespace Materials
+
+namespace Models {
+
+/**
+ * @brief TODO
+ */
+const ModelRef& basicCube();
+
+/**
+ * @brief TODO
+ */
+const ModelRef& basicSphere();
+
+/**
+ * @brief TODO
+ */
+const ModelRef& basicPlane();
+
+/**
+ * @brief TODO
+ */
+const ModelRef& basicCone();
+
+};  // namespace Models
 
 }  // namespace labeeri::Engine

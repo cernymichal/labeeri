@@ -74,6 +74,34 @@ const MeshRef& Meshes::sphere() {
     return mesh;
 }
 
+const MeshRef& Meshes::plane() {
+    static MeshRef mesh;
+
+    if (!mesh) {
+        try {
+            mesh = loadMesh("resources/engine/models/plane.obj");
+        }
+        catch (const std::exception&) {
+        }
+    }
+
+    return mesh;
+}
+
+const MeshRef& Meshes::cone() {
+    static MeshRef mesh;
+
+    if (!mesh) {
+        try {
+            mesh = loadMesh("resources/engine/models/cone.obj");
+        }
+        catch (const std::exception&) {
+        }
+    }
+
+    return mesh;
+}
+
 const TextureRef& Textures::test() {
     static TextureRef texture;
 
@@ -137,6 +165,30 @@ const ModelRef& Models::basicSphere() {
 
     if (!model->m_material || !model->m_mesh)
         *model = Model(Materials::grey(), Meshes::sphere());
+
+    return model;
+}
+
+const ModelRef& Models::basicPlane() {
+    static ModelRef model;
+
+    if (!model)
+        model = std::make_shared<Model>(nullptr, nullptr);
+
+    if (!model->m_material || !model->m_mesh)
+        *model = Model(Materials::grey(), Meshes::plane());
+
+    return model;
+}
+
+const ModelRef& Models::basicCone() {
+    static ModelRef model;
+
+    if (!model)
+        model = std::make_shared<Model>(nullptr, nullptr);
+
+    if (!model->m_material || !model->m_mesh)
+        *model = Model(Materials::grey(), Meshes::cone());
 
     return model;
 }
