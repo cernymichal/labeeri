@@ -46,14 +46,18 @@ ImGuiLayer::ImGuiLayer() {
 
     setupImGui();
 
-    m_windows.push_back(std::make_unique<MenuWindow>());
-    m_windows.push_back(std::make_unique<LogWindow>());
+    m_windows.emplace_back(std::make_unique<MenuWindow>());
+    m_windows.emplace_back(std::make_unique<LogWindow>());
 }
 
 ImGuiLayer::~ImGuiLayer() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+}
+
+IImGuiWindow* ImGuiLayer::addWindow(std::unique_ptr<IImGuiWindow>&& window) {
+    return m_windows.emplace_back(std::move(window)).get();
 }
 
 void ImGuiLayer::setupImGui() {

@@ -2,6 +2,7 @@
 
 #include "Engine/Scene/Scene.h"
 #include "Engine/WindowLayer/IWindowLayer.h"
+#include "Engine/WindowLayer/ImGuiLayer.h"
 #include "Engine/WindowLayer/SceneLayer.h"
 #include "Engine/WindowLayer/ViewportLayer.h"
 
@@ -65,6 +66,10 @@ public:
         return m_sceneLayer->m_scene;
     }
 
+    inline ImGuiLayer* imGuiLayer() const {
+        return m_imGuiLayer;
+    }
+
     /**
      * @brief TODO
      */
@@ -93,6 +98,7 @@ private:
     bool m_closed = false;
     ApplicationFocus m_focus = ApplicationFocus::UI;
     std::list<std::unique_ptr<IWindowLayer>> m_layers;
+    ImGuiLayer* m_imGuiLayer = nullptr;
     ViewportLayer* m_viewportLayer = nullptr;
     SceneLayer* m_sceneLayer = nullptr;
 

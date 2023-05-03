@@ -1,5 +1,7 @@
 #include "scenes.h"
 
+#include "Engine/WindowLayer/ImGuiWindow/EntityWindow.h"
+
 using namespace labeeri::Engine;
 
 namespace labeeri {
@@ -15,7 +17,7 @@ std::shared_ptr<Scene> labeeri::defaultScene() {
     auto sun = Entities::DirectionalLight(glm::vec3(glm::radians(-110.0), glm::radians(30.0), 0), .4f);
     auto pointLight = Entities::PointLight(glm::vec3(0.0, 4.0, -4.0));
     pointLight->m_light->m_properties.diffuse = glm::vec3(1.0, 0.8, 0.8);
-    auto spotLight = Entities::SpotLight(glm::vec3(2.0, 3.2, 1.5), glm::vec3(glm::radians(-50.0), glm::radians(45.0), 0));
+    auto spotLight = Entities::SpotLight(glm::vec3(2.1, 3.5, 1.6), glm::vec3(glm::radians(-50.0), glm::radians(45.0), 0));
     spotLight[0]->m_light->m_properties.diffuse = glm::vec3(0.6, 0.6, 1.0);
 
     scene->addEntity(sun);
@@ -46,6 +48,30 @@ std::shared_ptr<Scene> labeeri::defaultScene() {
         self.transform()->rotate(glm::vec3(0, glm::radians(20.0f), 0) * (float)deltaTime);
     };
     scene->addEntity(cube);
+
+    auto perlinMaterial = copyShared(Materials::grey());
+    perlinMaterial->m_diffuse = glm::vec3(0.8f, 1.0f, 0.8f);
+    perlinMaterial->m_specularMap = loadTexture("resources/engine/textures/perlin256.png");
+    perlinMaterial->m_shininess = 128.0;
+
+    auto teapot = Entity::Create();
+    teapot->transform()->setPosition(glm::vec3(-1.0f, 0.5f, 0.0f));
+    teapot->m_model = std::make_shared<Model>(perlinMaterial, loadMesh("resources/engine/models/teapot.obj"));
+    teapot->m_model->m_material = perlinMaterial;
+    scene->addEntity(teapot);
+
+    /*
+    auto dragon = Entity::Create();
+    dragon->transform()->setPosition(glm::vec3(1.0f, 1.5f, 0.0f));
+    dragon->m_model = std::make_shared<Model>(perlinMaterial, loadMesh("resources/engine/models/xyzrgb_dragon.obj"));
+    dragon->m_model->m_material = perlinMaterial;
+    scene->addEntity(dragon);
+    */
+
+    LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(sun));
+    LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(spotLight[0]));
+    LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(pointLight));
+    LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(teapot));
 
     return scene;
 }

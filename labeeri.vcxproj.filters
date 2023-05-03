@@ -96,6 +96,9 @@
     <ClCompile Include="src\Engine\Scene\Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\EntityWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Application.h">
@@ -216,6 +219,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\EntityWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

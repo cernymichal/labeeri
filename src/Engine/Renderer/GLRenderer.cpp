@@ -2,8 +2,6 @@
 
 #include <glad/glad.h>
 
-#include <format>
-
 #include "Engine/Resources/Resources.h"
 #include "Engine/Window/IWindow.h"
 

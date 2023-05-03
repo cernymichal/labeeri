@@ -168,6 +168,7 @@
     <ClCompile Include="src\Engine\Renderer\Texture.cpp" />
     <ClCompile Include="src\Engine\Scene\Light.cpp" />
     <ClCompile Include="src\Engine\Scene\Look.cpp" />
+    <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\EntityWindow.cpp" />
     <ClCompile Include="src\Engine\Window\GLFWWindow.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiLayer.cpp" />
     <ClCompile Include="src\Engine\Scene\Movement.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="src\Engine\Scene\Light.h" />
     <ClInclude Include="src\Engine\Scene\Look.h" />
     <ClInclude Include="src\Engine\Utils.h" />
+    <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\EntityWindow.h" />
     <ClInclude Include="src\Engine\Window\GLFWWindow.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiLayer.h" />
     <ClInclude Include="src\Engine\Scene\Camera.h" />

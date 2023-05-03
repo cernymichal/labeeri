@@ -24,6 +24,11 @@ public:
     /**
      * @brief TODO
      */
+    IImGuiWindow* addWindow(std::unique_ptr<IImGuiWindow>&& window);
+
+    /**
+     * @brief TODO
+     */
     void onEvent(IEvent& e) override;
 
 private:

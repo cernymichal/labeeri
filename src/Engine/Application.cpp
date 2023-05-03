@@ -33,6 +33,7 @@ void Application::initialize() {
     LAB_LOGH1("Application::initialize()");
 
     m_layers.push_back(std::make_unique<ImGuiLayer>());
+    m_imGuiLayer = dynamic_cast<ImGuiLayer*>(m_layers.back().get());
     m_layers.push_back(std::make_unique<ViewportLayer>());
     m_viewportLayer = dynamic_cast<ViewportLayer*>(m_layers.back().get());
     m_layers.push_back(std::make_unique<SceneLayer>());

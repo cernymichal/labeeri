@@ -11,6 +11,7 @@ using LAB_GL_HANDLE = LAB_GL_UINT;
 #define LAB_APP labeeri::Engine::Application::get()
 #define LAB_CURRENT_SCENE LAB_APP.scene()
 #define LAB_CURRENT_CAMERA LAB_APP.camera()
+#define LAB_IMGUI LAB_APP.imGuiLayer()
 #define LAB_WINDOW labeeri::Engine::IWindow::get()
 #define LAB_RENDERER labeeri::Engine::IRenderer::get()
 
