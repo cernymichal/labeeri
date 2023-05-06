@@ -19,7 +19,7 @@ public:
     /**
      * @brief TODO
      */
-    ~ImGuiLayer();
+    virtual ~ImGuiLayer() override;
 
     /**
      * @brief TODO
@@ -29,7 +29,7 @@ public:
     /**
      * @brief TODO
      */
-    void onEvent(IEvent& e) override;
+    virtual void onEvent(IEvent& e) override;
 
 private:
     std::list<std::unique_ptr<IImGuiWindow>> m_windows;

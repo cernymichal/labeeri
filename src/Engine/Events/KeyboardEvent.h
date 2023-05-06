@@ -10,15 +10,15 @@ namespace labeeri::Engine {
  */
 class KeyboardEvent : public IEvent {
 public:
-    inline KeyboardKey key() const {
+    KeyboardKey key() const {
         return m_key;
     }
 
-    inline int scanCode() const {
+    int scanCode() const {
         return m_scanCode;
     }
 
-    inline int mods() const {
+    int mods() const {
         return m_mods;
     }
 

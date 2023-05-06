@@ -6,11 +6,7 @@
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Events/KeyboardEvent.h"
 #include "Engine/Events/MouseEvent.h"
-#include "Engine/Resources/Resources.h"
-#include "Engine/Scene/Entity.h"
 #include "Engine/WindowLayer/ImGuiLayer.h"
-#include "Engine/WindowLayer/SceneLayer.h"
-#include "Engine/WindowLayer/ViewportLayer.h"
 
 namespace labeeri::Engine {
 
@@ -20,7 +16,7 @@ GLFWWindow::GLFWWindow() {
     setupGLFW();
 
     glfwGetCursorPos(m_window, &s_mousePosition.x, &s_mousePosition.y);
-    setVSync(true);
+    GLFWWindow::setVSync(true);
 }
 
 GLFWWindow::~GLFWWindow() {
@@ -50,7 +46,7 @@ void GLFWWindow::setFullscreen(bool enabled) {
     m_fullscreen = enabled;
 
     if (!m_fullscreen) {
-        glfwSetWindowMonitor(m_window, NULL, m_windowedPosition.x, m_windowedPosition.y, m_windowedSize.x, m_windowedSize.y, 0);
+        glfwSetWindowMonitor(m_window, nullptr, m_windowedPosition.x, m_windowedPosition.y, m_windowedSize.x, m_windowedSize.y, 0);
         return;
     }
 
@@ -137,7 +133,7 @@ void GLFWWindow::setupGLFW() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
     // Create window with graphics context
-    m_window = glfwCreateWindow(INITIAL_WINDOW_SIZE.x, INITIAL_WINDOW_SIZE.y, "labeeri", NULL, NULL);
+    m_window = glfwCreateWindow(INITIAL_WINDOW_SIZE.x, INITIAL_WINDOW_SIZE.y, "labeeri", nullptr, nullptr);
     if (!m_window) {
         glfwTerminate();
         throw std::runtime_error("glfwCreateWindow failed");
@@ -213,6 +209,8 @@ void GLFWWindow::glfwMouseButtonCallback(GLFWwindow* window, int buttonInt, int 
             LAB_APP.emitEvent(event);
             break;
         }
+        case KeyAction::Repeat:
+            break;
     }
 }
 

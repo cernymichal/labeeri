@@ -1,5 +1,3 @@
-#pragma once
-
 #include "IRenderer.h"
 
 namespace labeeri::Engine {

@@ -68,7 +68,7 @@ public:
     /**
      * @brief TODO
      */
-    bool isInCategory(EventCategory category) {
+    bool isInCategory(EventCategory category) const {
         return categoryFlags() & static_cast<int>(category);
     }
 

@@ -2,7 +2,6 @@
 
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Renderer/GLRenderer.h"
-#include "Engine/Resources/Resources.h"
 #include "Engine/Window/GLFWWindow.h"
 #include "Engine/WindowLayer/ImGuiLayer.h"
 #include "Engine/WindowLayer/SceneLayer.h"
@@ -55,7 +54,7 @@ void Application::focusViewport() {
     LAB_WINDOW->setCursorMode(CursorMode::Disabled);
 }
 
-void Application::emitEvent(IEvent& e) {
+void Application::emitEvent(IEvent& e) const {
     for (auto& layer : m_layers) {
         layer->onEvent(e);
 

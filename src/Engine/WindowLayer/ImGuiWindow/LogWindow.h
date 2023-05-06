@@ -12,12 +12,7 @@ public:
     /**
      * @brief TODO
      */
-    LogWindow();
-
-    /**
-     * @brief TODO
-     */
-    void draw() override;
+    virtual void draw() override;
 
 private:
     bool m_autoScroll = true;

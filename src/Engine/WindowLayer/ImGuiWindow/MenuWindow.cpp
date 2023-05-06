@@ -2,7 +2,6 @@
 
 #include <imgui.h>
 
-#include "Engine/Application.h"
 #include "Engine/Window/IWindow.h"
 
 namespace labeeri::Engine {

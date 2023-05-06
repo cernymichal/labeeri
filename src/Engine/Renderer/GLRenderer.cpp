@@ -8,7 +8,7 @@
 namespace labeeri::Engine {
 
 struct Shader {
-    Shader(GLuint shader) : m_shader(shader) {
+    explicit Shader(GLuint shader) : m_shader(shader) {
     }
 
     Shader(const Shader&) = delete;
@@ -46,7 +46,7 @@ Shader compileShader(const char* source, ShaderType shaderType) {
     }
 
     Shader shader(glCreateShader(type));
-    glShaderSource(shader, 1, &source, NULL);
+    glShaderSource(shader, 1, &source, nullptr);
     glCompileShader(shader);
 
     GLint status;
@@ -64,8 +64,8 @@ Shader compileShader(const char* source, ShaderType shaderType) {
     GLint infoLogLength;
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-    GLchar* infoLogStr = new GLchar[infoLogLength + 1];
-    glGetShaderInfoLog(shader, infoLogLength, NULL, infoLogStr);
+    auto infoLogStr = new GLchar[infoLogLength + 1];
+    glGetShaderInfoLog(shader, infoLogLength, nullptr, infoLogStr);
 
     LAB_LOG("Failed to compile " << typeStr << " shader:");
     LAB_LOG(infoLogStr);
@@ -90,8 +90,8 @@ void linkShaderProgram(GLuint program) {
     GLint infoLogLength;
     glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-    GLchar* strInfoLog = new GLchar[infoLogLength + 1];
-    glGetProgramInfoLog(program, infoLogLength, NULL, strInfoLog);
+    auto strInfoLog = new GLchar[infoLogLength + 1];
+    glGetProgramInfoLog(program, infoLogLength, nullptr, strInfoLog);
 
     LAB_LOG("Linker failure: " << strInfoLog);
     delete[] strInfoLog;
@@ -271,8 +271,8 @@ void GLRenderer::drawMesh() {
 ShaderProgram GLRenderer::createShaderProgram(const std::vector<std::pair<ShaderType, const char*>>& shaders) const {
     ShaderProgram program(glCreateProgram());
 
-    for (const auto& shader : shaders) {
-        Shader compiledShader = compileShader(shader.second, shader.first);
+    for (const auto& [source, type] : shaders) {
+        Shader compiledShader = compileShader(type, source);
         glAttachShader(program, compiledShader);
     }
 
@@ -287,7 +287,7 @@ void GLRenderer::deleteShaderProgram(ShaderProgram& shaderProgram) const {
     glDeleteProgram(shaderProgram);
 }
 
-Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const float* normals, const std::vector<const float*> UVs, const unsigned int* indices, uint32_t faceCount) const {
+Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const float* normals, const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const {
     GLuint VAO;
     GLuint VBO;
     GLuint EBO;
@@ -295,7 +295,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
     // VBO
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float) * vertexCount, 0, GL_STATIC_DRAW);  // vertices, normals, and UVs
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float) * vertexCount, nullptr, GL_STATIC_DRAW);  // vertices, normals, and UVs
 
     // vertices
     glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * sizeof(float) * vertexCount, vertices);
@@ -308,7 +308,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
     }
 
     // UVs
-    for (const auto& map : UVs) {  // TODO more than one UV map
+    for (const auto& map : uvs) {  // TODO more than one UV map
         glBufferSubData(GL_ARRAY_BUFFER, 6 * sizeof(float) * vertexCount, 2 * sizeof(float) * vertexCount, map);
         LAB_LOG("Uploaded UV map");
     }
@@ -323,7 +323,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
     LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Uploaded " << faceCount << " faces");
 
-    auto shader = Shaders::phong();
+    auto& shader = Shaders::phong();
     if (!shader)
         throw std::runtime_error("No phong shader for default attribute positions");
 
@@ -340,7 +340,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
     LAB_LOG_RENDERAPI_ERROR();
 
     glEnableVertexAttribArray(positionLocation);
-    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
     glEnableVertexAttribArray(normalLocation);
     glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(3 * sizeof(float) * vertexCount));

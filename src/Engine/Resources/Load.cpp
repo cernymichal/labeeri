@@ -10,7 +10,6 @@
 #include <sstream>
 
 #include "Engine/Renderer/IRenderer.h"
-#include "Engine/Resources/Resources.h"
 
 namespace labeeri::Engine {
 
@@ -51,7 +50,7 @@ MeshRef loadMesh(const char* filePath) {
                                                            | aiProcess_GenSmoothNormals      // Calculate normals per vertex.
                                                            | aiProcess_JoinIdenticalVertices);
 
-    if (scene == NULL) {
+    if (scene == nullptr) {
         LAB_LOG("assimp error: " << importer.GetErrorString());
         throw std::runtime_error("assimp error");
     }
@@ -65,13 +64,13 @@ MeshRef loadMesh(const char* filePath) {
 
     uint32_t vertexCount = assimpMesh->mNumVertices;
     uint32_t faceCount = assimpMesh->mNumFaces;
-    float* vertices = reinterpret_cast<float*>(assimpMesh->mVertices);
+    auto vertices = reinterpret_cast<float*>(assimpMesh->mVertices);
     float* normals = assimpMesh->HasNormals() ? reinterpret_cast<float*>(assimpMesh->mNormals) : nullptr;
 
     // UVs
     std::vector<std::vector<float>> UVs;
     if (assimpMesh->HasTextureCoords(0)) {
-        UVs.push_back({});
+        UVs.emplace_back();
         UVs[0].reserve((size_t)vertexCount * 2);
 
         for (size_t i = 0; i < vertexCount; i++) {
@@ -80,9 +79,10 @@ MeshRef loadMesh(const char* filePath) {
             UVs[0].push_back(vector.y);
         }
     }
-    std::vector<const float*> UVPtrs;
+    std::vector<const float*> uvPtrs;
+    uvPtrs.reserve(UVs.size());
     for (const auto& map : UVs)
-        UVPtrs.push_back(&map[0]);
+        uvPtrs.push_back(map.data());
 
     // indices
     std::vector<unsigned int> indices;
@@ -96,7 +96,7 @@ MeshRef loadMesh(const char* filePath) {
 
     LAB_LOG("Data loaded");
 
-    Mesh mesh = LAB_RENDERER->createMesh(vertices, vertexCount, normals, UVPtrs, &indices[0], faceCount);
+    Mesh mesh = LAB_RENDERER->createMesh(vertices, vertexCount, normals, uvPtrs, indices.data(), faceCount);
 
     return std::make_shared<Mesh>(std::move(mesh));
 }

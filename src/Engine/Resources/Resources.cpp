@@ -1,7 +1,6 @@
 #include "Resources.h"
 
 #include "Engine/Resources/Load.h"
-#include "Engine/Resources/Resources.h"
 
 namespace labeeri::Engine {
 const ShaderProgramRef& Shaders::fallback() {

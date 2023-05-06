@@ -1,8 +1,9 @@
 #pragma once
 
+// ReSharper disable once CppUnusedIncludeDirective
 #include "Engine/Log.h"
 
-#define LAB_BIT(x) (1 << x)
+#define LAB_BIT(x) (1 << (x))
 
 using LAB_GL_UINT = unsigned int;  // so that we dont have to include GLAD everywhere
 using LAB_GL_INT = int;

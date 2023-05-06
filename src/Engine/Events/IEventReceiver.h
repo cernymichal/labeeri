@@ -9,6 +9,8 @@ namespace labeeri::Engine {
  */
 class IEventReceiver {
 public:
+    virtual ~IEventReceiver() = default;
+
     /**
      * @brief TODO
      */

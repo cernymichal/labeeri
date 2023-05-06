@@ -9,10 +9,10 @@ namespace labeeri::Engine {
  */
 class WindowResizeEvent : public IEvent {
 public:
-    WindowResizeEvent(const glm::uvec2& windowSize) : m_windowSize(windowSize) {
+    explicit WindowResizeEvent(const glm::uvec2& windowSize) : m_windowSize(windowSize) {
     }
 
-    inline const glm::uvec2& windowSize() const {
+    const glm::uvec2& windowSize() const {
         return m_windowSize;
     }
 
@@ -39,10 +39,10 @@ public:
  */
 class ApplicationUpdateEvent : public IEvent {
 public:
-    ApplicationUpdateEvent(double deltaTime) : m_deltaTime(deltaTime) {
+    explicit ApplicationUpdateEvent(double deltaTime) : m_deltaTime(deltaTime) {
     }
 
-    inline double deltaTime() const {
+    double deltaTime() const {
         return m_deltaTime;
     }
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Scene/Scene.h"
 #include "Engine/WindowLayer/IWindowLayer.h"
 
@@ -16,7 +15,7 @@ public:
     /**
      * @brief TODO
      */
-    void onEvent(IEvent& e) override;
+    virtual void onEvent(IEvent& e) override;
 };
 
 }  // namespace labeeri::Engine

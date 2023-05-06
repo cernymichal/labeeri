@@ -14,14 +14,14 @@ public:
     /**
      * @brief TODO
      */
-    Movement(const std::shared_ptr<Transform>& transform, float speed = 4.0f);
+    explicit Movement(const std::shared_ptr<Transform>& transform, float speed = 4.0f);
 
     /**
      * @brief TODO
      */
     void update(double deltaTime);
 
-    void onEvent(IEvent& e) override;
+    virtual void onEvent(IEvent& e) override;
 
 private:
     glm::vec3 m_velocity = glm::vec3(0.0f);

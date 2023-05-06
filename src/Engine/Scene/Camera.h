@@ -16,13 +16,13 @@ public:
     /**
      * @brief TODO
      */
-    Camera(const std::shared_ptr<Transform>& transform) : m_transform(transform) {
+    explicit Camera(const std::shared_ptr<Transform>& transform) : m_transform(transform) {
     }
 
     /**
      * @brief TODO
      */
-    inline const std::shared_ptr<Transform>& transform() const {
+    const std::shared_ptr<Transform>& transform() const {
         return m_transform;
     }
 

@@ -14,9 +14,9 @@ public:
     /**
      * @brief TODO
      */
-    Look(const std::shared_ptr<Transform>& transform, double sensitivity = 0.002);
+    explicit Look(const std::shared_ptr<Transform>& transform, double sensitivity = 0.002);
 
-    void onEvent(IEvent& e) override;
+    virtual void onEvent(IEvent& e) override;
 
 private:
     std::shared_ptr<Transform> m_transform;

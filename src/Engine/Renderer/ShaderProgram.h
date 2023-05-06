@@ -10,7 +10,7 @@ public:
     /**
      * @brief TODO
      */
-    ShaderProgram(LAB_GL_HANDLE program);
+    explicit ShaderProgram(LAB_GL_HANDLE program);
 
     ShaderProgram(const ShaderProgram&) = delete;
 

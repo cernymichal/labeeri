@@ -6,7 +6,7 @@ using namespace labeeri::Engine;
 
 namespace labeeri {
 
-std::shared_ptr<Scene> labeeri::defaultScene() {
+std::shared_ptr<Scene> defaultScene() {
     auto scene = std::make_shared<Scene>();
 
     auto ground = Entity::Create();

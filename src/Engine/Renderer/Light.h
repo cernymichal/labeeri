@@ -10,8 +10,7 @@ struct LightAttenuation {
     float linear = 0.09f;
     float quadratic = 0.032f;
 
-    LightAttenuation() {
-    }
+    LightAttenuation() = default;
 
     LightAttenuation(float constant, float linear, float quadratic)
         : constant(constant), linear(linear), quadratic(quadratic) {
@@ -26,14 +25,13 @@ struct LightProperties {
     glm::vec3 diffuse = glm::vec3(1.0, 0.97, 0.98);  // 6400K
     glm::vec3 specular = glm::vec3(1.0);
 
-    LightProperties() {
-    }
+    LightProperties() = default;
 
     LightProperties(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
         : ambient(ambient), diffuse(diffuse), specular(specular) {
     }
 
-    inline LightProperties operator*(float factor) const {
+    LightProperties operator*(float factor) const {
         LightProperties result(*this);
         result.ambient *= factor;
         result.diffuse *= factor;

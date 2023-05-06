@@ -23,9 +23,7 @@ public:
     virtual void onEvent(IEvent& e) override;
 
 private:
-    glm::uvec2 m_size;
-
-    void setupGL();
+    glm::uvec2 m_size = glm::uvec2(0);
 
     bool onRender(const ApplicationRenderEvent& e);
 

@@ -85,7 +85,7 @@ public:
     /**
      * @brief TODO
      */
-    static inline IWindow* get() {
+    static IWindow* get() {
         return s_window.get();
     }
 

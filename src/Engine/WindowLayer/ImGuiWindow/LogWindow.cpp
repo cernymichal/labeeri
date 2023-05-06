@@ -2,13 +2,9 @@
 
 #include <imgui.h>
 
-#include "Engine/Application.h"
 #include "Engine/Window/IWindow.h"
 
 namespace labeeri::Engine {
-
-LogWindow::LogWindow() {
-}
 
 void LogWindow::draw() {
     ImGui::Begin("Log");

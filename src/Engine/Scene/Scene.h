@@ -18,7 +18,7 @@ public:
     /**
      * @brief TODO
      */
-    inline double time() const {
+    double time() const {
         return m_time;
     }
 
@@ -40,7 +40,7 @@ public:
     /**
      * @brief TODO
      */
-    inline const std::list<EntityRef>& entities() const {
+    const std::list<EntityRef>& entities() const {
         return m_entities;
     }
 

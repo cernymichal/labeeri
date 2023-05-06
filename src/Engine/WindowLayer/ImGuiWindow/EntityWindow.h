@@ -13,12 +13,12 @@ public:
     /**
      * @brief TODO
      */
-    EntityWindow(const EntityRef& entity);
+    explicit EntityWindow(const EntityRef& entity);
 
     /**
      * @brief TODO
      */
-    void draw() override;
+    virtual void draw() override;
 
 private:
     EntityRef m_entity;

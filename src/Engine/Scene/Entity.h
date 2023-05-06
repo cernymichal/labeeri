@@ -37,7 +37,7 @@ public:
     /**
      * @brief TODO
      */
-    inline const std::shared_ptr<Transform>& transform() const {
+    const std::shared_ptr<Transform>& transform() const {
         return m_transform;
     }
 
@@ -50,8 +50,7 @@ public:
 private:
     std::shared_ptr<Transform> m_transform = std::make_shared<Transform>();
 
-    Entity() {
-    }
+    Entity() = default;
 
     void fixedUpdate() {
         if (!m_enabled)

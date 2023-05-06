@@ -14,11 +14,11 @@ public:
         : m_position(postition), m_delta(delta) {
     }
 
-    inline const glm::dvec2& position() const {
+    const glm::dvec2& position() const {
         return m_position;
     }
 
-    inline const glm::dvec2& delta() const {
+    const glm::dvec2& delta() const {
         return m_delta;
     }
 
@@ -36,10 +36,10 @@ protected:
  */
 class MouseScrollEvent : public IEvent {
 public:
-    MouseScrollEvent(double delta) : m_delta(delta) {
+    explicit MouseScrollEvent(double delta) : m_delta(delta) {
     }
 
-    inline double delta() const {
+    double delta() const {
         return m_delta;
     }
 
@@ -56,11 +56,11 @@ protected:
  */
 class MouseButtonEvent : public IEvent {
 public:
-    inline MouseButton button() const {
+    MouseButton button() const {
         return m_button;
     }
 
-    inline int mods() const {
+    int mods() const {
         return m_mods;
     }
 

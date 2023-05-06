@@ -10,7 +10,7 @@ public:
     /**
      * @brief TODO
      */
-    Texture(LAB_GL_HANDLE texture);
+    explicit Texture(LAB_GL_HANDLE texture);
 
     Texture(const Texture&) = delete;
 

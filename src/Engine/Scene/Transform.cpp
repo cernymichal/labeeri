@@ -2,9 +2,6 @@
 
 namespace labeeri::Engine {
 
-Transform::Transform() {
-}
-
 Transform::~Transform() {
     destroy();
 }
@@ -91,7 +88,7 @@ glm::vec3 Transform::right() const {
     return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(LAB_RIGHT, 0.0f)));
 }
 
-Transform& Transform::operator=(Transform& other) {
+Transform& Transform::operator=(const Transform& other) {
     setWorldPosition(other.worldPosition());
     setRotation(other.rotation());
     return *this;

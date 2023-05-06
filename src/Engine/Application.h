@@ -23,7 +23,7 @@ public:
     /**
      * @brief TODO
      */
-    static inline Application& get() {
+    static Application& get() {
         static Application instance;
         return instance;
     }
@@ -45,7 +45,7 @@ public:
     /**
      * @brief TODO
      */
-    void emitEvent(IEvent& e);
+    void emitEvent(IEvent& e) const;
 
     /**
      * @brief TODO
@@ -55,25 +55,25 @@ public:
     /**
      * @brief TODO
      */
-    inline std::shared_ptr<Camera>& camera() const {
+    std::shared_ptr<Camera>& camera() const {
         return m_viewportLayer->m_camera;
     }
 
     /**
      * @brief TODO
      */
-    inline std::shared_ptr<Scene>& scene() const {
+    std::shared_ptr<Scene>& scene() const {
         return m_sceneLayer->m_scene;
     }
 
-    inline ImGuiLayer* imGuiLayer() const {
+    ImGuiLayer* imGuiLayer() const {
         return m_imGuiLayer;
     }
 
     /**
      * @brief TODO
      */
-    inline ApplicationFocus focus() const {
+    ApplicationFocus focus() const {
         return m_focus;
     }
 
@@ -90,7 +90,7 @@ public:
     /**
      * @brief TODO
      */
-    inline bool closed() const {
+    bool closed() const {
         return m_closed;
     }
 

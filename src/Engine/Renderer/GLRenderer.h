@@ -46,7 +46,7 @@ public:
 
     virtual void deleteShaderProgram(ShaderProgram& shaderProgram) const override;
 
-    virtual Mesh createMesh(const float* vertices, uint32_t vertexCount, const float* normals, const std::vector<const float*> UVs, const unsigned int* indices, uint32_t faceCount) const override;
+    virtual Mesh createMesh(const float* vertices, uint32_t vertexCount, const float* normals, const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const override;
 
     virtual void deleteMesh(Mesh& mesh) const override;
 

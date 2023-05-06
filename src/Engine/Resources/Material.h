@@ -15,7 +15,7 @@ public:
     /**
      * @brief TODO
      */
-    Material(const ShaderProgramRef& shader);
+    explicit Material(const ShaderProgramRef& shader);
 
     /**
      * @brief TODO
@@ -41,7 +41,7 @@ public:
     /**
      * @brief TODO
      */
-    FlatMaterial(const ShaderProgramRef& shader, const glm::vec3& color = FALLBACK_COLOR);
+    explicit FlatMaterial(const ShaderProgramRef& shader, const glm::vec3& color = FALLBACK_COLOR);
 
     /**
      * @brief TODO
@@ -69,7 +69,7 @@ public:
     /**
      * @brief TODO
      */
-    ShadedMaterial(const ShaderProgramRef& shader);
+    explicit ShadedMaterial(const ShaderProgramRef& shader);
 
     /**
      * @brief TODO

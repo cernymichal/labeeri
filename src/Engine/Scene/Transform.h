@@ -16,11 +16,6 @@ public:
     /**
      * @brief TODO
      */
-    Transform();
-
-    /**
-     * @brief TODO
-     */
     ~Transform();
 
     /**
@@ -71,28 +66,28 @@ public:
     /**
      * @brief TODO
      */
-    inline const std::shared_ptr<Transform>& parent() const {
+    const std::shared_ptr<Transform>& parent() const {
         return m_parent;
     }
 
     /**
      * @brief TODO
      */
-    inline const std::list<Transform*>& children() const {
+    const std::list<Transform*>& children() const {
         return m_children;
     }
 
     /**
      * @brief TODO
      */
-    inline const std::shared_ptr<Entity>& entity() const {
+    const std::shared_ptr<Entity>& entity() const {
         return m_entity.lock();
     }
 
     /**
      * @brief TODO
      */
-    inline glm::vec3 position() const {
+    glm::vec3 position() const {
         return m_position;
     }
 
@@ -104,14 +99,14 @@ public:
     /**
      * @brief TODO
      */
-    inline glm::quat rotation() const {
+    glm::quat rotation() const {
         return m_rotation;
     }
 
     /**
      * @brief TODO
      */
-    inline glm::vec3 scale() const {
+    glm::vec3 scale() const {
         return m_scale;
     }
 
@@ -139,7 +134,7 @@ public:
     /**
      * @brief TODO
      */
-    Transform& operator=(Transform& other);
+    Transform& operator=(const Transform& other);
 
 private:
     glm::vec3 m_position = glm::vec3(0.0f, 0.0f, 0.0f);

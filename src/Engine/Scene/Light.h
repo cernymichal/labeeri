@@ -35,21 +35,21 @@ public:
     /**
      * @brief TODO
      */
-    static inline Light Directional(const LightProperties& properties = LightProperties()) {
+    static Light Directional(const LightProperties& properties = LightProperties()) {
         return Light(LightType::Directional, properties);
     }
 
     /**
      * @brief TODO
      */
-    static inline Light Point(const LightProperties& properties = LightProperties(), const LightAttenuation& attenuation = LightAttenuation()) {
+    static Light Point(const LightProperties& properties = LightProperties(), const LightAttenuation& attenuation = LightAttenuation()) {
         return Light(LightType::Point, properties, attenuation);
     }
 
     /**
      * @brief TODO
      */
-    static inline Light Spot(const LightProperties& properties = LightProperties(), const LightAttenuation& attenuation = LightAttenuation(), float innerCutOff = 0.91, float outerCutOff = 0.82) {
+    static Light Spot(const LightProperties& properties = LightProperties(), const LightAttenuation& attenuation = LightAttenuation(), float innerCutOff = 0.91, float outerCutOff = 0.82) {
         return Light(LightType::Spot, properties, attenuation, innerCutOff, outerCutOff);
     }
 };

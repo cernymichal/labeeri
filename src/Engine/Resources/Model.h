@@ -16,7 +16,7 @@ public:
     /**
      * @brief TODO
      */
-    Model(MaterialRef material, MeshRef mesh);
+    Model(const MaterialRef& material, const MeshRef& mesh);
 
 private:
     /**

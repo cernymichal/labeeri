@@ -5,7 +5,7 @@
 
 namespace labeeri::Engine {
 
-Model::Model(MaterialRef material, MeshRef mesh) : m_material(material), m_mesh(mesh) {
+Model::Model(const MaterialRef& material, const MeshRef& mesh) : m_material(material), m_mesh(mesh) {
 }
 
 void Model::draw(const glm::mat4& modelMatrix) const {

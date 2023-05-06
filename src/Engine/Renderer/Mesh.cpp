@@ -5,11 +5,11 @@
 namespace labeeri::Engine {
 
 Mesh::Mesh(LAB_GL_HANDLE vertexArrayObject, LAB_GL_HANDLE vertexBufferObject, LAB_GL_HANDLE elementBufferObject, uint32_t triangleCount)
-    : m_elementBufferObject(elementBufferObject), m_vertexBufferObject(vertexBufferObject), m_vertexArrayObject(vertexArrayObject), m_triangleCount(triangleCount) {
+    : m_vertexArrayObject(vertexArrayObject), m_vertexBufferObject(vertexBufferObject), m_elementBufferObject(elementBufferObject), m_triangleCount(triangleCount) {
 }
 
 Mesh::Mesh(Mesh&& other) noexcept
-    : m_elementBufferObject(other.m_elementBufferObject), m_vertexBufferObject(other.m_vertexBufferObject), m_vertexArrayObject(other.m_vertexArrayObject), m_triangleCount(other.m_triangleCount) {
+    : m_vertexArrayObject(other.m_vertexArrayObject), m_vertexBufferObject(other.m_vertexBufferObject), m_elementBufferObject(other.m_elementBufferObject), m_triangleCount(other.m_triangleCount) {
     other.m_moved = true;
 }
 

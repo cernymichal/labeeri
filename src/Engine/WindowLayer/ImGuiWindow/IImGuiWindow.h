@@ -7,6 +7,8 @@ namespace labeeri::Engine {
  */
 class IImGuiWindow {
 public:
+    virtual ~IImGuiWindow() = default;
+
     /**
      * @brief TODO
      */

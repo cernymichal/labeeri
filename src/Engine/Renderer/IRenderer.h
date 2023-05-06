@@ -133,7 +133,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual Mesh createMesh(const float* vertices, uint32_t vertexCount, const float* normals, const std::vector<const float*> UVs, const unsigned int* indices, uint32_t faceCount) const = 0;
+    virtual Mesh createMesh(const float* vertices, uint32_t vertexCount, const float* normals, const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const = 0;
 
     /**
      * @brief TODO
@@ -178,7 +178,7 @@ public:
     /**
      * @brief TODO
      */
-    static inline IRenderer* get() {
+    static IRenderer* get() {
         return s_renderer.get();
     }
 

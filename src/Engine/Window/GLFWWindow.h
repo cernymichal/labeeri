@@ -21,7 +21,7 @@ public:
     /**
      * @brief TODO
      */
-    inline GLFWwindow* windowObject() const {
+    GLFWwindow* windowObject() const {
         return m_window;
     }
 
@@ -29,7 +29,7 @@ public:
 
     virtual glm::uvec2 frameBufferSize() const override;
 
-    virtual inline bool VSync() const override {
+    virtual bool VSync() const override {
         return m_VSync;
     }
 
@@ -59,8 +59,8 @@ private:
     GLFWwindow* m_window = nullptr;
     bool m_VSync = true;
     bool m_fullscreen = false;
-    glm::ivec2 m_windowedPosition;
-    glm::ivec2 m_windowedSize;
+    glm::ivec2 m_windowedPosition = glm::ivec2(0);
+    glm::ivec2 m_windowedSize = glm::ivec2(0);
     static glm::dvec2 s_mousePosition;
 
     void setupGLFW();
