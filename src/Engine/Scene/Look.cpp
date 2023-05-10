@@ -2,7 +2,7 @@
 
 namespace labeeri::Engine {
 
-Look::Look(const std::shared_ptr<Transform>& transform, double sensitivity) : m_transform(transform), m_sensitivity(sensitivity) {
+Look::Look(const Ref<Transform>& transform, double sensitivity) : m_transform(transform), m_sensitivity(sensitivity) {
 }
 
 void Look::onEvent(IEvent& e) {

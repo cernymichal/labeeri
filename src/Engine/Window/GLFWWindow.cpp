@@ -8,6 +8,8 @@
 #include "Engine/Events/MouseEvent.h"
 #include "Engine/WindowLayer/ImGuiLayer.h"
 
+#include "Engine/Renderer/IRenderer.h"
+
 namespace labeeri::Engine {
 
 glm::dvec2 GLFWWindow::s_mousePosition = glm::dvec2(0.0);
@@ -74,6 +76,13 @@ void GLFWWindow::setFullscreen(bool enabled) {
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
     glfwSetWindowMonitor(m_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
     glfwSwapInterval(m_VSync ? 1 : 0);
+}
+
+bool GLFWWindow::minimized() const {
+    LAB_LOG_RENDERAPI_ERROR();
+    bool minimized = glfwGetWindowAttrib(m_window, GLFW_ICONIFIED);
+    LAB_LOG_RENDERAPI_ERROR();
+    return minimized;
 }
 
 bool GLFWWindow::shouldClose() const {
@@ -143,6 +152,7 @@ void GLFWWindow::setupGLFW() {
     glfwMakeContextCurrent(m_window);
 
     glfwSetFramebufferSizeCallback(m_window, glfwFramebufferSizeCallback);
+    glfwSetWindowIconifyCallback(m_window, glfwWindowIconifyCallback);
     glfwSetKeyCallback(m_window, glfwKeyboardCallback);
     glfwSetCursorPosCallback(m_window, glfwCursorPosCallback);
     glfwSetMouseButtonCallback(m_window, glfwMouseButtonCallback);
@@ -160,6 +170,11 @@ void GLFWWindow::glfwFramebufferSizeCallback(GLFWwindow* window, int width, int 
     // rerender
     ApplicationRenderEvent renderEvent;
     LAB_APP.emitEvent(renderEvent);
+}
+
+void GLFWWindow::glfwWindowIconifyCallback(GLFWwindow* window, int iconified) {
+    WindowIconifyEvent iconifyvent(iconified);
+    LAB_APP.emitEvent(iconifyvent);
 }
 
 void GLFWWindow::glfwKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods) {

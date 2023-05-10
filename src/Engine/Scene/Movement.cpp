@@ -20,7 +20,7 @@ glm::vec3 directionFromKey(KeyboardKey key) {
     return direction;
 }
 
-Movement::Movement(const std::shared_ptr<Transform>& transform, float speed) : m_transform(transform), m_speed(speed) {
+Movement::Movement(const Ref<Transform>& transform, float speed) : m_transform(transform), m_speed(speed) {
 }
 
 void Movement::update(double deltaTime) {

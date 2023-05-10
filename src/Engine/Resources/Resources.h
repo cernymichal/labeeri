@@ -9,17 +9,17 @@ namespace Shaders {
 /**
  * @brief TODO
  */
-const ShaderProgramRef& fallback();
+const Ref<ShaderProgram>& fallback();
 
 /**
  * @brief TODO
  */
-const ShaderProgramRef& flat();
+const Ref<ShaderProgram>& flat();
 
 /**
  * @brief TODO
  */
-const ShaderProgramRef& phong();
+const Ref<ShaderProgram>& phong();
 
 };  // namespace Shaders
 
@@ -28,22 +28,22 @@ namespace Meshes {
 /**
  * @brief TODO
  */
-const MeshRef& cube();
+const Ref<Mesh>& cube();
 
 /**
  * @brief TODO
  */
-const MeshRef& sphere();
+const Ref<Mesh>& sphere();
 
 /**
  * @brief TODO
  */
-const MeshRef& plane();
+const Ref<Mesh>& plane();
 
 /**
  * @brief TODO
  */
-const MeshRef& cone();
+const Ref<Mesh>& cone();
 };  // namespace Meshes
 
 /**
@@ -53,7 +53,7 @@ namespace Textures {
 /**
  * @brief TODO
  */
-const TextureRef& test();
+const Ref<Texture>& test();
 
 };  // namespace Textures
 
@@ -62,17 +62,17 @@ namespace Materials {
 /**
  * @brief TODO
  */
-const std::shared_ptr<FlatMaterial>& flatWhite();
+const Ref<FlatMaterial>& flatWhite();
 
 /**
  * @brief TODO
  */
-const std::shared_ptr<ShadedMaterial>& grey();
+const Ref<ShadedMaterial>& grey();
 
 /**
  * @brief TODO
  */
-const std::shared_ptr<FlatMaterial>& UVTest();
+const Ref<FlatMaterial>& UVTest();
 
 };  // namespace Materials
 
@@ -81,37 +81,37 @@ namespace Models {
 /**
  * @brief TODO
  */
-const ModelRef& whiteCube();
+const Ref<Model>& whiteCube();
 
 /**
  * @brief TODO
  */
-const ModelRef& whiteSphere();
+const Ref<Model>& whiteSphere();
 
 /**
  * @brief TODO
  */
-const ModelRef& whiteCone();
+const Ref<Model>& whiteCone();
 
 /**
  * @brief TODO
  */
-const ModelRef& basicCube();
+const Ref<Model>& basicCube();
 
 /**
  * @brief TODO
  */
-const ModelRef& basicSphere();
+const Ref<Model>& basicSphere();
 
 /**
  * @brief TODO
  */
-const ModelRef& basicPlane();
+const Ref<Model>& basicPlane();
 
 /**
  * @brief TODO
  */
-const ModelRef& basicCone();
+const Ref<Model>& basicCone();
 
 };  // namespace Models
 

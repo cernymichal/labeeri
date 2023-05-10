@@ -27,6 +27,26 @@ private:
 /**
  * @brief TODO
  */
+class WindowIconifyEvent : public IEvent {
+public:
+    explicit WindowIconifyEvent(bool iconified) : m_iconified(iconified) {
+    }
+
+    bool iconified() const {
+        return m_iconified;
+    }
+
+    EVENT_CLASS_TYPE(WindowResize)
+
+    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application))
+
+private:
+    bool m_iconified;
+};
+
+/**
+ * @brief TODO
+ */
 class ApplicationRenderEvent : public IEvent {
 public:
     EVENT_CLASS_TYPE(ApplicationRender)

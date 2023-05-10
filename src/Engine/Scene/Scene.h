@@ -25,7 +25,7 @@ public:
     /**
      * @brief TODO
      */
-    void addEntity(const EntityRef& entity);
+    void addEntity(const Ref<Entity>& entity);
 
     /**
      * @brief TODO
@@ -35,19 +35,19 @@ public:
     /**
      * @brief TODO
      */
-    void removeEntity(const EntityRef& entity);
+    void removeEntity(const Ref<Entity>& entity);
 
     /**
      * @brief TODO
      */
-    const std::list<EntityRef>& entities() const {
+    const std::list<Ref<Entity>>& entities() const {
         return m_entities;
     }
 
     virtual void onEvent(IEvent& e) override;
 
 private:
-    std::list<EntityRef> m_entities;
+    std::list<Ref<Entity>> m_entities;
 
     double m_time = 0.0f;
 

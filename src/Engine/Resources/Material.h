@@ -10,12 +10,12 @@ namespace labeeri::Engine {
  */
 class Material {
 public:
-    ShaderProgramRef m_shader;
+    Ref<ShaderProgram> m_shader;
 
     /**
      * @brief TODO
      */
-    explicit Material(const ShaderProgramRef& shader);
+    explicit Material(const Ref<ShaderProgram>& shader);
 
     /**
      * @brief TODO
@@ -28,25 +28,23 @@ public:
     virtual void bindUniforms() const = 0;
 };
 
-using MaterialRef = std::shared_ptr<Material>;
-
 /**
  * @brief TODO
  */
 class FlatMaterial : public Material {
 public:
-    TextureRef m_texture = nullptr;
+    Ref<Texture> m_texture = nullptr;
     glm::vec3 m_color = FALLBACK_COLOR;
 
     /**
      * @brief TODO
      */
-    explicit FlatMaterial(const ShaderProgramRef& shader, const glm::vec3& color = FALLBACK_COLOR);
+    explicit FlatMaterial(const Ref<ShaderProgram>& shader, const glm::vec3& color = FALLBACK_COLOR);
 
     /**
      * @brief TODO
      */
-    FlatMaterial(const ShaderProgramRef& shader, const TextureRef& texture);
+    FlatMaterial(const Ref<ShaderProgram>& shader, const Ref<Texture>& texture);
 
     /**
      * @brief TODO
@@ -60,16 +58,16 @@ public:
 class ShadedMaterial : public Material {
 public:
     glm::vec3 m_diffuse = FALLBACK_COLOR;
-    TextureRef m_diffuseMap = nullptr;
+    Ref<Texture> m_diffuseMap = nullptr;
     glm::vec3 m_specular = glm::vec3(0.2f);
-    TextureRef m_specularMap = nullptr;
+    Ref<Texture> m_specularMap = nullptr;
     float m_shininess = 32.0f;
-    TextureRef m_normalMap = nullptr;
+    Ref<Texture> m_normalMap = nullptr;
 
     /**
      * @brief TODO
      */
-    explicit ShadedMaterial(const ShaderProgramRef& shader);
+    explicit ShadedMaterial(const Ref<ShaderProgram>& shader);
 
     /**
      * @brief TODO

@@ -24,7 +24,7 @@ public:
 
     virtual void endScene() override;
 
-    virtual void useShaderProgram(const ShaderProgramRef& shaderProgram) override;
+    virtual void useShaderProgram(const Ref<ShaderProgram>& shaderProgram) override;
 
     virtual void bindUniform(const char* name, float value) override;
 
@@ -38,7 +38,7 @@ public:
 
     virtual LAB_GL_INT getUniformLocation(ShaderProgram& shaderProgram, const char* name) override;
 
-    virtual void bindMesh(const MeshRef& mesh) override;
+    virtual void bindMesh(const Ref<Mesh>& mesh) override;
 
     virtual void drawMesh() override;
 
@@ -65,8 +65,8 @@ public:
     virtual void logError(const char* location) const override;
 
 private:
-    ShaderProgramRef m_currentShaderProgram;
-    MeshRef m_currentMesh;
+    Ref<ShaderProgram> m_currentShaderProgram;
+    Ref<Mesh> m_currentMesh;
     double m_time = 0.0;
     glm::vec3 m_cameraPosition = glm::vec3(0.0f);
     glm::mat4 m_viewMatrix = glm::mat4(1.0);

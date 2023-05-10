@@ -33,6 +33,4 @@ private:
     bool m_moved = false;
 };
 
-using MeshRef = std::shared_ptr<Mesh>;
-
 }  // namespace labeeri::Engine

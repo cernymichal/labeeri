@@ -14,7 +14,7 @@ public:
     /**
      * @brief TODO
      */
-    explicit Movement(const std::shared_ptr<Transform>& transform, float speed = 4.0f);
+    explicit Movement(const Ref<Transform>& transform, float speed = 4.0f);
 
     /**
      * @brief TODO
@@ -25,7 +25,7 @@ public:
 
 private:
     glm::vec3 m_velocity = glm::vec3(0.0f);
-    std::shared_ptr<Transform> m_transform;
+    Ref<Transform> m_transform;
     float m_speed;
 
     bool onKeyboardPress(const KeyboardPressEvent& e);

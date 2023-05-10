@@ -78,7 +78,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual void useShaderProgram(const ShaderProgramRef& shaderProgram) = 0;
+    virtual void useShaderProgram(const Ref<ShaderProgram>& shaderProgram) = 0;
 
     /**
      * @brief TODO
@@ -113,7 +113,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual void bindMesh(const MeshRef& mesh) = 0;
+    virtual void bindMesh(const Ref<Mesh>& mesh) = 0;
 
     /**
      * @brief TODO

@@ -13,7 +13,7 @@ public:
     /**
      * @brief TODO
      */
-    explicit EntityWindow(const EntityRef& entity);
+    explicit EntityWindow(const Ref<Entity>& entity);
 
     /**
      * @brief TODO
@@ -21,7 +21,7 @@ public:
     virtual void draw() override;
 
 private:
-    EntityRef m_entity;
+    Ref<Entity> m_entity;
     std::string m_name;
     glm::vec3 m_position;
     glm::quat m_rotation;

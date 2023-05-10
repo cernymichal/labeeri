@@ -14,12 +14,12 @@ public:
     /**
      * @brief TODO
      */
-    explicit Look(const std::shared_ptr<Transform>& transform, double sensitivity = 0.002);
+    explicit Look(const Ref<Transform>& transform, double sensitivity = 0.002);
 
     virtual void onEvent(IEvent& e) override;
 
 private:
-    std::shared_ptr<Transform> m_transform;
+    Ref<Transform> m_transform;
     double m_sensitivity;
     glm::vec2 m_viewAngles = glm::vec2(0.0f);
 

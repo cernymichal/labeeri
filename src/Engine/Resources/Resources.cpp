@@ -3,8 +3,8 @@
 #include "Engine/Resources/Load.h"
 
 namespace labeeri::Engine {
-const ShaderProgramRef& Shaders::fallback() {
-    static ShaderProgramRef shader;
+const Ref<ShaderProgram>& Shaders::fallback() {
+    static Ref<ShaderProgram> shader;
 
     if (!shader) {
         try {
@@ -17,8 +17,8 @@ const ShaderProgramRef& Shaders::fallback() {
     return shader;
 }
 
-const ShaderProgramRef& Shaders::flat() {
-    static ShaderProgramRef shader;
+const Ref<ShaderProgram>& Shaders::flat() {
+    static Ref<ShaderProgram> shader;
 
     if (!shader) {
         try {
@@ -31,8 +31,8 @@ const ShaderProgramRef& Shaders::flat() {
     return shader;
 }
 
-const ShaderProgramRef& Shaders::phong() {
-    static ShaderProgramRef shader;
+const Ref<ShaderProgram>& Shaders::phong() {
+    static Ref<ShaderProgram> shader;
 
     if (!shader) {
         try {
@@ -45,8 +45,8 @@ const ShaderProgramRef& Shaders::phong() {
     return shader;
 }
 
-const MeshRef& Meshes::cube() {
-    static MeshRef mesh;
+const Ref<Mesh>& Meshes::cube() {
+    static Ref<Mesh> mesh;
 
     if (!mesh) {
         try {
@@ -59,8 +59,8 @@ const MeshRef& Meshes::cube() {
     return mesh;
 }
 
-const MeshRef& Meshes::sphere() {
-    static MeshRef mesh;
+const Ref<Mesh>& Meshes::sphere() {
+    static Ref<Mesh> mesh;
 
     if (!mesh) {
         try {
@@ -73,8 +73,8 @@ const MeshRef& Meshes::sphere() {
     return mesh;
 }
 
-const MeshRef& Meshes::plane() {
-    static MeshRef mesh;
+const Ref<Mesh>& Meshes::plane() {
+    static Ref<Mesh> mesh;
 
     if (!mesh) {
         try {
@@ -87,8 +87,8 @@ const MeshRef& Meshes::plane() {
     return mesh;
 }
 
-const MeshRef& Meshes::cone() {
-    static MeshRef mesh;
+const Ref<Mesh>& Meshes::cone() {
+    static Ref<Mesh> mesh;
 
     if (!mesh) {
         try {
@@ -101,8 +101,8 @@ const MeshRef& Meshes::cone() {
     return mesh;
 }
 
-const TextureRef& Textures::test() {
-    static TextureRef texture;
+const Ref<Texture>& Textures::test() {
+    static Ref<Texture> texture;
 
     if (!texture) {
         try {
@@ -115,8 +115,8 @@ const TextureRef& Textures::test() {
     return texture;
 }
 
-const std::shared_ptr<FlatMaterial>& Materials::flatWhite() {
-    static std::shared_ptr<FlatMaterial> material;
+const Ref<FlatMaterial>& Materials::flatWhite() {
+    static Ref<FlatMaterial> material;
 
     if (!material && Shaders::flat())
         material = std::make_shared<FlatMaterial>(Shaders::flat(), glm::vec3(1.0f));
@@ -124,8 +124,8 @@ const std::shared_ptr<FlatMaterial>& Materials::flatWhite() {
     return material;
 }
 
-const std::shared_ptr<ShadedMaterial>& Materials::grey() {
-    static std::shared_ptr<ShadedMaterial> material;
+const Ref<ShadedMaterial>& Materials::grey() {
+    static Ref<ShadedMaterial> material;
 
     if (!material && Shaders::phong()) {
         material = std::make_shared<ShadedMaterial>(Shaders::phong());
@@ -135,8 +135,8 @@ const std::shared_ptr<ShadedMaterial>& Materials::grey() {
     return material;
 }
 
-const std::shared_ptr<FlatMaterial>& Materials::UVTest() {
-    static std::shared_ptr<FlatMaterial> material;
+const Ref<FlatMaterial>& Materials::UVTest() {
+    static Ref<FlatMaterial> material;
 
     if (!material && Shaders::flat())
         material = std::make_shared<FlatMaterial>(Shaders::flat(), Textures::test());
@@ -144,8 +144,8 @@ const std::shared_ptr<FlatMaterial>& Materials::UVTest() {
     return material;
 }
 
-const ModelRef& Models::whiteCube() {
-    static ModelRef model;
+const Ref<Model>& Models::whiteCube() {
+    static Ref<Model> model;
 
     if (!model)
         model = std::make_shared<Model>(nullptr, nullptr);
@@ -156,8 +156,8 @@ const ModelRef& Models::whiteCube() {
     return model;
 }
 
-const ModelRef& Models::whiteSphere() {
-    static ModelRef model;
+const Ref<Model>& Models::whiteSphere() {
+    static Ref<Model> model;
 
     if (!model)
         model = std::make_shared<Model>(nullptr, nullptr);
@@ -168,8 +168,8 @@ const ModelRef& Models::whiteSphere() {
     return model;
 }
 
-const ModelRef& Models::whiteCone() {
-    static ModelRef model;
+const Ref<Model>& Models::whiteCone() {
+    static Ref<Model> model;
 
     if (!model)
         model = std::make_shared<Model>(nullptr, nullptr);
@@ -180,8 +180,8 @@ const ModelRef& Models::whiteCone() {
     return model;
 }
 
-const ModelRef& Models::basicCube() {
-    static ModelRef model;
+const Ref<Model>& Models::basicCube() {
+    static Ref<Model> model;
 
     if (!model)
         model = std::make_shared<Model>(nullptr, nullptr);
@@ -192,8 +192,8 @@ const ModelRef& Models::basicCube() {
     return model;
 }
 
-const ModelRef& Models::basicSphere() {
-    static ModelRef model;
+const Ref<Model>& Models::basicSphere() {
+    static Ref<Model> model;
 
     if (!model)
         model = std::make_shared<Model>(nullptr, nullptr);
@@ -204,8 +204,8 @@ const ModelRef& Models::basicSphere() {
     return model;
 }
 
-const ModelRef& Models::basicPlane() {
-    static ModelRef model;
+const Ref<Model>& Models::basicPlane() {
+    static Ref<Model> model;
 
     if (!model)
         model = std::make_shared<Model>(nullptr, nullptr);
@@ -216,8 +216,8 @@ const ModelRef& Models::basicPlane() {
     return model;
 }
 
-const ModelRef& Models::basicCone() {
-    static ModelRef model;
+const Ref<Model>& Models::basicCone() {
+    static Ref<Model> model;
 
     if (!model)
         model = std::make_shared<Model>(nullptr, nullptr);

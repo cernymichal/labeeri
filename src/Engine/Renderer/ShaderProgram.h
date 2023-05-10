@@ -39,6 +39,4 @@ private:
     std::unordered_map<std::string, LAB_GL_INT> m_uniforms;
 };
 
-using ShaderProgramRef = std::shared_ptr<ShaderProgram>;
-
 }  // namespace labeeri::Engine

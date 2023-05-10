@@ -6,7 +6,7 @@ Scene::Scene() {
     LAB_LOGH2("Scene::Scene()");
 }
 
-void Scene::addEntity(const EntityRef& entity) {
+void Scene::addEntity(const Ref<Entity>& entity) {
     m_entities.push_back(entity);
 }
 
@@ -15,7 +15,7 @@ void Scene::addEntity(const EntityPack& entities) {
         m_entities.push_back(entity);
 }
 
-void Scene::removeEntity(const EntityRef& entity) {
+void Scene::removeEntity(const Ref<Entity>& entity) {
     m_entities.remove(entity);
 }
 

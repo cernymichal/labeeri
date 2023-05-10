@@ -9,8 +9,7 @@
 
 namespace labeeri::Engine {
 
-using EntityRef = std::shared_ptr<Entity>;
-using EntityPack = std::vector<EntityRef>;
+using EntityPack = std::vector<Ref<Entity>>;
 
 /**
  * @brief TODO
@@ -18,11 +17,11 @@ using EntityPack = std::vector<EntityRef>;
 class Entity {
 public:
     bool m_enabled = true;
-    ModelRef m_model;
-    std::shared_ptr<Look> m_look;
-    std::shared_ptr<Movement> m_movement;
-    std::shared_ptr<Camera> m_camera;
-    std::shared_ptr<Light> m_light;
+    Ref<Model> m_model;
+    Ref<Look> m_look;
+    Ref<Movement> m_movement;
+    Ref<Camera> m_camera;
+    Ref<Light> m_light;
 
     std::function<void(Entity&)> m_onFixedUpdate;
     std::function<void(Entity&, double)> m_onUpdate;
@@ -31,24 +30,24 @@ public:
      * @brief TODO
      */
     ~Entity() {
-        m_transform->destroy();
+        //m_transform->destroy();
     }
 
     /**
      * @brief TODO
      */
-    const std::shared_ptr<Transform>& transform() const {
+    const Ref<Transform>& transform() const {
         return m_transform;
     }
 
-    static EntityRef Create() {
-        auto entity = std::make_shared<Entity>(Entity());
+    static Ref<Entity> Create() {
+        auto entity = std::shared_ptr<Entity>(new Entity());
         entity->m_transform->m_entity = entity;
         return entity;
     }
 
 private:
-    std::shared_ptr<Transform> m_transform = std::make_shared<Transform>();
+    Ref<Transform> m_transform = std::make_shared<Transform>();
 
     Entity() = default;
 

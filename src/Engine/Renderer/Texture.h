@@ -30,6 +30,4 @@ private:
     LAB_GL_HANDLE m_texture;
 };
 
-using TextureRef = std::shared_ptr<Texture>;
-
 }  // namespace labeeri::Engine

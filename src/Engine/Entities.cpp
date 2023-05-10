@@ -4,7 +4,7 @@
 
 namespace labeeri::Engine {
 
-EntityRef Entities::Flycam(float speed, double sensitivity) {
+Ref<Entity> Entities::Flycam(float speed, double sensitivity) {
     auto entity = Entity::Create();
 
     entity->m_camera = std::make_shared<Camera>(entity->transform());
@@ -14,7 +14,7 @@ EntityRef Entities::Flycam(float speed, double sensitivity) {
     return entity;
 }
 
-EntityRef Entities::DirectionalLight(const glm::vec3& rotation, float intensity) {
+Ref<Entity> Entities::DirectionalLight(const glm::vec3& rotation, float intensity) {
     auto entity = Entity::Create();
 
     entity->m_model = Models::whiteCube();
@@ -27,7 +27,7 @@ EntityRef Entities::DirectionalLight(const glm::vec3& rotation, float intensity)
     return entity;
 }
 
-EntityRef Entities::PointLight(const glm::vec3& position, float intensity) {
+Ref<Entity> Entities::PointLight(const glm::vec3& position, float intensity) {
     auto entity = Entity::Create();
 
     entity->m_model = Models::whiteSphere();

@@ -34,6 +34,9 @@ constexpr auto MAX_POINT_LIGHTS = 16;
 constexpr auto MAX_SPOT_LIGHTS = 4;
 
 template <typename T>
+using Ref = std::shared_ptr<T>;
+
+template <typename T>
 std::shared_ptr<T> copyShared(const std::shared_ptr<T>& ptr) {
     return std::make_shared<T>(*ptr);
 }

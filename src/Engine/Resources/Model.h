@@ -10,13 +10,13 @@ namespace labeeri::Engine {
  */
 class Model {
 public:
-    MaterialRef m_material;
-    MeshRef m_mesh;
+    Ref<Material> m_material;
+    Ref<Mesh> m_mesh;
 
     /**
      * @brief TODO
      */
-    Model(const MaterialRef& material, const MeshRef& mesh);
+    Model(const Ref<Material>& material, const Ref<Mesh>& mesh);
 
 private:
     /**
@@ -26,7 +26,5 @@ private:
 
     friend class ViewportLayer;
 };
-
-using ModelRef = std::shared_ptr<Model>;
 
 }  // namespace labeeri::Engine

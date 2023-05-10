@@ -4,7 +4,7 @@
 
 namespace labeeri::Engine {
 
-EntityWindow::EntityWindow(const EntityRef& entity) : m_entity(entity), m_position(entity->transform()->position()), m_rotation(entity->transform()->rotation()) {
+EntityWindow::EntityWindow(const Ref<Entity>& entity) : m_entity(entity), m_position(entity->transform()->position()), m_rotation(entity->transform()->rotation()) {
     m_name = std::format("Entity {:p}", (void*)entity.get());
 }
 

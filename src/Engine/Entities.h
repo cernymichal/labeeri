@@ -9,11 +9,11 @@ namespace Entities {
 /**
  * @brief TODO
  */
-EntityRef Flycam(float speed = 4.0, double sensitivity = 0.002);
+Ref<Entity> Flycam(float speed = 4.0, double sensitivity = 0.002);
 
-EntityRef DirectionalLight(const glm::vec3& rotation, float intensity = 1.0);
+Ref<Entity> DirectionalLight(const glm::vec3& rotation, float intensity = 1.0);
 
-EntityRef PointLight(const glm::vec3& position, float intensity = 1.0);
+Ref<Entity> PointLight(const glm::vec3& position, float intensity = 1.0);
 
 EntityPack SpotLight(const glm::vec3& position, const glm::vec3& rotation, float intensity = 1.0);
 

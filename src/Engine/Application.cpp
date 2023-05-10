@@ -83,6 +83,10 @@ void Application::run() {
         double currentTime = LAB_WINDOW->currentTime();
         double deltaTime = currentTime - previousUpdateTime;
         previousUpdateTime = currentTime;
+
+        if (LAB_WINDOW->minimized())
+            continue;
+
         fixedUpdateTimeAccumulator += deltaTime;
 
         // emit fixed updates

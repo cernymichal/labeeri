@@ -14,7 +14,7 @@
 namespace labeeri::Engine {
 
 std::string loadShader(const char* path) {
-    std::ifstream file(path);
+    std::ifstream file(path, std::ios::in | std::ios::binary);
     std::stringstream contentBuffer;
 
     if (!file.good()) {
@@ -26,9 +26,9 @@ std::string loadShader(const char* path) {
     return contentBuffer.str();
 }
 
-ShaderProgramRef loadShaderProgram(const char* vertexPath, const char* fragmentPath) {
+Ref<ShaderProgram> loadShaderProgram(const char* vertexPath, const char* fragmentPath) {
     LAB_LOGH3("Loading shader program from " << vertexPath << " and " << fragmentPath);
-
+    
     std::string vertexShaderSource = loadShader(vertexPath);
     std::string fragmentShaderSource = loadShader(fragmentPath);
 
@@ -37,7 +37,7 @@ ShaderProgramRef loadShaderProgram(const char* vertexPath, const char* fragmentP
     return std::make_shared<ShaderProgram>(std::move(program));
 }
 
-MeshRef loadMesh(const char* filePath) {
+Ref<Mesh> loadMesh(const char* filePath) {
     LAB_LOGH3("Loading mesh " << filePath);
 
     Assimp::Importer importer;
@@ -101,7 +101,7 @@ MeshRef loadMesh(const char* filePath) {
     return std::make_shared<Mesh>(std::move(mesh));
 }
 
-TextureRef loadTexture(const char* filePath) {
+Ref<Texture> loadTexture(const char* filePath) {
     LAB_LOGH3("Loading texture " << filePath);
 
     stbi_set_flip_vertically_on_load(true);

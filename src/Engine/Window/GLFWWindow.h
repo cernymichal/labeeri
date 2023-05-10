@@ -41,6 +41,8 @@ public:
 
     virtual void setFullscreen(bool enabled) override;
 
+    virtual bool minimized() const override;
+
     virtual bool shouldClose() const override;
 
     virtual void swapBuffers() override;
@@ -68,6 +70,8 @@ private:
     static void glfwErrorCallback(int error, const char* description);
 
     static void glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height);
+
+    static void glfwWindowIconifyCallback(GLFWwindow* window, int iconified);
 
     static void glfwKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods);
 

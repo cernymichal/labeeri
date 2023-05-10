@@ -55,14 +55,14 @@ public:
     /**
      * @brief TODO
      */
-    std::shared_ptr<Camera>& camera() const {
+    Ref<Camera>& camera() const {
         return m_viewportLayer->m_camera;
     }
 
     /**
      * @brief TODO
      */
-    std::shared_ptr<Scene>& scene() const {
+    Ref<Scene>& scene() const {
         return m_sceneLayer->m_scene;
     }
 

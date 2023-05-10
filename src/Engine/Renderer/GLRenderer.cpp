@@ -205,7 +205,7 @@ void GLRenderer::endScene() {
     m_spotLights.clear();
 }
 
-void GLRenderer::useShaderProgram(const ShaderProgramRef& shaderProgram) {
+void GLRenderer::useShaderProgram(const Ref<ShaderProgram>& shaderProgram) {
     if (m_currentShaderProgram == shaderProgram)
         return;
 
@@ -256,7 +256,7 @@ LAB_GL_INT GLRenderer::getUniformLocation(ShaderProgram& shaderProgram, const ch
     return glGetUniformLocation(shaderProgram, name);
 }
 
-void GLRenderer::bindMesh(const MeshRef& mesh) {
+void GLRenderer::bindMesh(const Ref<Mesh>& mesh) {
     if (m_currentMesh == mesh)
         return;
 

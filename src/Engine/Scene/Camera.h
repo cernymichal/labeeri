@@ -16,13 +16,13 @@ public:
     /**
      * @brief TODO
      */
-    explicit Camera(const std::shared_ptr<Transform>& transform) : m_transform(transform) {
+    explicit Camera(const Ref<Transform>& transform) : m_transform(transform) {
     }
 
     /**
      * @brief TODO
      */
-    const std::shared_ptr<Transform>& transform() const {
+    const Ref<Transform>& transform() const {
         return m_transform;
     }
 
@@ -46,7 +46,7 @@ public:
     }
 
 private:
-    std::shared_ptr<Transform> m_transform;
+    Ref<Transform> m_transform;
 };
 
 }  // namespace labeeri::Engine

@@ -50,6 +50,11 @@ public:
     /**
      * @brief TODO
      */
+    virtual bool minimized() const = 0;   
+
+    /**
+     * @brief TODO
+     */
     virtual bool shouldClose() const = 0;
 
     /**

@@ -13,7 +13,7 @@ namespace labeeri::Engine {
  */
 class ViewportLayer : public IWindowLayer {
 public:
-    std::shared_ptr<Camera> m_camera;
+    Ref<Camera> m_camera;
 
     /**
      * @brief TODO
