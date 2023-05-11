@@ -90,7 +90,7 @@ public:
     /**
      * @brief TODO
      */
-    static IWindow* get() {
+    static IWindow* instance() {
         return s_window.get();
     }
 

@@ -13,7 +13,7 @@
 
 namespace labeeri::Engine {
 
-std::string loadShader(const char* path) {
+std::string loadShader(const std::string& path) {
     std::ifstream file(path, std::ios::in | std::ios::binary);
     std::stringstream contentBuffer;
 
@@ -26,9 +26,10 @@ std::string loadShader(const char* path) {
     return contentBuffer.str();
 }
 
-Ref<ShaderProgram> loadShaderProgram(const char* vertexPath, const char* fragmentPath) {
-    LAB_LOGH3("Loading shader program from " << vertexPath << " and " << fragmentPath);
-    
+Ref<ShaderProgram> loadShaderProgram(const char* path) {
+    std::string vertexPath = std::string(path) + ".vert";
+    std::string fragmentPath = std::string(path) + ".frag";
+
     std::string vertexShaderSource = loadShader(vertexPath);
     std::string fragmentShaderSource = loadShader(fragmentPath);
 

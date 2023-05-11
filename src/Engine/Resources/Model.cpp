@@ -11,7 +11,7 @@ Model::Model(const Ref<Material>& material, const Ref<Mesh>& mesh) : m_material(
 void Model::draw(const glm::mat4& modelMatrix) const {
     auto& shader = m_material->m_shader;
     if (!shader)
-        shader = Shaders::flat();
+        shader = Resources<ShaderProgram>::get("flat");
 
     LAB_RENDERER->useShaderProgram(shader);
     LAB_RENDERER->bindMesh(m_mesh);

@@ -9,16 +9,20 @@ using LAB_GL_UINT = unsigned int;  // so that we dont have to include GLAD every
 using LAB_GL_INT = int;
 using LAB_GL_HANDLE = LAB_GL_UINT;
 
-#define LAB_APP labeeri::Engine::Application::get()
+#define LAB_APP labeeri::Engine::Application::instance()
 #define LAB_CURRENT_SCENE LAB_APP.scene()
 #define LAB_CURRENT_CAMERA LAB_APP.camera()
 #define LAB_IMGUI LAB_APP.imGuiLayer()
-#define LAB_WINDOW labeeri::Engine::IWindow::get()
-#define LAB_RENDERER labeeri::Engine::IRenderer::get()
+#define LAB_WINDOW labeeri::Engine::IWindow::instance()
+#define LAB_RENDERER labeeri::Engine::IRenderer::instance()
 
 namespace labeeri::Engine {
 
 constexpr auto INITIAL_WINDOW_SIZE = glm::uvec2(1600, 1200);
+
+constexpr auto DEFAULT_SHADER_DIRECTORY = "resources/engine/shaders";
+constexpr auto DEFAULT_MESH_DIRECTORY = "resources/engine/models";
+constexpr auto DEFAULT_TEXTURE_DIRECTORY = "resources/engine/textures";
 
 // GL 4.3 + GLSL 430
 constexpr auto GL_VERSION_MAJOR = 4;

@@ -166,6 +166,7 @@
     <ClCompile Include="src\Engine\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Engine\Renderer\ShaderProgram.cpp" />
     <ClCompile Include="src\Engine\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Engine\Resources\Load.cpp" />
     <ClCompile Include="src\Engine\Scene\Light.cpp" />
     <ClCompile Include="src\Engine\Scene\Look.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\EntityWindow.cpp" />
@@ -176,14 +177,12 @@
     <ClCompile Include="src\Engine\Window\IWindow.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Engine\Resources\Resources.cpp" />
-    <ClCompile Include="src\Engine\Resources\Load.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\MenuWindow.cpp" />
     <ClCompile Include="src\Engine\Application.cpp" />
     <ClCompile Include="src\Game\Scenes.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\LogWindow.cpp" />
     <ClCompile Include="src\Engine\Scene\Scene.cpp" />
-    <ClCompile Include="src\Engine\Scene\Transform.cpp" />
     <ClCompile Include="src\Engine\Resources\Material.cpp" />
     <ClCompile Include="src\Engine\Resources\Model.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ViewportLayer.cpp" />
@@ -208,6 +207,7 @@
     <ClInclude Include="src\Engine\Renderer\Mesh.h" />
     <ClInclude Include="src\Engine\Renderer\ShaderProgram.h" />
     <ClInclude Include="src\Engine\Renderer\Texture.h" />
+    <ClInclude Include="src\Engine\Resources\Load.h" />
     <ClInclude Include="src\Engine\Scene\Light.h" />
     <ClInclude Include="src\Engine\Scene\Look.h" />
     <ClInclude Include="src\Engine\Utils.h" />
@@ -221,7 +221,6 @@
     <ClInclude Include="src\Engine\Window\IWindow.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Engine\Resources\Resources.h" />
-    <ClInclude Include="src\Engine\Resources\Load.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\MenuWindow.h" />
     <ClInclude Include="src\Engine\Application.h" />
     <ClInclude Include="src\Engine\Log.h" />

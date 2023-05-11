@@ -105,6 +105,8 @@ bool ImGuiLayer::onRender(const IEvent& e) {
     for (auto& window : m_windows)
         window->draw();
 
+    LAB_LOG_RENDERAPI_ERROR();
+
     return false;
 }
 

@@ -15,7 +15,8 @@ public:
     /**
      * @brief TODO
      */
-    explicit Material(const Ref<ShaderProgram>& shader);
+    explicit Material(const Ref<ShaderProgram>& shader) : m_shader(shader) {
+    }
 
     /**
      * @brief TODO
@@ -39,12 +40,16 @@ public:
     /**
      * @brief TODO
      */
-    explicit FlatMaterial(const Ref<ShaderProgram>& shader, const glm::vec3& color = FALLBACK_COLOR);
+    FlatMaterial(const Ref<ShaderProgram>& shader, const glm::vec3& color)
+        : Material(shader), m_color(color) {
+    }
 
     /**
      * @brief TODO
      */
-    FlatMaterial(const Ref<ShaderProgram>& shader, const Ref<Texture>& texture);
+    FlatMaterial(const Ref<ShaderProgram>& shader, const Ref<Texture>& texture)
+        : Material(shader), m_texture(texture) {
+    }
 
     /**
      * @brief TODO
@@ -67,7 +72,15 @@ public:
     /**
      * @brief TODO
      */
-    explicit ShadedMaterial(const Ref<ShaderProgram>& shader);
+    explicit ShadedMaterial(const Ref<ShaderProgram>& shader) : Material(shader) {
+    }
+
+    /**
+     * @brief TODO
+     */
+    ShadedMaterial(const Ref<ShaderProgram>& shader, glm::vec3 diffuse) : ShadedMaterial(shader) {
+        m_diffuse = diffuse;
+    }
 
     /**
      * @brief TODO

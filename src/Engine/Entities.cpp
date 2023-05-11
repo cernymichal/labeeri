@@ -17,7 +17,7 @@ Ref<Entity> Entities::Flycam(float speed, double sensitivity) {
 Ref<Entity> Entities::DirectionalLight(const glm::vec3& rotation, float intensity) {
     auto entity = Entity::Create();
 
-    entity->m_model = Models::whiteCube();
+    entity->m_model = Resources<Model>::get("whiteCube");
     entity->transform()->move(glm::vec3(0, 0.5, 0));
     entity->transform()->rotate(rotation);
     entity->transform()->setScale(glm::vec3(0.1, 0.1, 0.5));
@@ -30,7 +30,7 @@ Ref<Entity> Entities::DirectionalLight(const glm::vec3& rotation, float intensit
 Ref<Entity> Entities::PointLight(const glm::vec3& position, float intensity) {
     auto entity = Entity::Create();
 
-    entity->m_model = Models::whiteSphere();
+    entity->m_model = Resources<Model>::get("whiteSphere");
     entity->transform()->setPosition(position);
     entity->transform()->setScale(glm::vec3(0.3, 0.3, 0.3));
     entity->m_light = std::make_shared<Light>(Light::Point());
@@ -43,7 +43,7 @@ EntityPack Entities::SpotLight(const glm::vec3& position, const glm::vec3& rotat
     auto entity = Entity::Create();
     auto cone = Entity::Create();
 
-    cone->m_model = Models::whiteCone();
+    cone->m_model = Resources<Model>::get("whiteCone");
     cone->transform()->rotate(glm::vec3(glm::radians(90.0), 0, 0));
     cone->transform()->setScale(glm::vec3(0.3, 0.3, 0.3));
     cone->transform()->setParent(entity->transform());

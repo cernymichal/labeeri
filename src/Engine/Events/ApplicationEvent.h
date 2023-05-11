@@ -27,9 +27,9 @@ private:
 /**
  * @brief TODO
  */
-class WindowIconifyEvent : public IEvent {
+class WindowMinimizeEvent : public IEvent {
 public:
-    explicit WindowIconifyEvent(bool iconified) : m_iconified(iconified) {
+    explicit WindowMinimizeEvent(bool iconified) : m_iconified(iconified) {
     }
 
     bool iconified() const {

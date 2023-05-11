@@ -11,7 +11,7 @@ std::shared_ptr<Scene> defaultScene() {
 
     auto ground = Entity::Create();
     ground->transform()->setScale(glm::vec3(50.0));
-    ground->m_model = Models::basicPlane();
+    ground->m_model = Resources<Model>::get("basicPlane");
     scene->addEntity(ground);
 
     auto sun = Entities::DirectionalLight(glm::vec3(glm::radians(-110.0), glm::radians(30.0), 0), .4f);
@@ -24,14 +24,14 @@ std::shared_ptr<Scene> defaultScene() {
     scene->addEntity(pointLight);
     scene->addEntity(spotLight);
 
-    auto material = copyShared(Materials::grey());
-    material->m_diffuseMap = loadTexture("resources/labeeri/textures/catguy.jpg");
+    auto material = copyShared(std::dynamic_pointer_cast<ShadedMaterial>(Resources<Material>::get("grey")));
+    material->m_diffuseMap = Resources<Texture>::get("resources/labeeri/textures/catguy.jpg");
     material->m_specular = glm::vec3(0.6f);
     material->m_shininess = 128.0;
 
     auto sphere = Entity::Create();
     sphere->transform()->setPosition(glm::vec3(1.0, 1.0, -2.2));
-    sphere->m_model = copyShared(Models::basicSphere());
+    sphere->m_model = copyShared(Resources<Model>::get("basicSphere"));
     sphere->m_model->m_material = material;
     sphere->m_onUpdate = [](Entity& self, double deltaTime) {
         self.transform()->move(glm::vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.5f, 0) * (float)deltaTime);
@@ -41,7 +41,7 @@ std::shared_ptr<Scene> defaultScene() {
 
     auto cube = Entity::Create();
     cube->transform()->setPosition(glm::vec3(-1.0, 1.5, -2));
-    cube->m_model = copyShared(Models::basicCube());
+    cube->m_model = copyShared(Resources<Model>::get("basicCube"));
     cube->m_model->m_material = material;
     cube->m_onUpdate = [](Entity& self, double deltaTime) {
         self.transform()->move(glm::vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.15f, 0) * (float)deltaTime);
@@ -49,21 +49,21 @@ std::shared_ptr<Scene> defaultScene() {
     };
     scene->addEntity(cube);
 
-    auto perlinMaterial = copyShared(Materials::grey());
+    auto perlinMaterial = copyShared(std::dynamic_pointer_cast<ShadedMaterial>(Resources<Material>::get("grey")));
     perlinMaterial->m_diffuse = glm::vec3(0.8f, 1.0f, 0.8f);
-    perlinMaterial->m_specularMap = loadTexture("resources/engine/textures/perlin256.png");
+    perlinMaterial->m_specularMap = Resources<Texture>::get("perlin256.png");
     perlinMaterial->m_shininess = 128.0;
 
     auto teapot = Entity::Create();
     teapot->transform()->setPosition(glm::vec3(-1.0f, 0.5f, 0.0f));
-    teapot->m_model = std::make_shared<Model>(perlinMaterial, loadMesh("resources/engine/models/teapot.obj"));
+    teapot->m_model = std::make_shared<Model>(perlinMaterial, Resources<Mesh>::get("teapot.obj"));
     teapot->m_model->m_material = perlinMaterial;
     scene->addEntity(teapot);
 
     /*
     auto dragon = Entity::Create();
     dragon->transform()->setPosition(glm::vec3(1.0f, 1.5f, 0.0f));
-    dragon->m_model = std::make_shared<Model>(perlinMaterial, loadMesh("resources/engine/models/xyzrgb_dragon.obj"));
+    dragon->m_model = std::make_shared<Model>(perlinMaterial, Resources<Mesh>::get("xyzrgb_dragon"));
     dragon->m_model->m_material = perlinMaterial;
     scene->addEntity(dragon);
     */

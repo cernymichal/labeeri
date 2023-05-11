@@ -27,7 +27,9 @@ public:
 
     virtual double currentTime() const override;
 
-    virtual glm::uvec2 frameBufferSize() const override;
+    virtual glm::uvec2 frameBufferSize() const override {
+        return s_frameBufferSize;
+    }
 
     virtual bool VSync() const override {
         return m_VSync;
@@ -41,7 +43,9 @@ public:
 
     virtual void setFullscreen(bool enabled) override;
 
-    virtual bool minimized() const override;
+    virtual bool minimized() const override {
+        return s_minimized || s_frameBufferSize == glm::ivec2(0);
+    }
 
     virtual bool shouldClose() const override;
 
@@ -63,6 +67,9 @@ private:
     bool m_fullscreen = false;
     glm::ivec2 m_windowedPosition = glm::ivec2(0);
     glm::ivec2 m_windowedSize = glm::ivec2(0);
+
+    static glm::ivec2 s_frameBufferSize;
+    static bool s_minimized;
     static glm::dvec2 s_mousePosition;
 
     void setupGLFW();

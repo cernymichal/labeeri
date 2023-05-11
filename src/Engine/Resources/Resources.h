@@ -1,118 +1,94 @@
 #pragma once
 
-#include "Engine/Resources/Material.h"
-#include "Engine/Resources/Model.h"
+#include "Engine/Resources/Load.h"
 
 namespace labeeri::Engine {
 
-namespace Shaders {
-/**
- * @brief TODO
- */
-const Ref<ShaderProgram>& fallback();
+template <typename T>
+class Resources {
+public:
+    static Resources<T>& instance() {
+        static Resources<T> instance;
+        return instance;
+    }
 
-/**
- * @brief TODO
- */
-const Ref<ShaderProgram>& flat();
+    static const Ref<T>& get(const std::string& name, bool tryFind = true) {
+        auto iter = instance().m_resources.find(name);
 
-/**
- * @brief TODO
- */
-const Ref<ShaderProgram>& phong();
+        if (iter != instance().m_resources.end())
+            return iter->second;
 
-};  // namespace Shaders
+        Ref<T> resource;
+        if (tryFind)
+            resource = tryFindResource<T>(name.c_str());
 
-namespace Meshes {
+        if (!resource)
+            resource = load<T>(name.c_str());
 
-/**
- * @brief TODO
- */
-const Ref<Mesh>& cube();
+        instance().m_resources[name] = resource;
+        return instance().m_resources[name];
+    }
 
-/**
- * @brief TODO
- */
-const Ref<Mesh>& sphere();
+    static Ref<T>& set(const std::string& name) {
+        return instance().m_resources[name];
+    }
 
-/**
- * @brief TODO
- */
-const Ref<Mesh>& plane();
+    static void clear() {
+        instance().m_resources.clear();
+    }
 
-/**
- * @brief TODO
- */
-const Ref<Mesh>& cone();
-};  // namespace Meshes
+    static void remove(const std::string& name) {
+        instance().m_resources.erase(name);
+    }
 
-/**
- * @brief TODO
- */
-namespace Textures {
-/**
- * @brief TODO
- */
-const Ref<Texture>& test();
+    /*
+    static void reloadAll() {
+        for (auto& [name, resource] : instance().m_resources)
+            *resource = std::move(*load<T, const char*>(name.c_str()));
+    }
+    */
+private:
+    std::unordered_map<std::string, Ref<T>> m_resources;
+};
 
-};  // namespace Textures
+Ref<ShaderProgram> tryFindShaderProgram(const char* name);
 
-namespace Materials {
+Ref<Mesh> tryFindMesh(const char* name);
 
-/**
- * @brief TODO
- */
-const Ref<FlatMaterial>& flatWhite();
+Ref<Texture> tryFindTexture(const char* name);
 
-/**
- * @brief TODO
- */
-const Ref<ShadedMaterial>& grey();
+Ref<Material> tryFindMaterial(const char* name);
 
-/**
- * @brief TODO
- */
-const Ref<FlatMaterial>& UVTest();
+Ref<Model> tryFindModel(const char* name);
 
-};  // namespace Materials
+template <typename T>
+static Ref<T> tryFindResource(const char* name) {
+    throw std::runtime_error("Finding defautls of this resource type not supported");
+}
 
-namespace Models {
+template <>
+static Ref<ShaderProgram> tryFindResource<ShaderProgram>(const char* name) {
+    return tryFindShaderProgram(name);
+}
 
-/**
- * @brief TODO
- */
-const Ref<Model>& whiteCube();
+template <>
+static Ref<Mesh> tryFindResource<Mesh>(const char* name) {
+    return tryFindMesh(name);
+}
 
-/**
- * @brief TODO
- */
-const Ref<Model>& whiteSphere();
+template <>
+static Ref<Texture> tryFindResource<Texture>(const char* name) {
+    return tryFindTexture(name);
+}
 
-/**
- * @brief TODO
- */
-const Ref<Model>& whiteCone();
+template <>
+static Ref<Material> tryFindResource<Material>(const char* name) {
+    return tryFindMaterial(name);
+}
 
-/**
- * @brief TODO
- */
-const Ref<Model>& basicCube();
-
-/**
- * @brief TODO
- */
-const Ref<Model>& basicSphere();
-
-/**
- * @brief TODO
- */
-const Ref<Model>& basicPlane();
-
-/**
- * @brief TODO
- */
-const Ref<Model>& basicCone();
-
-};  // namespace Models
+template <>
+static Ref<Model> tryFindResource<Model>(const char* name) {
+    return tryFindModel(name);
+}
 
 }  // namespace labeeri::Engine

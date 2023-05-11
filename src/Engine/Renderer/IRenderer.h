@@ -178,7 +178,7 @@ public:
     /**
      * @brief TODO
      */
-    static IRenderer* get() {
+    static IRenderer* instance() {
         return s_renderer.get();
     }
 

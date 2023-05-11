@@ -323,7 +323,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
     LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Uploaded " << faceCount << " faces");
 
-    auto& shader = Shaders::phong();
+    auto& shader = Resources<ShaderProgram>::get("phong");
     if (!shader)
         throw std::runtime_error("No phong shader for default attribute positions");
 

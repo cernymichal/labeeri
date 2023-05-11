@@ -4,17 +4,6 @@
 
 namespace labeeri::Engine {
 
-Material::Material(const Ref<ShaderProgram>& shader) : m_shader(shader) {
-}
-
-FlatMaterial::FlatMaterial(const Ref<ShaderProgram>& shader, const glm::vec3& color)
-    : Material(shader), m_color(color) {
-}
-
-FlatMaterial::FlatMaterial(const Ref<ShaderProgram>& shader, const Ref<Texture>& texture)
-    : Material(shader), m_texture(texture) {
-}
-
 void FlatMaterial::bindUniforms() const {
     bool usingTexture = m_texture != nullptr;
 
@@ -24,9 +13,6 @@ void FlatMaterial::bindUniforms() const {
         LAB_RENDERER->bindTexture(TextureType::Texture2D, *m_texture, 0);
     else
         LAB_RENDERER->bindUniform("u_color", m_color);
-}
-
-ShadedMaterial::ShadedMaterial(const Ref<ShaderProgram>& shader) : Material(shader) {
 }
 
 void ShadedMaterial::bindUniforms() const {

@@ -8,15 +8,17 @@
 #include "Engine/Events/MouseEvent.h"
 #include "Engine/WindowLayer/ImGuiLayer.h"
 
-#include "Engine/Renderer/IRenderer.h"
-
 namespace labeeri::Engine {
 
+glm::ivec2 GLFWWindow::s_frameBufferSize = glm::ivec2(0);
+bool GLFWWindow::s_minimized = false;
 glm::dvec2 GLFWWindow::s_mousePosition = glm::dvec2(0.0);
 
 GLFWWindow::GLFWWindow() {
     setupGLFW();
 
+    glfwGetFramebufferSize(m_window, &s_frameBufferSize.x, &s_frameBufferSize.y);
+    s_minimized = glfwGetWindowAttrib(m_window, GLFW_ICONIFIED);
     glfwGetCursorPos(m_window, &s_mousePosition.x, &s_mousePosition.y);
     GLFWWindow::setVSync(true);
 }
@@ -28,12 +30,6 @@ GLFWWindow::~GLFWWindow() {
 
 double GLFWWindow::currentTime() const {
     return glfwGetTime();
-}
-
-glm::uvec2 GLFWWindow::frameBufferSize() const {
-    int width, height;
-    glfwGetFramebufferSize(m_window, &width, &height);
-    return glm::uvec2(width, height);
 }
 
 void GLFWWindow::setVSync(bool enabled) {
@@ -76,13 +72,6 @@ void GLFWWindow::setFullscreen(bool enabled) {
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
     glfwSetWindowMonitor(m_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
     glfwSwapInterval(m_VSync ? 1 : 0);
-}
-
-bool GLFWWindow::minimized() const {
-    LAB_LOG_RENDERAPI_ERROR();
-    bool minimized = glfwGetWindowAttrib(m_window, GLFW_ICONIFIED);
-    LAB_LOG_RENDERAPI_ERROR();
-    return minimized;
 }
 
 bool GLFWWindow::shouldClose() const {
@@ -164,6 +153,11 @@ void GLFWWindow::glfwErrorCallback(int error, const char* description) {
 }
 
 void GLFWWindow::glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height) {
+    s_frameBufferSize = glm::uvec2(width, height);
+
+    if (LAB_WINDOW->minimized())
+        return;
+
     WindowResizeEvent resizeEvent(glm::uvec2(width, height));
     LAB_APP.emitEvent(resizeEvent);
 
@@ -173,8 +167,10 @@ void GLFWWindow::glfwFramebufferSizeCallback(GLFWwindow* window, int width, int 
 }
 
 void GLFWWindow::glfwWindowIconifyCallback(GLFWwindow* window, int iconified) {
-    WindowIconifyEvent iconifyvent(iconified);
-    LAB_APP.emitEvent(iconifyvent);
+    s_minimized = iconified;
+
+    WindowMinimizeEvent event(iconified);
+    LAB_APP.emitEvent(event);
 }
 
 void GLFWWindow::glfwKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods) {

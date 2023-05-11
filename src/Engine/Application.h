@@ -23,7 +23,7 @@ public:
     /**
      * @brief TODO
      */
-    static Application& get() {
+    static Application& instance() {
         static Application instance;
         return instance;
     }
