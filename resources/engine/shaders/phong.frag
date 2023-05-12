@@ -148,6 +148,7 @@ void main() {
 	
 	for (int i = 0; i < u_spot_light_count; i++) 
 		result += calculate_spot_light(u_spot_lights[i], material_sample, view_direction);
- 
-	fragColor = vec4(result, 1.0);
+	
+	float gamma = 2.2;
+	fragColor = vec4(pow(result, vec3(1.0 / gamma)), 1.0);
 }

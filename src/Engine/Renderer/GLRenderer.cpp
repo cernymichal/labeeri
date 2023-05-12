@@ -118,6 +118,10 @@ int textureFormatGL(TextureFormat format) {
             return GL_RGB;
         case TextureFormat::RGBA:
             return GL_RGBA;
+        case TextureFormat::SRGB:
+            return GL_SRGB;
+        case TextureFormat::SRGBA:
+            return GL_SRGB_ALPHA;
         case TextureFormat::Depth:
             return GL_DEPTH_COMPONENT;
         default:

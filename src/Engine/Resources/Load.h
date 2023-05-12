@@ -9,7 +9,7 @@ Ref<ShaderProgram> loadShaderProgram(const char* path);
 
 Ref<Mesh> loadMesh(const char* filePath);
 
-Ref<Texture> loadTexture(const char* filePath);
+Ref<Texture> loadTexture(const char* filePath, bool gammaCorrected = true);
 
 template <typename T>
 static Ref<T> load(const char* path) {
@@ -28,7 +28,11 @@ static Ref<Mesh> load<Mesh>(const char* path) {
 
 template <>
 static Ref<Texture> load<Texture>(const char* path) {
-    return loadTexture(path);
+    bool gammaCorrected = true;
+    if (strstr(path, "normal") || strstr(path, "specular") || strstr(path, "_lin."))
+        gammaCorrected = false;
+
+    return loadTexture(path, gammaCorrected);
 }
 
 template <>

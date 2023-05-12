@@ -102,7 +102,7 @@ Ref<Mesh> loadMesh(const char* filePath) {
     return std::make_shared<Mesh>(std::move(mesh));
 }
 
-Ref<Texture> loadTexture(const char* filePath) {
+Ref<Texture> loadTexture(const char* filePath, bool gammaCorrected) {
     LAB_LOGH3("Loading texture " << filePath);
 
     stbi_set_flip_vertically_on_load(true);
@@ -115,7 +115,13 @@ Ref<Texture> loadTexture(const char* filePath) {
         throw std::runtime_error("Failed to load texture");
     }
 
-    Texture texture = LAB_RENDERER->createTexture(TextureType::Texture2D, channels == 4 ? TextureFormat::RGBA : TextureFormat::RGB, data, size);
+    TextureFormat format;
+    if (gammaCorrected)
+        format = channels == 4 ? TextureFormat::SRGBA : TextureFormat::SRGB;
+    else
+        format = channels == 4 ? TextureFormat::RGBA : TextureFormat::RGB;
+
+    Texture texture = LAB_RENDERER->createTexture(TextureType::Texture2D, format, data, size);
 
     stbi_image_free(data);
 
