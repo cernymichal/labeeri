@@ -25,7 +25,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual glm::uvec2 frameBufferSize() const = 0;
+    virtual glm::uvec2 m_frameBufferSize() const = 0;
 
     /**
      * @brief TODO

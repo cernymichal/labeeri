@@ -24,10 +24,10 @@ constexpr auto DEFAULT_SHADER_DIRECTORY = "resources/engine/shaders";
 constexpr auto DEFAULT_MESH_DIRECTORY = "resources/engine/models";
 constexpr auto DEFAULT_TEXTURE_DIRECTORY = "resources/engine/textures";
 
-// GL 4.3 + GLSL 430
+// GL 4.5 + GLSL 450
 constexpr auto GL_VERSION_MAJOR = 4;
-constexpr auto GL_VERSION_MINOR = 3;
-constexpr auto GLSL_VERSION = "#version 430";
+constexpr auto GL_VERSION_MINOR = 5;
+constexpr auto GLSL_VERSION = "#version 450";
 
 constexpr auto FIXED_UPDATE_INTERVAL = (1.0 / 50.0);  // 50 Hz
 

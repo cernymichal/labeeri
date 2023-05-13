@@ -65,6 +65,8 @@ public:
     virtual void logError(const char* location) const override;
 
 private:
+    LAB_GL_HANDLE m_FBO = -1;
+    glm::uvec2 m_frameBufferSize = glm::uvec2(0, 0);
     Ref<ShaderProgram> m_currentShaderProgram;
     Ref<Mesh> m_currentMesh;
     double m_time = 0.0;
@@ -75,6 +77,8 @@ private:
     std::vector<RendererDirectionalLight> m_directionalLights;
     std::vector<RendererPointLight> m_pointLights;
     std::vector<RendererSpotLight> m_spotLights;
+
+    LAB_GL_HANDLE createFBO(glm::uvec2 size) const;
 
     void bindDirectionalLights();
 

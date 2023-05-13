@@ -175,8 +175,7 @@ GLRenderer::GLRenderer() {
     LAB_LOG("Vendor: " << glGetString(GL_VENDOR));
     LAB_LOG("Renderer: " << glGetString(GL_RENDERER));
 
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_MULTISAMPLE);
+    glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
@@ -184,6 +183,11 @@ GLRenderer::GLRenderer() {
 
 void GLRenderer::setViewportSize(glm::uvec2 size) {
     glViewport(0, 0, size.x, size.y);
+    m_frameBufferSize = size;
+
+    if (m_FBO != -1)
+        glDeleteFramebuffers(1, &m_FBO);
+    m_FBO = createFBO(size);
 }
 
 void GLRenderer::clear(int buffers) {
@@ -195,6 +199,7 @@ void GLRenderer::clear(int buffers) {
     if (buffers & static_cast<int>(ClearBuffer::Stencil))
         buffersGL |= GL_STENCIL_BUFFER_BIT;
 
+    glClearDepth(0.0f);
     glClear(buffersGL);
 }
 
@@ -207,12 +212,26 @@ void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const 
     m_cameraPosition = cameraPosition;
     m_viewMatrix = viewMatrix;
     m_projectionMatrix = projectionMatrix;
+
+    glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_GREATER);
 }
 
 void GLRenderer::endScene() {
     m_directionalLights.clear();
     m_pointLights.clear();
     m_spotLights.clear();
+
+    glDepthFunc(GL_LESS);
+    glDisable(GL_DEPTH_TEST);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // Draw to screen
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_FBO);
+    glBlitFramebuffer(0, 0, m_frameBufferSize.x, m_frameBufferSize.y, 0, 0, m_frameBufferSize.x, m_frameBufferSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void GLRenderer::useShaderProgram(const Ref<ShaderProgram>& shaderProgram) {
@@ -486,6 +505,38 @@ void GLRenderer::bindDirectionalLights() {
         location = structLocation + ".properties.specular";
         bindUniform(location.c_str(), light.properties.specular);
     }
+}
+
+LAB_GL_HANDLE GLRenderer::createFBO(glm::uvec2 size) const {
+    GLuint colorBuffer, depthBuffer, FBO;
+
+    glGenTextures(1, &colorBuffer);
+    glBindTexture(GL_TEXTURE_2D, colorBuffer);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, size.x, size.y);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glGenTextures(1, &depthBuffer);
+    glBindTexture(GL_TEXTURE_2D, depthBuffer);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH_COMPONENT32F, size.x, size.y);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glGenFramebuffers(1, &FBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuffer, 0);
+
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status != GL_FRAMEBUFFER_COMPLETE)
+        LAB_LOG("Framebuffer not complete: " << status);
+
+    glViewport(0, 0, size.x, size.y);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glDeleteTextures(1, &colorBuffer);
+    glDeleteTextures(1, &depthBuffer);
+
+    return FBO;
 }
 
 void GLRenderer::bindPointLights() {

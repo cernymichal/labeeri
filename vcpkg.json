@@ -8,7 +8,7 @@
     "stb",
     {
       "name": "glad",
-      "features": [ "gl-api-43" ]
+      "features": [ "gl-api-45" ]
     },
     {
       "name": "imgui",

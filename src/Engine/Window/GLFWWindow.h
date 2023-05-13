@@ -27,7 +27,7 @@ public:
 
     virtual double currentTime() const override;
 
-    virtual glm::uvec2 frameBufferSize() const override {
+    virtual glm::uvec2 m_frameBufferSize() const override {
         return s_frameBufferSize;
     }
 

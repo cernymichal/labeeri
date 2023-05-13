@@ -9,7 +9,7 @@ namespace labeeri::Engine {
 ViewportLayer::ViewportLayer() {
     LAB_LOGH2("ViewportLayer::ViewportLayer()");
 
-    m_size = LAB_WINDOW->frameBufferSize();
+    m_size = LAB_WINDOW->m_frameBufferSize();
     LAB_RENDERER->setViewportSize(m_size);
     LAB_RENDERER->setClearColor(glm::vec4(glm::vec3(0.0), 1.0));
 }
@@ -22,8 +22,6 @@ void ViewportLayer::onEvent(IEvent& e) {
 }
 
 bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
-    LAB_RENDERER->clear((int)ClearBuffer::Color | (int)ClearBuffer::Depth);  // TODO remove color clear
-
     if (!LAB_CURRENT_SCENE) return false;
 
     // TODO orthogonal projection if no camera
@@ -31,6 +29,7 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     auto projectionMatrix = m_camera->projectionMatrix(m_size);
 
     LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), m_camera->transform()->worldPosition(), viewMatrix, projectionMatrix);
+    LAB_RENDERER->clear((int)ClearBuffer::Color | (int)ClearBuffer::Depth);  // TODO remove color clear
 
     for (auto& entity : LAB_CURRENT_SCENE->entities()) {
         if (entity->m_light)

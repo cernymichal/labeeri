@@ -7,8 +7,8 @@ namespace labeeri::Engine {
  */
 struct LightAttenuation {
     float constant = 1.0f;
-    float linear = 0.09f;
-    float quadratic = 0.032f;
+    float linear = 0.0f;
+    float quadratic = 0.1f;
 
     LightAttenuation() = default;
 

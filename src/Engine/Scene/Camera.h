@@ -11,7 +11,7 @@ class Camera {
 public:
     float m_FOV = 90.0f;
     float m_near = 0.1f;
-    float m_far = 50.0f;
+    float m_far = std::numeric_limits<float>::infinity();
 
     /**
      * @brief TODO
@@ -40,9 +40,18 @@ public:
      * @brief TODO
      */
     glm::mat4 projectionMatrix(glm::uvec2 viewportSize) const {
+        // TODO cache
         float aspectRatio = (float)viewportSize.x / (float)viewportSize.y;
 
-        return glm::perspective(glm::radians(m_FOV), aspectRatio, m_near, m_far);
+        if (m_far != std::numeric_limits<float>::infinity())
+            return glm::perspectiveZO(glm::radians(m_FOV), aspectRatio, m_far, m_near);  // Z reversed
+
+        float f = 1.0f / tan(glm::radians(m_FOV) / 2.0f);
+        return glm::mat4(
+            f / aspectRatio, 0.0f, 0.0f, 0.0f,
+            0.0f, f, 0.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, -1.0f,
+            0.0f, 0.0f, m_near, 0.0f);
     }
 
 private:

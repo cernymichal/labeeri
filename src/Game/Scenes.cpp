@@ -28,8 +28,8 @@ std::shared_ptr<Scene> defaultScene() {
     ground->m_model->m_material = normalTestmaterial;
     scene->addEntity(ground);
 
-    auto sun = Entities::DirectionalLight(glm::vec3(glm::radians(-110.0), glm::radians(30.0), 0), 0.1f);
-    auto pointLight = Entities::PointLight(glm::vec3(0.0, 4.0, -4.0));
+    auto sun = Entities::DirectionalLight(glm::vec3(glm::radians(-110.0), glm::radians(30.0), 0), 0.05f);
+    auto pointLight = Entities::PointLight(glm::vec3(0.0, 4.0, -4.0), 2.0f);
     pointLight->m_light->m_properties.diffuse = glm::vec3(1.0, 0.8, 0.8);
     auto spotLight = Entities::SpotLight(glm::vec3(2.1, 3.5, 1.6), glm::vec3(glm::radians(-50.0), glm::radians(45.0), 0), 1.5f);
     spotLight[0]->m_light->m_properties.diffuse = glm::vec3(0.6, 0.6, 1.0);
