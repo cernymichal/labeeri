@@ -41,6 +41,10 @@ Shader compileShader(const char* source, ShaderType shaderType) {
             type = GL_FRAGMENT_SHADER;
             typeStr = "fragment";
             break;
+        case (ShaderType::Geometry):
+            type = GL_GEOMETRY_SHADER;
+            typeStr = "geometry";
+            break;
         default:
             throw std::runtime_error("Unknown shader type");
     }
@@ -172,8 +176,10 @@ GLRenderer::GLRenderer() {
     LAB_LOG("Renderer: " << glGetString(GL_RENDERER));
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_MULTISAMPLE);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
 }
 
 void GLRenderer::setViewportSize(glm::uvec2 size) {
@@ -291,7 +297,7 @@ void GLRenderer::deleteShaderProgram(ShaderProgram& shaderProgram) const {
     glDeleteProgram(shaderProgram);
 }
 
-Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const float* normals, const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const {
+Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const float* normals, const float* tangents, const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const {
     GLuint VAO;
     GLuint VBO;
     GLuint EBO;
@@ -299,7 +305,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
     // VBO
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float) * vertexCount, nullptr, GL_STATIC_DRAW);  // vertices, normals, and UVs
+    glBufferData(GL_ARRAY_BUFFER, 11 * sizeof(float) * vertexCount, nullptr, GL_STATIC_DRAW);  // vertices, normals, tangents and UVs
 
     // vertices
     glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * sizeof(float) * vertexCount, vertices);
@@ -311,9 +317,15 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
         LAB_LOG("Uploaded normals");
     }
 
+    // tangents
+    if (tangents) {
+        glBufferSubData(GL_ARRAY_BUFFER, 6 * sizeof(float) * vertexCount, 3 * sizeof(float) * vertexCount, tangents);
+        LAB_LOG("Uploaded tangents");
+    }
+
     // UVs
     for (const auto& map : uvs) {  // TODO more than one UV map
-        glBufferSubData(GL_ARRAY_BUFFER, 6 * sizeof(float) * vertexCount, 2 * sizeof(float) * vertexCount, map);
+        glBufferSubData(GL_ARRAY_BUFFER, 9 * sizeof(float) * vertexCount, 2 * sizeof(float) * vertexCount, map);
         LAB_LOG("Uploaded UV map");
     }
 
@@ -333,6 +345,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
 
     GLuint positionLocation = glGetAttribLocation(*shader, "in_position");
     GLuint normalLocation = glGetAttribLocation(*shader, "in_normal");
+    GLuint tangentLocation = glGetAttribLocation(*shader, "in_tangent");
     GLuint UVLocation = glGetAttribLocation(*shader, "in_UV");
 
     glGenVertexArrays(1, &VAO);
@@ -349,8 +362,11 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const f
     glEnableVertexAttribArray(normalLocation);
     glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(3 * sizeof(float) * vertexCount));
 
+    glEnableVertexAttribArray(tangentLocation);
+    glVertexAttribPointer(tangentLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(6 * sizeof(float) * vertexCount));
+
     glEnableVertexAttribArray(UVLocation);
-    glVertexAttribPointer(UVLocation, 2, GL_FLOAT, GL_FALSE, 0, (void*)(6 * sizeof(float) * vertexCount));
+    glVertexAttribPointer(UVLocation, 2, GL_FLOAT, GL_FALSE, 0, (void*)(9 * sizeof(float) * vertexCount));
 
     LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Attribute pointers created");

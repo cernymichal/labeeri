@@ -27,13 +27,25 @@ std::string loadShader(const std::string& path) {
 }
 
 Ref<ShaderProgram> loadShaderProgram(const char* path) {
-    std::string vertexPath = std::string(path) + ".vert";
-    std::string fragmentPath = std::string(path) + ".frag";
+    std::vector<std::pair<ShaderType, const char*>> shaders;
+    shaders.reserve(3);
 
+    auto vertexPath = std::string(path) + ".vert";
     std::string vertexShaderSource = loadShader(vertexPath);
-    std::string fragmentShaderSource = loadShader(fragmentPath);
+    shaders.emplace_back(ShaderType::Vertex, vertexShaderSource.c_str());
 
-    ShaderProgram program = LAB_RENDERER->createShaderProgram({{ShaderType::Vertex, vertexShaderSource.c_str()}, {ShaderType::Fragment, fragmentShaderSource.c_str()}});
+    auto fragmentPath = std::string(path) + ".frag";
+    std::string fragmentShaderSource = loadShader(fragmentPath);
+    shaders.emplace_back(ShaderType::Fragment, fragmentShaderSource.c_str());
+
+    auto geometryPath = std::string(path) + ".geom";
+    std::string geometryShaderSource;
+    if (std::filesystem::exists(geometryPath)) {
+        geometryShaderSource = loadShader(geometryPath);
+        shaders.emplace_back(ShaderType::Geometry, geometryShaderSource.c_str());
+    }
+
+    ShaderProgram program = LAB_RENDERER->createShaderProgram(shaders);
 
     return std::make_shared<ShaderProgram>(std::move(program));
 }
@@ -49,6 +61,7 @@ Ref<Mesh> loadMesh(const char* filePath) {
     const aiScene* scene = importer.ReadFile(filePath, aiProcess_Triangulate                 // Triangulate polygons (if any).
                                                            | aiProcess_PreTransformVertices  // Transforms scene hierarchy into one root with geometry-leafs only. For more see Doc.
                                                            | aiProcess_GenSmoothNormals      // Calculate normals per vertex.
+                                                           | aiProcess_CalcTangentSpace      // Calculate tangents per vetex.
                                                            | aiProcess_JoinIdenticalVertices);
 
     if (scene == nullptr) {
@@ -67,6 +80,7 @@ Ref<Mesh> loadMesh(const char* filePath) {
     uint32_t faceCount = assimpMesh->mNumFaces;
     auto vertices = reinterpret_cast<float*>(assimpMesh->mVertices);
     float* normals = assimpMesh->HasNormals() ? reinterpret_cast<float*>(assimpMesh->mNormals) : nullptr;
+    float* tangents = assimpMesh->HasTangentsAndBitangents() ? reinterpret_cast<float*>(assimpMesh->mTangents) : nullptr;
 
     // UVs
     std::vector<std::vector<float>> UVs;
@@ -97,7 +111,7 @@ Ref<Mesh> loadMesh(const char* filePath) {
 
     LAB_LOG("Data loaded");
 
-    Mesh mesh = LAB_RENDERER->createMesh(vertices, vertexCount, normals, uvPtrs, indices.data(), faceCount);
+    Mesh mesh = LAB_RENDERER->createMesh(vertices, vertexCount, normals, tangents, uvPtrs, indices.data(), faceCount);
 
     return std::make_shared<Mesh>(std::move(mesh));
 }

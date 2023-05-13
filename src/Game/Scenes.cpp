@@ -9,9 +9,23 @@ namespace labeeri {
 std::shared_ptr<Scene> defaultScene() {
     auto scene = std::make_shared<Scene>();
 
+    auto normalTestmaterial = copyShared(std::dynamic_pointer_cast<ShadedMaterial>(Resources<Material>::get("grey")));
+    normalTestmaterial->m_normalMap = Resources<Texture>::get("normal_test.png");
+
+    auto brickWallMaterial = copyShared(normalTestmaterial);
+    brickWallMaterial->m_diffuseMap = Resources<Texture>::get("brickwall.jpg");
+    brickWallMaterial->m_normalMap = Resources<Texture>::get("brickwall_normal.jpg");
+
+    auto catMaterial = copyShared(normalTestmaterial);
+    catMaterial->m_diffuseMap = Resources<Texture>::get("resources/labeeri/textures/catguy.jpg");
+    catMaterial->m_normalMap = nullptr;
+    catMaterial->m_specular = glm::vec3(0.6f);
+    catMaterial->m_shininess = 128.0;
+
     auto ground = Entity::Create();
     ground->transform()->setScale(glm::vec3(50.0));
-    ground->m_model = Resources<Model>::get("basicPlane");
+    ground->m_model = copyShared( Resources<Model>::get("basicPlane"));
+    ground->m_model->m_material = normalTestmaterial;
     scene->addEntity(ground);
 
     auto sun = Entities::DirectionalLight(glm::vec3(glm::radians(-110.0), glm::radians(30.0), 0), 0.1f);
@@ -24,15 +38,10 @@ std::shared_ptr<Scene> defaultScene() {
     scene->addEntity(pointLight);
     scene->addEntity(spotLight);
 
-    auto material = copyShared(std::dynamic_pointer_cast<ShadedMaterial>(Resources<Material>::get("grey")));
-    material->m_diffuseMap = Resources<Texture>::get("resources/labeeri/textures/catguy.jpg");
-    material->m_specular = glm::vec3(0.6f);
-    material->m_shininess = 128.0;
-
     auto sphere = Entity::Create();
     sphere->transform()->setPosition(glm::vec3(1.0, 1.0, -2.2));
     sphere->m_model = copyShared(Resources<Model>::get("basicSphere"));
-    sphere->m_model->m_material = material;
+    sphere->m_model->m_material = brickWallMaterial;
     sphere->m_onUpdate = [](Entity& self, double deltaTime) {
         self.transform()->move(glm::vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.5f, 0) * (float)deltaTime);
         self.transform()->rotate(glm::vec3(0, glm::radians(-15.0f), 0) * (float)deltaTime);
@@ -42,7 +51,7 @@ std::shared_ptr<Scene> defaultScene() {
     auto cube = Entity::Create();
     cube->transform()->setPosition(glm::vec3(-1.0, 1.5, -2));
     cube->m_model = copyShared(Resources<Model>::get("basicCube"));
-    cube->m_model->m_material = material;
+    cube->m_model->m_material = catMaterial;
     cube->m_onUpdate = [](Entity& self, double deltaTime) {
         self.transform()->move(glm::vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.15f, 0) * (float)deltaTime);
         self.transform()->rotate(glm::vec3(0, glm::radians(20.0f), 0) * (float)deltaTime);

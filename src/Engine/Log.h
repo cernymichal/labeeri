@@ -20,6 +20,8 @@
 
 #endif
 
+#define LAB_LOG_TO_CONSOLE
+
 #ifdef LAB_LOG_TO_CONSOLE
 
 #define LAB_LOG(x) std::cout << x << std::endl

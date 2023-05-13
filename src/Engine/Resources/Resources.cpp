@@ -1,7 +1,5 @@
 #include "Resources.h"
 
-#include <filesystem>
-
 #include "Engine/Resources/Load.h"
 
 namespace labeeri::Engine {

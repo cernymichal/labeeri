@@ -38,8 +38,10 @@ void ShadedMaterial::bindUniforms() const {
 
     bool usingNormalMap = m_normalMap != nullptr;
     LAB_RENDERER->bindUniform("u_material.using_normal_map", usingNormalMap);
-    if (usingNormalMap)
+    if (usingNormalMap) {
         LAB_RENDERER->bindTexture(TextureType::Texture2D, *m_normalMap, 2);
+        LAB_RENDERER->bindUniform("u_material.normal_map", 2);
+    }
 }
 
 }  // namespace labeeri::Engine

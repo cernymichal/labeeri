@@ -64,9 +64,12 @@ struct SpotLight {
 	Attenuation attenuation;
 };
 
-smooth in vec3 position_ws;
-smooth in vec3 normal_ws;
-smooth in vec2 UV;
+in GData {
+	smooth vec3 position_ws;
+	smooth vec3 normal_ws;
+	smooth vec3 tangent_ws;
+	smooth vec2 UV;
+} g_data;
 
 uniform vec3 u_camera_position;
 
@@ -81,12 +84,27 @@ uniform Material u_material;
 
 out vec4 fragColor;
 
+mat3 calculate_TBN_matrix() {
+	vec3 T = normalize(g_data.tangent_ws);
+	vec3 N = normalize(g_data.normal_ws);
+	T = normalize(T - dot(T, N) * N);
+	vec3 B = cross(N, T);
+	
+	return mat3(T, B, N);
+}
+
 MaterialSample sample_material() {
 	MaterialSample result;
-	result.diffuse = u_material.using_diffuse_map ? texture(u_material.diffuse_map, UV).xyz : u_material.diffuse;
-	result.specular = u_material.using_specular_map ? texture(u_material.specular_map, UV).xyz : u_material.specular;
+	result.diffuse = u_material.using_diffuse_map ? texture(u_material.diffuse_map, g_data.UV).rgb : u_material.diffuse;
+	result.specular = u_material.using_specular_map ? texture(u_material.specular_map, g_data.UV).rgb : u_material.specular;
 	result.shininess = u_material.shininess;
-	result.normal = normalize(normal_ws);
+
+	if (u_material.using_normal_map) {
+		mat3 TBN_matrix = calculate_TBN_matrix();
+		result.normal = normalize(TBN_matrix * (texture(u_material.normal_map, g_data.UV).xyz * 2.0f - 1.0f));
+	}
+	else
+		result.normal = normalize(g_data.normal_ws);
 
 	return result;
 }
@@ -113,18 +131,18 @@ vec3 calculate_directional_light(DirectionalLight light, MaterialSample material
 }
 
 vec3 calculate_point_light(PointLight light, MaterialSample material, vec3 view_direction) {
-	vec3 light_direction = normalize(light.position - position_ws);
+	vec3 light_direction = normalize(light.position - g_data.position_ws);
 
-	float distance = length(light.position - position_ws);
+	float distance = length(light.position - g_data.position_ws);
 	float attenuation = 1.0 / (light.attenuation.constant + light.attenuation.linear * distance + light.attenuation.quadratic * (distance * distance));
 
 	return phong(light.properties, material, view_direction, light_direction) * attenuation;
 }
 
 vec3 calculate_spot_light(SpotLight light, MaterialSample material, vec3 view_direction) {
-	vec3 light_direction = normalize(light.position - position_ws);
+	vec3 light_direction = normalize(light.position - g_data.position_ws);
 
-	float distance = length(light.position - position_ws);
+	float distance = length(light.position - g_data.position_ws);
 	float attenuation = 1.0 / (light.attenuation.constant + light.attenuation.linear * distance + light.attenuation.quadratic * (distance * distance));
 
 	float theta = dot(light_direction, normalize(-light.direction));
@@ -135,7 +153,7 @@ vec3 calculate_spot_light(SpotLight light, MaterialSample material, vec3 view_di
 }
 
 void main() {
-	vec3 view_direction = normalize(u_camera_position - position_ws);
+	vec3 view_direction = normalize(u_camera_position - g_data.position_ws);
 	MaterialSample material_sample = sample_material();
 
 	vec3 result = vec3(0.0);
