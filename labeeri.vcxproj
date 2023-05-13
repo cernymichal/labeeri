@@ -161,6 +161,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine\Entities.cpp" />
+    <ClCompile Include="src\Engine\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Engine\Renderer\GLRenderer.cpp" />
     <ClCompile Include="src\Engine\Renderer\IRenderer.cpp" />
     <ClCompile Include="src\Engine\Renderer\Mesh.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="src\Engine\Events\Input.h" />
     <ClInclude Include="src\Engine\Events\KeyboardEvent.h" />
     <ClInclude Include="src\Engine\Events\MouseEvent.h" />
+    <ClInclude Include="src\Engine\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Engine\Renderer\GLRenderer.h" />
     <ClInclude Include="src\Engine\Renderer\IRenderer.h" />
     <ClInclude Include="src\Engine\Renderer\Light.h" />
@@ -243,6 +245,8 @@
     <None Include="resources\engine\shaders\phong.frag" />
     <None Include="resources\engine\shaders\phong.geom" />
     <None Include="resources\engine\shaders\phong.vert" />
+    <None Include="resources\engine\shaders\postprocess.frag" />
+    <None Include="resources\engine\shaders\postprocess.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

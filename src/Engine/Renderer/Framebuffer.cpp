@@ -1,14 +1,11 @@
-#include "Mesh.h"
+#include "Framebuffer.h"
 
 #include "Engine/Renderer/IRenderer.h"
 
 namespace labeeri::Engine {
 
-Mesh::~Mesh() {
-    if (m_moved)
-        return;
-
-    LAB_RENDERER->deleteMesh(*this);
+Framebuffer::~Framebuffer() {
+    LAB_RENDERER->deleteFramebuffer(*this);
 }
 
 }  // namespace labeeri::Engine

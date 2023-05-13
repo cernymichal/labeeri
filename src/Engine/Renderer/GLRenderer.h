@@ -56,6 +56,8 @@ public:
 
     virtual void deleteTexture(Texture& texure) const override;
 
+    virtual void deleteFramebuffer(Framebuffer& framebuffer) const override;
+
     virtual void submitLight(const RendererDirectionalLight& light) override;
 
     virtual void submitLight(const RendererPointLight& light) override;
@@ -65,9 +67,12 @@ public:
     virtual void logError(const char* location) const override;
 
 private:
-    LAB_GL_HANDLE m_FBO = -1;
+    std::unique_ptr<Framebuffer> m_frame;
     glm::uvec2 m_frameBufferSize = glm::uvec2(0, 0);
+    Ref<Mesh> m_screenQuad;
+    Ref<ShaderProgram> m_screenQuadShader;
     Ref<ShaderProgram> m_currentShaderProgram;
+
     Ref<Mesh> m_currentMesh;
     double m_time = 0.0;
     glm::vec3 m_cameraPosition = glm::vec3(0.0f);
@@ -78,7 +83,9 @@ private:
     std::vector<RendererPointLight> m_pointLights;
     std::vector<RendererSpotLight> m_spotLights;
 
-    LAB_GL_HANDLE createFBO(glm::uvec2 size) const;
+    Framebuffer createFrame(glm::uvec2 size) const;
+
+    Mesh createScreenQuad() const;
 
     void bindDirectionalLights();
 

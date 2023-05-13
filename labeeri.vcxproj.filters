@@ -96,6 +96,9 @@
     <ClCompile Include="src\Engine\Resources\Load.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\Framebuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Application.h">
@@ -221,6 +224,9 @@
     <ClInclude Include="src\Engine\Resources\Load.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\Framebuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\shaders\flat.vert" />
@@ -230,5 +236,7 @@
     <None Include="resources\engine\shaders\phong.frag" />
     <None Include="resources\engine\shaders\phong.vert" />
     <None Include="resources\engine\shaders\phong.geom" />
+    <None Include="resources\engine\shaders\postprocess.vert" />
+    <None Include="resources\engine\shaders\postprocess.frag" />
   </ItemGroup>
 </Project>

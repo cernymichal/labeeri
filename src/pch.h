@@ -11,7 +11,9 @@
 #include <utility>
 
 // STL
+#include <array>
 #include <list>
+#include <map>
 #include <string>
 #include <unordered_map>
 #include <vector>

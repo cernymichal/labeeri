@@ -10,14 +10,17 @@ public:
     /**
      * @brief TODO
      */
-    explicit ShaderProgram(LAB_GL_HANDLE program);
+    explicit ShaderProgram(LAB_GL_HANDLE program) : m_program(program) {
+    }
 
     ShaderProgram(const ShaderProgram&) = delete;
 
     /**
      * @brief TODO
      */
-    ShaderProgram(ShaderProgram&& other) noexcept;
+    ShaderProgram(ShaderProgram&& other) noexcept : m_program(other.m_program) {
+        other.m_program = 0;
+    }
 
     /**
      * @brief TODO
@@ -32,7 +35,9 @@ public:
     /**
      * @brief TODO
      */
-    operator LAB_GL_HANDLE() const;
+    operator LAB_GL_HANDLE() const {
+        return m_program;
+    }
 
 private:
     LAB_GL_HANDLE m_program;

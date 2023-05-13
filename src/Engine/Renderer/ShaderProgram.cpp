@@ -4,13 +4,6 @@
 
 namespace labeeri::Engine {
 
-ShaderProgram::ShaderProgram(LAB_GL_HANDLE program) : m_program(program) {
-}
-
-ShaderProgram::ShaderProgram(ShaderProgram&& other) noexcept : m_program(other.m_program) {
-    other.m_program = 0;
-}
-
 ShaderProgram::~ShaderProgram() {
     LAB_RENDERER->deleteShaderProgram(*this);
 }
@@ -26,10 +19,6 @@ LAB_GL_INT ShaderProgram::getUniformLocation(const std::string& name) {
         m_uniforms[name] = location;
 
     return location;
-}
-
-ShaderProgram::operator LAB_GL_HANDLE() const {
-    return m_program;
 }
 
 }  // namespace labeeri::Engine

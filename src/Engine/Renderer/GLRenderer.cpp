@@ -185,9 +185,7 @@ void GLRenderer::setViewportSize(glm::uvec2 size) {
     glViewport(0, 0, size.x, size.y);
     m_frameBufferSize = size;
 
-    if (m_FBO != -1)
-        glDeleteFramebuffers(1, &m_FBO);
-    m_FBO = createFBO(size);
+    m_frame = std::make_unique<Framebuffer>(createFrame(size));
 }
 
 void GLRenderer::clear(int buffers) {
@@ -213,7 +211,7 @@ void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const 
     m_viewMatrix = viewMatrix;
     m_projectionMatrix = projectionMatrix;
 
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, *m_frame);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_GREATER);
 }
@@ -225,13 +223,23 @@ void GLRenderer::endScene() {
 
     glDepthFunc(GL_LESS);
     glDisable(GL_DEPTH_TEST);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // Draw to screen
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_FBO);
-    glBlitFramebuffer(0, 0, m_frameBufferSize.x, m_frameBufferSize.y, 0, 0, m_frameBufferSize.x, m_frameBufferSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    if (!m_screenQuad) {
+        m_screenQuad = std::make_shared<Mesh>(createScreenQuad());
+        m_screenQuadShader = Resources<ShaderProgram>::get("postprocess");
+    }
+
+    useShaderProgram(m_screenQuadShader);
+    bindMesh(m_screenQuad);
+    bindTexture(TextureType::Texture2D, *m_frame->m_attachments[FramebufferAttachment::Color], 0);
+    bindUniform("u_color_buffer", 0);
+    bindTexture(TextureType::Texture2D, *m_frame->m_attachments[FramebufferAttachment::Depth], 1);
+    bindUniform("u_depth_buffer", 1);
+    bindUniform("u_gamma", 2.2f);
+    drawMesh();
 }
 
 void GLRenderer::useShaderProgram(const Ref<ShaderProgram>& shaderProgram) {
@@ -435,6 +443,11 @@ void GLRenderer::deleteTexture(Texture& texure) const {
     glDeleteTextures(1, &texureGL);
 }
 
+void GLRenderer::deleteFramebuffer(Framebuffer& framebuffer) const {
+    GLuint FBO = framebuffer;
+    glDeleteFramebuffers(1, &FBO);
+}
+
 void GLRenderer::submitLight(const RendererDirectionalLight& light) {
     if (m_directionalLights.size() >= MAX_DIRECTIONAL_LIGHTS) {
         LAB_LOG("Directional light limit reached!");
@@ -507,17 +520,41 @@ void GLRenderer::bindDirectionalLights() {
     }
 }
 
-LAB_GL_HANDLE GLRenderer::createFBO(glm::uvec2 size) const {
+Mesh GLRenderer::createScreenQuad() const {
+    float vertices[] = {
+        -1.0f, -1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
+        -1.0f, 1.0f, 0.0f};
+
+    float UVs[] = {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f};
+
+    unsigned int indices[] = {
+        0, 1, 2,
+        2, 3, 0};
+
+    return createMesh(vertices, 4, nullptr, nullptr, {UVs}, indices, 2);
+}
+
+Framebuffer GLRenderer::createFrame(glm::uvec2 size) const {
     GLuint colorBuffer, depthBuffer, FBO;
 
     glGenTextures(1, &colorBuffer);
     glBindTexture(GL_TEXTURE_2D, colorBuffer);
-    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, size.x, size.y);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glGenTextures(1, &depthBuffer);
     glBindTexture(GL_TEXTURE_2D, depthBuffer);
-    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH_COMPONENT32F, size.x, size.y);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glGenFramebuffers(1, &FBO);
@@ -533,10 +570,7 @@ LAB_GL_HANDLE GLRenderer::createFBO(glm::uvec2 size) const {
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    glDeleteTextures(1, &colorBuffer);
-    glDeleteTextures(1, &depthBuffer);
-
-    return FBO;
+    return Framebuffer(FBO, {{FramebufferAttachment::Color, std::make_shared<Texture>(colorBuffer)}, {FramebufferAttachment::Depth, std::make_shared<Texture>(depthBuffer)}});
 }
 
 void GLRenderer::bindPointLights() {

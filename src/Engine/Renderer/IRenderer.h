@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Renderer/Framebuffer.h"
 #include "Engine/Renderer/Light.h"
 #include "Engine/Renderer/Mesh.h"
 #include "Engine/Renderer/ShaderProgram.h"
@@ -157,6 +158,11 @@ public:
      * @brief TODO
      */
     virtual void deleteTexture(Texture& texure) const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void deleteFramebuffer(Framebuffer& framebuffer) const = 0;
 
     /**
      * @brief TODO
