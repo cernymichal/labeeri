@@ -3,6 +3,7 @@
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Events/KeyboardEvent.h"
 #include "Engine/Events/MouseEvent.h"
+#include "Engine/Renderer/IRenderer.h"
 #include "Engine/Scene/Camera.h"
 #include "Engine/WindowLayer/IWindowLayer.h"
 
@@ -24,6 +25,7 @@ public:
 
 private:
     glm::uvec2 m_size = glm::uvec2(0);
+    PostprocessingParameters m_postprocessingParameters;
 
     bool onRender(const ApplicationRenderEvent& e);
 

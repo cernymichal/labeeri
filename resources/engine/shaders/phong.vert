@@ -11,16 +11,16 @@ uniform mat4 u_model_matrix;
 uniform mat4 u_normal_matrix;
 
 out VData {
-	smooth vec3 position_ws;
-	smooth vec3 normal_ws;
-	smooth vec3 tangent_ws;
-	smooth vec2 UV;
+    smooth vec3 position_ws;
+    smooth vec3 normal_ws;
+    smooth vec3 tangent_ws;
+    smooth vec2 UV;
 } vs_data;
 
 void main() {
     gl_Position = u_PVM_matrix * vec4(in_position, 1);
     vs_data.position_ws = (u_model_matrix * vec4(in_position, 1)).xyz;
     vs_data.normal_ws = normalize((u_normal_matrix * vec4(in_normal, 0.0)).xyz);
-	vs_data.tangent_ws = normalize((u_normal_matrix * vec4(in_tangent, 0.0)).xyz);
+    vs_data.tangent_ws = normalize((u_normal_matrix * vec4(in_tangent, 0.0)).xyz);
     vs_data.UV = in_UV;
 }

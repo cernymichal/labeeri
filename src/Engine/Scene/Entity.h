@@ -47,7 +47,7 @@ public:
     }
 
 private:
-    Ref<Transform> m_transform = std::make_shared<Transform>();
+    Ref<Transform> m_transform = makeRef<Transform>();
 
     Entity() = default;
 

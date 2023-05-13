@@ -18,8 +18,16 @@ public:
     /**
      * @brief TODO
      */
-    ShaderProgram(ShaderProgram&& other) noexcept : m_program(other.m_program) {
+    ShaderProgram(ShaderProgram&& other) noexcept : m_program(other.m_program), m_uniforms(std::move(other.m_uniforms)) {
         other.m_program = 0;
+    }
+
+    ShaderProgram& operator=(const ShaderProgram&) = delete;
+
+    ShaderProgram& operator=(ShaderProgram&& other) noexcept {
+        this->~ShaderProgram();
+        new (this) ShaderProgram(std::move(other));
+        return *this;
     }
 
     /**

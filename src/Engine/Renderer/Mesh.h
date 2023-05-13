@@ -27,6 +27,14 @@ public:
         other.m_moved = true;
     }
 
+    Mesh& operator=(const Mesh&) = delete;
+
+    Mesh& operator=(Mesh&& other) noexcept {
+        this->~Mesh();
+        new (this) Mesh(std::move(other));
+        return *this;
+    }
+
     /**
      * @brief TODO
      */

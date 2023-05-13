@@ -38,11 +38,31 @@ constexpr auto MAX_POINT_LIGHTS = 16;
 constexpr auto MAX_SPOT_LIGHTS = 4;
 
 template <typename T>
-using Ref = std::shared_ptr<T>;
+inline std::shared_ptr<T> copyShared(const std::shared_ptr<T>& ptr) {
+    return std::make_shared<T>(*ptr);
+}
 
 template <typename T>
-std::shared_ptr<T> copyShared(const std::shared_ptr<T>& ptr) {
-    return std::make_shared<T>(*ptr);
+using Ref = std::shared_ptr<T>;
+
+template <typename T, typename... Args>
+inline Ref<T> makeRef(Args&& ...params) {
+	return std::make_shared<T>(std::forward<Args>(params)...);
+}
+
+template <typename T, typename S>
+inline std::shared_ptr<T> castRef(const std::shared_ptr<S>& ptr) {
+    return std::dynamic_pointer_cast<T>(ptr);
+}
+
+template <typename T>
+inline Ref<T> clone(const Ref<T>& ref) {
+    return copyShared<T>(ref);
+}
+
+template <typename T, typename S>
+inline Ref<T> cloneAs(const Ref<S>& ref) {
+    return clone(castRef<T>(ref));
 }
 
 }  // namespace labeeri::Engine

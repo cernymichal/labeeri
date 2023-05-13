@@ -40,6 +40,10 @@ struct LightProperties {
     }
 };
 
+const auto DefualtDirectionalLightProperties = LightProperties();
+const auto DefualtPointLightProperties = LightProperties(glm::vec3(0.1f), glm::vec3(1.0f), glm::vec3(1.0f));
+const auto DefualtSpotLightProperties = LightProperties(glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(1.0f));
+
 /**
  * @brief TODO
  */

@@ -45,11 +45,11 @@ Ref<Material> tryFindMaterial(const char* name) {
     auto nameStr = std::string(name);
 
     if (nameStr == "flatWhite")
-        return std::make_shared<FlatMaterial>(Resources<ShaderProgram>::get("flat"), glm::vec3(1.0f));
+        return makeRef<FlatMaterial>(Resources<ShaderProgram>::get("flat"), glm::vec3(1.0f));
     if (nameStr == "grey")
-        return std::make_shared<ShadedMaterial>(Resources<ShaderProgram>::get("phong"), glm::vec3(0.7f));
+        return makeRef<ShadedMaterial>(Resources<ShaderProgram>::get("phong"), glm::vec3(0.7f));
     if (nameStr == "UVTest")
-        return std::make_shared<FlatMaterial>(Resources<ShaderProgram>::get("flat"), Resources<Texture>::get("uv_test.png"));
+        return makeRef<FlatMaterial>(Resources<ShaderProgram>::get("flat"), Resources<Texture>::get("uv_test.png"));
 
     return nullptr;
 }
@@ -58,19 +58,19 @@ Ref<Model> tryFindModel(const char* name) {
     auto nameStr = std::string(name);
 
     if (nameStr == "whiteCube")
-        return std::make_shared<Model>(Resources<Material>::get("flatWhite"), Resources<Mesh>::get("cube.obj"));
+        return makeRef<Model>(Resources<Material>::get("flatWhite"), Resources<Mesh>::get("cube.obj"));
     if (nameStr == "whiteSphere")
-        return std::make_shared<Model>(Resources<Material>::get("flatWhite"), Resources<Mesh>::get("sphere.obj"));
+        return makeRef<Model>(Resources<Material>::get("flatWhite"), Resources<Mesh>::get("sphere.obj"));
     if (nameStr == "whiteCone")
-        return std::make_shared<Model>(Resources<Material>::get("flatWhite"), Resources<Mesh>::get("cone.obj"));
+        return makeRef<Model>(Resources<Material>::get("flatWhite"), Resources<Mesh>::get("cone.obj"));
     if (nameStr == "basicCube")
-        return std::make_shared<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("cube.obj"));
+        return makeRef<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("cube.obj"));
     if (nameStr == "basicSphere")
-        return std::make_shared<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("sphere.obj"));
+        return makeRef<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("sphere.obj"));
     if (nameStr == "basicPlane")
-        return std::make_shared<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("plane.obj"));
+        return makeRef<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("plane.obj"));
     if (nameStr == "basicCone")
-        return std::make_shared<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("cone.obj"));
+        return makeRef<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("cone.obj"));
 
     return nullptr;
 }

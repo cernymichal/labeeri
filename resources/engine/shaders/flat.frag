@@ -10,5 +10,5 @@ out vec4 fragColor;
 
 void main() {
     vec4 color = u_using_texture ? texture(u_texture, UV) : vec4(u_color, 1.0);
-	fragColor = color;
+    fragColor = color;
 }

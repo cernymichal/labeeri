@@ -22,6 +22,14 @@ public:
         other.m_texture = 0;
     }
 
+    Texture& operator=(const Texture&) = delete;
+
+    Texture& operator=(Texture&& other) noexcept {
+        this->~Texture();
+        new (this) Texture(std::move(other));
+        return *this;
+    }
+
     /**
      * @brief TODO
      */

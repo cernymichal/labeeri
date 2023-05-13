@@ -16,32 +16,51 @@ enum class ClearBuffer {
     Stencil = LAB_BIT(2)
 };
 
-enum class ShaderType {
+struct PostprocessingParameters {
+    float exposure = 1.0f;
+    float gamma = 2.2f;
+};
+
+enum class ShaderType : uint8_t {
     Vertex,
     Fragment,
     Geometry
 };
 
-enum class TextureType {
+enum class TextureType : uint8_t {
     Texture2D,
     Rectangle
 };
 
-enum class TextureFormat {
+enum class TextureInternalFormat : uint8_t {
     Red,
     RGB,
     RGBA,
     SRGB,
     SRGBA,
+    RGBAFloat16,
+    DepthFloat32
+};
+
+enum class TextureFormat : uint8_t {
+    Red,
+    RGB,
+    RGBA,
     Depth
 };
 
-enum class TextureFilter {
+enum class TextureDataType : uint8_t {
+    UnsignedByte,
+    Float16,
+    Float32
+};
+
+enum class TextureFilter : uint8_t {
     Nearest,
     Linear
 };
 
-enum class TextureWrap {
+enum class TextureWrap : uint8_t {
     ClampToEdge,
     Repeat,
     MirroredRepeat,
@@ -78,6 +97,16 @@ public:
      * @brief TODO
      */
     virtual void endScene() = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void drawToScreen() const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void drawToScreenPostprocessed(const PostprocessingParameters& parameters) = 0;
 
     /**
      * @brief TODO
@@ -137,7 +166,9 @@ public:
     /**
      * @brief TODO
      */
-    virtual Mesh createMesh(const float* vertices, uint32_t vertexCount, const float* normals, const float* tangets, const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const = 0;
+    virtual Mesh createMesh(const float* vertices, uint32_t vertexCount,
+                            const float* normals, const float* tangets,
+                            const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const = 0;
 
     /**
      * @brief TODO
@@ -147,7 +178,9 @@ public:
     /**
      * @brief TODO
      */
-    virtual Texture createTexture(TextureType type, TextureFormat format, unsigned char* data, glm::uvec2 size, bool generateMipmap = true, TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const = 0;
+    virtual Texture createTexture(TextureType type, TextureInternalFormat internalFormat, TextureFormat format, TextureDataType dataType,
+                                  glm::uvec2 size, unsigned char* data = nullptr, bool generateMipmap = true,
+                                  TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const = 0;
 
     /**
      * @brief TODO

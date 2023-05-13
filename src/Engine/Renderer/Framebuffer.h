@@ -7,8 +7,7 @@ namespace labeeri::Engine {
 enum class FramebufferAttachment {
     Color,
     Depth,
-    Stencil,
-    DepthStencil
+    Stencil
 };
 
 /**
@@ -16,13 +15,14 @@ enum class FramebufferAttachment {
  */
 class Framebuffer {
 public:
+    glm::uvec2 m_size;
     std::map<FramebufferAttachment, Ref<Texture>> m_attachments;
 
     /**
      * @brief TODO
      */
-    Framebuffer(LAB_GL_HANDLE framebufferObject, const std::map<FramebufferAttachment, Ref<Texture>>& attachments)
-        : m_framebufferObject(framebufferObject), m_attachments(attachments) {
+    Framebuffer(LAB_GL_HANDLE framebufferObject, glm::uvec2 size, const std::map<FramebufferAttachment, Ref<Texture>>& attachments)
+        : m_framebufferObject(framebufferObject), m_size(size), m_attachments(attachments) {
     }
 
     Framebuffer(const Texture&) = delete;
@@ -30,10 +30,17 @@ public:
     /**
      * @brief TODO
      */
-    Framebuffer(Framebuffer&& other) noexcept {
-        m_framebufferObject = other.m_framebufferObject;
-        m_attachments = std::move(other.m_attachments);
+    Framebuffer(Framebuffer&& other) noexcept
+        : m_framebufferObject(other.m_framebufferObject), m_size(other.m_size), m_attachments(std::move(other.m_attachments)) {
         other.m_framebufferObject = 0;
+    }
+
+    Framebuffer& operator=(const Texture&) = delete;
+
+    Framebuffer& operator=(Framebuffer&& other) noexcept {
+        this->~Framebuffer();
+        new (this) Framebuffer(std::move(other));
+        return *this;
     }
 
     /**

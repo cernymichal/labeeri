@@ -47,7 +47,7 @@ Ref<ShaderProgram> loadShaderProgram(const char* path) {
 
     ShaderProgram program = LAB_RENDERER->createShaderProgram(shaders);
 
-    return std::make_shared<ShaderProgram>(std::move(program));
+    return makeRef<ShaderProgram>(std::move(program));
 }
 
 Ref<Mesh> loadMesh(const char* filePath) {
@@ -113,7 +113,7 @@ Ref<Mesh> loadMesh(const char* filePath) {
 
     Mesh mesh = LAB_RENDERER->createMesh(vertices, vertexCount, normals, tangents, uvPtrs, indices.data(), faceCount);
 
-    return std::make_shared<Mesh>(std::move(mesh));
+    return makeRef<Mesh>(std::move(mesh));
 }
 
 Ref<Texture> loadTexture(const char* filePath, bool gammaCorrected) {
@@ -129,17 +129,21 @@ Ref<Texture> loadTexture(const char* filePath, bool gammaCorrected) {
         throw std::runtime_error("Failed to load texture");
     }
 
-    TextureFormat format;
-    if (gammaCorrected)
-        format = channels == 4 ? TextureFormat::SRGBA : TextureFormat::SRGB;
-    else
-        format = channels == 4 ? TextureFormat::RGBA : TextureFormat::RGB;
+    TextureFormat format = channels == 4 ? TextureFormat::RGBA : TextureFormat::RGB;
 
-    Texture texture = LAB_RENDERER->createTexture(TextureType::Texture2D, format, data, size);
+    TextureInternalFormat internalFormat;
+    if (gammaCorrected)
+        internalFormat = channels == 4 ? TextureInternalFormat::SRGBA : TextureInternalFormat::SRGB;
+    else
+        internalFormat = channels == 4 ? TextureInternalFormat::RGBA : TextureInternalFormat::RGB;
+
+    auto texture = LAB_RENDERER->createTexture(TextureType::Texture2D,
+                                               internalFormat, format, TextureDataType::UnsignedByte,
+                                               size, data);
 
     stbi_image_free(data);
 
-    return std::make_shared<Texture>(std::move(texture));
+    return makeRef<Texture>(std::move(texture));
 }
 
 }  // namespace labeeri::Engine

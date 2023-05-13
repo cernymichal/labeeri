@@ -24,6 +24,10 @@ public:
 
     virtual void endScene() override;
 
+    virtual void drawToScreen() const override;
+
+    virtual void drawToScreenPostprocessed(const PostprocessingParameters& parameters) override;
+
     virtual void useShaderProgram(const Ref<ShaderProgram>& shaderProgram) override;
 
     virtual void bindUniform(const char* name, float value) override;
@@ -46,11 +50,16 @@ public:
 
     virtual void deleteShaderProgram(ShaderProgram& shaderProgram) const override;
 
-    virtual Mesh createMesh(const float* vertices, uint32_t vertexCount, const float* normals, const float* tangents, const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const override;
+    virtual Mesh createMesh(const float* vertices, uint32_t vertexCount,
+                            const float* normals, const float* tangents,
+                            const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const override;
 
     virtual void deleteMesh(Mesh& mesh) const override;
 
-    virtual Texture createTexture(TextureType type, TextureFormat format, unsigned char* data, glm::uvec2 size, bool generateMipmap, TextureFilter filter, TextureWrap wrap) const override;
+    virtual Texture createTexture(TextureType type,
+                                  TextureInternalFormat internalFormat, TextureFormat format, TextureDataType dataType,
+                                  glm::uvec2 size, unsigned char* data = nullptr, bool generateMipmap = true,
+                                  TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const override;
 
     virtual void bindTexture(TextureType type, const Texture& texture, unsigned slot) const override;
 
@@ -67,8 +76,7 @@ public:
     virtual void logError(const char* location) const override;
 
 private:
-    std::unique_ptr<Framebuffer> m_frame;
-    glm::uvec2 m_frameBufferSize = glm::uvec2(0, 0);
+    Framebuffer m_frame;
     Ref<Mesh> m_screenQuad;
     Ref<ShaderProgram> m_screenQuadShader;
     Ref<ShaderProgram> m_currentShaderProgram;

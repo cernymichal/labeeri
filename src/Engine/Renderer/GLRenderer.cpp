@@ -114,6 +114,27 @@ int textureTypeGL(TextureType type) {
     }
 }
 
+int textureInternalFormatGL(TextureInternalFormat format) {
+    switch (format) {
+        case TextureInternalFormat::Red:
+            return GL_RED;
+        case TextureInternalFormat::RGB:
+            return GL_RGB;
+        case TextureInternalFormat::RGBA:
+            return GL_RGBA;
+        case TextureInternalFormat::SRGB:
+            return GL_SRGB;
+        case TextureInternalFormat::SRGBA:
+            return GL_SRGB_ALPHA;
+        case TextureInternalFormat::RGBAFloat16:
+            return GL_RGBA16;
+        case TextureInternalFormat::DepthFloat32:
+            return GL_DEPTH_COMPONENT32F;
+        default:
+            throw std::runtime_error("Unknown texture internal format");
+    }
+}
+
 int textureFormatGL(TextureFormat format) {
     switch (format) {
         case TextureFormat::Red:
@@ -122,14 +143,23 @@ int textureFormatGL(TextureFormat format) {
             return GL_RGB;
         case TextureFormat::RGBA:
             return GL_RGBA;
-        case TextureFormat::SRGB:
-            return GL_SRGB;
-        case TextureFormat::SRGBA:
-            return GL_SRGB_ALPHA;
         case TextureFormat::Depth:
             return GL_DEPTH_COMPONENT;
         default:
             throw std::runtime_error("Unknown texture format");
+    }
+}
+
+int textureDataTypeGL(TextureDataType type) {
+    switch (type) {
+        case TextureDataType::UnsignedByte:
+            return GL_UNSIGNED_BYTE;
+        case TextureDataType::Float16:
+            return GL_HALF_FLOAT;
+        case TextureDataType::Float32:
+            return GL_FLOAT;
+        default:
+            throw std::runtime_error("Unknown texture data type");
     }
 }
 
@@ -164,7 +194,7 @@ int textureWrapGL(TextureWrap wrap) {
     }
 }
 
-GLRenderer::GLRenderer() {
+GLRenderer::GLRenderer() : m_frame(0, {0, 0}, {}) {
     LAB_LOGH3("GLRenderer::GLRenderer()");
 
     if (!gladLoadGLLoader((GLADloadproc)LAB_WINDOW->procAddressGetter()))
@@ -183,9 +213,8 @@ GLRenderer::GLRenderer() {
 
 void GLRenderer::setViewportSize(glm::uvec2 size) {
     glViewport(0, 0, size.x, size.y);
-    m_frameBufferSize = size;
 
-    m_frame = std::make_unique<Framebuffer>(createFrame(size));
+    m_frame = createFrame(size);
 }
 
 void GLRenderer::clear(int buffers) {
@@ -211,34 +240,44 @@ void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const 
     m_viewMatrix = viewMatrix;
     m_projectionMatrix = projectionMatrix;
 
-    glBindFramebuffer(GL_FRAMEBUFFER, *m_frame);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_frame);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_GREATER);
 }
 
 void GLRenderer::endScene() {
+    glDepthFunc(GL_LESS);
+    glDisable(GL_DEPTH_TEST);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     m_directionalLights.clear();
     m_pointLights.clear();
     m_spotLights.clear();
+}
 
-    glDepthFunc(GL_LESS);
-    glDisable(GL_DEPTH_TEST);
+void GLRenderer::drawToScreen() const {
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_frame);
+    glBlitFramebuffer(0, 0, m_frame.m_size.x, m_frame.m_size.y, 0, 0, m_frame.m_size.x, m_frame.m_size.y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 
-    // Draw to screen
+void GLRenderer::drawToScreenPostprocessed(const PostprocessingParameters& parameters) {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     if (!m_screenQuad) {
-        m_screenQuad = std::make_shared<Mesh>(createScreenQuad());
+        m_screenQuad = makeRef<Mesh>(createScreenQuad());
         m_screenQuadShader = Resources<ShaderProgram>::get("postprocess");
     }
 
     useShaderProgram(m_screenQuadShader);
     bindMesh(m_screenQuad);
-    bindTexture(TextureType::Texture2D, *m_frame->m_attachments[FramebufferAttachment::Color], 0);
+    bindTexture(TextureType::Texture2D, *m_frame.m_attachments[FramebufferAttachment::Color], 0);
     bindUniform("u_color_buffer", 0);
-    bindTexture(TextureType::Texture2D, *m_frame->m_attachments[FramebufferAttachment::Depth], 1);
+    bindTexture(TextureType::Texture2D, *m_frame.m_attachments[FramebufferAttachment::Depth], 1);
     bindUniform("u_depth_buffer", 1);
-    bindUniform("u_gamma", 2.2f);
+    bindUniform("u_gamma", parameters.gamma);
+    bindUniform("u_exposure", parameters.exposure);
     drawMesh();
 }
 
@@ -409,9 +448,11 @@ void GLRenderer::deleteMesh(Mesh& mesh) const {
     glDeleteBuffers(1, &mesh.m_elementBufferObject);
 }
 
-Texture GLRenderer::createTexture(TextureType type, TextureFormat format, unsigned char* data, glm::uvec2 size, bool generateMipmap, TextureFilter filter, TextureWrap wrap) const {
+Texture GLRenderer::createTexture(TextureType type, TextureInternalFormat internalFormat, TextureFormat format, TextureDataType dataType, glm::uvec2 size, unsigned char* data, bool generateMipmap, TextureFilter filter, TextureWrap wrap) const {
     int typeGL = textureTypeGL(type);
+    int internalFormatGL = textureInternalFormatGL(internalFormat);
     int formatGL = textureFormatGL(format);
+    int dataTypeGL = textureDataTypeGL(dataType);
     auto [minFilterGL, magFilterGL] = textureFilterGL(filter, generateMipmap);
     int wrapGL = textureWrapGL(wrap);
 
@@ -424,7 +465,7 @@ Texture GLRenderer::createTexture(TextureType type, TextureFormat format, unsign
     glTexParameteri(typeGL, GL_TEXTURE_MIN_FILTER, minFilterGL);
     glTexParameteri(typeGL, GL_TEXTURE_MAG_FILTER, magFilterGL);
 
-    glTexImage2D(typeGL, 0, formatGL, size.x, size.y, 0, formatGL, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(typeGL, 0, internalFormatGL, size.x, size.y, 0, formatGL, dataTypeGL, data);
     if (generateMipmap)
         glGenerateMipmap(typeGL);
 
@@ -541,26 +582,23 @@ Mesh GLRenderer::createScreenQuad() const {
 }
 
 Framebuffer GLRenderer::createFrame(glm::uvec2 size) const {
-    GLuint colorBuffer, depthBuffer, FBO;
+    auto colorBuffer = makeRef<Texture>(
+        createTexture(TextureType::Texture2D,
+                      TextureInternalFormat::RGBAFloat16, TextureFormat::RGBA, TextureDataType::Float16,
+                      size, nullptr, false,
+                      TextureFilter::Linear, TextureWrap::ClampToEdge));
 
-    glGenTextures(1, &colorBuffer);
-    glBindTexture(GL_TEXTURE_2D, colorBuffer);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    auto depthBuffer = makeRef<Texture>(
+        createTexture(TextureType::Texture2D,
+                      TextureInternalFormat::DepthFloat32, TextureFormat::Depth, TextureDataType::Float32,
+                      size, nullptr, false,
+                      TextureFilter::Linear, TextureWrap::ClampToEdge));
 
-    glGenTextures(1, &depthBuffer);
-    glBindTexture(GL_TEXTURE_2D, depthBuffer);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, size.x, size.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
+    GLuint FBO;
     glGenFramebuffers(1, &FBO);
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuffer, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *colorBuffer, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *depthBuffer, 0);
 
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if (status != GL_FRAMEBUFFER_COMPLETE)
@@ -570,7 +608,7 @@ Framebuffer GLRenderer::createFrame(glm::uvec2 size) const {
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    return Framebuffer(FBO, {{FramebufferAttachment::Color, std::make_shared<Texture>(colorBuffer)}, {FramebufferAttachment::Depth, std::make_shared<Texture>(depthBuffer)}});
+    return Framebuffer(FBO, size, {{FramebufferAttachment::Color, colorBuffer}, {FramebufferAttachment::Depth, depthBuffer}});
 }
 
 void GLRenderer::bindPointLights() {

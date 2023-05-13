@@ -1,7 +1,6 @@
 #include "ViewportLayer.h"
 
 #include "Engine/Application.h"
-#include "Engine/Renderer/GLRenderer.h"
 #include "Engine/Window/IWindow.h"
 
 namespace labeeri::Engine {
@@ -42,7 +41,9 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     }
 
     LAB_RENDERER->endScene();
+    LAB_LOG_RENDERAPI_ERROR();
 
+    LAB_RENDERER->drawToScreenPostprocessed(m_postprocessingParameters);
     LAB_LOG_RENDERAPI_ERROR();
 
     return false;

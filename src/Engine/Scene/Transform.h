@@ -212,7 +212,7 @@ private:
     mutable glm::mat4 m_modelMatrix = glm::mat4(1.0);
     mutable bool m_modelMatrixValid = true;
 
-    Transform* m_parent;
+    Transform* m_parent = nullptr;
     std::list<Transform*> m_children;
 
     std::weak_ptr<Entity> m_entity;
