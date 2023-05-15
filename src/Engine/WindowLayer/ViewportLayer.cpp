@@ -27,7 +27,7 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     auto viewMatrix = m_camera->viewMatrix();
     auto projectionMatrix = m_camera->projectionMatrix(m_size);
 
-    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), m_camera->transform()->worldPosition(), viewMatrix, projectionMatrix);
+    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), m_camera->transform()->worldPosition(), viewMatrix, projectionMatrix, m_fog);
     LAB_RENDERER->clear((int)ClearBuffer::Color | (int)ClearBuffer::Depth);  // TODO remove color clear
 
     for (auto& entity : LAB_CURRENT_SCENE->entities()) {

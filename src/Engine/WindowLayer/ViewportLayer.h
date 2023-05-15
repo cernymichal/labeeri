@@ -26,6 +26,7 @@ public:
 private:
     glm::uvec2 m_size = glm::uvec2(0);
     PostprocessingParameters m_postprocessingParameters;
+    FogParameters m_fog;
 
     bool onRender(const ApplicationRenderEvent& e);
 

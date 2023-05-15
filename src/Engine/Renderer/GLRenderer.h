@@ -20,13 +20,13 @@ public:
 
     virtual void setClearColor(const glm::vec4& color) override;
 
-    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) override;
+    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const FogParameters& fog = FogParameters()) override;
 
     virtual void endScene() override;
 
     virtual void drawToScreen() const override;
 
-    virtual void drawToScreenPostprocessed(const PostprocessingParameters& parameters) override;
+    virtual void drawToScreenPostprocessed(const PostprocessingParameters& parameters = PostprocessingParameters()) override;
 
     virtual void useShaderProgram(const Ref<ShaderProgram>& shaderProgram) override;
 
@@ -86,6 +86,7 @@ private:
     glm::vec3 m_cameraPosition = glm::vec3(0.0f);
     glm::mat4 m_viewMatrix = glm::mat4(1.0);
     glm::mat4 m_projectionMatrix = glm::mat4(1.0);
+    FogParameters m_fog;
 
     std::vector<RendererDirectionalLight> m_directionalLights;
     std::vector<RendererPointLight> m_pointLights;
@@ -100,6 +101,8 @@ private:
     void bindPointLights();
 
     void bindSpotLights();
+
+    void bindFog();
 };
 
 }  // namespace labeeri::Engine

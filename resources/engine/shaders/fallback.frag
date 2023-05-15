@@ -1,4 +1,4 @@
-#version 450
+#version 450 core
 
 uniform float u_time;
 uniform vec3 u_camera_position;

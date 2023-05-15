@@ -21,6 +21,11 @@ struct PostprocessingParameters {
     float gamma = 2.2f;
 };
 
+struct FogParameters {
+	glm::vec3 color = glm::vec3(0.8f);
+	float density = 0.01f;
+};
+
 enum class ShaderType : uint8_t {
     Vertex,
     Fragment,
@@ -91,7 +96,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) = 0;
+    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const FogParameters& fog = FogParameters()) = 0;
 
     /**
      * @brief TODO
@@ -106,7 +111,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual void drawToScreenPostprocessed(const PostprocessingParameters& parameters) = 0;
+    virtual void drawToScreenPostprocessed(const PostprocessingParameters& parameters = PostprocessingParameters()) = 0;
 
     /**
      * @brief TODO

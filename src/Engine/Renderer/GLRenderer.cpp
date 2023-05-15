@@ -234,11 +234,12 @@ void GLRenderer::setClearColor(const glm::vec4& color) {
     glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
+void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const FogParameters& fog) {
     m_time = time;
     m_cameraPosition = cameraPosition;
     m_viewMatrix = viewMatrix;
     m_projectionMatrix = projectionMatrix;
+    m_fog = fog;
 
     glBindFramebuffer(GL_FRAMEBUFFER, m_frame);
     glEnable(GL_DEPTH_TEST);
@@ -295,6 +296,7 @@ void GLRenderer::useShaderProgram(const Ref<ShaderProgram>& shaderProgram) {
     bindDirectionalLights();
     bindPointLights();
     bindSpotLights();
+    bindFog();
 }
 
 void GLRenderer::bindUniform(const char* name, float value) {
@@ -665,6 +667,17 @@ void GLRenderer::bindSpotLights() {
         location = structLocation + ".attenuation.quadratic";
         bindUniform(location.c_str(), light.attenuation.quadratic);
     }
+}
+
+void GLRenderer::bindFog() {
+    if (m_currentShaderProgram->getUniformLocation("u_fog.color") == -1)
+        return;
+
+    const std::string structLocation = "u_fog";
+    std::string location = structLocation + ".color";
+    bindUniform(location.c_str(), m_fog.color);
+    location = structLocation + ".density";
+    bindUniform(location.c_str(), m_fog.density);
 }
 
 }  // namespace labeeri::Engine

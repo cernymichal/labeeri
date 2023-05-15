@@ -1,10 +1,11 @@
-#version 450
+#version 450 core
 
 layout (triangles) in;
 layout (triangle_strip, max_vertices = 3) out;
 
 in VData {
     smooth vec3 position_ws;
+    smooth vec3 position_es;
     smooth vec3 normal_ws;
     smooth vec3 tangent_ws;
     smooth vec2 UV;
@@ -14,6 +15,7 @@ uniform mat4 u_model_matrix;
 
 out GData {
     smooth vec3 position_ws;
+    smooth vec3 position_es;
     smooth vec3 normal_ws;
     smooth vec3 tangent_ws;
     smooth vec2 UV;
@@ -38,6 +40,7 @@ void main() {
     for (int i = 0; i < 3; i++) {
         gl_Position = gl_in[i].gl_Position;
         g_data.position_ws = v_data[i].position_ws;
+        g_data.position_es = v_data[i].position_es;
         g_data.normal_ws = v_data[i].normal_ws;
         g_data.tangent_ws = v_data[i].tangent_ws;
         g_data.UV = v_data[i].UV;

@@ -1,4 +1,4 @@
-#version 450
+#version 450 core
 
 #define MAX_DIRECTIONAL_LIGHTS 1
 #define MAX_POINT_LIGHTS 16
@@ -64,8 +64,14 @@ struct SpotLight {
     Attenuation attenuation;
 };
 
+struct Fog {
+	vec3 color;
+	float density;
+};
+
 in GData {
     smooth vec3 position_ws;
+    smooth vec3 position_es;
     smooth vec3 normal_ws;
     smooth vec3 tangent_ws;
     smooth vec2 UV;
@@ -79,6 +85,8 @@ uniform PointLight u_point_lights[MAX_POINT_LIGHTS];
 uniform int u_point_light_count;
 uniform SpotLight u_spot_lights[MAX_SPOT_LIGHTS];
 uniform int u_spot_light_count;
+
+uniform Fog u_fog;
 
 uniform Material u_material;
 
@@ -152,20 +160,28 @@ vec3 calculate_spot_light(SpotLight light, MaterialSample material, vec3 view_di
     return phong(light.properties, material, view_direction, light_direction) * attenuation * intensity;
 }
 
+vec4 apply_fog(vec4 color) {
+	float dist = length(g_data.position_es);
+	float fog_amount = exp(-pow(u_fog.density * dist, 2.0));
+	return vec4(mix(u_fog.color, color.rgb, fog_amount), color.a);
+}
+
 void main() {
     vec3 view_direction = normalize(u_camera_position - g_data.position_ws);
     MaterialSample material_sample = sample_material();
 
-    vec3 result = vec3(0.0);
+    vec4 result = vec4(vec3(0.0), 1.0);
 
     for (int i = 0; i < u_directional_light_count; i++) 
-        result += calculate_directional_light(u_directional_lights[i], material_sample, view_direction);
+        result.rgb += calculate_directional_light(u_directional_lights[i], material_sample, view_direction);
     
     for (int i = 0; i < u_point_light_count; i++) 
-        result += calculate_point_light(u_point_lights[i], material_sample, view_direction);
+        result.rgb += calculate_point_light(u_point_lights[i], material_sample, view_direction);
     
     for (int i = 0; i < u_spot_light_count; i++) 
-        result += calculate_spot_light(u_spot_lights[i], material_sample, view_direction);
+        result.rgb += calculate_spot_light(u_spot_lights[i], material_sample, view_direction);
     
-    fragColor = vec4(result, 1.0);
+    result = apply_fog(result);
+
+    fragColor = result;
 }

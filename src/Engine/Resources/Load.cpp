@@ -61,7 +61,7 @@ Ref<Mesh> loadMesh(const char* filePath) {
     const aiScene* scene = importer.ReadFile(filePath, aiProcess_Triangulate                 // Triangulate polygons (if any).
                                                            | aiProcess_PreTransformVertices  // Transforms scene hierarchy into one root with geometry-leafs only. For more see Doc.
                                                            | aiProcess_GenSmoothNormals      // Calculate normals per vertex.
-                                                           | aiProcess_CalcTangentSpace      // Calculate tangents per vetex.
+                                                           | aiProcess_CalcTangentSpace      // Calculate tangents per vertex.
                                                            | aiProcess_JoinIdenticalVertices);
 
     if (scene == nullptr) {
