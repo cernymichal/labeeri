@@ -11,7 +11,7 @@ Ref<ShaderProgram> tryFindShaderProgram(const char* name) {
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
         auto path = entry.path();
         if (!entry.is_directory() && path.stem() == nameStr)
-            return Resources<ShaderProgram>::get(path.replace_extension("").string());
+            return Resources<ShaderProgram>::get(path.replace_extension("").string(), false);
     }
 
     return nullptr;
@@ -23,7 +23,7 @@ Ref<Mesh> tryFindMesh(const char* name) {
 
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
         if (!entry.is_directory() && entry.path().filename() == nameStr)
-            return Resources<Mesh>::get(entry.path().string());
+            return Resources<Mesh>::get(entry.path().string(), false);
     }
 
     return nullptr;
@@ -35,7 +35,13 @@ Ref<Texture> tryFindTexture(const char* name) {
 
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
         if (!entry.is_directory() && entry.path().filename() == nameStr)
-            return Resources<Texture>::get(entry.path().string());
+            return Resources<Texture>::get(entry.path().string(), false);
+    }
+
+    for (const auto& entry : std::filesystem::directory_iterator(directory / "cubemaps")) {
+        if (entry.is_directory() && entry.path().filename() == nameStr) {
+            return loadCubemap(entry.path());
+        }
     }
 
     return nullptr;

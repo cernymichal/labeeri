@@ -1,75 +1,16 @@
 #pragma once
 
 #include "Engine/Renderer/Framebuffer.h"
+#include "Engine/Renderer/Image.h"
 #include "Engine/Renderer/Light.h"
 #include "Engine/Renderer/Mesh.h"
+#include "Engine/Renderer/RendererParameters.h"
 #include "Engine/Renderer/ShaderProgram.h"
 #include "Engine/Renderer/Texture.h"
 
 namespace labeeri::Engine {
 
 class Application;
-
-enum class ClearBuffer {
-    Color = LAB_BIT(0),
-    Depth = LAB_BIT(1),
-    Stencil = LAB_BIT(2)
-};
-
-struct PostprocessingParameters {
-    float exposure = 1.0f;
-    float gamma = 2.2f;
-};
-
-struct FogParameters {
-	glm::vec3 color = glm::vec3(0.8f);
-	float density = 0.01f;
-};
-
-enum class ShaderType : uint8_t {
-    Vertex,
-    Fragment,
-    Geometry
-};
-
-enum class TextureType : uint8_t {
-    Texture2D,
-    Rectangle
-};
-
-enum class TextureInternalFormat : uint8_t {
-    Red,
-    RGB,
-    RGBA,
-    SRGB,
-    SRGBA,
-    RGBAFloat16,
-    DepthFloat32
-};
-
-enum class TextureFormat : uint8_t {
-    Red,
-    RGB,
-    RGBA,
-    Depth
-};
-
-enum class TextureDataType : uint8_t {
-    UnsignedByte,
-    Float16,
-    Float32
-};
-
-enum class TextureFilter : uint8_t {
-    Nearest,
-    Linear
-};
-
-enum class TextureWrap : uint8_t {
-    ClampToEdge,
-    Repeat,
-    MirroredRepeat,
-};
 
 class IRenderer {
 public:
@@ -96,7 +37,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const FogParameters& fog = FogParameters()) = 0;
+    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const RenderSceneParameters& parameters = RenderSceneParameters()) = 0;
 
     /**
      * @brief TODO
@@ -111,7 +52,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual void drawToScreenPostprocessed(const PostprocessingParameters& parameters = PostprocessingParameters()) = 0;
+    virtual void drawToScreenPostprocessed() = 0;
 
     /**
      * @brief TODO
@@ -183,9 +124,13 @@ public:
     /**
      * @brief TODO
      */
-    virtual Texture createTexture(TextureType type, TextureInternalFormat internalFormat, TextureFormat format, TextureDataType dataType,
-                                  glm::uvec2 size, unsigned char* data = nullptr, bool generateMipmap = true,
+    virtual Texture createTexture(TextureType type, const Image& image, bool generateMipmap = true,
                                   TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual Texture createCubemap(const std::array<Scoped<Image>, 6>& images, TextureFilter filter = TextureFilter::Linear) const = 0;
 
     /**
      * @brief TODO

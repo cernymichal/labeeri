@@ -26,19 +26,19 @@ std::string loadShader(const std::string& path) {
     return contentBuffer.str();
 }
 
-Ref<ShaderProgram> loadShaderProgram(const char* path) {
+Ref<ShaderProgram> loadShaderProgram(const std::filesystem::path& path) {
     std::vector<std::pair<ShaderType, const char*>> shaders;
     shaders.reserve(3);
 
-    auto vertexPath = std::string(path) + ".vert";
+    auto vertexPath = path.string() + ".vert";
     std::string vertexShaderSource = loadShader(vertexPath);
     shaders.emplace_back(ShaderType::Vertex, vertexShaderSource.c_str());
 
-    auto fragmentPath = std::string(path) + ".frag";
+    auto fragmentPath = path.string() + ".frag";
     std::string fragmentShaderSource = loadShader(fragmentPath);
     shaders.emplace_back(ShaderType::Fragment, fragmentShaderSource.c_str());
 
-    auto geometryPath = std::string(path) + ".geom";
+    auto geometryPath = path.string() + ".geom";
     std::string geometryShaderSource;
     if (std::filesystem::exists(geometryPath)) {
         geometryShaderSource = loadShader(geometryPath);
@@ -50,7 +50,7 @@ Ref<ShaderProgram> loadShaderProgram(const char* path) {
     return makeRef<ShaderProgram>(std::move(program));
 }
 
-Ref<Mesh> loadMesh(const char* filePath) {
+Ref<Mesh> loadMesh(const std::filesystem::path& filePath) {
     LAB_LOGH3("Loading mesh " << filePath);
 
     Assimp::Importer importer;
@@ -58,11 +58,11 @@ Ref<Mesh> loadMesh(const char* filePath) {
     // normalize size
     // importer.SetPropertyInteger(AI_CONFIG_PP_PTV_NORMALIZE, 1);
 
-    const aiScene* scene = importer.ReadFile(filePath, aiProcess_Triangulate                 // Triangulate polygons (if any).
-                                                           | aiProcess_PreTransformVertices  // Transforms scene hierarchy into one root with geometry-leafs only. For more see Doc.
-                                                           | aiProcess_GenSmoothNormals      // Calculate normals per vertex.
-                                                           | aiProcess_CalcTangentSpace      // Calculate tangents per vertex.
-                                                           | aiProcess_JoinIdenticalVertices);
+    const aiScene* scene = importer.ReadFile(filePath.string(), aiProcess_Triangulate                 // Triangulate polygons (if any).
+                                                                    | aiProcess_PreTransformVertices  // Transforms scene hierarchy into one root with geometry-leafs only. For more see Doc.
+                                                                    | aiProcess_GenSmoothNormals      // Calculate normals per vertex.
+                                                                    | aiProcess_CalcTangentSpace      // Calculate tangents per vertex.
+                                                                    | aiProcess_JoinIdenticalVertices);
 
     if (scene == nullptr) {
         LAB_LOG("assimp error: " << importer.GetErrorString());
@@ -116,32 +116,71 @@ Ref<Mesh> loadMesh(const char* filePath) {
     return makeRef<Mesh>(std::move(mesh));
 }
 
-Ref<Texture> loadTexture(const char* filePath, bool gammaCorrected) {
-    LAB_LOGH3("Loading texture " << filePath);
+struct STBImage : Image {
+    STBImage(const std::filesystem::path& filePath, bool gammaCorrected) {
+        LAB_LOGH3("Loading image " << filePath);
 
-    stbi_set_flip_vertically_on_load(true);
+        stbi_set_flip_vertically_on_load(true);
 
-    glm::ivec2 size;
-    int channels;
-    unsigned char* data = stbi_load(filePath, &size.x, &size.y, &channels, 0);
-    if (!data) {
-        LAB_LOG("Failed to load texture " << filePath);
-        throw std::runtime_error("Failed to load texture");
+        int channels;
+        glm::ivec2 sizeInt;
+
+        const auto filePathStr = filePath.string();
+        if (stbi_is_hdr(filePathStr.c_str())) {
+            data = stbi_loadf(filePathStr.c_str(), &sizeInt.x, &sizeInt.y, &channels, 0);
+            dataType = TextureDataType::Float16;
+            gammaCorrected = false;
+        }
+        else {
+            data = stbi_load(filePathStr.c_str(), &sizeInt.x, &sizeInt.y, &channels, 0);
+            dataType = TextureDataType::UnsignedByte;
+        }
+
+        if (!data) {
+            LAB_LOG("Failed to load texture " << filePath);
+            throw std::runtime_error("Failed to load texture");
+        }
+
+        size = sizeInt;
+        format = channels == 4 ? TextureFormat::RGBA : TextureFormat::RGB;
+
+        if (gammaCorrected)
+            internalFormat = channels == 4 ? TextureInternalFormat::SRGBA : TextureInternalFormat::SRGB;
+        else
+            internalFormat = channels == 4 ? TextureInternalFormat::RGBA : TextureInternalFormat::RGB;
     }
 
-    TextureFormat format = channels == 4 ? TextureFormat::RGBA : TextureFormat::RGB;
+    virtual ~STBImage() override {
+        stbi_image_free(data);
+    }
+};
 
-    TextureInternalFormat internalFormat;
-    if (gammaCorrected)
-        internalFormat = channels == 4 ? TextureInternalFormat::SRGBA : TextureInternalFormat::SRGB;
-    else
-        internalFormat = channels == 4 ? TextureInternalFormat::RGBA : TextureInternalFormat::RGB;
+Ref<Texture> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected) {
+    STBImage image(filePath, gammaCorrected);
+    auto texture = LAB_RENDERER->createTexture(TextureType::Texture2D, image);
 
-    auto texture = LAB_RENDERER->createTexture(TextureType::Texture2D,
-                                               internalFormat, format, TextureDataType::UnsignedByte,
-                                               size, data);
+    return makeRef<Texture>(std::move(texture));
+}
 
-    stbi_image_free(data);
+Ref<Texture> loadCubemap(const std::filesystem::path& path, bool gammaCorrected) {
+    std::array<Scoped<Image>, 6> images;
+
+    std::string extension;
+    for (const auto& entry : std::filesystem::directory_iterator(path)) {
+        if (!entry.is_directory() && entry.path().stem() == "px") {
+            extension = entry.path().extension().string();
+            break;
+        }
+    }
+
+    images[0] = makeScoped<STBImage>((path / ("px" + extension)), gammaCorrected);
+    images[1] = makeScoped<STBImage>((path / ("nx" + extension)), gammaCorrected);
+    images[2] = makeScoped<STBImage>((path / ("py" + extension)), gammaCorrected);
+    images[3] = makeScoped<STBImage>((path / ("ny" + extension)), gammaCorrected);
+    images[4] = makeScoped<STBImage>((path / ("pz" + extension)), gammaCorrected);
+    images[5] = makeScoped<STBImage>((path / ("nz" + extension)), gammaCorrected);
+
+    auto texture = LAB_RENDERER->createCubemap(images);
 
     return makeRef<Texture>(std::move(texture));
 }

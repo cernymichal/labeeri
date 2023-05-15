@@ -204,9 +204,11 @@
     <ClInclude Include="src\Engine\Events\MouseEvent.h" />
     <ClInclude Include="src\Engine\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Engine\Renderer\GLRenderer.h" />
+    <ClInclude Include="src\Engine\Renderer\Image.h" />
     <ClInclude Include="src\Engine\Renderer\IRenderer.h" />
     <ClInclude Include="src\Engine\Renderer\Light.h" />
     <ClInclude Include="src\Engine\Renderer\Mesh.h" />
+    <ClInclude Include="src\Engine\Renderer\RendererParameters.h" />
     <ClInclude Include="src\Engine\Renderer\ShaderProgram.h" />
     <ClInclude Include="src\Engine\Renderer\Texture.h" />
     <ClInclude Include="src\Engine\Resources\Load.h" />

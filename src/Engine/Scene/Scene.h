@@ -2,6 +2,7 @@
 
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Scene/Entity.h"
+#include "Engine/Renderer/RendererParameters.h"
 
 namespace labeeri::Engine {
 
@@ -10,6 +11,8 @@ namespace labeeri::Engine {
  */
 class Scene : IEventReceiver {
 public:
+    RenderSceneParameters m_renderParameters;
+
     /**
      * @brief TODO
      */

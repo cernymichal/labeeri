@@ -1,6 +1,7 @@
 #include "ViewportLayer.h"
 
 #include "Engine/Application.h"
+#include "Engine/Renderer/IRenderer.h"
 #include "Engine/Window/IWindow.h"
 
 namespace labeeri::Engine {
@@ -27,7 +28,7 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     auto viewMatrix = m_camera->viewMatrix();
     auto projectionMatrix = m_camera->projectionMatrix(m_size);
 
-    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), m_camera->transform()->worldPosition(), viewMatrix, projectionMatrix, m_fog);
+    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), m_camera->transform()->worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
     LAB_RENDERER->clear((int)ClearBuffer::Color | (int)ClearBuffer::Depth);  // TODO remove color clear
 
     for (auto& entity : LAB_CURRENT_SCENE->entities()) {
@@ -43,7 +44,7 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     LAB_RENDERER->endScene();
     LAB_LOG_RENDERAPI_ERROR();
 
-    LAB_RENDERER->drawToScreenPostprocessed(m_postprocessingParameters);
+    LAB_RENDERER->drawToScreenPostprocessed();
     LAB_LOG_RENDERAPI_ERROR();
 
     return false;

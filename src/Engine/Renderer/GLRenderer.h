@@ -20,13 +20,13 @@ public:
 
     virtual void setClearColor(const glm::vec4& color) override;
 
-    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const FogParameters& fog = FogParameters()) override;
+    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const RenderSceneParameters& parameters = RenderSceneParameters()) override;
 
     virtual void endScene() override;
 
     virtual void drawToScreen() const override;
 
-    virtual void drawToScreenPostprocessed(const PostprocessingParameters& parameters = PostprocessingParameters()) override;
+    virtual void drawToScreenPostprocessed() override;
 
     virtual void useShaderProgram(const Ref<ShaderProgram>& shaderProgram) override;
 
@@ -56,10 +56,10 @@ public:
 
     virtual void deleteMesh(Mesh& mesh) const override;
 
-    virtual Texture createTexture(TextureType type,
-                                  TextureInternalFormat internalFormat, TextureFormat format, TextureDataType dataType,
-                                  glm::uvec2 size, unsigned char* data = nullptr, bool generateMipmap = true,
-                                  TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const override;
+    virtual Texture createTexture(TextureType type, const Image& image, bool generateMipmap = true,
+                                  TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const;
+
+    virtual Texture createCubemap(const std::array<Scoped<Image>, 6>& images, TextureFilter filter = TextureFilter::Linear) const;
 
     virtual void bindTexture(TextureType type, const Texture& texture, unsigned slot) const override;
 
@@ -86,7 +86,7 @@ private:
     glm::vec3 m_cameraPosition = glm::vec3(0.0f);
     glm::mat4 m_viewMatrix = glm::mat4(1.0);
     glm::mat4 m_projectionMatrix = glm::mat4(1.0);
-    FogParameters m_fog;
+    RenderSceneParameters m_sceneParameters;
 
     std::vector<RendererDirectionalLight> m_directionalLights;
     std::vector<RendererPointLight> m_pointLights;

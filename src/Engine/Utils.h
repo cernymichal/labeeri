@@ -51,7 +51,7 @@ inline Ref<T> makeRef(Args&& ...params) {
 }
 
 template <typename T, typename S>
-inline std::shared_ptr<T> castRef(const std::shared_ptr<S>& ptr) {
+inline Ref<T> castRef(const Ref<S>& ptr) {
     return std::dynamic_pointer_cast<T>(ptr);
 }
 
@@ -64,5 +64,14 @@ template <typename T, typename S>
 inline Ref<T> cloneAs(const Ref<S>& ref) {
     return clone(castRef<T>(ref));
 }
+
+template <typename T>
+using Scoped = std::unique_ptr<T>;
+
+template <typename T, typename... Args>
+inline Scoped<T> makeScoped(Args&& ...params) {
+	return std::make_unique<T>(std::forward<Args>(params)...);
+}
+
 
 }  // namespace labeeri::Engine

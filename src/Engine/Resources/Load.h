@@ -5,43 +5,47 @@
 
 namespace labeeri::Engine {
 
-Ref<ShaderProgram> loadShaderProgram(const char* path);
+Ref<ShaderProgram> loadShaderProgram(const std::filesystem::path& path);
 
-Ref<Mesh> loadMesh(const char* filePath);
+Ref<Mesh> loadMesh(const std::filesystem::path& filePath);
 
-Ref<Texture> loadTexture(const char* filePath, bool gammaCorrected = true);
+Ref<Texture> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected = true);
+
+Ref<Texture> loadCubemap(const std::filesystem::path& folderPath, bool gammaCorrected = true);
 
 template <typename T>
-static Ref<T> load(const char* path) {
+static Ref<T> load(const std::filesystem::path& path) {
     throw std::runtime_error("Loading this resource type not supported");
 }
 
 template <>
-static Ref<ShaderProgram> load<ShaderProgram>(const char* path) {
+static Ref<ShaderProgram> load<ShaderProgram>(const std::filesystem::path& path) {
     return loadShaderProgram(path);
 }
 
 template <>
-static Ref<Mesh> load<Mesh>(const char* path) {
+static Ref<Mesh> load<Mesh>(const std::filesystem::path& path) {
     return loadMesh(path);
 }
 
 template <>
-static Ref<Texture> load<Texture>(const char* path) {
+static Ref<Texture> load<Texture>(const std::filesystem::path& path) {
     bool gammaCorrected = true;
-    if (strstr(path, "normal") || strstr(path, "specular") || strstr(path, "_lin."))
+
+    const auto filename = path.filename().string();
+    if (filename.find("normal") != std::string::npos || filename.find("specular") != std::string::npos || filename.find("_lin.") != std::string::npos)
         gammaCorrected = false;
 
     return loadTexture(path, gammaCorrected);
 }
 
 template <>
-static Ref<Material> load<Material>(const char* path) {
+static Ref<Material> load<Material>(const std::filesystem::path& path) {
     return std::shared_ptr<Material>(nullptr);
 }
 
 template <>
-static Ref<Model> load<Model>(const char* path) {
+static Ref<Model> load<Model>(const std::filesystem::path& path) {
     return std::shared_ptr<Model>(nullptr);
 }
 

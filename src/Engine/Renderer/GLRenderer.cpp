@@ -234,12 +234,12 @@ void GLRenderer::setClearColor(const glm::vec4& color) {
     glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const FogParameters& fog) {
+void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const RenderSceneParameters& parameters) {
     m_time = time;
     m_cameraPosition = cameraPosition;
     m_viewMatrix = viewMatrix;
     m_projectionMatrix = projectionMatrix;
-    m_fog = fog;
+    m_sceneParameters = parameters;
 
     glBindFramebuffer(GL_FRAMEBUFFER, m_frame);
     glEnable(GL_DEPTH_TEST);
@@ -263,7 +263,7 @@ void GLRenderer::drawToScreen() const {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void GLRenderer::drawToScreenPostprocessed(const PostprocessingParameters& parameters) {
+void GLRenderer::drawToScreenPostprocessed() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     if (!m_screenQuad) {
@@ -277,8 +277,8 @@ void GLRenderer::drawToScreenPostprocessed(const PostprocessingParameters& param
     bindUniform("u_color_buffer", 0);
     bindTexture(TextureType::Texture2D, *m_frame.m_attachments[FramebufferAttachment::Depth], 1);
     bindUniform("u_depth_buffer", 1);
-    bindUniform("u_gamma", parameters.gamma);
-    bindUniform("u_exposure", parameters.exposure);
+    bindUniform("u_gamma", m_sceneParameters.postprocessing.gamma);
+    bindUniform("u_exposure", m_sceneParameters.postprocessing.exposure);
     drawMesh();
 }
 
@@ -365,7 +365,9 @@ void GLRenderer::deleteShaderProgram(ShaderProgram& shaderProgram) const {
     glDeleteProgram(shaderProgram);
 }
 
-Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount, const float* normals, const float* tangents, const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const {
+Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
+                            const float* normals, const float* tangents,
+                            const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const {
     GLuint VAO;
     GLuint VBO;
     GLuint EBO;
@@ -450,11 +452,12 @@ void GLRenderer::deleteMesh(Mesh& mesh) const {
     glDeleteBuffers(1, &mesh.m_elementBufferObject);
 }
 
-Texture GLRenderer::createTexture(TextureType type, TextureInternalFormat internalFormat, TextureFormat format, TextureDataType dataType, glm::uvec2 size, unsigned char* data, bool generateMipmap, TextureFilter filter, TextureWrap wrap) const {
+Texture GLRenderer::createTexture(TextureType type, const Image& image, bool generateMipmap,
+                                  TextureFilter filter, TextureWrap wrap) const {
     int typeGL = textureTypeGL(type);
-    int internalFormatGL = textureInternalFormatGL(internalFormat);
-    int formatGL = textureFormatGL(format);
-    int dataTypeGL = textureDataTypeGL(dataType);
+    int internalFormatGL = textureInternalFormatGL(image.internalFormat);
+    int formatGL = textureFormatGL(image.format);
+    int dataTypeGL = textureDataTypeGL(image.dataType);
     auto [minFilterGL, magFilterGL] = textureFilterGL(filter, generateMipmap);
     int wrapGL = textureWrapGL(wrap);
 
@@ -467,11 +470,39 @@ Texture GLRenderer::createTexture(TextureType type, TextureInternalFormat intern
     glTexParameteri(typeGL, GL_TEXTURE_MIN_FILTER, minFilterGL);
     glTexParameteri(typeGL, GL_TEXTURE_MAG_FILTER, magFilterGL);
 
-    glTexImage2D(typeGL, 0, internalFormatGL, size.x, size.y, 0, formatGL, dataTypeGL, data);
+    glTexImage2D(typeGL, 0, internalFormatGL, image.size.x, image.size.y, 0, formatGL, dataTypeGL, image.data);
     if (generateMipmap)
         glGenerateMipmap(typeGL);
 
+    LAB_LOG_RENDERAPI_ERROR();
     glBindTexture(typeGL, 0);
+
+    return Texture(texture);
+}
+
+Texture GLRenderer::createCubemap(const std::array<Scoped<Image>, 6>& images, TextureFilter filter) const {
+    int internalFormatGL = textureInternalFormatGL(images[0]->internalFormat);
+    int formatGL = textureFormatGL(images[0]->format);
+    int dataTypeGL = textureDataTypeGL(images[0]->dataType);
+    auto [minFilterGL, magFilterGL] = textureFilterGL(filter, false);
+
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, minFilterGL);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, magFilterGL);
+
+    for (int i = 0; i < 6; i++) {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormatGL, images[i]->size.x, images[i]->size.y, 0,
+                     formatGL, dataTypeGL, images[i]->data);
+    }
+
+    LAB_LOG_RENDERAPI_ERROR();
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
     return Texture(texture);
 }
@@ -586,14 +617,12 @@ Mesh GLRenderer::createScreenQuad() const {
 Framebuffer GLRenderer::createFrame(glm::uvec2 size) const {
     auto colorBuffer = makeRef<Texture>(
         createTexture(TextureType::Texture2D,
-                      TextureInternalFormat::RGBAFloat16, TextureFormat::RGBA, TextureDataType::Float16,
-                      size, nullptr, false,
+                      Image(size, nullptr, TextureDataType::Float16, TextureFormat::RGBA, TextureInternalFormat::RGBAFloat16), false,
                       TextureFilter::Linear, TextureWrap::ClampToEdge));
 
     auto depthBuffer = makeRef<Texture>(
         createTexture(TextureType::Texture2D,
-                      TextureInternalFormat::DepthFloat32, TextureFormat::Depth, TextureDataType::Float32,
-                      size, nullptr, false,
+                      Image(size, nullptr, TextureDataType::Float32, TextureFormat::Depth, TextureInternalFormat::DepthFloat32), false,
                       TextureFilter::Linear, TextureWrap::ClampToEdge));
 
     GLuint FBO;
@@ -675,9 +704,9 @@ void GLRenderer::bindFog() {
 
     const std::string structLocation = "u_fog";
     std::string location = structLocation + ".color";
-    bindUniform(location.c_str(), m_fog.color);
+    bindUniform(location.c_str(), m_sceneParameters.fog.color);
     location = structLocation + ".density";
-    bindUniform(location.c_str(), m_fog.density);
+    bindUniform(location.c_str(), m_sceneParameters.fog.density);
 }
 
 }  // namespace labeeri::Engine
