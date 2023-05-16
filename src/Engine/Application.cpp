@@ -38,6 +38,7 @@ void Application::initialize() {
     m_layers.push_back(std::make_unique<SceneLayer>());
     m_sceneLayer = dynamic_cast<SceneLayer*>(m_layers.back().get());
 }
+
 void Application::focusUI() {
     if (closed())
         return;

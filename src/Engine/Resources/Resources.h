@@ -25,8 +25,7 @@ public:
         if (!resource)
             resource = load<T>(name.c_str());
 
-        instance().m_resources[name] = resource;
-        return instance().m_resources[name];
+        return instance().m_resources[name] = resource;
     }
 
     static Ref<T>& set(const std::string& name) {

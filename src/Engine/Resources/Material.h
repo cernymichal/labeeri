@@ -67,6 +67,8 @@ public:
     glm::vec3 m_specular = glm::vec3(0.2f);
     Ref<Texture> m_specularMap = nullptr;
     float m_shininess = 32.0f;
+    float m_metallic = 0;
+    Ref<Texture> m_metallicMap = nullptr;
     Ref<Texture> m_normalMap = nullptr;
 
     /**

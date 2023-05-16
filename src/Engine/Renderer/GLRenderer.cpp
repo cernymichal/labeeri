@@ -202,7 +202,7 @@ int textureWrapGL(TextureWrap wrap) {
     }
 }
 
-GLRenderer::GLRenderer() : m_frame(0, {0, 0}, {}) {
+GLRenderer::GLRenderer() {
     LAB_LOGH3("GLRenderer::GLRenderer()");
 
     if (!gladLoadGLLoader((GLADloadproc)LAB_WINDOW->procAddressGetter()))
@@ -251,14 +251,25 @@ void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const 
     m_matrices.projectionInverse = glm::inverse(projectionMatrix);
     m_sceneParameters = parameters;
 
+    if (!m_postprocessShader)
+        initialize();
+
+    m_currentShaderProgram = nullptr;
+    m_currentMesh = nullptr;
+
     glBindFramebuffer(GL_FRAMEBUFFER, m_frame);
     glEnable(GL_DEPTH_TEST);
-    drawSkybox();
     glDepthFunc(GL_GREATER);
+    glDepthMask(GL_TRUE);
+    clear(static_cast<int>(ClearBuffer::Depth));
+}
+
+void GLRenderer::endOpaque() {
+    drawSkybox();
+    glDepthMask(GL_FALSE);
 }
 
 void GLRenderer::endScene() {
-    glDepthFunc(GL_LESS);
     glDisable(GL_DEPTH_TEST);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -276,12 +287,6 @@ void GLRenderer::drawToScreen() const {
 
 void GLRenderer::drawToScreenPostprocessed() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    if (!m_screenQuad)
-        m_screenQuad = makeRef<Mesh>(createScreenQuad());
-
-    if (!m_postprocessShader)
-        m_postprocessShader = Resources<ShaderProgram>::get("postprocess");
 
     useShaderProgram(m_postprocessShader);
     bindMesh(m_screenQuad);
@@ -312,6 +317,12 @@ void GLRenderer::useShaderProgram(const Ref<ShaderProgram>& shaderProgram) {
     bindPointLights();
     bindSpotLights();
     bindFog();
+
+    if (m_sceneParameters.skybox) {
+        bindTexture(TextureType::Cubemap, *m_sceneParameters.skybox, 0);
+        bindUniform("u_cubemap", 0);
+    }
+    bindUniform("u_using_cubemap", m_sceneParameters.skybox != nullptr);
 }
 
 void GLRenderer::bindUniform(const char* name, float value) {
@@ -461,7 +472,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
     LAB_LOG("Attribute pointers created");
 
     glBindVertexArray(0);
-
+    LAB_LOG(VAO);
     return Mesh(VAO, VBO, EBO, faceCount);
 }
 
@@ -592,6 +603,12 @@ void GLRenderer::logError(const char* location) const {
 
         LAB_LOG("OpenGL error: " << errorStr << " at " << location);
     }
+}
+
+void GLRenderer::initialize() {
+    m_screenQuad = makeRef<Mesh>(createScreenQuad());
+    m_skyboxShader = Resources<ShaderProgram>::get("skybox");
+    m_postprocessShader = Resources<ShaderProgram>::get("postprocess");
 }
 
 void GLRenderer::bindDirectionalLights() {
@@ -729,23 +746,14 @@ void GLRenderer::bindFog() {
 }
 
 void GLRenderer::drawSkybox() {
-    if (!m_sceneParameters.skybox) {
-        clear(static_cast<int>(ClearBuffer::Color) | static_cast<int>(ClearBuffer::Depth));
+    if (!m_sceneParameters.skybox)
         return;
-    }
 
-    if (!m_screenQuad)
-        m_screenQuad = makeRef<Mesh>(createScreenQuad());
-
-    if (!m_skyboxShader)
-        m_skyboxShader = Resources<ShaderProgram>::get("skybox");
-
-    glDepthFunc(GL_ALWAYS);
+    glDepthFunc(GL_GEQUAL);
     useShaderProgram(m_skyboxShader);
     bindMesh(m_screenQuad);
-    bindTexture(TextureType::Cubemap, *m_sceneParameters.skybox, 0);
-    bindUniform("u_skybox", 0);
     drawMesh();
+    glDepthFunc(GL_GREATER);
 }
 
 }  // namespace labeeri::Engine

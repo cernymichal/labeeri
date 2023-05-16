@@ -17,6 +17,10 @@ struct Material {
 
     float shininess;
 
+    float metallic;
+    sampler2D metallic_map;
+    bool using_metallic_map;
+
     sampler2D normal_map;
     bool using_normal_map;
 };
@@ -25,6 +29,7 @@ struct MaterialSample {
     vec3 diffuse;
     vec3 specular;
     float shininess;
+    float metallic;
     vec3 normal;
 };
 
@@ -88,6 +93,9 @@ uniform int u_spot_light_count;
 
 uniform Fog u_fog;
 
+uniform samplerCube u_cubemap;
+uniform bool u_using_cubemap;
+
 uniform Material u_material;
 
 out vec4 frag_color;
@@ -106,6 +114,7 @@ MaterialSample sample_material() {
     result.diffuse = u_material.using_diffuse_map ? texture(u_material.diffuse_map, g_data.UV).rgb : u_material.diffuse;
     result.specular = u_material.using_specular_map ? texture(u_material.specular_map, g_data.UV).rgb : u_material.specular;
     result.shininess = u_material.shininess;
+    result.metallic = u_material.using_metallic_map ? texture(u_material.metallic_map, g_data.UV).r : u_material.metallic;
 
     if (u_material.using_normal_map) {
         mat3 TBN_matrix = calculate_TBN_matrix();
@@ -160,28 +169,48 @@ vec3 calculate_spot_light(SpotLight light, MaterialSample material, vec3 view_di
     return phong(light.properties, material, view_direction, light_direction) * attenuation * intensity;
 }
 
-vec4 apply_fog(vec4 color) {
+vec3 calculate_diffuse_lighting(MaterialSample material, vec3 view_direction) {
+    vec3 result = vec3(0.0);
+
+    for (int i = 0; i < u_directional_light_count; i++) 
+        result += calculate_directional_light(u_directional_lights[i], material, view_direction);
+    
+    for (int i = 0; i < u_point_light_count; i++) 
+        result += calculate_point_light(u_point_lights[i], material, view_direction);
+    
+    for (int i = 0; i < u_spot_light_count; i++) 
+        result += calculate_spot_light(u_spot_lights[i], material, view_direction);
+
+    return result * (1.0 - material.metallic);
+}
+
+vec3 sample_reflection(vec3 view_direction) {
+	if (!u_using_cubemap)
+		return vec3(0.0);
+
+	vec3 I = normalize(g_data.position_ws - u_camera_position);
+	vec3 R = reflect(I, g_data.normal_ws);
+	return texture(u_cubemap, R).rgb;
+}
+
+vec3 calculate_reflection(MaterialSample material, vec3 view_direction) {
+    float fresnel = pow(1.0 - clamp(dot(view_direction, material.normal), 0.0, 1.0), 6.0);
+    vec3 reflection = sample_reflection(view_direction) * mix(vec3(fresnel), material.diffuse, material.metallic);
+    return reflection;
+}
+
+vec3 apply_fog(vec3 color) {
 	float dist = length(g_data.position_es);
-	float fog_amount = exp(-pow(u_fog.density * dist, 2.0));
-	return vec4(mix(u_fog.color, color.rgb, fog_amount), color.a);
+	float fog_amount = 1.0 - exp(-pow(u_fog.density * dist, 2.0));
+	return mix(color, u_fog.color, fog_amount);
 }
 
 void main() {
     vec3 view_direction = normalize(u_camera_position - g_data.position_ws);
     MaterialSample material_sample = sample_material();
 
-    vec4 result = vec4(vec3(0.0), 1.0);
+    vec3 diffuse_lighting = calculate_diffuse_lighting(material_sample, view_direction);
+    vec3 reflection = calculate_reflection(material_sample, view_direction);
 
-    for (int i = 0; i < u_directional_light_count; i++) 
-        result.rgb += calculate_directional_light(u_directional_lights[i], material_sample, view_direction);
-    
-    for (int i = 0; i < u_point_light_count; i++) 
-        result.rgb += calculate_point_light(u_point_lights[i], material_sample, view_direction);
-    
-    for (int i = 0; i < u_spot_light_count; i++) 
-        result.rgb += calculate_spot_light(u_spot_lights[i], material_sample, view_direction);
-    
-    result = apply_fog(result);
-
-    frag_color = result;
+    frag_color = vec4(diffuse_lighting + reflection, 1.0);
 }

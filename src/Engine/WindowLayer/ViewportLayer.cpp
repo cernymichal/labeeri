@@ -29,7 +29,6 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     auto projectionMatrix = m_camera->projectionMatrix(m_size);
 
     LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), m_camera->transform()->worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
-    //LAB_RENDERER->clear((int)ClearBuffer::Color | (int)ClearBuffer::Depth);  // TODO remove color clear
 
     for (auto& entity : LAB_CURRENT_SCENE->entities()) {
         if (entity->m_light)
@@ -41,8 +40,9 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
             entity->m_model->draw(entity->transform()->modelMatrix());
     }
 
+    LAB_RENDERER->endOpaque();
+
     LAB_RENDERER->endScene();
-    LAB_LOG_RENDERAPI_ERROR();
 
     LAB_RENDERER->drawToScreenPostprocessed();
     LAB_LOG_RENDERAPI_ERROR();

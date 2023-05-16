@@ -22,6 +22,8 @@ public:
 
     virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const RenderSceneParameters& parameters = RenderSceneParameters()) override;
 
+    virtual void endOpaque() override;
+
     virtual void endScene() override;
 
     virtual void drawToScreen() const override;
@@ -78,7 +80,7 @@ public:
     virtual void logError(const char* location) const override;
 
 private:
-    Framebuffer m_frame;
+    Framebuffer m_frame = Framebuffer(0, {0, 0}, {});
     Ref<Mesh> m_screenQuad;
     Ref<ShaderProgram> m_postprocessShader;
     Ref<ShaderProgram> m_skyboxShader;
@@ -98,6 +100,8 @@ private:
     std::vector<RendererDirectionalLight> m_directionalLights;
     std::vector<RendererPointLight> m_pointLights;
     std::vector<RendererSpotLight> m_spotLights;
+
+    void initialize();
 
     Framebuffer createFrame(glm::uvec2 size) const;
 

@@ -24,7 +24,7 @@ std::shared_ptr<Scene> defaultScene() {
 
     auto ground = Entity::Create();
     ground->transform()->setScale(glm::vec3(50.0));
-    ground->m_model = clone( Resources<Model>::get("basicPlane"));
+    ground->m_model = clone(Resources<Model>::get("basicPlane"));
     ground->m_model->m_material = normalTestmaterial;
     scene->addEntity(ground);
 
@@ -58,6 +58,16 @@ std::shared_ptr<Scene> defaultScene() {
     };
     scene->addEntity(cube);
 
+    auto reflectiveMaterial = cloneAs<ShadedMaterial>(Resources<Material>::get("grey"));
+    reflectiveMaterial->m_diffuse = glm::vec3(0.8, 0.1, 0.1);
+    reflectiveMaterial->m_specular = glm::vec3(0.8f);
+    reflectiveMaterial->m_metallic = 0.0f;
+
+    auto reflectiveCube = Entity::Create();
+    reflectiveCube->transform()->setPosition(glm::vec3(2, 1, -1));
+    reflectiveCube->m_model = makeRef<Model>(reflectiveMaterial, Resources<Mesh>::get("teapot.obj"));
+    scene->addEntity(reflectiveCube);
+
     auto perlinMaterial = cloneAs<ShadedMaterial>(Resources<Material>::get("grey"));
     perlinMaterial->m_diffuse = glm::vec3(0.8f, 1.0f, 0.8f);
     perlinMaterial->m_specularMap = Resources<Texture>::get("perlin256_lin.png");
@@ -66,13 +76,12 @@ std::shared_ptr<Scene> defaultScene() {
     auto teapot = Entity::Create();
     teapot->transform()->setPosition(glm::vec3(-1.0f, 0.5f, 0.0f));
     teapot->m_model = makeRef<Model>(perlinMaterial, Resources<Mesh>::get("teapot.obj"));
-    teapot->m_model->m_material = perlinMaterial;
     scene->addEntity(teapot);
 
     /*
     auto dragon = Entity::Create();
     dragon->transform()->setPosition(glm::vec3(1.0f, 1.5f, 0.0f));
-    dragon->m_model = makeRef<Model>(perlinMaterial, Resources<Mesh>::get("xyzrgb_dragon"));
+    dragon->m_model = makeRef<Model>(perlinMaterial, Resources<Mesh>::get("xyzrgb_dragon.obj"));
     dragon->m_model->m_material = perlinMaterial;
     scene->addEntity(dragon);
     */

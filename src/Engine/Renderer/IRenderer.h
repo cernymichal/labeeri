@@ -42,6 +42,11 @@ public:
     /**
      * @brief TODO
      */
+    virtual void endOpaque() = 0;
+
+    /**
+     * @brief TODO
+     */
     virtual void endScene() = 0;
 
     /**
