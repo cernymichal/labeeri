@@ -244,5 +244,7 @@
     <None Include="resources\engine\shaders\phong.geom" />
     <None Include="resources\engine\shaders\postprocess.vert" />
     <None Include="resources\engine\shaders\postprocess.frag" />
+    <None Include="resources\engine\shaders\skybox.vert" />
+    <None Include="resources\engine\shaders\skybox.frag" />
   </ItemGroup>
 </Project>

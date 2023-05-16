@@ -40,7 +40,6 @@ public:
      * @brief TODO
      */
     glm::mat4 projectionMatrix(glm::uvec2 viewportSize) const {
-        // TODO cache
         float aspectRatio = (float)viewportSize.x / (float)viewportSize.y;
 
         if (m_far != std::numeric_limits<float>::infinity())

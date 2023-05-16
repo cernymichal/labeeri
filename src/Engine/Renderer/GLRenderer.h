@@ -38,6 +38,8 @@ public:
 
     virtual void bindUniform(const char* name, const glm::vec3& value) override;
 
+    virtual void bindUniform(const char* name, const glm::vec2& value) override;
+
     virtual void bindPVM(const glm::mat4& modelMatrix) override;
 
     virtual LAB_GL_INT getUniformLocation(ShaderProgram& shaderProgram, const char* name) override;
@@ -78,14 +80,19 @@ public:
 private:
     Framebuffer m_frame;
     Ref<Mesh> m_screenQuad;
-    Ref<ShaderProgram> m_screenQuadShader;
-    Ref<ShaderProgram> m_currentShaderProgram;
+    Ref<ShaderProgram> m_postprocessShader;
+    Ref<ShaderProgram> m_skyboxShader;
 
+    Ref<ShaderProgram> m_currentShaderProgram;
     Ref<Mesh> m_currentMesh;
     double m_time = 0.0;
     glm::vec3 m_cameraPosition = glm::vec3(0.0f);
-    glm::mat4 m_viewMatrix = glm::mat4(1.0);
-    glm::mat4 m_projectionMatrix = glm::mat4(1.0);
+    struct Matrices {
+        glm::mat4 view = glm::mat4(1.0);
+        glm::mat4 viewInverse = glm::mat4(1.0);
+        glm::mat4 projection = glm::mat4(1.0);
+        glm::mat4 projectionInverse = glm::mat4(1.0);
+    } m_matrices;
     RenderSceneParameters m_sceneParameters;
 
     std::vector<RendererDirectionalLight> m_directionalLights;
@@ -103,6 +110,8 @@ private:
     void bindSpotLights();
 
     void bindFog();
+
+    void drawSkybox();
 };
 
 }  // namespace labeeri::Engine

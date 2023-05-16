@@ -90,7 +90,7 @@ uniform Fog u_fog;
 
 uniform Material u_material;
 
-out vec4 fragColor;
+out vec4 frag_color;
 
 mat3 calculate_TBN_matrix() {
     vec3 T = normalize(g_data.tangent_ws);
@@ -183,5 +183,5 @@ void main() {
     
     result = apply_fog(result);
 
-    fragColor = result;
+    frag_color = result;
 }

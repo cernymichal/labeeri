@@ -82,7 +82,7 @@ std::shared_ptr<Scene> defaultScene() {
     LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(pointLight));
     LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(teapot));
 
-    scene->m_renderParameters.skybox = Resources<Texture>::get("clear_sky");
+    scene->m_renderParameters.skybox = Resources<Texture>::get("the_sky_is_on_fire");
 
     return scene;
 }

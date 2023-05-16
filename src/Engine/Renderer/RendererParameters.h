@@ -16,12 +16,12 @@ struct PostprocessingParameters {
 };
 
 struct FogParameters {
-	glm::vec3 color = glm::vec3(0.8f);
-	float density = 0.01f;
+    glm::vec3 color = glm::vec3(0.8f);
+    float density = 0.01f;
 };
 
 struct RenderSceneParameters {
-	FogParameters fog;
+    FogParameters fog;
     PostprocessingParameters postprocessing;
     Ref<Texture> skybox;
 };
@@ -34,7 +34,8 @@ enum class ShaderType : uint8_t {
 
 enum class TextureType : uint8_t {
     Texture2D,
-    Rectangle
+    Rectangle,
+    Cubemap
 };
 
 enum class TextureInternalFormat : uint8_t {
@@ -43,7 +44,10 @@ enum class TextureInternalFormat : uint8_t {
     RGBA,
     SRGB,
     SRGBA,
+    RGBFloat16,
     RGBAFloat16,
+    RGBFloat32,
+    RGBAFloat32,
     DepthFloat32
 };
 

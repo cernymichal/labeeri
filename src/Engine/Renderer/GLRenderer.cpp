@@ -109,6 +109,8 @@ int textureTypeGL(TextureType type) {
             return GL_TEXTURE_2D;
         case TextureType::Rectangle:
             return GL_TEXTURE_RECTANGLE;
+        case TextureType::Cubemap:
+            return GL_TEXTURE_CUBE_MAP;
         default:
             throw std::runtime_error("Unknown texture type");
     }
@@ -126,8 +128,14 @@ int textureInternalFormatGL(TextureInternalFormat format) {
             return GL_SRGB;
         case TextureInternalFormat::SRGBA:
             return GL_SRGB_ALPHA;
+        case TextureInternalFormat::RGBFloat16:
+            return GL_RGB16F;
         case TextureInternalFormat::RGBAFloat16:
-            return GL_RGBA16;
+            return GL_RGBA16F;
+        case TextureInternalFormat::RGBFloat32:
+            return GL_RGB32F;
+        case TextureInternalFormat::RGBAFloat32:
+            return GL_RGBA32F;
         case TextureInternalFormat::DepthFloat32:
             return GL_DEPTH_COMPONENT32F;
         default:
@@ -237,12 +245,15 @@ void GLRenderer::setClearColor(const glm::vec4& color) {
 void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const RenderSceneParameters& parameters) {
     m_time = time;
     m_cameraPosition = cameraPosition;
-    m_viewMatrix = viewMatrix;
-    m_projectionMatrix = projectionMatrix;
+    m_matrices.view = viewMatrix;
+    m_matrices.viewInverse = glm::inverse(m_matrices.view);
+    m_matrices.projection = projectionMatrix;
+    m_matrices.projectionInverse = glm::inverse(projectionMatrix);
     m_sceneParameters = parameters;
 
     glBindFramebuffer(GL_FRAMEBUFFER, m_frame);
     glEnable(GL_DEPTH_TEST);
+    drawSkybox();
     glDepthFunc(GL_GREATER);
 }
 
@@ -266,12 +277,13 @@ void GLRenderer::drawToScreen() const {
 void GLRenderer::drawToScreenPostprocessed() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    if (!m_screenQuad) {
+    if (!m_screenQuad)
         m_screenQuad = makeRef<Mesh>(createScreenQuad());
-        m_screenQuadShader = Resources<ShaderProgram>::get("postprocess");
-    }
 
-    useShaderProgram(m_screenQuadShader);
+    if (!m_postprocessShader)
+        m_postprocessShader = Resources<ShaderProgram>::get("postprocess");
+
+    useShaderProgram(m_postprocessShader);
     bindMesh(m_screenQuad);
     bindTexture(TextureType::Texture2D, *m_frame.m_attachments[FramebufferAttachment::Color], 0);
     bindUniform("u_color_buffer", 0);
@@ -291,7 +303,10 @@ void GLRenderer::useShaderProgram(const Ref<ShaderProgram>& shaderProgram) {
 
     bindUniform("u_time", (float)m_time);
     bindUniform("u_camera_position", m_cameraPosition);
-    bindUniform("u_view_matrix", m_viewMatrix);
+    bindUniform("u_view_matrix", m_matrices.view);
+    bindUniform("u_view_matrix_inverse", m_matrices.viewInverse);
+    bindUniform("u_projection_matrix_inverse", m_matrices.projectionInverse);
+    bindUniform("u_screen_size", m_frame.m_size);
 
     bindDirectionalLights();
     bindPointLights();
@@ -315,8 +330,12 @@ void GLRenderer::bindUniform(const char* name, const glm::vec3& value) {
     glUniform3fv(m_currentShaderProgram->getUniformLocation(name), 1, glm::value_ptr(value));
 }
 
+void GLRenderer::bindUniform(const char* name, const glm::vec2& value) {
+    glUniform2fv(m_currentShaderProgram->getUniformLocation(name), 1, glm::value_ptr(value));
+}
+
 void GLRenderer::bindPVM(const glm::mat4& modelMatrix) {
-    glm::mat4 PVM = m_projectionMatrix * m_viewMatrix * modelMatrix;
+    glm::mat4 PVM = m_matrices.projection * m_matrices.view * modelMatrix;
 
     const glm::mat4 modelRotationMatrix = glm::mat4(
         modelMatrix[0],
@@ -707,6 +726,26 @@ void GLRenderer::bindFog() {
     bindUniform(location.c_str(), m_sceneParameters.fog.color);
     location = structLocation + ".density";
     bindUniform(location.c_str(), m_sceneParameters.fog.density);
+}
+
+void GLRenderer::drawSkybox() {
+    if (!m_sceneParameters.skybox) {
+        clear(static_cast<int>(ClearBuffer::Color) | static_cast<int>(ClearBuffer::Depth));
+        return;
+    }
+
+    if (!m_screenQuad)
+        m_screenQuad = makeRef<Mesh>(createScreenQuad());
+
+    if (!m_skyboxShader)
+        m_skyboxShader = Resources<ShaderProgram>::get("skybox");
+
+    glDepthFunc(GL_ALWAYS);
+    useShaderProgram(m_skyboxShader);
+    bindMesh(m_screenQuad);
+    bindTexture(TextureType::Cubemap, *m_sceneParameters.skybox, 0);
+    bindUniform("u_skybox", 0);
+    drawMesh();
 }
 
 }  // namespace labeeri::Engine

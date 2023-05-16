@@ -3,8 +3,8 @@
 uniform float u_time;
 uniform vec3 u_camera_position;
 
-out vec4 fragColor;
+out vec4 frag_color;
 
 void main() {
-    fragColor = vec4(0.9, 0.0, 0.9, 1.0);
+    frag_color = vec4(0.9, 0.0, 0.9, 1.0);
 }

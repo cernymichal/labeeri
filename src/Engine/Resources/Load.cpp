@@ -117,10 +117,13 @@ Ref<Mesh> loadMesh(const std::filesystem::path& filePath) {
 }
 
 struct STBImage : Image {
-    STBImage(const std::filesystem::path& filePath, bool gammaCorrected) {
+    STBImage(const std::filesystem::path& filePath, bool gammaCorrected, bool flip = true) {
         LAB_LOGH3("Loading image " << filePath);
 
-        stbi_set_flip_vertically_on_load(true);
+        if (flip)
+            stbi_set_flip_vertically_on_load(true);
+        else 
+            stbi_set_flip_vertically_on_load(false);
 
         int channels;
         glm::ivec2 sizeInt;
@@ -128,12 +131,17 @@ struct STBImage : Image {
         const auto filePathStr = filePath.string();
         if (stbi_is_hdr(filePathStr.c_str())) {
             data = stbi_loadf(filePathStr.c_str(), &sizeInt.x, &sizeInt.y, &channels, 0);
-            dataType = TextureDataType::Float16;
+            dataType = TextureDataType::Float32;
+            internalFormat = channels == 4 ? TextureInternalFormat::RGBAFloat32 : TextureInternalFormat::RGBFloat32;
             gammaCorrected = false;
         }
         else {
             data = stbi_load(filePathStr.c_str(), &sizeInt.x, &sizeInt.y, &channels, 0);
             dataType = TextureDataType::UnsignedByte;
+            if (gammaCorrected)
+                internalFormat = channels == 4 ? TextureInternalFormat::SRGBA : TextureInternalFormat::SRGB;
+            else
+                internalFormat = channels == 4 ? TextureInternalFormat::RGBA : TextureInternalFormat::RGB;
         }
 
         if (!data) {
@@ -143,11 +151,6 @@ struct STBImage : Image {
 
         size = sizeInt;
         format = channels == 4 ? TextureFormat::RGBA : TextureFormat::RGB;
-
-        if (gammaCorrected)
-            internalFormat = channels == 4 ? TextureInternalFormat::SRGBA : TextureInternalFormat::SRGB;
-        else
-            internalFormat = channels == 4 ? TextureInternalFormat::RGBA : TextureInternalFormat::RGB;
     }
 
     virtual ~STBImage() override {
@@ -173,12 +176,12 @@ Ref<Texture> loadCubemap(const std::filesystem::path& path, bool gammaCorrected)
         }
     }
 
-    images[0] = makeScoped<STBImage>((path / ("px" + extension)), gammaCorrected);
-    images[1] = makeScoped<STBImage>((path / ("nx" + extension)), gammaCorrected);
-    images[2] = makeScoped<STBImage>((path / ("py" + extension)), gammaCorrected);
-    images[3] = makeScoped<STBImage>((path / ("ny" + extension)), gammaCorrected);
-    images[4] = makeScoped<STBImage>((path / ("pz" + extension)), gammaCorrected);
-    images[5] = makeScoped<STBImage>((path / ("nz" + extension)), gammaCorrected);
+    images[0] = makeScoped<STBImage>((path / ("px" + extension)), gammaCorrected, false);
+    images[1] = makeScoped<STBImage>((path / ("nx" + extension)), gammaCorrected, false);
+    images[2] = makeScoped<STBImage>((path / ("py" + extension)), gammaCorrected, false);
+    images[3] = makeScoped<STBImage>((path / ("ny" + extension)), gammaCorrected, false);
+    images[4] = makeScoped<STBImage>((path / ("pz" + extension)), gammaCorrected, false);
+    images[5] = makeScoped<STBImage>((path / ("nz" + extension)), gammaCorrected, false);
 
     auto texture = LAB_RENDERER->createCubemap(images);
 

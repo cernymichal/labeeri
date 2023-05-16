@@ -82,6 +82,11 @@ public:
     /**
      * @brief TODO
      */
+    virtual void bindUniform(const char* name, const glm::vec2& value) = 0;
+
+    /**
+     * @brief TODO
+     */
     virtual void bindPVM(const glm::mat4& modelMatrix) = 0;
 
     /**

@@ -7,7 +7,7 @@ uniform sampler2D u_depth_buffer;
 uniform float u_gamma;
 uniform float u_exposure;
 
-out vec4 fragColor;
+out vec4 frag_color;
 
 // https://knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve/
 vec3 narkowicz_ACES(vec3 color) {
@@ -27,5 +27,5 @@ void main() {
     vec3 tone_mapped_color = narkowicz_ACES(exposed_color);
     vec3 gamma_corrected_color = pow(tone_mapped_color, vec3(1.0 / u_gamma));
 
-    fragColor = vec4(gamma_corrected_color, color.a);
+    frag_color = vec4(gamma_corrected_color, color.a);
 }
