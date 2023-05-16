@@ -283,7 +283,7 @@ void GLRenderer::endOpaque() {
 
 void GLRenderer::endScene() {
     glDisable(GL_DEPTH_TEST);
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     m_directionalLights.clear();
     m_pointLights.clear();
@@ -565,7 +565,7 @@ void GLRenderer::bindTexture(TextureType type, const Texture& texture, unsigned 
 }
 
 void GLRenderer::readFramebuffer(TextureFormat format, TextureDataType dataType,
-                             glm::uvec2 position, glm::uvec2 size, void* result) const {
+                                 glm::uvec2 position, glm::uvec2 size, void* result) const {
     int formatGL = textureFormatGL(format);
     int dataTypeGL = textureDataTypeGL(dataType);
 
@@ -745,10 +745,10 @@ void GLRenderer::bindSpotLights() {
         bindUniform(location.c_str(), light.position);
         location = structLocation + ".direction";
         bindUniform(location.c_str(), light.direction);
-        location = structLocation + ".innerCutOff";
-        bindUniform(location.c_str(), light.innerCutOff);
-        location = structLocation + ".outerCutOff";
-        bindUniform(location.c_str(), light.outerCutOff);
+        location = structLocation + ".innerCutoff";
+        bindUniform(location.c_str(), light.innerCutoff);
+        location = structLocation + ".outerCutoff";
+        bindUniform(location.c_str(), light.outerCutoff);
         location = structLocation + ".properties.ambient";
         bindUniform(location.c_str(), light.properties.ambient);
         location = structLocation + ".properties.diffuse";

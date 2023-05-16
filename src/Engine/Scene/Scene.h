@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Engine/Events/ApplicationEvent.h"
-#include "Engine/Scene/Entity.h"
 #include "Engine/Renderer/RendererParameters.h"
+#include "Engine/Scene/Entity.h"
 
 namespace labeeri::Engine {
 
@@ -43,14 +43,14 @@ public:
     /**
      * @brief TODO
      */
-    const std::list<Ref<Entity>>& entities() const {
+    const std::vector<Ref<Entity>>& entities() const {
         return m_entities;
     }
 
     virtual void onEvent(IEvent& e) override;
 
 private:
-    std::list<Ref<Entity>> m_entities;
+    std::vector<Ref<Entity>> m_entities;
 
     double m_time = 0.0f;
 

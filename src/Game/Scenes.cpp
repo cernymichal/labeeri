@@ -1,7 +1,5 @@
 #include "scenes.h"
 
-#include "Engine/WindowLayer/ImGuiWindow/EntityWindow.h"
-
 using namespace labeeri::Engine;
 
 namespace labeeri {
@@ -85,11 +83,6 @@ std::shared_ptr<Scene> defaultScene() {
     dragon->m_model->m_material = perlinMaterial;
     scene->addEntity(dragon);
     */
-
-    LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(sun));
-    LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(spotLight[0]));
-    LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(pointLight));
-    LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(teapot));
 
     scene->m_renderParameters.skybox = Resources<Texture>::get("the_sky_is_on_fire");
 

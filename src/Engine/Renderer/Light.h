@@ -78,14 +78,14 @@ struct RendererSpotLight {
     glm::vec3 position;
     glm::vec3 direction;
 
-    float innerCutOff;
-    float outerCutOff;
+    float innerCutoff;
+    float outerCutoff;
 
     LightProperties properties;
     LightAttenuation attenuation;
 
-    RendererSpotLight(const glm::vec3& position, const glm::vec3& direction, float innerCutOff, float outerCutOff, const LightProperties& properties, const LightAttenuation& attenuation)
-        : position(position), direction(direction), innerCutOff(innerCutOff), outerCutOff(outerCutOff), properties(properties), attenuation(attenuation) {
+    RendererSpotLight(const glm::vec3& position, const glm::vec3& direction, float innerCutoff, float outerCutoff, const LightProperties& properties, const LightAttenuation& attenuation)
+        : position(position), direction(direction), innerCutoff(innerCutoff), outerCutoff(outerCutoff), properties(properties), attenuation(attenuation) {
     }
 };
 

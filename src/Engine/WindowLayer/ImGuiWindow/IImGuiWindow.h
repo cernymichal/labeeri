@@ -12,7 +12,19 @@ public:
     /**
      * @brief TODO
      */
-    virtual void draw() = 0;
+    virtual const std::string& name() const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual bool draw() = 0;
+
+    /**
+     * @brief TODO
+     */
+    bool operator==(const IImGuiWindow& other) const {
+        return name() == other.name();
+    }
 };
 
 }  // namespace labeeri::Engine

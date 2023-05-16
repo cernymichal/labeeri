@@ -16,7 +16,9 @@ void Scene::addEntity(const EntityPack& entities) {
 }
 
 void Scene::removeEntity(const Ref<Entity>& entity) {
-    m_entities.remove(entity);
+    auto entityPosition = std::find(m_entities.begin(), m_entities.end(), entity);
+    if (entityPosition != m_entities.end())
+		m_entities.erase(entityPosition);
 }
 
 void Scene::onEvent(IEvent& e) {

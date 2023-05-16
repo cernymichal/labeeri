@@ -19,12 +19,12 @@ public:
     LightType m_type;
     LightProperties m_properties;
     LightAttenuation m_attenuation;
-    float m_innerCutOff;
-    float m_outerCutOff;
+    float m_innerCutoff;
+    float m_outerCutoff;
     float m_intensity = 1.0;
 
-    Light(LightType type, const LightProperties& properties, const LightAttenuation& attenuation = LightAttenuation(), float innerCutOff = 0.91, float outerCutOff = 0.82)
-        : m_type(type), m_properties(properties), m_attenuation(attenuation), m_innerCutOff(innerCutOff), m_outerCutOff(outerCutOff) {
+    Light(LightType type, const LightProperties& properties, const LightAttenuation& attenuation = LightAttenuation(), float innerCutoff = 0.91, float outerCutoff = 0.82)
+        : m_type(type), m_properties(properties), m_attenuation(attenuation), m_innerCutoff(innerCutoff), m_outerCutoff(outerCutoff) {
     }
 
     /**
@@ -49,8 +49,8 @@ public:
     /**
      * @brief TODO
      */
-    static Light Spot(const LightProperties& properties = DefualtSpotLightProperties, const LightAttenuation& attenuation = LightAttenuation(), float innerCutOff = 0.91, float outerCutOff = 0.82) {
-        return Light(LightType::Spot, properties, attenuation, innerCutOff, outerCutOff);
+    static Light Spot(const LightProperties& properties = DefualtSpotLightProperties, const LightAttenuation& attenuation = LightAttenuation(), float innerCutoff = 0.91, float outerCutoff = 0.82) {
+        return Light(LightType::Spot, properties, attenuation, innerCutoff, outerCutoff);
     }
 };
 

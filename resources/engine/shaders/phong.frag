@@ -62,8 +62,8 @@ struct SpotLight {
     vec3 position;
     vec3 direction;
 
-    float innerCutOff;
-    float outerCutOff;
+    float innerCutoff;
+    float outerCutoff;
 
     LightProperties properties;
     Attenuation attenuation;
@@ -163,8 +163,8 @@ vec3 calculate_spot_light(SpotLight light, MaterialSample material, vec3 view_di
     float attenuation = 1.0 / (light.attenuation.constant + light.attenuation.linear * distance + light.attenuation.quadratic * (distance * distance));
 
     float theta = dot(light_direction, normalize(-light.direction));
-    float epsilon = light.innerCutOff - light.outerCutOff;
-    float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
+    float epsilon = light.innerCutoff - light.outerCutoff;
+    float intensity = clamp((theta - light.outerCutoff) / epsilon, 0.0, 1.0);
 
     return phong(light.properties, material, view_direction, light_direction) * attenuation * intensity;
 }
@@ -210,7 +210,10 @@ void main() {
     MaterialSample material_sample = sample_material();
 
     vec3 diffuse_lighting = calculate_diffuse_lighting(material_sample, view_direction);
-    vec3 reflection = vec3(0.0);//calculate_reflection(material_sample, view_direction);
+    vec3 reflection = calculate_reflection(material_sample, view_direction);
 
-    frag_color = vec4(diffuse_lighting + reflection, 1.0);
+    vec3 result = diffuse_lighting + reflection;
+    result = apply_fog(result);
+
+    frag_color = vec4(result, 1.0);
 }

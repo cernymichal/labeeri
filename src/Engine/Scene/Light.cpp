@@ -13,7 +13,7 @@ void Light::submit(const Transform& transform) const {
             LAB_RENDERER->submitLight(RendererPointLight(transform.position(), m_properties * m_intensity, m_attenuation));
             break;
         case LightType::Spot:
-            LAB_RENDERER->submitLight(RendererSpotLight(transform.position(), transform.forward(), m_innerCutOff, m_outerCutOff, m_properties * m_intensity, m_attenuation));
+            LAB_RENDERER->submitLight(RendererSpotLight(transform.position(), transform.forward(), m_innerCutoff, m_outerCutoff, m_properties * m_intensity, m_attenuation));
             break;
         default:
             LAB_LOG("Unknown light type");

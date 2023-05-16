@@ -6,8 +6,11 @@
 
 namespace labeeri::Engine {
 
-void LogWindow::draw() {
-    ImGui::Begin("Log");
+bool LogWindow::draw() {
+    ImGui::SetNextWindowSize(ImVec2(800, 600), ImGuiCond_FirstUseEver);
+
+    bool shouldContinue = true;
+    ImGui::Begin(m_name.c_str(), &shouldContinue);
 
     bool autoScrollChanged = ImGui::Checkbox("Auto-scroll", &m_autoScroll);
     ImGui::SameLine(ImGui::GetWindowWidth() - 100);
@@ -32,6 +35,8 @@ void LogWindow::draw() {
     ImGui::EndChild();
 
     ImGui::End();
+
+    return shouldContinue;
 }
 
 }  // namespace labeeri::Engine

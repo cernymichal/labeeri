@@ -8,7 +8,6 @@
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Renderer/IRenderer.h"
 #include "Engine/Window/GLFWWindow.h"
-#include "Engine/WindowLayer/ImGuiWindow/LogWindow.h"
 #include "Engine/WindowLayer/ImGuiWindow/MenuWindow.h"
 
 namespace labeeri::Engine {
@@ -47,7 +46,6 @@ ImGuiLayer::ImGuiLayer() {
     setupImGui();
 
     m_windows.emplace_back(std::make_unique<MenuWindow>());
-    m_windows.emplace_back(std::make_unique<LogWindow>());
 }
 
 ImGuiLayer::~ImGuiLayer() {
@@ -57,6 +55,10 @@ ImGuiLayer::~ImGuiLayer() {
 }
 
 IImGuiWindow* ImGuiLayer::addWindow(std::unique_ptr<IImGuiWindow>&& window) {
+    auto windowFound = std::find_if(m_windows.begin(), m_windows.end(), [&window](const auto& other) { return *window == *other; });
+    if (windowFound != m_windows.end())
+        return windowFound->get();
+
     return m_windows.emplace_back(std::move(window)).get();
 }
 
@@ -102,8 +104,13 @@ void ImGuiLayer::onEvent(IEvent& e) {
 
 bool ImGuiLayer::onRender(const IEvent& e) {
     ImGuiFrame frame;
-    for (auto& window : m_windows)
-        window->draw();
+
+    for (int i = 0; i < m_windows.size(); ++i) {
+        if (!m_windows[i]->draw()) {
+            m_windows.erase(m_windows.begin() + i);
+            --i;
+        }
+    }
 
     LAB_LOG_RENDERAPI_ERROR();
 

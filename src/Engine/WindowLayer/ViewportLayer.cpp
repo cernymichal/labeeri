@@ -4,6 +4,7 @@
 #include "Engine/Renderer/IRenderer.h"
 #include "Engine/Resources/Resources.h"
 #include "Engine/Window/IWindow.h"
+#include "Engine/WindowLayer/ImGuiWindow/EntityWindow.h"
 
 namespace labeeri::Engine {
 
@@ -130,14 +131,15 @@ void ViewportLayer::clickOnObject(const glm::uvec2& mousePosition) {
     LAB_RENDERER->clearBuffer(static_cast<int>(ClearBuffer::Color), 0);
     LAB_RENDERER->useShaderProgram(Resources<ShaderProgram>::get("id"));
 
-    uint32_t id = 1;
+    uint32_t id = 0;
     for (auto& entity : LAB_CURRENT_SCENE->entities()) {
+        id++;
         if (!entity->m_model)
             continue;
 
         LAB_RENDERER->bindMesh(entity->m_model->m_mesh);
         LAB_RENDERER->bindPVM(entity->transform()->modelMatrix());
-        LAB_RENDERER->bindUniform("u_id", id++);
+        LAB_RENDERER->bindUniform("u_id", id);
         LAB_RENDERER->drawMesh();
     }
 
@@ -145,8 +147,12 @@ void ViewportLayer::clickOnObject(const glm::uvec2& mousePosition) {
     LAB_RENDERER->waitForFrame();
     LAB_LOG_RENDERAPI_ERROR();
 
+    LAB_RENDERER->bindFramebuffer(m_idFramebuffer);
     LAB_RENDERER->readFramebuffer(TextureFormat::RedInt, TextureDataType::UInt32, glm::uvec2(mousePosition.x, m_size.y - mousePosition.y - 1), glm::uvec2(1), &id);
     LAB_LOG_RENDERAPI_ERROR();
+    id--;
+
+    LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(LAB_CURRENT_SCENE->entities()[id], id));
 
     LAB_LOG("Clicked on object with id " << id);
 }

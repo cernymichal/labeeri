@@ -2,7 +2,9 @@
 
 #include <imgui.h>
 
+#include "Engine/Application.h"
 #include "Engine/Window/IWindow.h"
+#include "Engine/WindowLayer/ImGuiWindow/LogWindow.h"
 
 namespace labeeri::Engine {
 
@@ -10,14 +12,17 @@ MenuWindow::MenuWindow() {
     m_VSync = LAB_WINDOW->VSync();
 }
 
-void MenuWindow::draw() {
-    ImGui::Begin("Menu");
+bool MenuWindow::draw() {
+    ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiCond_FirstUseEver);
+
+    ImGui::Begin(m_name.c_str());
 
     bool vSyncChanged = ImGui::Checkbox("VSync", &m_VSync);
     if (vSyncChanged)
         LAB_WINDOW->setVSync(m_VSync);
 
-    bool throwException = ImGui::Button("Exception");
+    if (ImGui::Button("Open Log"))
+        LAB_IMGUI->addWindow(std::make_unique<LogWindow>());
 
     ImGui::Separator();
 
@@ -26,8 +31,7 @@ void MenuWindow::draw() {
 
     ImGui::End();
 
-    if (throwException)
-        throw std::runtime_error("Exception thrown from MenuWindow");
+    return true;
 }
 
 }  // namespace labeeri::Engine
