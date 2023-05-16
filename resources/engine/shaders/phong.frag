@@ -210,7 +210,7 @@ void main() {
     MaterialSample material_sample = sample_material();
 
     vec3 diffuse_lighting = calculate_diffuse_lighting(material_sample, view_direction);
-    vec3 reflection = calculate_reflection(material_sample, view_direction);
+    vec3 reflection = vec3(0.0);//calculate_reflection(material_sample, view_direction);
 
     frag_color = vec4(diffuse_lighting + reflection, 1.0);
 }

@@ -246,5 +246,7 @@
     <None Include="resources\engine\shaders\postprocess.frag" />
     <None Include="resources\engine\shaders\skybox.vert" />
     <None Include="resources\engine\shaders\skybox.frag" />
+    <None Include="resources\engine\shaders\id.frag" />
+    <None Include="resources\engine\shaders\id.vert" />
   </ItemGroup>
 </Project>

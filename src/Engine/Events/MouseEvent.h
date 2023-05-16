@@ -64,14 +64,19 @@ public:
         return m_mods;
     }
 
+    const glm::dvec2& position() const {
+        return m_position;
+    }
+
     EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Input) | static_cast<int>(EventCategory::Mouse))
 
 protected:
     MouseButton m_button;
     int m_mods;
+    glm::dvec2 m_position;
 
-    MouseButtonEvent(MouseButton button, int mods)
-        : m_button(button), m_mods(mods) {
+    MouseButtonEvent(MouseButton button, int mods, glm::dvec2 positon)
+        : m_button(button), m_mods(mods), m_position(positon) {
     }
 };
 
@@ -80,8 +85,8 @@ protected:
  */
 class MouseButtonPressEvent : public MouseButtonEvent {
 public:
-    MouseButtonPressEvent(MouseButton button, int mods)
-        : MouseButtonEvent(button, mods) {
+    MouseButtonPressEvent(MouseButton button, int mods, glm::dvec2 position)
+        : MouseButtonEvent(button, mods, position) {
     }
 
     EVENT_CLASS_TYPE(MouseButtonPress)
@@ -92,8 +97,8 @@ public:
  */
 class MouseButtonReleaseEvent : public MouseButtonEvent {
 public:
-    MouseButtonReleaseEvent(MouseButton button, int mods)
-        : MouseButtonEvent(button, mods) {
+    MouseButtonReleaseEvent(MouseButton button, int mods, glm::dvec2 position)
+        : MouseButtonEvent(button, mods, position) {
     }
 
     EVENT_CLASS_TYPE(MouseButtonRelease)

@@ -22,12 +22,12 @@ public:
     /**
      * @brief TODO
      */
-    virtual void setViewportSize(glm::uvec2 size) = 0;
+    virtual void clear(int buffers) = 0;
 
     /**
      * @brief TODO
      */
-    virtual void clear(int buffers) = 0;
+    virtual void clearBuffer(int buffers, uint32_t value) = 0;
 
     /**
      * @brief TODO
@@ -37,7 +37,8 @@ public:
     /**
      * @brief TODO
      */
-    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const RenderSceneParameters& parameters = RenderSceneParameters()) = 0;
+    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix,
+                            const RenderSceneParameters& parameters = RenderSceneParameters()) = 0;
 
     /**
      * @brief TODO
@@ -62,6 +63,11 @@ public:
     /**
      * @brief TODO
      */
+    virtual void waitForFrame() = 0;
+
+    /**
+     * @brief TODO
+     */
     virtual void useShaderProgram(const Ref<ShaderProgram>& shaderProgram) = 0;
 
     /**
@@ -72,7 +78,12 @@ public:
     /**
      * @brief TODO
      */
-    virtual void bindUniform(const char* name, int value) = 0;
+    virtual void bindUniform(const char* name, int32_t value) = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void bindUniform(const char* name, uint32_t value) = 0;
 
     /**
      * @brief TODO
@@ -82,12 +93,12 @@ public:
     /**
      * @brief TODO
      */
-    virtual void bindUniform(const char* name, const glm::vec3& value) = 0;
+    virtual void bindUniform(const char* name, const glm::vec2& value) = 0;
 
     /**
      * @brief TODO
      */
-    virtual void bindUniform(const char* name, const glm::vec2& value) = 0;
+    virtual void bindUniform(const char* name, const glm::vec3& value) = 0;
 
     /**
      * @brief TODO
@@ -150,7 +161,23 @@ public:
     /**
      * @brief TODO
      */
+    virtual void readFramebuffer(TextureFormat format, TextureDataType dataType,
+                             glm::uvec2 position, glm::uvec2 size, void* result) const = 0;
+
+    /**
+     * @brief TODO
+     */
     virtual void deleteTexture(Texture& texure) const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual Framebuffer createFramebuffer(glm::uvec2 size, std::map<FramebufferAttachment, Ref<Texture>>&& attachments) const = 0;
+
+    /**
+     * @brief TODO
+     */
+    virtual void bindFramebuffer(const Ref<Framebuffer>& framebuffer) = 0;
 
     /**
      * @brief TODO

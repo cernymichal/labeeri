@@ -39,7 +39,6 @@ enum class TextureType : uint8_t {
 };
 
 enum class TextureInternalFormat : uint8_t {
-    Red,
     RGB,
     RGBA,
     SRGB,
@@ -48,6 +47,7 @@ enum class TextureInternalFormat : uint8_t {
     RGBAFloat16,
     RGBFloat32,
     RGBAFloat32,
+    RedUInt32,
     DepthFloat32
 };
 
@@ -55,11 +55,13 @@ enum class TextureFormat : uint8_t {
     Red,
     RGB,
     RGBA,
+    RedInt,
     Depth
 };
 
 enum class TextureDataType : uint8_t {
-    UnsignedByte,
+    UByte,
+    UInt32,
     Float16,
     Float32
 };

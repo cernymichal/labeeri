@@ -46,8 +46,8 @@ template <typename T>
 using Ref = std::shared_ptr<T>;
 
 template <typename T, typename... Args>
-inline Ref<T> makeRef(Args&& ...params) {
-	return std::make_shared<T>(std::forward<Args>(params)...);
+inline Ref<T> makeRef(Args&&... params) {
+    return std::make_shared<T>(std::forward<Args>(params)...);
 }
 
 template <typename T, typename S>
@@ -69,9 +69,26 @@ template <typename T>
 using Scoped = std::unique_ptr<T>;
 
 template <typename T, typename... Args>
-inline Scoped<T> makeScoped(Args&& ...params) {
-	return std::make_unique<T>(std::forward<Args>(params)...);
+inline Scoped<T> makeScoped(Args&&... params) {
+    return std::make_unique<T>(std::forward<Args>(params)...);
 }
 
+template <typename T>
+inline std::ostream& operator<<(std::ostream& os, const glm::vec<2, T>& v) {
+    os << "(" << v.x << ", " << v.y << ")";
+    return os;
+}
+
+template <typename T>
+inline std::ostream& operator<<(std::ostream& os, const glm::vec<3, T>& v) {
+    os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+    return os;
+}
+
+template <typename T>
+inline std::ostream& operator<<(std::ostream& os, const glm::vec<4, T>& v) {
+    os << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
+    return os;
+}
 
 }  // namespace labeeri::Engine

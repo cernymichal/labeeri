@@ -7,7 +7,7 @@ namespace labeeri::Engine {
 struct Image {
     glm::uvec2 size = glm::uvec2(0);
     void* data = nullptr;
-    TextureDataType dataType = TextureDataType::UnsignedByte;
+    TextureDataType dataType = TextureDataType::UByte;
     TextureFormat format = TextureFormat::RGB;
     TextureInternalFormat internalFormat = TextureInternalFormat::RGB;
 

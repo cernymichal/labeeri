@@ -137,7 +137,7 @@ struct STBImage : Image {
         }
         else {
             data = stbi_load(filePathStr.c_str(), &sizeInt.x, &sizeInt.y, &channels, 0);
-            dataType = TextureDataType::UnsignedByte;
+            dataType = TextureDataType::UByte;
             if (gammaCorrected)
                 internalFormat = channels == 4 ? TextureInternalFormat::SRGBA : TextureInternalFormat::SRGB;
             else

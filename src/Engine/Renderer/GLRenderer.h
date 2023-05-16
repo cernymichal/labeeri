@@ -14,13 +14,14 @@ public:
      */
     GLRenderer();
 
-    virtual void setViewportSize(glm::uvec2 size) override;
-
     virtual void clear(int buffers) override;
+
+    virtual void clearBuffer(int buffers, uint32_t value) override;
 
     virtual void setClearColor(const glm::vec4& color) override;
 
-    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const RenderSceneParameters& parameters = RenderSceneParameters()) override;
+    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix,
+                            const RenderSceneParameters& parameters = RenderSceneParameters()) override;
 
     virtual void endOpaque() override;
 
@@ -30,17 +31,21 @@ public:
 
     virtual void drawToScreenPostprocessed() override;
 
+    virtual void waitForFrame() override;
+
     virtual void useShaderProgram(const Ref<ShaderProgram>& shaderProgram) override;
 
     virtual void bindUniform(const char* name, float value) override;
 
-    virtual void bindUniform(const char* name, int value) override;
+    virtual void bindUniform(const char* name, int32_t value) override;
+
+    virtual void bindUniform(const char* name, uint32_t value) override;
 
     virtual void bindUniform(const char* name, const glm::mat4& value) override;
 
-    virtual void bindUniform(const char* name, const glm::vec3& value) override;
-
     virtual void bindUniform(const char* name, const glm::vec2& value) override;
+
+    virtual void bindUniform(const char* name, const glm::vec3& value) override;
 
     virtual void bindPVM(const glm::mat4& modelMatrix) override;
 
@@ -67,7 +72,14 @@ public:
 
     virtual void bindTexture(TextureType type, const Texture& texture, unsigned slot) const override;
 
+    virtual void readFramebuffer(TextureFormat format, TextureDataType dataType,
+                             glm::uvec2 position, glm::uvec2 size, void* result) const override;
+
     virtual void deleteTexture(Texture& texure) const override;
+
+    virtual Framebuffer createFramebuffer(glm::uvec2 size, std::map<FramebufferAttachment, Ref<Texture>>&& attachments) const override;
+
+    virtual void bindFramebuffer(const Ref<Framebuffer>& framebuffer) override;
 
     virtual void deleteFramebuffer(Framebuffer& framebuffer) const override;
 
@@ -80,11 +92,11 @@ public:
     virtual void logError(const char* location) const override;
 
 private:
-    Framebuffer m_frame = Framebuffer(0, {0, 0}, {});
     Ref<Mesh> m_screenQuad;
     Ref<ShaderProgram> m_postprocessShader;
     Ref<ShaderProgram> m_skyboxShader;
 
+    Ref<Framebuffer> m_currentFramebuffer;
     Ref<ShaderProgram> m_currentShaderProgram;
     Ref<Mesh> m_currentMesh;
     double m_time = 0.0;
@@ -102,8 +114,6 @@ private:
     std::vector<RendererSpotLight> m_spotLights;
 
     void initialize();
-
-    Framebuffer createFrame(glm::uvec2 size) const;
 
     Mesh createScreenQuad() const;
 

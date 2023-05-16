@@ -209,19 +209,23 @@ void GLFWWindow::glfwMouseButtonCallback(GLFWwindow* window, int buttonInt, int 
     auto button = static_cast<MouseButton>(buttonInt);
     auto action = static_cast<KeyAction>(actionInt);
 
+    if (action == KeyAction::Repeat)
+        return;
+
+    glm::dvec2 position;
+    glfwGetCursorPos(window, &position.x, &position.y);
+
     switch (action) {
         case KeyAction::Press: {
-            MouseButtonPressEvent event(button, mods);
+            MouseButtonPressEvent event(button, mods, position);
             LAB_APP.emitEvent(event);
             break;
         }
         case KeyAction::Release: {
-            MouseButtonReleaseEvent event(button, mods);
+            MouseButtonReleaseEvent event(button, mods, position);
             LAB_APP.emitEvent(event);
             break;
         }
-        case KeyAction::Repeat:
-            break;
     }
 }
 

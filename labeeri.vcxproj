@@ -244,6 +244,8 @@
     <None Include="resources\engine\shaders\fallback.vert" />
     <None Include="resources\engine\shaders\flat.frag" />
     <None Include="resources\engine\shaders\flat.vert" />
+    <None Include="resources\engine\shaders\id.frag" />
+    <None Include="resources\engine\shaders\id.vert" />
     <None Include="resources\engine\shaders\phong.frag" />
     <None Include="resources\engine\shaders\phong.geom" />
     <None Include="resources\engine\shaders\phong.vert" />
