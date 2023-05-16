@@ -226,6 +226,8 @@ void GLFWWindow::glfwMouseButtonCallback(GLFWwindow* window, int buttonInt, int 
             LAB_APP.emitEvent(event);
             break;
         }
+        case KeyAction::Repeat:
+            break;
     }
 }
 

@@ -41,12 +41,12 @@ static Ref<Texture> load<Texture>(const std::filesystem::path& path) {
 
 template <>
 static Ref<Material> load<Material>(const std::filesystem::path& path) {
-    return std::shared_ptr<Material>(nullptr);
+    return nullptr;
 }
 
 template <>
 static Ref<Model> load<Model>(const std::filesystem::path& path) {
-    return std::shared_ptr<Model>(nullptr);
+    return nullptr;
 }
 
 }  // namespace labeeri::Engine

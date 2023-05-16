@@ -236,7 +236,7 @@ GLRenderer::GLRenderer() {
 }
 
 void GLRenderer::clear(int buffers) {
-    glClearDepth(0.0f);
+    glClearDepth(0.0);
     glClear(clearBuffersGL(buffers));
 }
 
@@ -581,11 +581,11 @@ Framebuffer GLRenderer::createFramebuffer(glm::uvec2 size, std::map<FramebufferA
     GLuint FBO;
     glGenFramebuffers(1, &FBO);
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-    if (attachments.count(FramebufferAttachment::Color) != 0)
+    if (attachments.contains(FramebufferAttachment::Color))
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *attachments.at(FramebufferAttachment::Color), 0);
-    if (attachments.count(FramebufferAttachment::Depth) != 0)
+    if (attachments.contains(FramebufferAttachment::Depth))
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, *attachments.at(FramebufferAttachment::Depth), 0);
-    if (attachments.count(FramebufferAttachment::Stencil) != 0)
+    if (attachments.contains(FramebufferAttachment::Stencil))
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, *attachments.at(FramebufferAttachment::Stencil), 0);
 
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -596,7 +596,7 @@ Framebuffer GLRenderer::createFramebuffer(glm::uvec2 size, std::map<FramebufferA
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    return Framebuffer(FBO, size, attachments);
+    return Framebuffer(FBO, size, std::move(attachments));
 }
 
 void GLRenderer::bindFramebuffer(const Ref<Framebuffer>& framebuffer) {
@@ -674,7 +674,7 @@ void GLRenderer::bindDirectionalLights() {
         return;
 
     bindUniform("u_directional_light_count", static_cast<int>(m_directionalLights.size()));
-    for (int i = 0; i < m_directionalLights.size(); i++) {
+    for (size_t i = 0; i < m_directionalLights.size(); i++) {
         const auto& light = m_directionalLights[i];
         const std::string structLocation = std::format("u_directional_lights[{}]", i);
         std::string location = structLocation + ".direction";
@@ -713,7 +713,7 @@ void GLRenderer::bindPointLights() {
         return;
 
     bindUniform("u_point_light_count", static_cast<int>(m_pointLights.size()));
-    for (int i = 0; i < m_pointLights.size(); i++) {
+    for (size_t i = 0; i < m_pointLights.size(); i++) {
         const auto& light = m_pointLights[i];
         const std::string structLocation = std::format("u_point_lights[{}]", i);
         std::string location = structLocation + ".position";
@@ -738,7 +738,7 @@ void GLRenderer::bindSpotLights() {
         return;
 
     bindUniform("u_spot_light_count", static_cast<int>(m_spotLights.size()));
-    for (int i = 0; i < m_spotLights.size(); i++) {
+    for (size_t i = 0; i < m_spotLights.size(); i++) {
         const auto& light = m_spotLights[i];
         const std::string structLocation = std::format("u_spot_lights[{}]", i);
         std::string location = structLocation + ".position";

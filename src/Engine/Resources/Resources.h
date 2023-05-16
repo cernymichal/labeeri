@@ -4,6 +4,46 @@
 
 namespace labeeri::Engine {
 
+Ref<ShaderProgram> tryFindShaderProgram(const char* name);
+
+Ref<Mesh> tryFindMesh(const char* name);
+
+Ref<Texture> tryFindTexture(const char* name);
+
+Ref<Material> tryFindMaterial(const char* name);
+
+Ref<Model> tryFindModel(const char* name);
+
+template <typename T>
+static Ref<T> tryFindResource(const char* name) {
+    throw std::runtime_error("Finding defautls of this resource type not supported");
+}
+
+template <>
+static Ref<ShaderProgram> tryFindResource<ShaderProgram>(const char* name) {
+    return tryFindShaderProgram(name);
+}
+
+template <>
+static Ref<Mesh> tryFindResource<Mesh>(const char* name) {
+    return tryFindMesh(name);
+}
+
+template <>
+static Ref<Texture> tryFindResource<Texture>(const char* name) {
+    return tryFindTexture(name);
+}
+
+template <>
+static Ref<Material> tryFindResource<Material>(const char* name) {
+    return tryFindMaterial(name);
+}
+
+template <>
+static Ref<Model> tryFindResource<Model>(const char* name) {
+    return tryFindModel(name);
+}
+
 template <typename T>
 class Resources {
 public:
@@ -49,45 +89,5 @@ public:
 private:
     std::unordered_map<std::string, Ref<T>> m_resources;
 };
-
-Ref<ShaderProgram> tryFindShaderProgram(const char* name);
-
-Ref<Mesh> tryFindMesh(const char* name);
-
-Ref<Texture> tryFindTexture(const char* name);
-
-Ref<Material> tryFindMaterial(const char* name);
-
-Ref<Model> tryFindModel(const char* name);
-
-template <typename T>
-static Ref<T> tryFindResource(const char* name) {
-    throw std::runtime_error("Finding defautls of this resource type not supported");
-}
-
-template <>
-static Ref<ShaderProgram> tryFindResource<ShaderProgram>(const char* name) {
-    return tryFindShaderProgram(name);
-}
-
-template <>
-static Ref<Mesh> tryFindResource<Mesh>(const char* name) {
-    return tryFindMesh(name);
-}
-
-template <>
-static Ref<Texture> tryFindResource<Texture>(const char* name) {
-    return tryFindTexture(name);
-}
-
-template <>
-static Ref<Material> tryFindResource<Material>(const char* name) {
-    return tryFindMaterial(name);
-}
-
-template <>
-static Ref<Model> tryFindResource<Model>(const char* name) {
-    return tryFindModel(name);
-}
 
 }  // namespace labeeri::Engine

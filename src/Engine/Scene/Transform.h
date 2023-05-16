@@ -131,7 +131,7 @@ public:
     /**
      * @brief TODO
      */
-    const Ref<Entity>& entity() const {
+    const Ref<Entity>&& entity() const {
         return m_entity.lock();
     }
 
@@ -199,6 +199,9 @@ public:
      * @brief TODO
      */
     Transform& operator=(const Transform& other) {
+        if (this == &other)
+            return *this;
+
         setWorldPosition(other.worldPosition());
         setRotation(other.rotation());
         return *this;

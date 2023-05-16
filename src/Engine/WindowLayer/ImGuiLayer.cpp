@@ -105,7 +105,7 @@ void ImGuiLayer::onEvent(IEvent& e) {
 bool ImGuiLayer::onRender(const IEvent& e) {
     ImGuiFrame frame;
 
-    for (int i = 0; i < m_windows.size(); ++i) {
+    for (size_t i = 0; i < m_windows.size(); ++i) {
         if (!m_windows[i]->draw()) {
             m_windows.erase(m_windows.begin() + i);
             --i;

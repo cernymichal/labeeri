@@ -41,7 +41,7 @@ std::shared_ptr<Scene> defaultScene() {
     sphere->m_model = clone(Resources<Model>::get("basicSphere"));
     sphere->m_model->m_material = brickWallMaterial;
     sphere->m_onUpdate = [](Entity& self, double deltaTime) {
-        self.transform()->move(glm::vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.5f, 0) * (float)deltaTime);
+        self.transform()->move(glm::vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.5, 0) * (float)deltaTime);
         self.transform()->rotate(glm::vec3(0, glm::radians(-15.0f), 0) * (float)deltaTime);
     };
     scene->addEntity(sphere);
@@ -51,7 +51,7 @@ std::shared_ptr<Scene> defaultScene() {
     cube->m_model = clone(Resources<Model>::get("basicCube"));
     cube->m_model->m_material = catMaterial;
     cube->m_onUpdate = [](Entity& self, double deltaTime) {
-        self.transform()->move(glm::vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.15f, 0) * (float)deltaTime);
+        self.transform()->move(glm::vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.15, 0) * (float)deltaTime);
         self.transform()->rotate(glm::vec3(0, glm::radians(20.0f), 0) * (float)deltaTime);
     };
     scene->addEntity(cube);

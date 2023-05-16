@@ -52,7 +52,7 @@ public:
 private:
     std::vector<Ref<Entity>> m_entities;
 
-    double m_time = 0.0f;
+    double m_time = 0.0;
 
     bool onUpdate(const ApplicationUpdateEvent& e);
 

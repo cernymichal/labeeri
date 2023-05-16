@@ -66,9 +66,9 @@ public:
     virtual void deleteMesh(Mesh& mesh) const override;
 
     virtual Texture createTexture(TextureType type, const Image& image, bool generateMipmap = true,
-                                  TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const;
+                                  TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const override;
 
-    virtual Texture createCubemap(const std::array<Scoped<Image>, 6>& images, TextureFilter filter = TextureFilter::Linear) const;
+    virtual Texture createCubemap(const std::array<Scoped<Image>, 6>& images, TextureFilter filter = TextureFilter::Linear) const override;
 
     virtual void bindTexture(TextureType type, const Texture& texture, unsigned slot) const override;
 

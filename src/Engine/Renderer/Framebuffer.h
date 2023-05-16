@@ -21,8 +21,8 @@ public:
     /**
      * @brief TODO
      */
-    Framebuffer(LAB_GL_HANDLE framebufferObject, glm::uvec2 size, const std::map<FramebufferAttachment, Ref<Texture>>& attachments)
-        : m_framebufferObject(framebufferObject), m_size(size), m_attachments(attachments) {
+    Framebuffer(LAB_GL_HANDLE framebufferObject, glm::uvec2 size, std::map<FramebufferAttachment, Ref<Texture>>&& attachments)
+        : m_size(size), m_attachments(attachments), m_framebufferObject(framebufferObject) {
     }
 
     Framebuffer(const Texture&) = delete;
@@ -31,7 +31,7 @@ public:
      * @brief TODO
      */
     Framebuffer(Framebuffer&& other) noexcept
-        : m_framebufferObject(other.m_framebufferObject), m_size(other.m_size), m_attachments(std::move(other.m_attachments)) {
+        : m_size(other.m_size), m_attachments(std::move(other.m_attachments)), m_framebufferObject(other.m_framebufferObject) {
         other.m_framebufferObject = 0;
     }
 
