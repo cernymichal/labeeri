@@ -279,6 +279,8 @@ void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const 
 void GLRenderer::endOpaque() {
     drawSkybox();
     glDepthMask(GL_FALSE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void GLRenderer::endScene() {

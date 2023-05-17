@@ -68,7 +68,7 @@ std::shared_ptr<Scene> defaultScene() {
 
     auto perlinMaterial = cloneAs<ShadedMaterial>(Resources<Material>::get("grey"));
     perlinMaterial->m_diffuse = glm::vec3(0.8f, 1.0f, 0.8f);
-    perlinMaterial->m_specularMap = Resources<Texture>::get("perlin256_lin.png");
+    perlinMaterial->m_metallicMap = Resources<Texture>::get("perlin512_lin.png");
     perlinMaterial->m_shininess = 128.0;
 
     auto teapot = Entity::Create();

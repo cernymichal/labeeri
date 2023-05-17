@@ -249,4 +249,9 @@
     <None Include="resources\engine\shaders\id.frag" />
     <None Include="resources\engine\shaders\id.vert" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\perlin512_lin.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

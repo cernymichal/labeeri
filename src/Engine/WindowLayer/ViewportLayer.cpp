@@ -38,11 +38,16 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     }
 
     for (auto& entity : LAB_CURRENT_SCENE->entities()) {
-        if (entity->m_model)
+        if (entity->m_model && (!entity->m_model->m_material || entity->m_model->m_material->opaque()))
             entity->m_model->draw(entity->transform()->modelMatrix());
     }
 
     LAB_RENDERER->endOpaque();
+
+    for (auto& entity : LAB_CURRENT_SCENE->entities()) {
+        if (entity->m_model && entity->m_model->m_material && !entity->m_model->m_material->opaque())
+            entity->m_model->draw(entity->transform()->modelMatrix());
+    }
 
     LAB_RENDERER->endScene();
     LAB_RENDERER->drawToScreenPostprocessed();

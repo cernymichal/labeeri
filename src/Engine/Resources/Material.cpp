@@ -15,6 +15,8 @@ void FlatMaterial::bindUniforms() const {
     }
     else
         LAB_RENDERER->bindUniform("u_color", m_color);
+
+    LAB_RENDERER->bindUniform("u_alpha", m_alpha);
 }
 
 void ShadedMaterial::bindUniforms() const {
@@ -53,6 +55,8 @@ void ShadedMaterial::bindUniforms() const {
         LAB_RENDERER->bindTexture(TextureType::Texture2D, *m_normalMap, 4);
         LAB_RENDERER->bindUniform("u_material.normal_map", 4);
     }
+
+    LAB_RENDERER->bindUniform("u_alpha", m_alpha);
 }
 
 }  // namespace labeeri::Engine

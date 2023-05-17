@@ -12,6 +12,7 @@ void materialSectionFlat(const Ref<FlatMaterial>& material) {
     ImGui::SeparatorText("Flat Material");
 
     ImGui::ColorEdit3("Color", glm::value_ptr(material->m_color));
+    ImGui::SliderFloat("Alpha", &material->m_alpha, 0.0f, 1.0f);
 
     bool usingTexture = material->m_texture != nullptr;
 
@@ -27,6 +28,7 @@ void materialSectionShaded(const Ref<ShadedMaterial>& material) {
     ImGui::ColorEdit3("Specular", glm::value_ptr(material->m_specular));
     ImGui::InputFloat("Shininess", &material->m_shininess);
     ImGui::SliderFloat("Metallic", &material->m_metallic, 0.0f, 1.0f);
+    ImGui::SliderFloat("Alpha", &material->m_alpha, 0.0f, 1.0f);
 
     bool usingDiffuseMap = material->m_diffuseMap != nullptr;
     bool usingSpecularMap = material->m_specularMap != nullptr;

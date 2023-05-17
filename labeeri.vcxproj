@@ -254,6 +254,9 @@
     <None Include="resources\engine\shaders\skybox.frag" />
     <None Include="resources\engine\shaders\skybox.vert" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\perlin512_lin.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

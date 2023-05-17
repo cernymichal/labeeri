@@ -98,6 +98,8 @@ uniform bool u_using_cubemap;
 
 uniform Material u_material;
 
+uniform float u_alpha;
+
 out vec4 frag_color;
 
 mat3 calculate_TBN_matrix() {
@@ -215,5 +217,5 @@ void main() {
     vec3 result = diffuse_lighting + reflection;
     result = apply_fog(result);
 
-    frag_color = vec4(result, 1.0);
+    frag_color = vec4(result, u_alpha);
 }

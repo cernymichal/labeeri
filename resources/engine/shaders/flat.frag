@@ -14,16 +14,18 @@ uniform bool u_using_texture;
 
 uniform Fog u_fog;
 
+uniform float u_alpha;
+
 out vec4 frag_color;
 
-vec4 apply_fog(vec4 color) {
+vec3 apply_fog(vec3 color) {
 	float dist = length(position_es);
 	float fog_amount = exp(-pow(u_fog.density * dist, 2.0));
-	return vec4(mix(u_fog.color, color.rgb, fog_amount), color.a);
+	return mix(u_fog.color, color, fog_amount);
 }
 
 void main() {
-    vec4 color = u_using_texture ? texture(u_texture, UV) : vec4(u_color, 1.0);
+    vec3 color = u_using_texture ? texture(u_texture, UV).rgb : u_color;
 	color = apply_fog(color);
-    frag_color = color;
+    frag_color = vec4(color, u_alpha);
 }

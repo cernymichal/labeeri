@@ -26,6 +26,11 @@ public:
     /**
      * @brief TODO
      */
+    virtual bool opaque() const = 0;
+
+    /**
+     * @brief TODO
+     */
     virtual void bindUniforms() const = 0;
 };
 
@@ -36,6 +41,7 @@ class FlatMaterial : public Material {
 public:
     Ref<Texture> m_texture = nullptr;
     glm::vec3 m_color = FALLBACK_COLOR;
+    float m_alpha = 1.0f;
 
     /**
      * @brief TODO
@@ -51,9 +57,10 @@ public:
         : Material(shader), m_texture(texture) {
     }
 
-    /**
-     * @brief TODO
-     */
+    virtual bool opaque() const override {
+        return m_alpha == 1.0f;
+    }
+
     virtual void bindUniforms() const override;
 };
 
@@ -70,6 +77,7 @@ public:
     float m_metallic = 0;
     Ref<Texture> m_metallicMap = nullptr;
     Ref<Texture> m_normalMap = nullptr;
+    float m_alpha = 1.0f;
 
     /**
      * @brief TODO
@@ -84,9 +92,10 @@ public:
         m_diffuse = diffuse;
     }
 
-    /**
-     * @brief TODO
-     */
+    virtual bool opaque() const override {
+        return m_alpha == 1.0f;
+    }
+
     virtual void bindUniforms() const override;
 };
 
