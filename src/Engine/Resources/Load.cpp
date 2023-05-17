@@ -27,6 +27,7 @@ std::string loadShader(const std::string& path) {
 }
 
 Ref<ShaderProgram> loadShaderProgram(const std::filesystem::path& path) {
+    LAB_LOGH3("Loading shader program " << path);
     std::vector<std::pair<ShaderType, const char*>> shaders;
     shaders.reserve(3);
 

@@ -1,7 +1,7 @@
 #version 450 core
 
 layout (triangles) in;
-layout (triangle_strip, max_vertices = 128) out;
+layout (triangle_strip, max_vertices = 64) out;
 
 in VData {
     smooth vec3 normal;
@@ -84,6 +84,7 @@ void instantiate_triangle(vec3 offset) {
         g_data.position_ws = positions_ws[i];
         g_data.position_es = (u_view_matrix * u_model_matrix * position).xyz;
         g_data.normal_ws = normal_ws;
+        g_data.tangent_ws = vec3(0.0);
         g_data.UV = UVs[i];
         EmitVertex();
     }
@@ -92,8 +93,8 @@ void instantiate_triangle(vec3 offset) {
 
 
 void main() {
-    for (float x_offset = 0; x_offset < 6.0; x_offset += 1) {
-		for (float z_offset = 0; z_offset < 6.0; z_offset += 1) {
+    for (float x_offset = 0; x_offset < 4.0; x_offset += 1) {
+		for (float z_offset = 0; z_offset < 4.0; z_offset += 1) {
 			instantiate_triangle(vec3(x_offset, 0.0, z_offset));
 		}
 	}

@@ -230,6 +230,7 @@ GLRenderer::GLRenderer() {
     LAB_LOG("Renderer: " << glGetString(GL_RENDERER));
 
     glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
@@ -274,6 +275,8 @@ void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_GREATER);
     glDepthMask(GL_TRUE);
+
+    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void GLRenderer::endOpaque() {
@@ -281,6 +284,8 @@ void GLRenderer::endOpaque() {
     glDepthMask(GL_FALSE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void GLRenderer::endScene() {
@@ -291,6 +296,8 @@ void GLRenderer::endScene() {
     m_directionalLights.clear();
     m_pointLights.clear();
     m_spotLights.clear();
+
+    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void GLRenderer::drawToScreen() const {
@@ -299,6 +306,8 @@ void GLRenderer::drawToScreen() const {
     glBindFramebuffer(GL_READ_FRAMEBUFFER, *m_currentFramebuffer);
     glBlitFramebuffer(0, 0, frameSize.x, frameSize.y, 0, 0, frameSize.x, frameSize.y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void GLRenderer::drawToScreenPostprocessed() {
@@ -313,6 +322,8 @@ void GLRenderer::drawToScreenPostprocessed() {
     bindUniform("u_gamma", m_sceneParameters.postprocessing.gamma);
     bindUniform("u_exposure", m_sceneParameters.postprocessing.exposure);
     drawMesh();
+
+    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void GLRenderer::waitForFrame() {
@@ -339,11 +350,12 @@ void GLRenderer::useShaderProgram(const Ref<ShaderProgram>& shaderProgram) {
     bindSpotLights();
     bindFog();
 
-    if (m_sceneParameters.skybox) {
-        bindTexture(TextureType::Cubemap, *m_sceneParameters.skybox, 0);
-        bindUniform("u_cubemap", 0);
-    }
+    bindUniform("u_cubemap", 16);
+    if (m_sceneParameters.skybox)
+        bindTexture(TextureType::Cubemap, *m_sceneParameters.skybox, 16);
     bindUniform("u_using_cubemap", m_sceneParameters.skybox != nullptr);
+
+    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void GLRenderer::bindUniform(const char* name, float value) {
@@ -394,7 +406,10 @@ void GLRenderer::bindMesh(const Ref<Mesh>& mesh) {
         return;
 
     m_currentMesh = mesh;
-    glBindVertexArray(mesh->m_vertexArrayObject);
+    if (mesh)
+        glBindVertexArray(mesh->m_vertexArrayObject);
+    else
+        glBindVertexArray(0);
 }
 
 void GLRenderer::drawMesh() {
@@ -412,6 +427,7 @@ ShaderProgram GLRenderer::createShaderProgram(const std::vector<std::pair<Shader
     LAB_LOG_RENDERAPI_ERROR();
 
     linkShaderProgram(program);
+    LAB_LOG(program.operator unsigned int());
 
     return program;
 }
@@ -495,6 +511,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
 
     LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Attribute pointers created");
+    LAB_LOG(VAO);
 
     glBindVertexArray(0);
     return Mesh(VAO, VBO, EBO, faceCount);
@@ -530,6 +547,7 @@ Texture GLRenderer::createTexture(TextureType type, const Image& image, bool gen
 
     LAB_LOG_RENDERAPI_ERROR();
     glBindTexture(typeGL, 0);
+    LAB_LOG(texture);
 
     return Texture(texture);
 }
@@ -557,6 +575,7 @@ Texture GLRenderer::createCubemap(const std::array<Scoped<Image>, 6>& images, Te
 
     LAB_LOG_RENDERAPI_ERROR();
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    LAB_LOG(texture);
 
     return Texture(texture);
 }

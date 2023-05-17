@@ -14,6 +14,8 @@ void WaterMaterial::bindUniforms() const {
 
     LAB_RENDERER->bindUniform("u_displacement_strength", m_displacementStrength);
     LAB_RENDERER->bindUniform("u_time_multiplier", m_timeMultiplier);
+
+    LAB_LOG_RENDERAPI_ERROR();
 }
 
 };  // namespace labeeri

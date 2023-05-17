@@ -41,27 +41,28 @@ std::shared_ptr<Scene> defaultScene() {
 
     auto water = Entity::Create();
     water->transform()->setPosition(glm::vec3(0.0f, 0.45f, 0.0f));
-    water->transform()->setScale(glm::vec3(5.0f));
+    water->transform()->setScale(glm::vec3(8.0f));
     water->m_model = waterModel();
     scene->addEntity(water);
 
     water = Entity::Create();
-    water->transform()->setPosition(glm::vec3(-30.0f, 0.45f, 0.0f));
-    water->transform()->setScale(glm::vec3(5.0f));
+    water->transform()->setPosition(glm::vec3(-32.0f, 0.45f, 0.0f));
+    water->transform()->setScale(glm::vec3(8.0f));
     water->m_model = waterModel();
     scene->addEntity(water);
 
     water = Entity::Create();
-    water->transform()->setPosition(glm::vec3(0.0f, 0.45f, -30.0f));
-    water->transform()->setScale(glm::vec3(5.0f));
+    water->transform()->setPosition(glm::vec3(0.0f, 0.45f, -32.0f));
+    water->transform()->setScale(glm::vec3(8.0f));
     water->m_model = waterModel();
     scene->addEntity(water);
 
     water = Entity::Create();
-    water->transform()->setPosition(glm::vec3(-30.0f, 0.45f, -30.0f));
-    water->transform()->setScale(glm::vec3(5.0f));
+    water->transform()->setPosition(glm::vec3(-32.0f, 0.45f, -32.0f));
+    water->transform()->setScale(glm::vec3(8.0f));
     water->m_model = waterModel();
     scene->addEntity(water);
+
 
     auto sphere = Entity::Create();
     sphere->transform()->setPosition(glm::vec3(1.0, 1.0, -2.2));

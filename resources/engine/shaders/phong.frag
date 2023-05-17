@@ -74,13 +74,13 @@ struct Fog {
 	float density;
 };
 
-in GData {
+in VData {
     smooth vec3 position_ws;
     smooth vec3 position_es;
     smooth vec3 normal_ws;
     smooth vec3 tangent_ws;
     smooth vec2 UV;
-} g_data;
+} v_data;
 
 uniform vec3 u_camera_position;
 
@@ -103,27 +103,27 @@ uniform float u_alpha;
 out vec4 frag_color;
 
 mat3 calculate_TBN_matrix() {
-    vec3 T = normalize(g_data.tangent_ws);
-    vec3 N = normalize(g_data.normal_ws);
-    T = normalize(T - dot(T, N) * N);
-    vec3 B = cross(N, T);
+    vec3 tangent = normalize(v_data.tangent_ws);
+    vec3 normal = normalize(v_data.normal_ws);
+    tangent = normalize(tangent - dot(tangent, normal) * normal);
+    vec3 bitangent = cross(normal, tangent);
     
-    return mat3(T, B, N);
+    return mat3(tangent, bitangent, normal);
 }
 
 MaterialSample sample_material() {
     MaterialSample result;
-    result.diffuse = u_material.using_diffuse_map ? texture(u_material.diffuse_map, g_data.UV).rgb : u_material.diffuse;
-    result.specular = u_material.using_specular_map ? texture(u_material.specular_map, g_data.UV).rgb : u_material.specular;
+    result.diffuse = u_material.using_diffuse_map ? texture(u_material.diffuse_map, v_data.UV).rgb : u_material.diffuse;
+    result.specular = u_material.using_specular_map ? texture(u_material.specular_map, v_data.UV).rgb : u_material.specular;
     result.shininess = u_material.shininess;
-    result.metallic = u_material.using_metallic_map ? texture(u_material.metallic_map, g_data.UV).r : u_material.metallic;
+    result.metallic = u_material.using_metallic_map ? texture(u_material.metallic_map, v_data.UV).r : u_material.metallic;
 
     if (u_material.using_normal_map) {
         mat3 TBN_matrix = calculate_TBN_matrix();
-        result.normal = normalize(TBN_matrix * (texture(u_material.normal_map, g_data.UV).xyz * 2.0f - 1.0f));
+        result.normal = normalize(TBN_matrix * (texture(u_material.normal_map, v_data.UV).xyz * 2.0 - 1.0));
     }
     else
-        result.normal = normalize(g_data.normal_ws);
+        result.normal = normalize(v_data.normal_ws);
 
     return result;
 }
@@ -150,18 +150,18 @@ vec3 calculate_directional_light(DirectionalLight light, MaterialSample material
 }
 
 vec3 calculate_point_light(PointLight light, MaterialSample material, vec3 view_direction) {
-    vec3 light_direction = normalize(light.position - g_data.position_ws);
+    vec3 light_direction = normalize(light.position - v_data.position_ws);
 
-    float distance = length(light.position - g_data.position_ws);
+    float distance = length(light.position - v_data.position_ws);
     float attenuation = 1.0 / (light.attenuation.constant + light.attenuation.linear * distance + light.attenuation.quadratic * (distance * distance));
 
     return phong(light.properties, material, view_direction, light_direction) * attenuation;
 }
 
 vec3 calculate_spot_light(SpotLight light, MaterialSample material, vec3 view_direction) {
-    vec3 light_direction = normalize(light.position - g_data.position_ws);
+    vec3 light_direction = normalize(light.position - v_data.position_ws);
 
-    float distance = length(light.position - g_data.position_ws);
+    float distance = length(light.position - v_data.position_ws);
     float attenuation = 1.0 / (light.attenuation.constant + light.attenuation.linear * distance + light.attenuation.quadratic * (distance * distance));
 
     float theta = dot(light_direction, normalize(-light.direction));
@@ -186,29 +186,28 @@ vec3 calculate_diffuse_lighting(MaterialSample material, vec3 view_direction) {
     return result * (1.0 - material.metallic);
 }
 
-vec3 sample_reflection(vec3 view_direction) {
+vec3 sample_reflection(vec3 view_direction, vec3 normal) {
 	if (!u_using_cubemap)
 		return vec3(0.0);
 
-	vec3 I = normalize(g_data.position_ws - u_camera_position);
-	vec3 R = reflect(I, g_data.normal_ws);
-	return texture(u_cubemap, R).rgb;
+	vec3 reflected_direction = reflect(-view_direction, normal);
+	return texture(u_cubemap, reflected_direction).rgb;
 }
 
 vec3 calculate_reflection(MaterialSample material, vec3 view_direction) {
     float fresnel = pow(1.0 - clamp(dot(view_direction, material.normal), 0.0, 1.0), 8.0);
-    vec3 reflection = sample_reflection(view_direction) * mix(vec3(fresnel), material.diffuse, material.metallic);
+    vec3 reflection = sample_reflection(view_direction, material.normal) * mix(vec3(fresnel), material.diffuse, material.metallic);
     return reflection;
 }
 
 vec3 apply_fog(vec3 color) {
-	float dist = length(g_data.position_es);
+	float dist = length(v_data.position_es);
 	float fog_amount = 1.0 - exp(-pow(u_fog.density * dist, 2.0));
 	return mix(color, u_fog.color, fog_amount);
 }
 
 void main() {
-    vec3 view_direction = normalize(u_camera_position - g_data.position_ws);
+    vec3 view_direction = normalize(u_camera_position - v_data.position_ws);
     MaterialSample material_sample = sample_material();
 
     vec3 diffuse_lighting = calculate_diffuse_lighting(material_sample, view_direction);

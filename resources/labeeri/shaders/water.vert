@@ -10,10 +10,10 @@ uniform mat4 u_normal_matrix;
 out VData {
     smooth vec3 normal;
     smooth vec2 UV;
-} vs_data;
+} v_data;
 
 void main() {
     gl_Position = vec4(in_position, 1);
-    vs_data.normal = in_normal;
-    vs_data.UV = in_UV;
+    v_data.normal = in_normal;
+    v_data.UV = in_UV;
 }
