@@ -496,7 +496,6 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
     LAB_LOG("Attribute pointers created");
 
     glBindVertexArray(0);
-    LAB_LOG(VAO);
     return Mesh(VAO, VBO, EBO, faceCount);
 }
 

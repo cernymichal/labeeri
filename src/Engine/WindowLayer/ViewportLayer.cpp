@@ -157,7 +157,8 @@ void ViewportLayer::clickOnObject(const glm::uvec2& mousePosition) {
     LAB_LOG_RENDERAPI_ERROR();
     id--;
 
-    LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(LAB_CURRENT_SCENE->entities()[id], id));
+    if (id > 0 && id < LAB_CURRENT_SCENE->entities().size())
+        LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(LAB_CURRENT_SCENE->entities()[id], id));
 
     LAB_LOG("Clicked on object with id " << id);
 }

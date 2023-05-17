@@ -180,6 +180,8 @@
     <ClCompile Include="src\Engine\Resources\Resources.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\MenuWindow.cpp" />
     <ClCompile Include="src\Engine\Application.cpp" />
+    <ClCompile Include="src\Game\Resources\Materials.cpp" />
+    <ClCompile Include="src\Game\Resources\Models.cpp" />
     <ClCompile Include="src\Game\Scenes.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\LogWindow.cpp" />
@@ -236,6 +238,9 @@
     <ClInclude Include="src\Engine\Resources\Material.h" />
     <ClInclude Include="src\Engine\Resources\Model.h" />
     <ClInclude Include="src\Engine\WindowLayer\ViewportLayer.h" />
+    <ClInclude Include="src\Game\Resources\plane.h" />
+    <ClInclude Include="src\Game\Resources\Materials.h" />
+    <ClInclude Include="src\Game\Resources\Models.h" />
     <ClInclude Include="src\Game\Scenes.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
@@ -253,9 +258,9 @@
     <None Include="resources\engine\shaders\postprocess.vert" />
     <None Include="resources\engine\shaders\skybox.frag" />
     <None Include="resources\engine\shaders\skybox.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\perlin512_lin.png" />
+    <None Include="resources\labeeri\shaders\water.frag" />
+    <None Include="resources\labeeri\shaders\water.geom" />
+    <None Include="resources\labeeri\shaders\water.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

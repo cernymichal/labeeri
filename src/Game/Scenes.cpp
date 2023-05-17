@@ -1,5 +1,8 @@
 #include "scenes.h"
 
+#include "Game/Resources/Materials.h"
+#include "Game/Resources/Models.h"
+
 using namespace labeeri::Engine;
 
 namespace labeeri {
@@ -68,13 +71,19 @@ std::shared_ptr<Scene> defaultScene() {
 
     auto perlinMaterial = cloneAs<ShadedMaterial>(Resources<Material>::get("grey"));
     perlinMaterial->m_diffuse = glm::vec3(0.8f, 1.0f, 0.8f);
-    perlinMaterial->m_metallicMap = Resources<Texture>::get("perlin512_lin.png");
+    perlinMaterial->m_metallicMap = Resources<Texture>::get("resources/labeeri/textures/perlin512_lin.png");
     perlinMaterial->m_shininess = 128.0;
 
     auto teapot = Entity::Create();
     teapot->transform()->setPosition(glm::vec3(-1.0f, 0.5f, 0.0f));
     teapot->m_model = makeRef<Model>(perlinMaterial, Resources<Mesh>::get("teapot.obj"));
     scene->addEntity(teapot);
+
+    auto water = Entity::Create();
+    water->transform()->setPosition(glm::vec3(0.0f, 0.5f, 0.0f));
+    water->transform()->setScale(glm::vec3(5.0f));
+    water->m_model = waterModel();
+    scene->addEntity(water);
 
     /*
     auto dragon = Entity::Create();

@@ -99,6 +99,12 @@
     <ClCompile Include="src\Engine\Renderer\Framebuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\Resources\Materials.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Resources\Models.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Application.h">
@@ -233,6 +239,15 @@
     <ClInclude Include="src\Engine\Renderer\RendererParameters.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\Resources\plane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Resources\Materials.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Resources\Models.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\shaders\flat.vert" />
@@ -248,10 +263,8 @@
     <None Include="resources\engine\shaders\skybox.frag" />
     <None Include="resources\engine\shaders\id.frag" />
     <None Include="resources\engine\shaders\id.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\perlin512_lin.png">
-      <Filter>Resource Files</Filter>
-    </Image>
+    <None Include="resources\labeeri\shaders\water.frag" />
+    <None Include="resources\labeeri\shaders\water.geom" />
+    <None Include="resources\labeeri\shaders\water.vert" />
   </ItemGroup>
 </Project>
