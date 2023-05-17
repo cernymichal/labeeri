@@ -39,6 +39,30 @@ std::shared_ptr<Scene> defaultScene() {
     scene->addEntity(pointLight);
     scene->addEntity(spotLight);
 
+    auto water = Entity::Create();
+    water->transform()->setPosition(glm::vec3(0.0f, 0.45f, 0.0f));
+    water->transform()->setScale(glm::vec3(5.0f));
+    water->m_model = waterModel();
+    scene->addEntity(water);
+
+    water = Entity::Create();
+    water->transform()->setPosition(glm::vec3(-30.0f, 0.45f, 0.0f));
+    water->transform()->setScale(glm::vec3(5.0f));
+    water->m_model = waterModel();
+    scene->addEntity(water);
+
+    water = Entity::Create();
+    water->transform()->setPosition(glm::vec3(0.0f, 0.45f, -30.0f));
+    water->transform()->setScale(glm::vec3(5.0f));
+    water->m_model = waterModel();
+    scene->addEntity(water);
+
+    water = Entity::Create();
+    water->transform()->setPosition(glm::vec3(-30.0f, 0.45f, -30.0f));
+    water->transform()->setScale(glm::vec3(5.0f));
+    water->m_model = waterModel();
+    scene->addEntity(water);
+
     auto sphere = Entity::Create();
     sphere->transform()->setPosition(glm::vec3(1.0, 1.0, -2.2));
     sphere->m_model = clone(Resources<Model>::get("basicSphere"));
@@ -78,12 +102,6 @@ std::shared_ptr<Scene> defaultScene() {
     teapot->transform()->setPosition(glm::vec3(-1.0f, 0.5f, 0.0f));
     teapot->m_model = makeRef<Model>(perlinMaterial, Resources<Mesh>::get("teapot.obj"));
     scene->addEntity(teapot);
-
-    auto water = Entity::Create();
-    water->transform()->setPosition(glm::vec3(0.0f, 0.5f, 0.0f));
-    water->transform()->setScale(glm::vec3(5.0f));
-    water->m_model = waterModel();
-    scene->addEntity(water);
 
     /*
     auto dragon = Entity::Create();

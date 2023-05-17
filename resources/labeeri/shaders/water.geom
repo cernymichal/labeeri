@@ -28,11 +28,11 @@ out GData {
 } g_data;
 
 
-vec2 calculate_UVs(vec2 UV, vec3 position) {
+vec2 calculate_UVs(vec4 position) {
     float time = u_time * u_time_multiplier;
     float scale = 0.0325 + 0.01 * sin(time*2);
 
-    UV =+ position.xz;
+    vec2 UV = (u_model_matrix * position).xz * 0.25;
 
     mat3 translate_matrix = transpose(mat3(1.0, 0.0, time,
                                            0.0, 1.0, time * 0.25,
@@ -69,7 +69,7 @@ void instantiate_triangle(vec3 offset) {
 
     for (int i = 0; i < 3; i++) {
         vec4 position = gl_in[i].gl_Position + vec4(offset, 0.0);
-        UVs[i] = calculate_UVs(v_data[i].UV, position.xyz);
+        UVs[i] = calculate_UVs(position);
         position.xyz = calculate_displacement(position.xyz, UVs[i], v_data[i].normal);
         positions[i] = position;
         positions_ws[i] = (u_model_matrix * position).xyz;
@@ -92,8 +92,8 @@ void instantiate_triangle(vec3 offset) {
 
 
 void main() {
-    for (float x_offset = 0; x_offset <= 6.5; x_offset += 1) {
-		for (float z_offset = 0; z_offset <= 6.5; z_offset += 1) {
+    for (float x_offset = 0; x_offset < 6.0; x_offset += 1) {
+		for (float z_offset = 0; z_offset < 6.0; z_offset += 1) {
 			instantiate_triangle(vec3(x_offset, 0.0, z_offset));
 		}
 	}

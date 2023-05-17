@@ -284,6 +284,7 @@ void GLRenderer::endOpaque() {
 }
 
 void GLRenderer::endScene() {
+    glDisable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
