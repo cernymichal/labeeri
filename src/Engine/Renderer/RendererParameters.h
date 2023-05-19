@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Renderer/Texture.h"
+#include "Engine/Renderer/TextureResource.h"
 
 namespace labeeri::Engine {
 
@@ -23,7 +23,7 @@ struct FogParameters {
 struct RenderSceneParameters {
     FogParameters fog;
     PostprocessingParameters postprocessing;
-    Ref<Texture> skybox;
+    Ref<TextureResource> skybox;
 };
 
 enum class ShaderType : uint8_t {

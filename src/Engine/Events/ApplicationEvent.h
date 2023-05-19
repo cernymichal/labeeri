@@ -9,19 +9,14 @@ namespace labeeri::Engine {
  */
 class WindowResizeEvent : public IEvent {
 public:
-    explicit WindowResizeEvent(const glm::uvec2& windowSize) : m_windowSize(windowSize) {
-    }
+    const glm::uvec2 m_windowSize;
 
-    const glm::uvec2& windowSize() const {
-        return m_windowSize;
+    explicit WindowResizeEvent(const glm::uvec2& windowSize) : m_windowSize(windowSize) {
     }
 
     EVENT_CLASS_TYPE(WindowResize)
 
     EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application))
-
-private:
-    glm::uvec2 m_windowSize;
 };
 
 /**
@@ -29,19 +24,14 @@ private:
  */
 class WindowMinimizeEvent : public IEvent {
 public:
-    explicit WindowMinimizeEvent(bool iconified) : m_iconified(iconified) {
-    }
+    const bool m_iconified;
 
-    bool iconified() const {
-        return m_iconified;
+    explicit WindowMinimizeEvent(bool iconified) : m_iconified(iconified) {
     }
 
     EVENT_CLASS_TYPE(WindowResize)
 
     EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application))
-
-private:
-    bool m_iconified;
 };
 
 /**
@@ -57,29 +47,41 @@ public:
 /**
  * @brief TODO
  */
-class ApplicationUpdateEvent : public IEvent {
+class UpdateEvent : public IEvent {
 public:
-    explicit ApplicationUpdateEvent(double deltaTime) : m_deltaTime(deltaTime) {
-    }
+    const double m_deltaTime;
 
-    double deltaTime() const {
-        return m_deltaTime;
+    explicit UpdateEvent(double deltaTime) : m_deltaTime(deltaTime) {
     }
 
     EVENT_CLASS_TYPE(ApplicationUpdate)
 
-    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application))
-
-private:
-    double m_deltaTime;
+    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application) | static_cast<int>(EventCategory::Scene))
 };
 
 /**
  * @brief TODO
  */
-class ApplicationFixedUpdateEvent : public IEvent {
+class FixedUpdateEvent : public IEvent {
 public:
     EVENT_CLASS_TYPE(ApplicationFixedUpdate)
+
+    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application) | static_cast<int>(EventCategory::Scene))
+};
+
+class Scene;
+
+/**
+ * @brief TODO
+ */
+class SceneChangeEvent : public IEvent {
+public:
+    const std::shared_ptr<Scene> m_scene;
+
+    explicit SceneChangeEvent(const std::shared_ptr<Scene>& scene) : m_scene(scene) {
+    }
+
+    EVENT_CLASS_TYPE(SceneChange)
 
     EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application))
 };

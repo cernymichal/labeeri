@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Engine/Renderer/Framebuffer.h"
-#include "Engine/Renderer/Image.h"
+#include "Engine/Renderer/ImageResource.h"
 #include "Engine/Renderer/Light.h"
-#include "Engine/Renderer/Mesh.h"
+#include "Engine/Renderer/MeshResource.h"
 #include "Engine/Renderer/RendererParameters.h"
-#include "Engine/Renderer/ShaderProgram.h"
-#include "Engine/Renderer/Texture.h"
+#include "Engine/Renderer/ShaderResource.h"
+#include "Engine/Renderer/TextureResource.h"
 
 namespace labeeri::Engine {
 
@@ -68,7 +68,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual void useShaderProgram(const Ref<ShaderProgram>& shaderProgram) = 0;
+    virtual void useShaderProgram(const Ref<ShaderResource>& shaderProgram) = 0;
 
     /**
      * @brief TODO
@@ -108,12 +108,12 @@ public:
     /**
      * @brief TODO
      */
-    virtual LAB_GL_INT getUniformLocation(ShaderProgram& shaderProgram, const char* name) = 0;
+    virtual LAB_GL_INT getUniformLocation(ShaderResource& shaderProgram, const char* name) = 0;
 
     /**
      * @brief TODO
      */
-    virtual void bindMesh(const Ref<Mesh>& mesh) = 0;
+    virtual void bindMesh(const Ref<MeshResource>& mesh) = 0;
 
     /**
      * @brief TODO
@@ -123,56 +123,56 @@ public:
     /**
      * @brief TODO
      */
-    virtual ShaderProgram createShaderProgram(const std::vector<std::pair<ShaderType, const char*>>& shaders) const = 0;
+    virtual ShaderResource createShaderProgram(const std::vector<std::pair<ShaderType, const char*>>& shaders) const = 0;
 
     /**
      * @brief TODO
      */
-    virtual void deleteShaderProgram(ShaderProgram& shaderProgram) const = 0;
+    virtual void deleteShaderProgram(ShaderResource& shaderProgram) const = 0;
 
     /**
      * @brief TODO
      */
-    virtual Mesh createMesh(const float* vertices, uint32_t vertexCount,
-                            const float* normals, const float* tangets,
-                            const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const = 0;
+    virtual MeshResource createMesh(const float* vertices, uint32_t vertexCount,
+                                    const float* normals, const float* tangets,
+                                    const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const = 0;
 
     /**
      * @brief TODO
      */
-    virtual void deleteMesh(Mesh& mesh) const = 0;
+    virtual void deleteMesh(MeshResource& mesh) const = 0;
 
     /**
      * @brief TODO
      */
-    virtual Texture createTexture(TextureType type, const Image& image, bool generateMipmap = true,
-                                  TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const = 0;
+    virtual TextureResource createTexture(TextureType type, const ImageResource& image, bool generateMipmap = true,
+                                          TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const = 0;
 
     /**
      * @brief TODO
      */
-    virtual Texture createCubemap(const std::array<Scoped<Image>, 6>& images, TextureFilter filter = TextureFilter::Linear) const = 0;
+    virtual TextureResource createCubemap(const std::array<Scoped<ImageResource>, 6>& images, TextureFilter filter = TextureFilter::Linear) const = 0;
 
     /**
      * @brief TODO
      */
-    virtual void bindTexture(TextureType type, const Texture& texture, unsigned slot = 0) const = 0;
+    virtual void bindTexture(TextureType type, const TextureResource& texture, unsigned slot = 0) const = 0;
 
     /**
      * @brief TODO
      */
     virtual void readFramebuffer(TextureFormat format, TextureDataType dataType,
-                             glm::uvec2 position, glm::uvec2 size, void* result) const = 0;
+                                 glm::uvec2 position, glm::uvec2 size, void* result) const = 0;
 
     /**
      * @brief TODO
      */
-    virtual void deleteTexture(Texture& texure) const = 0;
+    virtual void deleteTexture(TextureResource& texure) const = 0;
 
     /**
      * @brief TODO
      */
-    virtual Framebuffer createFramebuffer(glm::uvec2 size, std::map<FramebufferAttachment, Ref<Texture>>&& attachments) const = 0;
+    virtual Framebuffer createFramebuffer(glm::uvec2 size, std::map<FramebufferAttachment, Ref<TextureResource>>&& attachments) const = 0;
 
     /**
      * @brief TODO
@@ -207,12 +207,12 @@ public:
     /**
      * @brief TODO
      */
-    static IRenderer* instance() {
+    static IRenderer* Instance() {
         return s_renderer.get();
     }
 
 private:
-    static std::unique_ptr<IRenderer> s_renderer;
+    static inline std::unique_ptr<IRenderer> s_renderer;
 
     friend Application;
 };

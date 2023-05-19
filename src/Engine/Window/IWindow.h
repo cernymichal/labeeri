@@ -90,12 +90,12 @@ public:
     /**
      * @brief TODO
      */
-    static IWindow* instance() {
+    static IWindow* Instance() {
         return s_window.get();
     }
 
 private:
-    static std::unique_ptr<IWindow> s_window;
+    static inline std::unique_ptr<IWindow> s_window;
 
     friend Application;
 };

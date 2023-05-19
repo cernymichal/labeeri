@@ -26,7 +26,7 @@ std::string loadShader(const std::string& path) {
     return contentBuffer.str();
 }
 
-Ref<ShaderProgram> loadShaderProgram(const std::filesystem::path& path) {
+Ref<ShaderResource> loadShader(const std::filesystem::path& path) {
     LAB_LOGH3("Loading shader program " << path);
     std::vector<std::pair<ShaderType, const char*>> shaders;
     shaders.reserve(3);
@@ -46,12 +46,12 @@ Ref<ShaderProgram> loadShaderProgram(const std::filesystem::path& path) {
         shaders.emplace_back(ShaderType::Geometry, geometryShaderSource.c_str());
     }
 
-    ShaderProgram program = LAB_RENDERER->createShaderProgram(shaders);
+    ShaderResource program = LAB_RENDERER->createShaderProgram(shaders);
 
-    return makeRef<ShaderProgram>(std::move(program));
+    return makeRef<ShaderResource>(std::move(program));
 }
 
-Ref<Mesh> loadMesh(const std::filesystem::path& filePath) {
+Ref<MeshResource> loadMesh(const std::filesystem::path& filePath) {
     LAB_LOGH3("Loading mesh " << filePath);
 
     Assimp::Importer importer;
@@ -112,13 +112,13 @@ Ref<Mesh> loadMesh(const std::filesystem::path& filePath) {
 
     LAB_LOG("Data loaded");
 
-    Mesh mesh = LAB_RENDERER->createMesh(vertices, vertexCount, normals, tangents, uvPtrs, indices.data(), faceCount);
+    MeshResource mesh = LAB_RENDERER->createMesh(vertices, vertexCount, normals, tangents, uvPtrs, indices.data(), faceCount);
 
-    return makeRef<Mesh>(std::move(mesh));
+    return makeRef<MeshResource>(std::move(mesh));
 }
 
-struct STBImage : Image {
-    STBImage(const std::filesystem::path& filePath, bool gammaCorrected, bool flip = true) {
+struct STBImageResource : ImageResource {
+    STBImageResource(const std::filesystem::path& filePath, bool gammaCorrected, bool flip = true) {
         LAB_LOGH3("Loading image " << filePath);
 
         if (flip)
@@ -154,20 +154,20 @@ struct STBImage : Image {
         format = channels == 4 ? TextureFormat::RGBA : TextureFormat::RGB;
     }
 
-    virtual ~STBImage() override {
+    virtual ~STBImageResource() override {
         stbi_image_free(data);
     }
 };
 
-Ref<Texture> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected) {
-    STBImage image(filePath, gammaCorrected);
+Ref<TextureResource> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected) {
+    STBImageResource image(filePath, gammaCorrected);
     auto texture = LAB_RENDERER->createTexture(TextureType::Texture2D, image);
 
-    return makeRef<Texture>(std::move(texture));
+    return makeRef<TextureResource>(std::move(texture));
 }
 
-Ref<Texture> loadCubemap(const std::filesystem::path& path, bool gammaCorrected) {
-    std::array<Scoped<Image>, 6> images;
+Ref<TextureResource> loadCubemap(const std::filesystem::path& path, bool gammaCorrected) {
+    std::array<Scoped<ImageResource>, 6> images;
 
     std::string extension;
     for (const auto& entry : std::filesystem::directory_iterator(path)) {
@@ -177,16 +177,16 @@ Ref<Texture> loadCubemap(const std::filesystem::path& path, bool gammaCorrected)
         }
     }
 
-    images[0] = makeScoped<STBImage>((path / ("px" + extension)), gammaCorrected, false);
-    images[1] = makeScoped<STBImage>((path / ("nx" + extension)), gammaCorrected, false);
-    images[2] = makeScoped<STBImage>((path / ("py" + extension)), gammaCorrected, false);
-    images[3] = makeScoped<STBImage>((path / ("ny" + extension)), gammaCorrected, false);
-    images[4] = makeScoped<STBImage>((path / ("pz" + extension)), gammaCorrected, false);
-    images[5] = makeScoped<STBImage>((path / ("nz" + extension)), gammaCorrected, false);
+    images[0] = makeScoped<STBImageResource>((path / ("px" + extension)), gammaCorrected, false);
+    images[1] = makeScoped<STBImageResource>((path / ("nx" + extension)), gammaCorrected, false);
+    images[2] = makeScoped<STBImageResource>((path / ("py" + extension)), gammaCorrected, false);
+    images[3] = makeScoped<STBImageResource>((path / ("ny" + extension)), gammaCorrected, false);
+    images[4] = makeScoped<STBImageResource>((path / ("pz" + extension)), gammaCorrected, false);
+    images[5] = makeScoped<STBImageResource>((path / ("nz" + extension)), gammaCorrected, false);
 
     auto texture = LAB_RENDERER->createCubemap(images);
 
-    return makeRef<Texture>(std::move(texture));
+    return makeRef<TextureResource>(std::move(texture));
 }
 
 }  // namespace labeeri::Engine

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Renderer/Light.h"
-#include "Engine/Scene/Transform.h"
+#include "Engine/Scene/Components/Transform.h"
 
 namespace labeeri::Engine {
 
@@ -23,7 +23,7 @@ public:
     float m_outerCutoff;
     float m_intensity = 1.0;
 
-    Light(LightType type, const LightProperties& properties, const LightAttenuation& attenuation = LightAttenuation(), float innerCutoff = 0.91f, float outerCutoff = 0.82f)
+    explicit Light(LightType type = LightType::Point, const LightProperties& properties = LightProperties(), const LightAttenuation& attenuation = LightAttenuation(), float innerCutoff = 0.91f, float outerCutoff = 0.82f)
         : m_type(type), m_properties(properties), m_attenuation(attenuation), m_innerCutoff(innerCutoff), m_outerCutoff(outerCutoff) {
     }
 

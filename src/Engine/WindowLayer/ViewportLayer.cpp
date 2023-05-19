@@ -3,6 +3,8 @@
 #include "Engine/Application.h"
 #include "Engine/Renderer/IRenderer.h"
 #include "Engine/Resources/Resources.h"
+#include "Engine/Scene/Components/Camera.h"
+#include "Engine/Scene/Components/Transform.h"
 #include "Engine/Window/IWindow.h"
 #include "Engine/WindowLayer/ImGuiWindow/EntityWindow.h"
 
@@ -16,38 +18,32 @@ ViewportLayer::ViewportLayer() {
 }
 
 void ViewportLayer::onEvent(IEvent& e) {
-    e.dispatch<ApplicationRenderEvent>(LAB_BIND_EVENT_FUNC(ViewportLayer::onRender));
-    e.dispatch<WindowResizeEvent>(LAB_BIND_EVENT_FUNC(ViewportLayer::onResize));
-    e.dispatch<MouseButtonPressEvent>(LAB_BIND_EVENT_FUNC(ViewportLayer::onMouseButtonPress));
-    e.dispatch<KeyboardPressEvent>(LAB_BIND_EVENT_FUNC(ViewportLayer::onKeyboardPress));
+    e.dispatch<ApplicationRenderEvent>(LAB_BIND_EVENT_FUNC(onRender));
+    e.dispatch<WindowResizeEvent>(LAB_BIND_EVENT_FUNC(onResize));
+    e.dispatch<MouseButtonPressEvent>(LAB_BIND_EVENT_FUNC(onMouseButtonPress));
+    e.dispatch<KeyboardPressEvent>(LAB_BIND_EVENT_FUNC(onKeyboardPress));
 }
 
 bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     if (!LAB_CURRENT_SCENE) return false;
 
-    auto viewMatrix = m_camera->viewMatrix();
-    auto projectionMatrix = m_camera->projectionMatrix(m_size);
+    auto& camera = m_camera.getComponent<Camera>();
+    auto& cameraPosition = m_camera.getComponent<Transform>();
 
-    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), m_camera->transform()->worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
+    auto viewMatrix = camera.viewMatrix(cameraPosition);
+    auto projectionMatrix = camera.projectionMatrix(m_size);
+
+    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), cameraPosition.worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
     LAB_RENDERER->bindFramebuffer(m_viewFramebuffer);
     LAB_RENDERER->clear(static_cast<int>(ClearBuffer::Depth));
 
-    for (auto& entity : LAB_CURRENT_SCENE->entities()) {
-        if (entity->m_light)
-            entity->m_light->submit(*entity->transform());
-    }
+    LAB_CURRENT_SCENE->m_systems.light->bindLights();
 
-    for (auto& entity : LAB_CURRENT_SCENE->entities()) {
-        if (entity->m_model && (!entity->m_model->m_material || entity->m_model->m_material->opaque()))
-            entity->m_model->draw(entity->transform()->modelMatrix());
-    }
+    LAB_CURRENT_SCENE->m_systems.render->drawOpaque();
 
     LAB_RENDERER->endOpaque();
 
-    for (auto& entity : LAB_CURRENT_SCENE->entities()) {
-        if (entity->m_model && entity->m_model->m_material && !entity->m_model->m_material->opaque())
-            entity->m_model->draw(entity->transform()->modelMatrix());
-    }
+    LAB_CURRENT_SCENE->m_systems.render->drawTransparent();
 
     LAB_RENDERER->endScene();
     LAB_RENDERER->drawToScreenPostprocessed();
@@ -57,7 +53,7 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
 }
 
 bool ViewportLayer::onResize(const WindowResizeEvent& e) {
-    m_size = e.windowSize();
+    m_size = e.m_windowSize;
     updateViewFramebuffer();
     m_idFramebuffer = nullptr;
 
@@ -65,13 +61,13 @@ bool ViewportLayer::onResize(const WindowResizeEvent& e) {
 }
 
 bool ViewportLayer::onMouseButtonPress(const MouseButtonPressEvent& e) {
-    if (e.button() == MouseButton::Left && !(e.mods() & LAB_MOD_CONTROL) && LAB_APP.focus() != ApplicationFocus::Viewport) {
+    if (e.m_button == MouseButton::Left && !(e.m_mods & LAB_MOD_CONTROL) && LAB_APP.focus() != ApplicationFocus::Viewport) {
         LAB_APP.focusViewport();
         return true;
     }
 
-    if (e.button() == MouseButton::Left && e.mods() & LAB_MOD_CONTROL && LAB_APP.focus() != ApplicationFocus::Viewport) {
-        clickOnObject(e.position());
+    if (e.m_button == MouseButton::Left && e.m_mods & LAB_MOD_CONTROL && LAB_APP.focus() != ApplicationFocus::Viewport) {
+        clickOnObject(e.m_position);
         return true;
     }
 
@@ -79,12 +75,12 @@ bool ViewportLayer::onMouseButtonPress(const MouseButtonPressEvent& e) {
 }
 
 bool ViewportLayer::onKeyboardPress(const KeyboardPressEvent& e) {
-    if (e.key() == KeyboardKey::Escape && LAB_APP.focus() == ApplicationFocus::Viewport) {
+    if (e.m_key == KeyboardKey::Escape && LAB_APP.focus() == ApplicationFocus::Viewport) {
         LAB_APP.focusUI();
         return true;
     }
 
-    if (e.key() == KeyboardKey::F5) {
+    if (e.m_key == KeyboardKey::F5) {
         LAB_WINDOW->setFullscreen(!LAB_WINDOW->fullscreen());
         return true;
     }
@@ -93,14 +89,14 @@ bool ViewportLayer::onKeyboardPress(const KeyboardPressEvent& e) {
 }
 
 void ViewportLayer::updateViewFramebuffer() {
-    auto colorBuffer = makeRef<Texture>(
+    auto colorBuffer = makeRef<TextureResource>(
         LAB_RENDERER->createTexture(TextureType::Texture2D,
-                                    Image(m_size, nullptr, TextureDataType::Float16, TextureFormat::RGBA, TextureInternalFormat::RGBAFloat16), false,
+                                    ImageResource(m_size, nullptr, TextureDataType::Float16, TextureFormat::RGBA, TextureInternalFormat::RGBAFloat16), false,
                                     TextureFilter::Linear, TextureWrap::ClampToEdge));
 
-    auto depthBuffer = makeRef<Texture>(
+    auto depthBuffer = makeRef<TextureResource>(
         LAB_RENDERER->createTexture(TextureType::Texture2D,
-                                    Image(m_size, nullptr, TextureDataType::Float32, TextureFormat::Depth, TextureInternalFormat::DepthFloat32), false,
+                                    ImageResource(m_size, nullptr, TextureDataType::Float32, TextureFormat::Depth, TextureInternalFormat::DepthFloat32), false,
                                     TextureFilter::Linear, TextureWrap::ClampToEdge));
 
     m_viewFramebuffer = makeRef<Framebuffer>(
@@ -109,9 +105,9 @@ void ViewportLayer::updateViewFramebuffer() {
 }
 
 void ViewportLayer::updateIdFramebuffer() {
-    auto idBuffer = makeRef<Texture>(
+    auto idBuffer = makeRef<TextureResource>(
         LAB_RENDERER->createTexture(TextureType::Texture2D,
-                                    Image(m_size, nullptr, TextureDataType::UInt32, TextureFormat::RedInt, TextureInternalFormat::RedUInt32), false,
+                                    ImageResource(m_size, nullptr, TextureDataType::UInt32, TextureFormat::RedInt, TextureInternalFormat::RedUInt32), false,
                                     TextureFilter::Nearest, TextureWrap::ClampToEdge));
 
     // Depth buffer is shared with view framebuffer
@@ -127,38 +123,31 @@ void ViewportLayer::clickOnObject(const glm::uvec2& mousePosition) {
     if (!m_idFramebuffer)
         updateIdFramebuffer();
 
-    auto viewMatrix = m_camera->viewMatrix();
-    auto projectionMatrix = m_camera->projectionMatrix(m_size);
+    auto& camera = m_camera.getComponent<Camera>();
+    auto& cameraPosition = m_camera.getComponent<Transform>();
 
-    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), m_camera->transform()->worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
+    auto viewMatrix = camera.viewMatrix(cameraPosition);
+    auto projectionMatrix = camera.projectionMatrix(m_size);
+
+    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), cameraPosition.worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
     LAB_RENDERER->bindFramebuffer(m_idFramebuffer);
     LAB_RENDERER->clear(static_cast<int>(ClearBuffer::Depth));
-    LAB_RENDERER->clearBuffer(static_cast<int>(ClearBuffer::Color), 0);
-    LAB_RENDERER->useShaderProgram(Resources<ShaderProgram>::get("id"));
+    LAB_RENDERER->clearBuffer(static_cast<int>(ClearBuffer::Color), NULL_ENTITY);
 
-    uint32_t id = 0;
-    for (auto& entity : LAB_CURRENT_SCENE->entities()) {
-        id++;
-        if (!entity->m_model)
-            continue;
-
-        LAB_RENDERER->bindMesh(entity->m_model->m_mesh);
-        LAB_RENDERER->bindPVM(entity->transform()->modelMatrix());
-        LAB_RENDERER->bindUniform("u_id", id);
-        LAB_RENDERER->drawMesh();
-    }
+    LAB_CURRENT_SCENE->m_systems.render->drawIds();
 
     LAB_RENDERER->endScene();
     LAB_RENDERER->waitForFrame();
     LAB_LOG_RENDERAPI_ERROR();
 
     LAB_RENDERER->bindFramebuffer(m_idFramebuffer);
-    LAB_RENDERER->readFramebuffer(TextureFormat::RedInt, TextureDataType::UInt32, glm::uvec2(mousePosition.x, m_size.y - mousePosition.y - 1), glm::uvec2(1), &id);
-    LAB_LOG_RENDERAPI_ERROR();
-    id--;
 
-    if (id > 0 && id < LAB_CURRENT_SCENE->entities().size())
-        LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(LAB_CURRENT_SCENE->entities()[id], id));
+    EntityId id = NULL_ENTITY;
+    LAB_RENDERER->readFramebuffer(TextureFormat::RedInt, TextureDataType::UInt32, glm::uvec2(mousePosition.x, m_size.y - mousePosition.y - 1), glm::uvec2(1), &id);
+    if (id >= NULL_ENTITY && id < MAX_ENTITIES)
+        LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(id));
+
+    LAB_LOG_RENDERAPI_ERROR();
 
     LAB_LOG("Clicked on object with id " << id);
 }

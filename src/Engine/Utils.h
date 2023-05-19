@@ -9,33 +9,41 @@ using LAB_GL_UINT = unsigned int;  // so that we dont have to include GLAD every
 using LAB_GL_INT = int;
 using LAB_GL_HANDLE = LAB_GL_UINT;
 
-#define LAB_APP labeeri::Engine::Application::instance()
+#define LAB_APP labeeri::Engine::Application::Instance()
 #define LAB_CURRENT_SCENE LAB_APP.scene()
 #define LAB_CURRENT_CAMERA LAB_APP.camera()
 #define LAB_IMGUI LAB_APP.imGuiLayer()
-#define LAB_WINDOW labeeri::Engine::IWindow::instance()
-#define LAB_RENDERER labeeri::Engine::IRenderer::instance()
+#define LAB_WINDOW labeeri::Engine::IWindow::Instance()
+#define LAB_RENDERER labeeri::Engine::IRenderer::Instance()
+#define LAB_ECS labeeri::Engine::ECS::CURRENT_INSTANCE
 
 namespace labeeri::Engine {
 
-constexpr auto INITIAL_WINDOW_SIZE = glm::uvec2(1600, 1200);
+inline constexpr auto INITIAL_WINDOW_SIZE = glm::uvec2(1600, 1200);
 
-constexpr auto DEFAULT_SHADER_DIRECTORY = "resources/engine/shaders";
-constexpr auto DEFAULT_MESH_DIRECTORY = "resources/engine/models";
-constexpr auto DEFAULT_TEXTURE_DIRECTORY = "resources/engine/textures";
+inline constexpr auto DEFAULT_SHADER_DIRECTORY = "resources/engine/shaders";
+inline constexpr auto DEFAULT_MESH_DIRECTORY = "resources/engine/models";
+inline constexpr auto DEFAULT_TEXTURE_DIRECTORY = "resources/engine/textures";
 
 // GL 4.5 + GLSL 450
-constexpr auto GL_VERSION_MAJOR = 4;
-constexpr auto GL_VERSION_MINOR = 5;
-constexpr auto GLSL_VERSION = "#version 450";
+inline constexpr auto GL_VERSION_MAJOR = 4;
+inline constexpr auto GL_VERSION_MINOR = 5;
+inline constexpr auto GLSL_VERSION = "#version 450";
 
-constexpr auto FIXED_UPDATE_INTERVAL = (1.0 / 50.0);  // 50 Hz
+inline constexpr auto FIXED_UPDATE_INTERVAL = (1.0 / 50.0);  // 50 Hz
 
-constexpr auto FALLBACK_COLOR = glm::vec3(0.9, 0.0, 0.9);
+inline constexpr auto LAB_FORWARD = glm::vec3(0.0f, 0.0f, -1.0f);
+inline constexpr auto LAB_UP = glm::vec3(0.0f, 1.0f, 0.0f);
+inline constexpr auto LAB_RIGHT = glm::vec3(1.0f, 0.0f, 0.0f);
 
-constexpr auto MAX_DIRECTIONAL_LIGHTS = 1;
-constexpr auto MAX_POINT_LIGHTS = 16;
-constexpr auto MAX_SPOT_LIGHTS = 4;
+inline constexpr auto FALLBACK_COLOR = glm::vec3(0.9, 0.0, 0.9);
+
+inline constexpr auto MAX_DIRECTIONAL_LIGHTS = 1;
+inline constexpr auto MAX_POINT_LIGHTS = 16;
+inline constexpr auto MAX_SPOT_LIGHTS = 4;
+
+inline constexpr auto MAX_ENTITIES = 2048;
+inline constexpr auto MAX_COMPONENTS = 32;
 
 template <typename T>
 inline std::shared_ptr<T> copyShared(const std::shared_ptr<T>& ptr) {
@@ -46,8 +54,8 @@ template <typename T>
 using Ref = std::shared_ptr<T>;
 
 template <typename T, typename... Args>
-inline Ref<T> makeRef(Args&&... params) {
-    return std::make_shared<T>(std::forward<Args>(params)...);
+inline Ref<T> makeRef(Args&&... args) {
+    return std::make_shared<T>(std::forward<Args>(args)...);
 }
 
 template <typename T, typename S>
@@ -69,8 +77,8 @@ template <typename T>
 using Scoped = std::unique_ptr<T>;
 
 template <typename T, typename... Args>
-inline Scoped<T> makeScoped(Args&&... params) {
-    return std::make_unique<T>(std::forward<Args>(params)...);
+inline Scoped<T> makeScoped(Args&&... args) {
+    return std::make_unique<T>(std::forward<Args>(args)...);
 }
 
 template <typename T>

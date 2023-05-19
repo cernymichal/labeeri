@@ -118,7 +118,7 @@ void GLFWWindow::makeCurrent() {
 void GLFWWindow::setupGLFW() {
     LAB_LOGH3("GLFWWindow::setupGLFW()");
 
-    glfwSetErrorCallback(glfwErrorCallback);
+    glfwSetErrorCallback(GLFWErrorCallback);
 
     // Initialize the library
     if (!glfwInit())
@@ -140,19 +140,19 @@ void GLFWWindow::setupGLFW() {
     // Make the window's context current
     glfwMakeContextCurrent(m_window);
 
-    glfwSetFramebufferSizeCallback(m_window, glfwFramebufferSizeCallback);
-    glfwSetWindowIconifyCallback(m_window, glfwWindowIconifyCallback);
-    glfwSetKeyCallback(m_window, glfwKeyboardCallback);
-    glfwSetCursorPosCallback(m_window, glfwCursorPosCallback);
-    glfwSetMouseButtonCallback(m_window, glfwMouseButtonCallback);
-    glfwSetScrollCallback(m_window, glfwScrollCallback);
+    glfwSetFramebufferSizeCallback(m_window, GLFWFramebufferSizeCallback);
+    glfwSetWindowIconifyCallback(m_window, GLFWWindowIconifyCallback);
+    glfwSetKeyCallback(m_window, GLFWKeyboardCallback);
+    glfwSetCursorPosCallback(m_window, GLFWCursorPosCallback);
+    glfwSetMouseButtonCallback(m_window, GLFWMouseButtonCallback);
+    glfwSetScrollCallback(m_window, GLFWScrollCallback);
 }
 
-void GLFWWindow::glfwErrorCallback(int error, const char* description) {
+void GLFWWindow::GLFWErrorCallback(int error, const char* description) {
     LAB_LOG("GLFW Error " << error << ": " << description);
 }
 
-void GLFWWindow::glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height) {
+void GLFWWindow::GLFWFramebufferSizeCallback(GLFWwindow* window, int width, int height) {
     s_frameBufferSize = glm::uvec2(width, height);
 
     if (LAB_WINDOW->minimized())
@@ -166,14 +166,14 @@ void GLFWWindow::glfwFramebufferSizeCallback(GLFWwindow* window, int width, int 
     LAB_APP.emitEvent(renderEvent);
 }
 
-void GLFWWindow::glfwWindowIconifyCallback(GLFWwindow* window, int iconified) {
+void GLFWWindow::GLFWWindowIconifyCallback(GLFWwindow* window, int iconified) {
     s_minimized = iconified;
 
     WindowMinimizeEvent event(iconified);
     LAB_APP.emitEvent(event);
 }
 
-void GLFWWindow::glfwKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods) {
+void GLFWWindow::GLFWKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods) {
     auto key = static_cast<KeyboardKey>(keyInt);
     auto action = static_cast<KeyAction>(actionInt);
 
@@ -196,7 +196,7 @@ void GLFWWindow::glfwKeyboardCallback(GLFWwindow* window, int keyInt, int scanCo
     }
 }
 
-void GLFWWindow::glfwCursorPosCallback(GLFWwindow* window, double x, double y) {
+void GLFWWindow::GLFWCursorPosCallback(GLFWwindow* window, double x, double y) {
     glm::dvec2 newPosition(x, y);
     glm::dvec2 delta = newPosition - s_mousePosition;
     s_mousePosition = newPosition;
@@ -205,7 +205,7 @@ void GLFWWindow::glfwCursorPosCallback(GLFWwindow* window, double x, double y) {
     LAB_APP.emitEvent(event);
 }
 
-void GLFWWindow::glfwMouseButtonCallback(GLFWwindow* window, int buttonInt, int actionInt, int mods) {
+void GLFWWindow::GLFWMouseButtonCallback(GLFWwindow* window, int buttonInt, int actionInt, int mods) {
     auto button = static_cast<MouseButton>(buttonInt);
     auto action = static_cast<KeyAction>(actionInt);
 
@@ -231,7 +231,7 @@ void GLFWWindow::glfwMouseButtonCallback(GLFWwindow* window, int buttonInt, int 
     }
 }
 
-void GLFWWindow::glfwScrollCallback(GLFWwindow* window, double deltaX, double deltaY) {
+void GLFWWindow::GLFWScrollCallback(GLFWwindow* window, double deltaX, double deltaY) {
     MouseScrollEvent event(deltaY);
     LAB_APP.emitEvent(event);
 }

@@ -23,7 +23,7 @@ public:
     /**
      * @brief TODO
      */
-    static Application& instance() {
+    static Application& Instance() {
         static Application instance;
         return instance;
     }
@@ -55,17 +55,27 @@ public:
     /**
      * @brief TODO
      */
-    Ref<Camera>& camera() const {
+    Entity& camera() const {
         return m_viewportLayer->m_camera;
     }
 
     /**
      * @brief TODO
      */
-    Ref<Scene>& scene() const {
-        return m_sceneLayer->m_scene;
+    const Ref<Scene>& scene() const {
+        return m_sceneLayer->scene();
     }
 
+    /**
+     * @brief TODO
+     */
+    void setScene(const Ref<Scene>& scene) const {
+        return m_sceneLayer->setScene(scene);
+    }
+
+    /**
+     * @brief TODO
+     */
     ImGuiLayer* imGuiLayer() const {
         return m_imGuiLayer;
     }

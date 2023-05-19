@@ -5,7 +5,7 @@
 namespace labeeri {
 
 void WaterMaterial::bindUniforms() const {
-    ShadedMaterial::bindUniforms();
+    ShadedMaterialResource::bindUniforms();
 
     if (m_displacementMap) {
         LAB_RENDERER->bindTexture(TextureType::Texture2D, *m_displacementMap, 5);

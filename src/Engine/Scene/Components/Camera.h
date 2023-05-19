@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Scene/Transform.h"
+#include "Engine/Scene/Components/Transform.h"
 
 namespace labeeri::Engine {
 
@@ -16,24 +16,11 @@ public:
     /**
      * @brief TODO
      */
-    explicit Camera(const Ref<Transform>& transform) : m_transform(transform) {
-    }
+    glm::mat4 viewMatrix(const Transform& transform) const {
+        glm::vec3 cameraPosition = transform.worldPosition();
+        glm::vec3 center = cameraPosition + transform.forward();
 
-    /**
-     * @brief TODO
-     */
-    const Ref<Transform>& transform() const {
-        return m_transform;
-    }
-
-    /**
-     * @brief TODO
-     */
-    glm::mat4 viewMatrix() const {
-        glm::vec3 cameraPosition = m_transform->worldPosition();
-        glm::vec3 center = cameraPosition + m_transform->forward();
-
-        return glm::lookAt(cameraPosition, center, m_transform->up());
+        return glm::lookAt(cameraPosition, center, transform.up());
     }
 
     /**
@@ -52,9 +39,6 @@ public:
             0.0f, 0.0f, 0.0f, -1.0f,
             0.0f, 0.0f, m_near, 0.0f);
     }
-
-private:
-    Ref<Transform> m_transform;
 };
 
 }  // namespace labeeri::Engine

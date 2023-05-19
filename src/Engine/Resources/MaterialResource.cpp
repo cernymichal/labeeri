@@ -1,10 +1,10 @@
-#include "Material.h"
+#include "MaterialResource.h"
 
 #include "Engine/Renderer/IRenderer.h"
 
 namespace labeeri::Engine {
 
-void FlatMaterial::bindUniforms() const {
+void FlatMaterialResource::bindUniforms() const {
     bool usingTexture = m_texture != nullptr;
 
     LAB_RENDERER->bindUniform("u_using_texture", usingTexture);
@@ -21,7 +21,7 @@ void FlatMaterial::bindUniforms() const {
     LAB_LOG_RENDERAPI_ERROR();
 }
 
-void ShadedMaterial::bindUniforms() const {
+void ShadedMaterialResource::bindUniforms() const {
     bool usingDiffuseMap = m_diffuseMap != nullptr;
     LAB_RENDERER->bindUniform("u_material.using_diffuse_map", usingDiffuseMap);
     if (usingDiffuseMap) {

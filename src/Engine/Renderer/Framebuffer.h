@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Renderer/Texture.h"
+#include "Engine/Renderer/TextureResource.h"
 
 namespace labeeri::Engine {
 
@@ -16,16 +16,16 @@ enum class FramebufferAttachment {
 class Framebuffer {
 public:
     glm::uvec2 m_size;
-    std::map<FramebufferAttachment, Ref<Texture>> m_attachments;
+    std::map<FramebufferAttachment, Ref<TextureResource>> m_attachments;
 
     /**
      * @brief TODO
      */
-    Framebuffer(LAB_GL_HANDLE framebufferObject, glm::uvec2 size, std::map<FramebufferAttachment, Ref<Texture>>&& attachments)
+    Framebuffer(LAB_GL_HANDLE framebufferObject, glm::uvec2 size, std::map<FramebufferAttachment, Ref<TextureResource>>&& attachments)
         : m_size(size), m_attachments(attachments), m_framebufferObject(framebufferObject) {
     }
 
-    Framebuffer(const Texture&) = delete;
+    Framebuffer(const TextureResource&) = delete;
 
     /**
      * @brief TODO
@@ -35,7 +35,7 @@ public:
         other.m_framebufferObject = 0;
     }
 
-    Framebuffer& operator=(const Texture&) = delete;
+    Framebuffer& operator=(const TextureResource&) = delete;
 
     Framebuffer& operator=(Framebuffer&& other) noexcept {
         this->~Framebuffer();

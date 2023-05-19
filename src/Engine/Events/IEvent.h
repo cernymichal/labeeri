@@ -2,11 +2,11 @@
 
 namespace labeeri::Engine {
 
-#define LAB_BIND_EVENT_FUNC(f) std::bind(&f, this, std::placeholders::_1)
+#define LAB_BIND_EVENT_FUNC(f) [this](auto& e) { return f(e); }
 
 #define EVENT_CLASS_TYPE(type)                                                 \
-    static EventType staticEventType() { return EventType::type; }             \
-    virtual EventType eventType() const override { return staticEventType(); } \
+    static EventType StaticEventType() { return EventType::type; }             \
+    virtual EventType eventType() const override { return StaticEventType(); } \
     virtual const char* name() const override { return #type; }
 
 #define EVENT_CLASS_CATEGORY(category) \
@@ -27,7 +27,9 @@ enum class EventType : uint8_t {
     MouseButtonPress,
     MouseButtonRelease,
     MouseMove,
-    MouseScroll
+    MouseScroll,
+    SceneChange,
+    EntityClick
 };
 
 /**
@@ -38,7 +40,8 @@ enum class EventCategory : int {
     Application = LAB_BIT(0),
     Input = LAB_BIT(1),
     Keyboard = LAB_BIT(2),
-    Mouse = LAB_BIT(3)
+    Mouse = LAB_BIT(3),
+    Scene = LAB_BIT(4),
 };
 
 /**
@@ -77,7 +80,7 @@ public:
      */
     template <typename T, typename F>
     bool dispatch(const F& handler) {
-        if (eventType() != T::staticEventType())
+        if (eventType() != T::StaticEventType())
             return false;
 
         m_handled |= handler(static_cast<T&>(*this));

@@ -10,25 +10,16 @@ namespace labeeri::Engine {
  */
 class MouseMoveEvent : public IEvent {
 public:
+    const glm::dvec2 m_position;
+    const glm::dvec2 m_delta;
+
     MouseMoveEvent(const glm::dvec2& postition, const glm::dvec2& delta)
         : m_position(postition), m_delta(delta) {
-    }
-
-    const glm::dvec2& position() const {
-        return m_position;
-    }
-
-    const glm::dvec2& delta() const {
-        return m_delta;
     }
 
     EVENT_CLASS_TYPE(MouseMove)
 
     EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Input) | static_cast<int>(EventCategory::Mouse))
-
-protected:
-    glm::dvec2 m_position;
-    glm::dvec2 m_delta;
 };
 
 /**
@@ -36,19 +27,14 @@ protected:
  */
 class MouseScrollEvent : public IEvent {
 public:
-    explicit MouseScrollEvent(double delta) : m_delta(delta) {
-    }
+    const double m_delta;
 
-    double delta() const {
-        return m_delta;
+    explicit MouseScrollEvent(double delta) : m_delta(delta) {
     }
 
     EVENT_CLASS_TYPE(MouseScroll)
 
     EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Input) | static_cast<int>(EventCategory::Mouse))
-
-protected:
-    double m_delta;
 };
 
 /**
@@ -56,25 +42,13 @@ protected:
  */
 class MouseButtonEvent : public IEvent {
 public:
-    MouseButton button() const {
-        return m_button;
-    }
-
-    int mods() const {
-        return m_mods;
-    }
-
-    const glm::dvec2& position() const {
-        return m_position;
-    }
+    const MouseButton m_button;
+    const int m_mods;
+    const glm::dvec2 m_position;
 
     EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Input) | static_cast<int>(EventCategory::Mouse))
 
 protected:
-    MouseButton m_button;
-    int m_mods;
-    glm::dvec2 m_position;
-
     MouseButtonEvent(MouseButton button, int mods, glm::dvec2 positon)
         : m_button(button), m_mods(mods), m_position(positon) {
     }

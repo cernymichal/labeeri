@@ -7,7 +7,7 @@
 
 namespace labeeri {
 
-Mesh createWaterMesh() {
+MeshResource createWaterMesh() {
     GLuint VAO;
     GLuint VBO;
     GLuint EBO;
@@ -21,7 +21,7 @@ Mesh createWaterMesh() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * plane::faceCount * 3, plane::indices, GL_STATIC_DRAW);
 
-    auto& shader = Resources<ShaderProgram>::get("phong");
+    auto& shader = Resources<ShaderResource>::Get("phong");
     if (!shader)
         throw std::runtime_error("No phong shader for default attribute positions");
 
@@ -49,15 +49,15 @@ Mesh createWaterMesh() {
     glVertexAttribPointer(UVLocation, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 
     glBindVertexArray(0);
-    return Mesh(VAO, VBO, EBO, plane::faceCount);
+    return MeshResource(VAO, VBO, EBO, plane::faceCount);
 }
 
-Ref<Model> waterModel() {
-    auto water = Resources<Model>::get("water");
+Ref<ModelResource> waterModel() {
+    auto water = Resources<ModelResource>::Get("water");
     if (water)
         return water;
 
-    return Resources<Model>::set("water") = makeRef<Model>(makeRef<WaterMaterial>(WaterMaterial()), makeRef<Mesh>(createWaterMesh()));
+    return Resources<ModelResource>::Set("water") = makeRef<ModelResource>(makeRef<WaterMaterial>(WaterMaterial()), makeRef<MeshResource>(createWaterMesh()));
 }
 
 }  // namespace labeeri

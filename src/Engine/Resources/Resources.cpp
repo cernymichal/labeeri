@@ -4,38 +4,38 @@
 
 namespace labeeri::Engine {
 
-Ref<ShaderProgram> tryFindShaderProgram(const char* name) {
+Ref<ShaderResource> tryFindShader(const char* name) {
     auto nameStr = std::string(name);
     const std::filesystem::path directory(DEFAULT_SHADER_DIRECTORY);
 
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
         auto path = entry.path();
         if (!entry.is_directory() && path.stem() == nameStr)
-            return Resources<ShaderProgram>::get(path.replace_extension("").string(), false);
+            return Resources<ShaderResource>::Get(path.replace_extension("").string(), false);
     }
 
     return nullptr;
 }
 
-Ref<Mesh> tryFindMesh(const char* name) {
+Ref<MeshResource> tryFindMesh(const char* name) {
     auto nameStr = std::string(name);
     const std::filesystem::path directory(DEFAULT_MESH_DIRECTORY);
 
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
         if (!entry.is_directory() && entry.path().filename() == nameStr)
-            return Resources<Mesh>::get(entry.path().string(), false);
+            return Resources<MeshResource>::Get(entry.path().string(), false);
     }
 
     return nullptr;
 }
 
-Ref<Texture> tryFindTexture(const char* name) {
+Ref<TextureResource> tryFindTexture(const char* name) {
     auto nameStr = std::string(name);
     const std::filesystem::path directory(DEFAULT_TEXTURE_DIRECTORY);
 
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
         if (!entry.is_directory() && entry.path().filename() == nameStr)
-            return Resources<Texture>::get(entry.path().string(), false);
+            return Resources<TextureResource>::Get(entry.path().string(), false);
     }
 
     for (const auto& entry : std::filesystem::directory_iterator(directory / "cubemaps")) {
@@ -47,36 +47,36 @@ Ref<Texture> tryFindTexture(const char* name) {
     return nullptr;
 }
 
-Ref<Material> tryFindMaterial(const char* name) {
+Ref<MaterialResource> tryFindMaterial(const char* name) {
     auto nameStr = std::string(name);
 
     if (nameStr == "flatWhite")
-        return makeRef<FlatMaterial>(Resources<ShaderProgram>::get("flat"), glm::vec3(1.0f));
+        return makeRef<FlatMaterialResource>(Resources<ShaderResource>::Get("flat"), glm::vec3(1.0f));
     if (nameStr == "grey")
-        return makeRef<ShadedMaterial>(Resources<ShaderProgram>::get("phong"), glm::vec3(0.7f));
+        return makeRef<ShadedMaterialResource>(Resources<ShaderResource>::Get("phong"), glm::vec3(0.7f));
     if (nameStr == "UVTest")
-        return makeRef<FlatMaterial>(Resources<ShaderProgram>::get("flat"), Resources<Texture>::get("uv_test.png"));
+        return makeRef<FlatMaterialResource>(Resources<ShaderResource>::Get("flat"), Resources<TextureResource>::Get("uv_test.png"));
 
     return nullptr;
 }
 
-Ref<Model> tryFindModel(const char* name) {
+Ref<ModelResource> tryFindModel(const char* name) {
     auto nameStr = std::string(name);
 
     if (nameStr == "whiteCube")
-        return makeRef<Model>(Resources<Material>::get("flatWhite"), Resources<Mesh>::get("cube.obj"));
+        return makeRef<ModelResource>(Resources<MaterialResource>::Get("flatWhite"), Resources<MeshResource>::Get("cube.obj"));
     if (nameStr == "whiteSphere")
-        return makeRef<Model>(Resources<Material>::get("flatWhite"), Resources<Mesh>::get("sphere.obj"));
+        return makeRef<ModelResource>(Resources<MaterialResource>::Get("flatWhite"), Resources<MeshResource>::Get("sphere.obj"));
     if (nameStr == "whiteCone")
-        return makeRef<Model>(Resources<Material>::get("flatWhite"), Resources<Mesh>::get("cone.obj"));
+        return makeRef<ModelResource>(Resources<MaterialResource>::Get("flatWhite"), Resources<MeshResource>::Get("cone.obj"));
     if (nameStr == "basicCube")
-        return makeRef<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("cube.obj"));
+        return makeRef<ModelResource>(Resources<MaterialResource>::Get("grey"), Resources<MeshResource>::Get("cube.obj"));
     if (nameStr == "basicSphere")
-        return makeRef<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("sphere.obj"));
+        return makeRef<ModelResource>(Resources<MaterialResource>::Get("grey"), Resources<MeshResource>::Get("sphere.obj"));
     if (nameStr == "basicPlane")
-        return makeRef<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("plane.obj"));
+        return makeRef<ModelResource>(Resources<MaterialResource>::Get("grey"), Resources<MeshResource>::Get("plane.obj"));
     if (nameStr == "basicCone")
-        return makeRef<Model>(Resources<Material>::get("grey"), Resources<Mesh>::get("cone.obj"));
+        return makeRef<ModelResource>(Resources<MaterialResource>::Get("grey"), Resources<MeshResource>::Get("cone.obj"));
 
     return nullptr;
 }

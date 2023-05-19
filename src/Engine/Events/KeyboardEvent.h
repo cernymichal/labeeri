@@ -10,25 +10,13 @@ namespace labeeri::Engine {
  */
 class KeyboardEvent : public IEvent {
 public:
-    KeyboardKey key() const {
-        return m_key;
-    }
-
-    int scanCode() const {
-        return m_scanCode;
-    }
-
-    int mods() const {
-        return m_mods;
-    }
+    const KeyboardKey m_key;
+    const int m_scanCode;
+    const int m_mods;
 
     EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Input) | static_cast<int>(EventCategory::Keyboard))
 
 protected:
-    KeyboardKey m_key;
-    int m_scanCode;
-    int m_mods;
-
     KeyboardEvent(KeyboardKey key, int scanCode, int mods)
         : m_key(key), m_scanCode(scanCode), m_mods(mods) {
     }

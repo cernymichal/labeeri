@@ -1,10 +1,16 @@
 #pragma once
 
 #include "Engine/Events/ApplicationEvent.h"
+#include "Engine/Events/IEventReceiver.h"
 #include "Engine/Renderer/RendererParameters.h"
-#include "Engine/Scene/Entity.h"
+#include "Engine/Resources/Scripts/IScript.h"
+#include "Engine/Scene/ECS/Instance.h"
+#include "Engine/Scene/Systems/PhysicsSystem.h"
+#include "Engine/Scene/Systems/RenderSystem.h"
 
 namespace labeeri::Engine {
+
+class ViewportLayer;
 
 /**
  * @brief TODO
@@ -21,6 +27,13 @@ public:
     /**
      * @brief TODO
      */
+    const std::shared_ptr<ECS::Instance>& ecs() const {
+        return m_ecs;
+    }
+
+    /**
+     * @brief TODO
+     */
     double time() const {
         return m_time;
     }
@@ -28,37 +41,29 @@ public:
     /**
      * @brief TODO
      */
-    void addEntity(const Ref<Entity>& entity);
-
-    /**
-     * @brief TODO
-     */
-    void addEntity(const EntityPack& entities);
-
-    /**
-     * @brief TODO
-     */
-    void removeEntity(const Ref<Entity>& entity);
-
-    /**
-     * @brief TODO
-     */
-    const std::vector<Ref<Entity>>& entities() const {
-        return m_entities;
+    template <typename T, typename... Args>
+    T* addScript(Args&&... args) {
+        IScript* script = m_scripts.emplace_back(makeScoped<T>(std::forward<Args>(args)...)).get();
+        return static_cast<T*>(script);
     }
 
     virtual void onEvent(IEvent& e) override;
 
 private:
-    std::vector<Ref<Entity>> m_entities;
-
+    std::shared_ptr<ECS::Instance> m_ecs = std::make_shared<ECS::Instance>();
+    struct {
+        std::shared_ptr<PhysicsSystem> physics;
+        std::shared_ptr<LightSystem> light;
+        std::shared_ptr<RenderSystem> render;
+    } m_systems;
+    std::list<Scoped<IScript>> m_scripts;
     double m_time = 0.0;
 
-    bool onUpdate(const ApplicationUpdateEvent& e);
+    bool onUpdate(const UpdateEvent& e);
 
-    bool onFixedUpdate(const ApplicationFixedUpdateEvent& e);
+    bool onFixedUpdate(const FixedUpdateEvent& e);
 
-    bool onInput(IEvent& e);
+    friend class ViewportLayer;
 };
 
 }  // namespace labeeri::Engine

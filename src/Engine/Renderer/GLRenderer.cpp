@@ -331,7 +331,7 @@ void GLRenderer::waitForFrame() {
     glFinish();
 }
 
-void GLRenderer::useShaderProgram(const Ref<ShaderProgram>& shaderProgram) {
+void GLRenderer::useShaderProgram(const Ref<ShaderResource>& shaderProgram) {
     if (m_currentShaderProgram == shaderProgram)
         return;
 
@@ -397,11 +397,11 @@ void GLRenderer::bindPVM(const glm::mat4& modelMatrix) {
     bindUniform("u_normal_matrix", normalMatrix);
 }
 
-LAB_GL_INT GLRenderer::getUniformLocation(ShaderProgram& shaderProgram, const char* name) {
+LAB_GL_INT GLRenderer::getUniformLocation(ShaderResource& shaderProgram, const char* name) {
     return glGetUniformLocation(shaderProgram, name);
 }
 
-void GLRenderer::bindMesh(const Ref<Mesh>& mesh) {
+void GLRenderer::bindMesh(const Ref<MeshResource>& mesh) {
     if (m_currentMesh == mesh)
         return;
 
@@ -416,8 +416,8 @@ void GLRenderer::drawMesh() {
     glDrawElements(GL_TRIANGLES, m_currentMesh->m_triangleCount * 3, GL_UNSIGNED_INT, nullptr);
 }
 
-ShaderProgram GLRenderer::createShaderProgram(const std::vector<std::pair<ShaderType, const char*>>& shaders) const {
-    ShaderProgram program(glCreateProgram());
+ShaderResource GLRenderer::createShaderProgram(const std::vector<std::pair<ShaderType, const char*>>& shaders) const {
+    ShaderResource program(glCreateProgram());
 
     for (const auto& [source, type] : shaders) {
         Shader compiledShader = compileShader(type, source);
@@ -432,11 +432,11 @@ ShaderProgram GLRenderer::createShaderProgram(const std::vector<std::pair<Shader
     return program;
 }
 
-void GLRenderer::deleteShaderProgram(ShaderProgram& shaderProgram) const {
+void GLRenderer::deleteShaderProgram(ShaderResource& shaderProgram) const {
     glDeleteProgram(shaderProgram);
 }
 
-Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
+MeshResource GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
                             const float* normals, const float* tangents,
                             const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const {
     GLuint VAO;
@@ -480,7 +480,7 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
     LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Uploaded " << faceCount << " faces");
 
-    auto& shader = Resources<ShaderProgram>::get("phong");
+    auto& shader = Resources<ShaderResource>::Get("phong");
     if (!shader)
         throw std::runtime_error("No phong shader for default attribute positions");
 
@@ -514,16 +514,16 @@ Mesh GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
     LAB_LOG(VAO);
 
     glBindVertexArray(0);
-    return Mesh(VAO, VBO, EBO, faceCount);
+    return MeshResource(VAO, VBO, EBO, faceCount);
 }
 
-void GLRenderer::deleteMesh(Mesh& mesh) const {
+void GLRenderer::deleteMesh(MeshResource& mesh) const {
     glDeleteVertexArrays(1, &mesh.m_vertexArrayObject);
     glDeleteBuffers(1, &mesh.m_vertexBufferObject);
     glDeleteBuffers(1, &mesh.m_elementBufferObject);
 }
 
-Texture GLRenderer::createTexture(TextureType type, const Image& image, bool generateMipmap,
+TextureResource GLRenderer::createTexture(TextureType type, const ImageResource& image, bool generateMipmap,
                                   TextureFilter filter, TextureWrap wrap) const {
     int typeGL = textureTypeGL(type);
     int internalFormatGL = textureInternalFormatGL(image.internalFormat);
@@ -549,10 +549,10 @@ Texture GLRenderer::createTexture(TextureType type, const Image& image, bool gen
     glBindTexture(typeGL, 0);
     LAB_LOG(texture);
 
-    return Texture(texture);
+    return TextureResource(texture);
 }
 
-Texture GLRenderer::createCubemap(const std::array<Scoped<Image>, 6>& images, TextureFilter filter) const {
+TextureResource GLRenderer::createCubemap(const std::array<Scoped<ImageResource>, 6>& images, TextureFilter filter) const {
     int internalFormatGL = textureInternalFormatGL(images[0]->internalFormat);
     int formatGL = textureFormatGL(images[0]->format);
     int dataTypeGL = textureDataTypeGL(images[0]->dataType);
@@ -577,10 +577,10 @@ Texture GLRenderer::createCubemap(const std::array<Scoped<Image>, 6>& images, Te
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     LAB_LOG(texture);
 
-    return Texture(texture);
+    return TextureResource(texture);
 }
 
-void GLRenderer::bindTexture(TextureType type, const Texture& texture, unsigned slot) const {
+void GLRenderer::bindTexture(TextureType type, const TextureResource& texture, unsigned slot) const {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(textureTypeGL(type), texture);
 }
@@ -593,12 +593,12 @@ void GLRenderer::readFramebuffer(TextureFormat format, TextureDataType dataType,
     glReadPixels(position.x, position.y, size.x, size.y, formatGL, dataTypeGL, result);
 }
 
-void GLRenderer::deleteTexture(Texture& texure) const {
+void GLRenderer::deleteTexture(TextureResource& texure) const {
     GLuint texureGL = texure;
     glDeleteTextures(1, &texureGL);
 }
 
-Framebuffer GLRenderer::createFramebuffer(glm::uvec2 size, std::map<FramebufferAttachment, Ref<Texture>>&& attachments) const {
+Framebuffer GLRenderer::createFramebuffer(glm::uvec2 size, std::map<FramebufferAttachment, Ref<TextureResource>>&& attachments) const {
     GLuint FBO;
     glGenFramebuffers(1, &FBO);
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -685,9 +685,9 @@ void GLRenderer::logError(const char* location) const {
 }
 
 void GLRenderer::initialize() {
-    m_screenQuad = makeRef<Mesh>(createScreenQuad());
-    m_skyboxShader = Resources<ShaderProgram>::get("skybox");
-    m_postprocessShader = Resources<ShaderProgram>::get("postprocess");
+    m_screenQuad = makeRef<MeshResource>(createScreenQuad());
+    m_skyboxShader = Resources<ShaderResource>::Get("skybox");
+    m_postprocessShader = Resources<ShaderResource>::Get("postprocess");
 }
 
 void GLRenderer::bindDirectionalLights() {
@@ -709,7 +709,7 @@ void GLRenderer::bindDirectionalLights() {
     }
 }
 
-Mesh GLRenderer::createScreenQuad() const {
+MeshResource GLRenderer::createScreenQuad() const {
     float vertices[] = {
         -1.0f, -1.0f, 0.0f,
         1.0f, -1.0f, 0.0f,

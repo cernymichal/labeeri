@@ -96,9 +96,8 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <UseStandardPreprocessor>
-      </UseStandardPreprocessor>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,9 +120,8 @@
       <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <UseStandardPreprocessor>
-      </UseStandardPreprocessor>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,9 +146,8 @@
       <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>$(ProjectDir)/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <UseStandardPreprocessor>
-      </UseStandardPreprocessor>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,19 +160,21 @@
     <ClCompile Include="src\Engine\Entities.cpp" />
     <ClCompile Include="src\Engine\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Engine\Renderer\GLRenderer.cpp" />
-    <ClCompile Include="src\Engine\Renderer\IRenderer.cpp" />
-    <ClCompile Include="src\Engine\Renderer\Mesh.cpp" />
-    <ClCompile Include="src\Engine\Renderer\ShaderProgram.cpp" />
-    <ClCompile Include="src\Engine\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Engine\Renderer\MeshResource.cpp" />
+    <ClCompile Include="src\Engine\Renderer\ShaderResource.cpp" />
+    <ClCompile Include="src\Engine\Renderer\TextureResource.cpp" />
     <ClCompile Include="src\Engine\Resources\Load.cpp" />
-    <ClCompile Include="src\Engine\Scene\Light.cpp" />
-    <ClCompile Include="src\Engine\Scene\Look.cpp" />
+    <ClCompile Include="src\Engine\Resources\MaterialResource.cpp" />
+    <ClCompile Include="src\Engine\Scene\Components\Light.cpp" />
+    <ClCompile Include="src\Engine\Scene\ECS\Entity.cpp" />
+    <ClCompile Include="src\Engine\Scene\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="src\Engine\Scene\Systems\PhysicsSystem.h" />
+    <ClCompile Include="src\Engine\Scene\Systems\RenderSystem.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\EntityWindow.cpp" />
     <ClCompile Include="src\Engine\Window\GLFWWindow.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Engine\Scene\Movement.cpp" />
+    <ClCompile Include="src\Engine\Resources\Scripts\CharacterController.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\SceneLayer.cpp" />
-    <ClCompile Include="src\Engine\Window\IWindow.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Engine\Resources\Resources.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\MenuWindow.cpp" />
@@ -186,8 +185,6 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\LogWindow.cpp" />
     <ClCompile Include="src\Engine\Scene\Scene.cpp" />
-    <ClCompile Include="src\Engine\Resources\Material.cpp" />
-    <ClCompile Include="src\Engine\Resources\Model.cpp" />
     <ClCompile Include="src\Engine\WindowLayer\ViewportLayer.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -204,24 +201,46 @@
     <ClInclude Include="src\Engine\Events\Input.h" />
     <ClInclude Include="src\Engine\Events\KeyboardEvent.h" />
     <ClInclude Include="src\Engine\Events\MouseEvent.h" />
+    <ClInclude Include="src\Engine\Events\SceneEvent.h" />
     <ClInclude Include="src\Engine\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Engine\Renderer\GLRenderer.h" />
     <ClInclude Include="src\Engine\Renderer\Image.h" />
+    <ClInclude Include="src\Engine\Renderer\ImageResource.h" />
     <ClInclude Include="src\Engine\Renderer\IRenderer.h" />
     <ClInclude Include="src\Engine\Renderer\Light.h" />
     <ClInclude Include="src\Engine\Renderer\Mesh.h" />
+    <ClInclude Include="src\Engine\Renderer\MeshResource.h" />
     <ClInclude Include="src\Engine\Renderer\RendererParameters.h" />
     <ClInclude Include="src\Engine\Renderer\ShaderProgram.h" />
+    <ClInclude Include="src\Engine\Renderer\ShaderResource.h" />
     <ClInclude Include="src\Engine\Renderer\Texture.h" />
+    <ClInclude Include="src\Engine\Renderer\TextureResource.h" />
     <ClInclude Include="src\Engine\Resources\Load.h" />
+    <ClInclude Include="src\Engine\Resources\MaterialResource.h" />
+    <ClInclude Include="src\Engine\Resources\ModelResource.h" />
+    <ClInclude Include="src\Engine\Resources\Scripts\IScript.h" />
+    <ClInclude Include="src\Engine\Scene\Components\Camera.h" />
+    <ClInclude Include="src\Engine\Scene\Components\Components.h" />
+    <ClInclude Include="src\Engine\Scene\Components\Light.h" />
+    <ClInclude Include="src\Engine\Scene\Components\Model.h" />
+    <ClInclude Include="src\Engine\Scene\Components\RigidBody.h" />
+    <ClInclude Include="src\Engine\Scene\Components\Transform.h" />
+    <ClInclude Include="src\Engine\Scene\ECS\Common.h" />
+    <ClInclude Include="src\Engine\Scene\ECS\Instance.h" />
+    <ClInclude Include="src\Engine\Scene\ECS\ComponentArray.h" />
+    <ClInclude Include="src\Engine\Scene\ECS\ComponentManager.h" />
+    <ClInclude Include="src\Engine\Scene\ECS\Entity.h" />
+    <ClInclude Include="src\Engine\Scene\ECS\EntityManager.h" />
+    <ClInclude Include="src\Engine\Scene\ECS\ISystem.h" />
+    <ClInclude Include="src\Engine\Scene\ECS\SystemManager.h" />
     <ClInclude Include="src\Engine\Scene\Light.h" />
-    <ClInclude Include="src\Engine\Scene\Look.h" />
+    <ClInclude Include="src\Engine\Scene\Systems\RenderSystem.h" />
     <ClInclude Include="src\Engine\Utils.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\EntityWindow.h" />
     <ClInclude Include="src\Engine\Window\GLFWWindow.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiLayer.h" />
     <ClInclude Include="src\Engine\Scene\Camera.h" />
-    <ClInclude Include="src\Engine\Scene\Movement.h" />
+    <ClInclude Include="src\Engine\Resources\Scripts\CharacterController.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\IImGuiWindow.h" />
     <ClInclude Include="src\Engine\WindowLayer\SceneLayer.h" />
     <ClInclude Include="src\Engine\Window\IWindow.h" />
@@ -232,7 +251,6 @@
     <ClInclude Include="src\Engine\Log.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\LogWindow.h" />
     <ClInclude Include="src\Engine\WindowLayer\IWindowLayer.h" />
-    <ClInclude Include="src\Engine\Scene\Entity.h" />
     <ClInclude Include="src\Engine\Scene\Scene.h" />
     <ClInclude Include="src\Engine\Scene\Transform.h" />
     <ClInclude Include="src\Engine\Resources\Material.h" />

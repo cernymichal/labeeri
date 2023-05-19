@@ -1,17 +1,17 @@
 #pragma once
 
-#include "Engine/Resources/Material.h"
-#include "Engine/Resources/Model.h"
+#include "Engine/Resources/MaterialResource.h"
+#include "Engine/Resources/ModelResource.h"
 
 namespace labeeri::Engine {
 
-Ref<ShaderProgram> loadShaderProgram(const std::filesystem::path& path);
+Ref<ShaderResource> loadShader(const std::filesystem::path& path);
 
-Ref<Mesh> loadMesh(const std::filesystem::path& filePath);
+Ref<MeshResource> loadMesh(const std::filesystem::path& filePath);
 
-Ref<Texture> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected = true);
+Ref<TextureResource> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected = true);
 
-Ref<Texture> loadCubemap(const std::filesystem::path& folderPath, bool gammaCorrected = true);
+Ref<TextureResource> loadCubemap(const std::filesystem::path& folderPath, bool gammaCorrected = true);
 
 template <typename T>
 static Ref<T> load(const std::filesystem::path& path) {
@@ -19,17 +19,17 @@ static Ref<T> load(const std::filesystem::path& path) {
 }
 
 template <>
-static Ref<ShaderProgram> load<ShaderProgram>(const std::filesystem::path& path) {
-    return loadShaderProgram(path);
+static Ref<ShaderResource> load<ShaderResource>(const std::filesystem::path& path) {
+    return loadShader(path);
 }
 
 template <>
-static Ref<Mesh> load<Mesh>(const std::filesystem::path& path) {
+static Ref<MeshResource> load<MeshResource>(const std::filesystem::path& path) {
     return loadMesh(path);
 }
 
 template <>
-static Ref<Texture> load<Texture>(const std::filesystem::path& path) {
+static Ref<TextureResource> load<TextureResource>(const std::filesystem::path& path) {
     bool gammaCorrected = true;
 
     const auto filename = path.filename().string();
@@ -40,12 +40,12 @@ static Ref<Texture> load<Texture>(const std::filesystem::path& path) {
 }
 
 template <>
-static Ref<Material> load<Material>(const std::filesystem::path& path) {
+static Ref<MaterialResource> load<MaterialResource>(const std::filesystem::path& path) {
     return nullptr;
 }
 
 template <>
-static Ref<Model> load<Model>(const std::filesystem::path& path) {
+static Ref<ModelResource> load<ModelResource>(const std::filesystem::path& path) {
     return nullptr;
 }
 

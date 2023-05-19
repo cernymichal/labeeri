@@ -1,4 +1,5 @@
 #include "Engine/Application.h"
+#include "Engine/Renderer/IRenderer.h"
 #include "Game/Game.h"
 
 int main(int argc, char** argv) {

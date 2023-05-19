@@ -1,58 +1,67 @@
 #include "Entities.h"
 
+#include "Engine/Application.h"
 #include "Engine/Resources/Resources.h"
+#include "Engine/Resources/Scripts/CharacterController.h"
+#include "Engine/Scene/Components/Components.h"
 
 namespace labeeri::Engine {
 
-Ref<Entity> Entities::Flycam(float speed, double sensitivity) {
-    auto entity = Entity::Create();
+Entity Entities::Flycam(Scene& scene, float speed, double sensitivity) {
+    auto entity = Entity::Create(*scene.ecs());
 
-    entity->m_camera = makeRef<Camera>(entity->transform());
-    entity->m_movement = makeRef<Movement>(entity->transform(), speed);
-    entity->m_look = makeRef<Look>(entity->transform(), sensitivity);
-
-    return entity;
-}
-
-Ref<Entity> Entities::DirectionalLight(const glm::vec3& rotation, float intensity) {
-    auto entity = Entity::Create();
-
-    entity->m_model = Resources<Model>::get("whiteCube");
-    entity->transform()->move(glm::vec3(0, 0.5, 0));
-    entity->transform()->rotate(rotation);
-    entity->transform()->setScale(glm::vec3(0.1, 0.1, 0.5));
-    entity->m_light = makeRef<Light>(Light::Directional());
-    entity->m_light->m_intensity = intensity;
+    entity.addComponent<Camera>(Camera(), *scene.ecs());
+    entity.addComponent<RigidBody>(RigidBody(), *scene.ecs());
+    scene.addScript<CharacterController>(entity, speed, sensitivity);
 
     return entity;
 }
 
-Ref<Entity> Entities::PointLight(const glm::vec3& position, float intensity) {
-    auto entity = Entity::Create();
+Entity Entities::DirectionalLight(Scene& scene, const glm::vec3& rotation, float intensity) {
+    auto entity = Entity::Create(*scene.ecs());
 
-    entity->m_model = Resources<Model>::get("whiteSphere");
-    entity->transform()->setPosition(position);
-    entity->transform()->setScale(glm::vec3(0.3, 0.3, 0.3));
-    entity->m_light = makeRef<Light>(Light::Point());
-    entity->m_light->m_intensity = intensity;
+    auto& transform = entity.getComponent<Transform>(*scene.ecs());
+    transform.move(glm::vec3(0, 0.5, 0));
+    transform.rotate(rotation);
+    transform.setScale(glm::vec3(0.1, 0.1, 0.5));
+
+    auto& light = entity.addComponent<Light>(Light::Directional(), *scene.ecs());
+    light.m_intensity = intensity;
+
+    entity.addComponent<Model>(Model(Resources<ModelResource>::Get("whiteCube")), *scene.ecs());
 
     return entity;
 }
 
-EntityPack Entities::SpotLight(const glm::vec3& position, const glm::vec3& rotation, float intensity) {
-    auto entity = Entity::Create();
-    auto cone = Entity::Create();
+Entity Entities::PointLight(Scene& scene, const glm::vec3& position, float intensity) {
+    auto entity = Entity::Create(*scene.ecs());
 
-    cone->m_model = Resources<Model>::get("whiteCone");
-    cone->transform()->rotate(glm::vec3(glm::radians(90.0), 0, 0));
-    cone->transform()->setScale(glm::vec3(0.3, 0.3, 0.3));
-    cone->transform()->setParent(entity->transform());
-    entity->transform()->setPosition(position);
-    entity->transform()->rotate(rotation);
-    entity->m_light = makeRef<Light>(Light::Spot());
-    entity->m_light->m_intensity = intensity;
+    auto& transform = entity.getComponent<Transform>(*scene.ecs());
+    transform.setPosition(position);
+    transform.setScale(glm::vec3(0.3, 0.3, 0.3));
 
-    return {entity, cone};
+    auto& light = entity.addComponent<Light>(Light::Point(), *scene.ecs());
+    light.m_intensity = intensity;
+
+    entity.addComponent<Model>(Model(Resources<ModelResource>::Get("whiteSphere")), *scene.ecs());
+
+    return entity;
+}
+
+Entity Entities::SpotLight(Scene& scene, const glm::vec3& position, const glm::vec3& rotation, float intensity) {
+    auto entity = Entity::Create(*scene.ecs());
+
+    auto& transform = entity.getComponent<Transform>(*scene.ecs());
+    transform.setPosition(position);
+    transform.rotate(rotation);
+    transform.setScale(glm::vec3(0.3, 0.3, 0.3));
+
+    auto& light = entity.addComponent<Light>(Light::Spot(), *scene.ecs());
+    light.m_intensity = intensity;
+
+    entity.addComponent<Model>(Model(Resources<ModelResource>::Get("whiteCone")), *scene.ecs());
+
+    return entity;
 }
 
 }  // namespace labeeri::Engine

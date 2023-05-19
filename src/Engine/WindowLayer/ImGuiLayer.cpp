@@ -86,7 +86,7 @@ void ImGuiLayer::setupImGui() {
     }
 
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(dynamic_cast<GLFWWindow*>(LAB_WINDOW)->windowObject(), true);
+    ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWWindow*>(LAB_WINDOW)->windowObject(), true);
     ImGui_ImplOpenGL3_Init(GLSL_VERSION);
 
     LAB_LOG_RENDERAPI_ERROR();
@@ -98,8 +98,8 @@ void ImGuiLayer::onEvent(IEvent& e) {
         return;
     }
 
-    e.dispatch<ApplicationRenderEvent>(LAB_BIND_EVENT_FUNC(ImGuiLayer::onRender));
-    e.dispatch<KeyboardPressEvent>(LAB_BIND_EVENT_FUNC(ImGuiLayer::onKeyboardPress));
+    e.dispatch<ApplicationRenderEvent>(LAB_BIND_EVENT_FUNC(onRender));
+    e.dispatch<KeyboardPressEvent>(LAB_BIND_EVENT_FUNC(onKeyboardPress));
 }
 
 bool ImGuiLayer::onRender(const IEvent& e) {
@@ -118,7 +118,7 @@ bool ImGuiLayer::onRender(const IEvent& e) {
 }
 
 bool ImGuiLayer::onKeyboardPress(const KeyboardPressEvent& e) {
-    if (e.key() == KeyboardKey::F3) {
+    if (e.m_key == KeyboardKey::F3) {
         m_enabled = !m_enabled;
         return true;
     }

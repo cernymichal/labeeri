@@ -74,19 +74,19 @@ private:
 
     void setupGLFW();
 
-    static void glfwErrorCallback(int error, const char* description);
+    static void GLFWErrorCallback(int error, const char* description);
 
-    static void glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height);
+    static void GLFWFramebufferSizeCallback(GLFWwindow* window, int width, int height);
 
-    static void glfwWindowIconifyCallback(GLFWwindow* window, int iconified);
+    static void GLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
 
-    static void glfwKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods);
+    static void GLFWKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods);
 
-    static void glfwCursorPosCallback(GLFWwindow* window, double x, double y);
+    static void GLFWCursorPosCallback(GLFWwindow* window, double x, double y);
 
-    static void glfwMouseButtonCallback(GLFWwindow* window, int buttonInt, int actionInt, int mods);
+    static void GLFWMouseButtonCallback(GLFWwindow* window, int buttonInt, int actionInt, int mods);
 
-    static void glfwScrollCallback(GLFWwindow* window, double deltaX, double deltaY);
+    static void GLFWScrollCallback(GLFWwindow* window, double deltaX, double deltaY);
 };
 
 }  // namespace labeeri::Engine

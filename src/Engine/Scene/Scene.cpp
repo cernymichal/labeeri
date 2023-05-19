@@ -1,64 +1,48 @@
 #include "Scene.h"
 
+#include "Engine/Scene/Components/Components.h"
+#include "Engine/Scene/ECS/Instance.h"
+
 namespace labeeri::Engine {
 
 Scene::Scene() {
     LAB_LOGH2("Scene::Scene()");
-}
 
-void Scene::addEntity(const Ref<Entity>& entity) {
-    m_entities.push_back(entity);
-}
+    registerDefaultComponents(*m_ecs);
 
-void Scene::addEntity(const EntityPack& entities) {
-    for (const auto& entity : entities)
-        m_entities.push_back(entity);
-}
-
-void Scene::removeEntity(const Ref<Entity>& entity) {
-    auto entityPosition = std::find(m_entities.begin(), m_entities.end(), entity);
-    if (entityPosition != m_entities.end())
-		m_entities.erase(entityPosition);
+    m_systems.physics = m_ecs->registerSystem<PhysicsSystem>();
+    m_systems.light = m_ecs->registerSystem<LightSystem>();
+    m_systems.render = m_ecs->registerSystem<RenderSystem>();
 }
 
 void Scene::onEvent(IEvent& e) {
-    e.dispatch<ApplicationUpdateEvent>(LAB_BIND_EVENT_FUNC(Scene::onUpdate));
-    e.dispatch<ApplicationFixedUpdateEvent>(LAB_BIND_EVENT_FUNC(Scene::onFixedUpdate));
+    if (!(e.isInCategory(EventCategory::Input) || e.isInCategory(EventCategory::Scene)))
+        return;
 
-    if (e.isInCategory(EventCategory::Input) && !e.m_handled)
-        onInput(e);
-}
+    e.dispatch<UpdateEvent>(LAB_BIND_EVENT_FUNC(onUpdate));
+    e.dispatch<FixedUpdateEvent>(LAB_BIND_EVENT_FUNC(onFixedUpdate));
 
-bool Scene::onUpdate(const ApplicationUpdateEvent& e) {
-    double deltaTime = e.deltaTime();
-    m_time += deltaTime;
-
-    for (const auto& entity : m_entities)
-        entity->update(deltaTime);
-
-    return false;
-}
-
-bool Scene::onFixedUpdate(const ApplicationFixedUpdateEvent& e) {
-    for (const auto& entity : m_entities)
-        entity->fixedUpdate();
-
-    return false;
-}
-
-bool Scene::onInput(IEvent& e) {
-    for (auto& entity : entities()) {
-        if (!entity->m_enabled)
-            continue;
-
-        if (entity->m_movement)
-            entity->m_movement->onEvent(e);
-
-        if (entity->m_look)
-            entity->m_look->onEvent(e);
+    if (e.eventType() == EventType::EntityClick) {
+        for (const auto& script : m_scripts) {
+            if (script->m_entity == dynamic_cast<EntityClickEvent&>(e).m_entity)
+                script->onEvent(e);
+        }
     }
+    else {
+        for (const auto& script : m_scripts)
+            script->onEvent(e);
+    }
+}
 
-    return true;
+bool Scene::onUpdate(const UpdateEvent& e) {
+    m_time += e.m_deltaTime;
+    m_systems.physics->update(e.m_deltaTime);
+
+    return false;
+}
+
+bool Scene::onFixedUpdate(const FixedUpdateEvent& e) {
+    return false;
 }
 
 }  // namespace labeeri::Engine

@@ -1,10 +1,10 @@
-#include "Mesh.h"
+#include "MeshResource.h"
 
 #include "Engine/Renderer/IRenderer.h"
 
 namespace labeeri::Engine {
 
-Mesh::~Mesh() {
+MeshResource::~MeshResource() {
     if (m_moved)
         return;
 

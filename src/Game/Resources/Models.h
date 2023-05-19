@@ -6,6 +6,6 @@ using namespace labeeri::Engine;
 
 namespace labeeri {
 
-Ref<Model> waterModel();
+Ref<ModelResource> waterModel();
 
 }  // namespace labeeri

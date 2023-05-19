@@ -5,7 +5,7 @@ namespace labeeri::Engine {
 /**
  * @brief TODO
  */
-class Mesh {
+class MeshResource {
 public:
     const LAB_GL_HANDLE m_vertexArrayObject;
     const LAB_GL_HANDLE m_vertexBufferObject;
@@ -15,30 +15,33 @@ public:
     /**
      * @brief TODO
      */
-    Mesh(LAB_GL_HANDLE vertexArrayObject, LAB_GL_HANDLE vertexBufferObject, LAB_GL_HANDLE elementBufferObject, uint32_t triangleCount)
+    MeshResource(LAB_GL_HANDLE vertexArrayObject, LAB_GL_HANDLE vertexBufferObject, LAB_GL_HANDLE elementBufferObject, uint32_t triangleCount)
         : m_vertexArrayObject(vertexArrayObject), m_vertexBufferObject(vertexBufferObject), m_elementBufferObject(elementBufferObject), m_triangleCount(triangleCount) {
     }
 
     /**
      * @brief TODO
      */
-    Mesh(Mesh&& other) noexcept
+    MeshResource(MeshResource&& other) noexcept
         : m_vertexArrayObject(other.m_vertexArrayObject), m_vertexBufferObject(other.m_vertexBufferObject), m_elementBufferObject(other.m_elementBufferObject), m_triangleCount(other.m_triangleCount) {
         other.m_moved = true;
     }
 
-    Mesh& operator=(const Mesh&) = delete;
+    MeshResource& operator=(const MeshResource&) = delete;
 
-    Mesh& operator=(Mesh&& other) noexcept {
-        this->~Mesh();
-        new (this) Mesh(std::move(other));
+    MeshResource& operator=(MeshResource&& other) noexcept {
+        if (this == &other)
+            return *this;
+
+        this->~MeshResource();
+        new (this) MeshResource(std::move(other));
         return *this;
     }
 
     /**
      * @brief TODO
      */
-    ~Mesh();
+    ~MeshResource();
 
 private:
     bool m_moved = false;

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Engine/Scene/Entity.h"
+#include "Engine/Scene/ECS/Entity.h"
+#include "Engine/Scene/Scene.h"
 
 namespace labeeri::Engine {
 
@@ -9,13 +10,22 @@ namespace Entities {
 /**
  * @brief TODO
  */
-Ref<Entity> Flycam(float speed = 4.0, double sensitivity = 0.002);
+Entity Flycam(Scene& scene, float speed = 4.0, double sensitivity = 0.002);
 
-Ref<Entity> DirectionalLight(const glm::vec3& rotation, float intensity = 1.0);
+/**
+ * @brief TODO
+ */
+Entity DirectionalLight(Scene& scene, const glm::vec3& rotation, float intensity = 1.0);
 
-Ref<Entity> PointLight(const glm::vec3& position, float intensity = 1.0);
+/**
+ * @brief TODO
+ */
+Entity PointLight(Scene& scene, const glm::vec3& position, float intensity = 1.0);
 
-EntityPack SpotLight(const glm::vec3& position, const glm::vec3& rotation, float intensity = 1.0);
+/**
+ * @brief TODO
+ */
+Entity SpotLight(Scene& scene, const glm::vec3& position, const glm::vec3& rotation, float intensity = 1.0);
 
 };  // namespace Entities
 

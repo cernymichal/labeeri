@@ -12,8 +12,12 @@
 
 // STL
 #include <array>
+#include <bitset>
 #include <list>
 #include <map>
+#include <queue>
+#include <set>
+#include <stack>
 #include <string>
 #include <unordered_map>
 #include <vector>

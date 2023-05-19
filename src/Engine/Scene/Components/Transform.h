@@ -1,12 +1,8 @@
 #pragma once
 
+#include "Engine/Scene/ECS/Entity.h"
+
 namespace labeeri::Engine {
-
-constexpr auto LAB_FORWARD = glm::vec3(0.0f, 0.0f, -1.0f);
-constexpr auto LAB_UP = glm::vec3(0.0f, 1.0f, 0.0f);
-constexpr auto LAB_RIGHT = glm::vec3(1.0f, 0.0f, 0.0f);
-
-class Entity;
 
 /**
  * @brief TODO
@@ -16,12 +12,53 @@ public:
     /**
      * @brief TODO
      */
+    explicit Transform(Entity entity = NULL_ENTITY) : m_entity(entity) {
+    }
+
+    /**
+     * @brief TODO
+     */
+    Transform(Transform&& other) noexcept
+        : m_position(other.m_position), m_rotation(other.m_rotation), m_scale(other.m_scale), m_modelMatrix(other.m_modelMatrix), m_modelMatrixValid(other.m_modelMatrixValid), m_entity(other.m_entity), m_parent(other.m_parent), m_children(other.m_children), m_moved(other.m_moved) {
+        other.m_moved = true;
+    }
+
+    /**
+     * @brief TODO
+     */
     ~Transform() {
+        if (m_moved)
+            return;
+
         while (!m_children.empty())
-            m_children.front()->setParent(m_parent);
+            m_children.front().getComponent<Transform>().setParent(m_parent);
 
         m_children.clear();
         removeParent();
+    }
+
+    /**
+     * @brief TODO
+     */
+    Transform& operator=(const Transform& other) {
+        if (this == &other)
+            return *this;
+
+        setWorldPosition(other.worldPosition());
+        setRotation(other.rotation());
+        return *this;
+    }
+
+    /**
+     * @brief TODO
+     */
+    Transform& operator=(Transform&& other) noexcept {
+        if (this == &other)
+            return *this;
+
+        this->~Transform();
+        new (this) Transform(std::move(other));
+        return *this;
     }
 
     /**
@@ -48,7 +85,7 @@ public:
             return;
         }
 
-        glm::mat4 parentInverseModelMatrix = glm::inverse(m_parent->modelMatrix());
+        glm::mat4 parentInverseModelMatrix = glm::inverse(m_parent.getComponent<Transform>().modelMatrix());
         glm::vec3 localPosition = glm::vec3(parentInverseModelMatrix * glm::vec4(position, 1.0f));
         setPosition(localPosition);
     }
@@ -93,7 +130,7 @@ public:
     /**
      * @brief TODO
      */
-    void setParent(Transform* parent) {
+    void setParent(Entity parent) {
         if (!m_parent && !parent)
             return;
 
@@ -102,37 +139,26 @@ public:
         m_parent = parent;
         m_modelMatrixValid = false;
 
-        if (!m_parent)
+        if (!m_parent || !m_entity)
             return;
 
-        m_parent->m_children.push_back(this);
+        m_parent.getComponent<Transform>().m_children.push_back(m_entity);
 
         setWorldPosition(position());
     }
 
-    void setParent(const Ref<Transform>& parent) {
-        setParent(parent.get());
+    /**
+     * @brief TODO
+     */
+    Entity parent() const {
+        return m_parent;
     }
 
     /**
      * @brief TODO
      */
-    const Transform& parent() const {
-        return *m_parent;
-    }
-
-    /**
-     * @brief TODO
-     */
-    const std::list<Transform*>& children() const {
+    const std::list<Entity>& children() const {
         return m_children;
-    }
-
-    /**
-     * @brief TODO
-     */
-    const Ref<Entity>&& entity() const {
-        return m_entity.lock();
     }
 
     /**
@@ -195,18 +221,6 @@ public:
         return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(LAB_RIGHT, 0.0f)));
     }
 
-    /**
-     * @brief TODO
-     */
-    Transform& operator=(const Transform& other) {
-        if (this == &other)
-            return *this;
-
-        setWorldPosition(other.worldPosition());
-        setRotation(other.rotation());
-        return *this;
-    }
-
 private:
     glm::vec3 m_position = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::quat m_rotation = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -215,10 +229,11 @@ private:
     mutable glm::mat4 m_modelMatrix = glm::mat4(1.0);
     mutable bool m_modelMatrixValid = true;
 
-    Transform* m_parent = nullptr;
-    std::list<Transform*> m_children;
+    Entity m_entity;
+    Entity m_parent = NULL_ENTITY;
+    std::list<Entity> m_children;
 
-    std::weak_ptr<Entity> m_entity;
+    bool m_moved = false;
 
     /**
      * @brief TODO
@@ -227,7 +242,7 @@ private:
         if (!m_parent)
             return m_modelMatrixValid;
 
-        return m_parent->modelMatrixValid() && m_modelMatrixValid;
+        return m_parent.getComponent<Transform>().modelMatrixValid() && m_modelMatrixValid;
     }
 
     /**
@@ -242,29 +257,27 @@ private:
         m_modelMatrix = localModelMatrix;
 
         if (m_parent)
-            m_modelMatrix = m_parent->modelMatrix() * m_modelMatrix;
+            m_modelMatrix = m_parent.getComponent<Transform>().modelMatrix() * m_modelMatrix;
 
         m_modelMatrixValid = true;
 
         for (auto& child : m_children)
-            child->m_modelMatrixValid = false;
+            child.getComponent<Transform>().m_modelMatrixValid = false;
     }
 
     /**
      * @brief TODO
      */
     void removeParent() {
-        if (!m_parent)
+        if (!m_parent || !m_entity)
             return;
 
         setPosition(worldPosition());
 
-        m_parent->m_children.remove(this);
-        m_parent = nullptr;
+        m_parent.getComponent<Transform>().m_children.remove(m_entity);
+        m_parent = NULL_ENTITY;
         m_modelMatrixValid = false;
     }
-
-    friend Entity;
 };
 
 }  // namespace labeeri::Engine

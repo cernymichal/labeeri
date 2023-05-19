@@ -33,7 +33,7 @@ public:
 
     virtual void waitForFrame() override;
 
-    virtual void useShaderProgram(const Ref<ShaderProgram>& shaderProgram) override;
+    virtual void useShaderProgram(const Ref<ShaderResource>& shaderProgram) override;
 
     virtual void bindUniform(const char* name, float value) override;
 
@@ -49,35 +49,35 @@ public:
 
     virtual void bindPVM(const glm::mat4& modelMatrix) override;
 
-    virtual LAB_GL_INT getUniformLocation(ShaderProgram& shaderProgram, const char* name) override;
+    virtual LAB_GL_INT getUniformLocation(ShaderResource& shaderProgram, const char* name) override;
 
-    virtual void bindMesh(const Ref<Mesh>& mesh) override;
+    virtual void bindMesh(const Ref<MeshResource>& mesh) override;
 
     virtual void drawMesh() override;
 
-    virtual ShaderProgram createShaderProgram(const std::vector<std::pair<ShaderType, const char*>>& shaders) const override;
+    virtual ShaderResource createShaderProgram(const std::vector<std::pair<ShaderType, const char*>>& shaders) const override;
 
-    virtual void deleteShaderProgram(ShaderProgram& shaderProgram) const override;
+    virtual void deleteShaderProgram(ShaderResource& shaderProgram) const override;
 
-    virtual Mesh createMesh(const float* vertices, uint32_t vertexCount,
+    virtual MeshResource createMesh(const float* vertices, uint32_t vertexCount,
                             const float* normals, const float* tangents,
                             const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const override;
 
-    virtual void deleteMesh(Mesh& mesh) const override;
+    virtual void deleteMesh(MeshResource& mesh) const override;
 
-    virtual Texture createTexture(TextureType type, const Image& image, bool generateMipmap = true,
+    virtual TextureResource createTexture(TextureType type, const ImageResource& image, bool generateMipmap = true,
                                   TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const override;
 
-    virtual Texture createCubemap(const std::array<Scoped<Image>, 6>& images, TextureFilter filter = TextureFilter::Linear) const override;
+    virtual TextureResource createCubemap(const std::array<Scoped<ImageResource>, 6>& images, TextureFilter filter = TextureFilter::Linear) const override;
 
-    virtual void bindTexture(TextureType type, const Texture& texture, unsigned slot) const override;
+    virtual void bindTexture(TextureType type, const TextureResource& texture, unsigned slot) const override;
 
     virtual void readFramebuffer(TextureFormat format, TextureDataType dataType,
                              glm::uvec2 position, glm::uvec2 size, void* result) const override;
 
-    virtual void deleteTexture(Texture& texure) const override;
+    virtual void deleteTexture(TextureResource& texure) const override;
 
-    virtual Framebuffer createFramebuffer(glm::uvec2 size, std::map<FramebufferAttachment, Ref<Texture>>&& attachments) const override;
+    virtual Framebuffer createFramebuffer(glm::uvec2 size, std::map<FramebufferAttachment, Ref<TextureResource>>&& attachments) const override;
 
     virtual void bindFramebuffer(const Ref<Framebuffer>& framebuffer) override;
 
@@ -92,13 +92,13 @@ public:
     virtual void logError(const char* location) const override;
 
 private:
-    Ref<Mesh> m_screenQuad;
-    Ref<ShaderProgram> m_postprocessShader;
-    Ref<ShaderProgram> m_skyboxShader;
+    Ref<MeshResource> m_screenQuad;
+    Ref<ShaderResource> m_postprocessShader;
+    Ref<ShaderResource> m_skyboxShader;
 
     Ref<Framebuffer> m_currentFramebuffer;
-    Ref<ShaderProgram> m_currentShaderProgram;
-    Ref<Mesh> m_currentMesh;
+    Ref<ShaderResource> m_currentShaderProgram;
+    Ref<MeshResource> m_currentMesh;
     double m_time = 0.0;
     glm::vec3 m_cameraPosition = glm::vec3(0.0f);
     struct Matrices {
@@ -115,7 +115,7 @@ private:
 
     void initialize();
 
-    Mesh createScreenQuad() const;
+    MeshResource createScreenQuad() const;
 
     void bindDirectionalLights();
 

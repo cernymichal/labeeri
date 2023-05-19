@@ -1,14 +1,14 @@
-#include "ShaderProgram.h"
+#include "ShaderResource.h"
 
 #include "Engine/Renderer/IRenderer.h"
 
 namespace labeeri::Engine {
 
-ShaderProgram::~ShaderProgram() {
+ShaderResource::~ShaderResource() {
     LAB_RENDERER->deleteShaderProgram(*this);
 }
 
-LAB_GL_INT ShaderProgram::getUniformLocation(const std::string& name) {
+LAB_GL_INT ShaderResource::getUniformLocation(const std::string& name) {
     auto iter = m_uniforms.find(name);
 
     if (iter != m_uniforms.end())

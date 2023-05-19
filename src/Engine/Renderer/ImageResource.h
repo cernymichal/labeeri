@@ -4,27 +4,27 @@
 
 namespace labeeri::Engine {
 
-struct Image {
+struct ImageResource {
     glm::uvec2 size = glm::uvec2(0);
     void* data = nullptr;
     TextureDataType dataType = TextureDataType::UByte;
     TextureFormat format = TextureFormat::RGB;
     TextureInternalFormat internalFormat = TextureInternalFormat::RGB;
 
-    Image() = default;
+    ImageResource() = default;
 
-    Image(glm::uvec2 size, void* data, TextureDataType dataType, TextureFormat format, TextureInternalFormat internalFormat)
+    ImageResource(glm::uvec2 size, void* data, TextureDataType dataType, TextureFormat format, TextureInternalFormat internalFormat)
         : size(size), data(data), dataType(dataType), format(format), internalFormat(internalFormat) {
     }
 
-    Image(const Image& other) = delete;
+    ImageResource(const ImageResource& other) = delete;
 
-    Image(Image&& other) noexcept
+    ImageResource(ImageResource&& other) noexcept
         : size(other.size), data(other.data), dataType(other.dataType), format(other.format), internalFormat(other.internalFormat) {
         other.data = nullptr;
     }
 
-    virtual ~Image() = default;
+    virtual ~ImageResource() = default;
 };
 
 }  // namespace labeeri::Engine

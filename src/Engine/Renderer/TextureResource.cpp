@@ -1,10 +1,10 @@
-#include "Texture.h"
+#include "TextureResource.h"
 
 #include "Engine/Renderer/IRenderer.h"
 
 namespace labeeri::Engine {
 
-Texture::~Texture() {
+TextureResource::~TextureResource() {
     LAB_RENDERER->deleteTexture(*this);
 }
 
