@@ -33,23 +33,23 @@ ECS::ComponentSignature RenderSystem::signature(const ECS::Instance& ecs) const 
 
 void RenderSystem::drawOpaque() {
     for (Entity entity : entities()) {
-        auto& model = *entity.getComponent<Model>();
+        auto& model = entity.getComponent<Model>()->m_ref;
         if (!model->m_material->opaque())
             continue;
-        auto& transform = entity.getComponent<Transform>();
+        auto transform = entity.getComponent<Transform>();
 
-        drawModel(model, transform.modelMatrix());
+        drawModel(model, transform->modelMatrix());
     }
 }
 
 void RenderSystem::drawTransparent() {
     for (Entity entity : entities()) {
-        auto& model = *entity.getComponent<Model>();
+        auto& model = entity.getComponent<Model>()->m_ref;
         if (model->m_material->opaque())
             continue;
-        auto& transform = entity.getComponent<Transform>();
+        auto transform = entity.getComponent<Transform>();
 
-        drawModel(model, transform.modelMatrix());
+        drawModel(model, transform->modelMatrix());
     }
 }
 
@@ -57,11 +57,11 @@ void RenderSystem::drawIds() {
     LAB_RENDERER->useShaderProgram(Resources<ShaderResource>::Get("id"));
 
     for (Entity entity : entities()) {
-        auto& transform = entity.getComponent<Transform>();
-        auto& model = *entity.getComponent<Model>();
+        auto transform = entity.getComponent<Transform>();
+        auto& model = entity.getComponent<Model>()->m_ref;
 
         LAB_RENDERER->bindMesh(model->m_mesh);
-        LAB_RENDERER->bindPVM(transform.modelMatrix());
+        LAB_RENDERER->bindPVM(transform->modelMatrix());
         LAB_RENDERER->bindUniform("u_id", static_cast<EntityId>(entity));
         LAB_RENDERER->drawMesh();
     }
@@ -76,10 +76,10 @@ ECS::ComponentSignature LightSystem::signature(const ECS::Instance& ecs) const {
 
 void LightSystem::bindLights() {
     for (Entity entity : entities()) {
-        auto& transform = entity.getComponent<Transform>();
-        auto& light = entity.getComponent<Light>();
+        auto transform = entity.getComponent<Transform>();
+        auto light = entity.getComponent<Light>();
 
-        light.submit(transform);
+        light->submit(*transform);
     }
 }
 

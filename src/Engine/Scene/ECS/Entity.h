@@ -78,8 +78,8 @@ public:
      * @brief TODO
      */
     template <typename T>
-    T& addComponent(T&& component, const ECS::Instance& ecs) const {
-        T& placedComponent = ecs.m_componentManager->addComponent<T>(*this, std::forward<T>(component));
+    T* addComponent(T&& component, const ECS::Instance& ecs) const {
+        T* placedComponent = ecs.m_componentManager->addComponent<T>(*this, std::forward<T>(component));
 
         auto signature = ecs.m_entityManager->getSignature(*this);
         signature.set(ecs.m_componentManager->getComponentType<T>(), true);
@@ -94,7 +94,7 @@ public:
      * @brief TODO
      */
     template <typename T>
-    T& addComponent(T&& component) const {
+    T* addComponent(T&& component) const {
         return addComponent<T>(std::forward<T>(component), *ECS::CURRENT_INSTANCE);
     }
 
@@ -124,7 +124,7 @@ public:
      * @brief TODO
      */
     template <typename T>
-    T& getComponent(const ECS::Instance& ecs) const {
+    T* getComponent(const ECS::Instance& ecs) const {
         return ecs.m_componentManager->getComponent<T>(*this);
     }
 
@@ -132,7 +132,7 @@ public:
      * @brief TODO
      */
     template <typename T>
-    T& getComponent() const {
+    T* getComponent() const {
         return getComponent<T>(*ECS::CURRENT_INSTANCE);
     }
 };

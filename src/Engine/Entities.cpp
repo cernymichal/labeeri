@@ -20,13 +20,13 @@ Entity Entities::Flycam(Scene& scene, float speed, double sensitivity) {
 Entity Entities::DirectionalLight(Scene& scene, const glm::vec3& rotation, float intensity) {
     auto entity = Entity::Create(*scene.ecs());
 
-    auto& transform = entity.getComponent<Transform>(*scene.ecs());
-    transform.move(glm::vec3(0, 0.5, 0));
-    transform.rotate(rotation);
-    transform.setScale(glm::vec3(0.1, 0.1, 0.5));
+    auto transform = entity.getComponent<Transform>(*scene.ecs());
+    transform->move(glm::vec3(0, 0.5, 0));
+    transform->rotate(rotation);
+    transform->setScale(glm::vec3(0.1, 0.1, 0.5));
 
-    auto& light = entity.addComponent<Light>(Light::Directional(), *scene.ecs());
-    light.m_intensity = intensity;
+    auto light = entity.addComponent<Light>(Light::Directional(), *scene.ecs());
+    light->m_intensity = intensity;
 
     entity.addComponent<Model>(Model(Resources<ModelResource>::Get("whiteCube")), *scene.ecs());
 
@@ -36,12 +36,12 @@ Entity Entities::DirectionalLight(Scene& scene, const glm::vec3& rotation, float
 Entity Entities::PointLight(Scene& scene, const glm::vec3& position, float intensity) {
     auto entity = Entity::Create(*scene.ecs());
 
-    auto& transform = entity.getComponent<Transform>(*scene.ecs());
-    transform.setPosition(position);
-    transform.setScale(glm::vec3(0.3, 0.3, 0.3));
+    auto transform = entity.getComponent<Transform>(*scene.ecs());
+    transform->setPosition(position);
+    transform->setScale(glm::vec3(0.3, 0.3, 0.3));
 
-    auto& light = entity.addComponent<Light>(Light::Point(), *scene.ecs());
-    light.m_intensity = intensity;
+    auto light = entity.addComponent<Light>(Light::Point(), *scene.ecs());
+    light->m_intensity = intensity;
 
     entity.addComponent<Model>(Model(Resources<ModelResource>::Get("whiteSphere")), *scene.ecs());
 
@@ -51,13 +51,13 @@ Entity Entities::PointLight(Scene& scene, const glm::vec3& position, float inten
 Entity Entities::SpotLight(Scene& scene, const glm::vec3& position, const glm::vec3& rotation, float intensity) {
     auto entity = Entity::Create(*scene.ecs());
 
-    auto& transform = entity.getComponent<Transform>(*scene.ecs());
-    transform.setPosition(position);
-    transform.rotate(rotation);
-    transform.setScale(glm::vec3(0.3, 0.3, 0.3));
+    auto transform = entity.getComponent<Transform>(*scene.ecs());
+    transform->setPosition(position);
+    transform->rotate(rotation);
+    transform->setScale(glm::vec3(0.3, 0.3, 0.3));
 
-    auto& light = entity.addComponent<Light>(Light::Spot(), *scene.ecs());
-    light.m_intensity = intensity;
+    auto light = entity.addComponent<Light>(Light::Spot(), *scene.ecs());
+    light->m_intensity = intensity;
 
     entity.addComponent<Model>(Model(Resources<ModelResource>::Get("whiteCone")), *scene.ecs());
 

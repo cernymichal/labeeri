@@ -39,7 +39,7 @@ public:
      * @brief TODO
      */
     template <typename T>
-    T& addComponent(EntityId entity, T&& component) {
+    T* addComponent(EntityId entity, T&& component) {
         return getComponentArray<T>()->insert(entity, std::forward<T>(component));
     }
 
@@ -55,7 +55,7 @@ public:
      * @brief TODO
      */
     template <typename T>
-    T& getComponent(EntityId entity) const {
+    T* getComponent(EntityId entity) const {
         return (*getComponentArray<T>())[entity];
     }
 

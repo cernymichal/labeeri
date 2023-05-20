@@ -31,7 +31,7 @@ public:
             return;
 
         while (!m_children.empty())
-            m_children.front().getComponent<Transform>().setParent(m_parent);
+            m_children.front().getComponent<Transform>()->setParent(m_parent);
 
         m_children.clear();
         removeParent();
@@ -85,7 +85,7 @@ public:
             return;
         }
 
-        glm::mat4 parentInverseModelMatrix = glm::inverse(m_parent.getComponent<Transform>().modelMatrix());
+        glm::mat4 parentInverseModelMatrix = glm::inverse(m_parent.getComponent<Transform>()->modelMatrix());
         glm::vec3 localPosition = glm::vec3(parentInverseModelMatrix * glm::vec4(position, 1.0f));
         setPosition(localPosition);
     }
@@ -142,7 +142,7 @@ public:
         if (!m_parent || !m_entity)
             return;
 
-        m_parent.getComponent<Transform>().m_children.push_back(m_entity);
+        m_parent.getComponent<Transform>()->m_children.push_back(m_entity);
 
         setWorldPosition(position());
     }
@@ -242,7 +242,7 @@ private:
         if (!m_parent)
             return m_modelMatrixValid;
 
-        return m_parent.getComponent<Transform>().modelMatrixValid() && m_modelMatrixValid;
+        return m_parent.getComponent<Transform>()->modelMatrixValid() && m_modelMatrixValid;
     }
 
     /**
@@ -257,12 +257,12 @@ private:
         m_modelMatrix = localModelMatrix;
 
         if (m_parent)
-            m_modelMatrix = m_parent.getComponent<Transform>().modelMatrix() * m_modelMatrix;
+            m_modelMatrix = m_parent.getComponent<Transform>()->modelMatrix() * m_modelMatrix;
 
         m_modelMatrixValid = true;
 
         for (auto& child : m_children)
-            child.getComponent<Transform>().m_modelMatrixValid = false;
+            child.getComponent<Transform>()->m_modelMatrixValid = false;
     }
 
     /**
@@ -274,7 +274,7 @@ private:
 
         setPosition(worldPosition());
 
-        m_parent.getComponent<Transform>().m_children.remove(m_entity);
+        m_parent.getComponent<Transform>()->m_children.remove(m_entity);
         m_parent = NULL_ENTITY;
         m_modelMatrixValid = false;
     }

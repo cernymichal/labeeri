@@ -26,7 +26,7 @@ public:
     /**
      * @brief TODO
      */
-    T& insert(EntityId entity, T&& component) {
+    T* insert(EntityId entity, T&& component) {
         assert(m_entityToIndex.find(entity) == m_entityToIndex.end() && "Component added to same entity more than once.");
 
         size_t insertIndex = m_size++;
@@ -34,7 +34,7 @@ public:
         m_entityToIndex[entity] = insertIndex;
         m_indexToEntity[insertIndex] = entity;
 
-        return m_components[insertIndex];
+        return &m_components[insertIndex];
     }
 
     /**
@@ -64,10 +64,11 @@ public:
     /**
      * @brief TODO
      */
-    T& operator[](EntityId entity) {
-        assert(m_entityToIndex.find(entity) != m_entityToIndex.end() && "Retrieving non-existent component.");
+    T* operator[](EntityId entity) {
+        if (!m_entityToIndex.contains(entity))
+            return nullptr;
 
-        return m_components[m_entityToIndex.at(entity)];
+        return &m_components[m_entityToIndex.at(entity)];
     }
 
     /**

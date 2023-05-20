@@ -26,13 +26,13 @@ void ViewportLayer::onEvent(IEvent& e) {
 bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     if (!LAB_CURRENT_SCENE) return false;
 
-    auto& camera = m_camera.getComponent<Camera>();
-    auto& cameraPosition = m_camera.getComponent<Transform>();
+    auto camera = m_camera.getComponent<Camera>();
+    auto cameraPosition = m_camera.getComponent<Transform>();
 
-    auto viewMatrix = camera.viewMatrix(cameraPosition);
-    auto projectionMatrix = camera.projectionMatrix(m_size);
+    auto viewMatrix = camera->viewMatrix(*cameraPosition);
+    auto projectionMatrix = camera->projectionMatrix(m_size);
 
-    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), cameraPosition.worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
+    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), cameraPosition->worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
     LAB_RENDERER->bindFramebuffer(m_viewFramebuffer);
     LAB_RENDERER->clear(static_cast<int>(ClearBuffer::Depth));
 
@@ -122,13 +122,13 @@ void ViewportLayer::clickOnObject(const glm::uvec2& mousePosition) {
     if (!m_idFramebuffer)
         updateIdFramebuffer();
 
-    auto& camera = m_camera.getComponent<Camera>();
-    auto& cameraPosition = m_camera.getComponent<Transform>();
+    auto camera = m_camera.getComponent<Camera>();
+    auto cameraPosition = m_camera.getComponent<Transform>();
 
-    auto viewMatrix = camera.viewMatrix(cameraPosition);
-    auto projectionMatrix = camera.projectionMatrix(m_size);
+    auto viewMatrix = camera->viewMatrix(*cameraPosition);
+    auto projectionMatrix = camera->projectionMatrix(m_size);
 
-    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), cameraPosition.worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
+    LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), cameraPosition->worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
     LAB_RENDERER->bindFramebuffer(m_idFramebuffer);
     LAB_RENDERER->clear(static_cast<int>(ClearBuffer::Depth));
     LAB_RENDERER->clearBuffer(static_cast<int>(ClearBuffer::Color), NULL_ENTITY);
