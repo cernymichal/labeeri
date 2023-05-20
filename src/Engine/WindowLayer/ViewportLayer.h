@@ -3,10 +3,8 @@
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Events/KeyboardEvent.h"
 #include "Engine/Events/MouseEvent.h"
-#include "Engine/Events/SceneEvent.h"
 #include "Engine/Renderer/Framebuffer.h"
 #include "Engine/Scene/ECS/Entity.h"
-#include "Engine/Scene/Systems/RenderSystem.h"
 #include "Engine/WindowLayer/IWindowLayer.h"
 
 namespace labeeri::Engine {

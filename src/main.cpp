@@ -1,9 +1,10 @@
 #include "Engine/Application.h"
-#include "Engine/Renderer/IRenderer.h"
+#include "Engine/Resources/Resources.h"
 #include "Game/Game.h"
 
 int main(int argc, char** argv) {
     LAB_APP.initialize();
+
     // while (!LAB_APP.closed()) {
     try {
         labeeri::Game game;

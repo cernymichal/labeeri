@@ -2,8 +2,6 @@
 
 #include "Engine/API.h"
 
-using namespace labeeri::Engine;
-
 namespace labeeri {
 
 /**

@@ -63,8 +63,8 @@ public:
      * @brief TODO
      */
     void entityDestroyed(EntityId entity) {
-        for (auto const& element : m_componentArrays)
-            element.second->entityDestroyed(entity);
+        for (const auto& array : m_componentArrays | std::views::values)
+            array->entityDestroyed(entity);
     }
 
 private:

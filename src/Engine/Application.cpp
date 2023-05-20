@@ -2,7 +2,6 @@
 
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Renderer/GLRenderer.h"
-#include "Engine/Resources/Resources.h"
 #include "Engine/Window/GLFWWindow.h"
 #include "Engine/WindowLayer/ImGuiLayer.h"
 #include "Engine/WindowLayer/SceneLayer.h"
@@ -20,20 +19,12 @@ Application::Application() {
 Application::~Application() {
     LAB_LOGH2("Application::~Application()");
 
+    LAB_APP.setScene(nullptr);
     m_layers.clear();
-
-    /*
-    Resources<ModelResource>::Clear();
-    Resources<MaterialResource>::Clear();
-    Resources<TextureResource>::Clear();
-    Resources<MeshResource>::Clear();
-    Resources<ShaderResource>::Clear();
-    */
-
-    LAB_LOG_RENDERAPI_ERROR();
 
     IWindow::s_window = nullptr;
 
+    LAB_LOG_RENDERAPI_ERROR();
     LAB_DEBUG_ONLY(std::cout << LOG_STREAM.str() << std::endl);
 }
 
@@ -41,11 +32,11 @@ void Application::initialize() {
     LAB_LOGH1("Application::initialize()");
 
     m_layers.push_back(std::make_unique<ImGuiLayer>());
-    m_imGuiLayer = static_cast<ImGuiLayer*>(m_layers.back().get());
+    m_imGuiLayer = dynamic_cast<ImGuiLayer*>(m_layers.back().get());
     m_layers.push_back(std::make_unique<ViewportLayer>());
-    m_viewportLayer = static_cast<ViewportLayer*>(m_layers.back().get());
+    m_viewportLayer = dynamic_cast<ViewportLayer*>(m_layers.back().get());
     m_layers.push_back(std::make_unique<SceneLayer>());
-    m_sceneLayer = static_cast<SceneLayer*>(m_layers.back().get());
+    m_sceneLayer = dynamic_cast<SceneLayer*>(m_layers.back().get());
 }
 
 void Application::focusUI() {

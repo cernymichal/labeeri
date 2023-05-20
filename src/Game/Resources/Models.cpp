@@ -53,7 +53,7 @@ MeshResource createWaterMesh() {
 }
 
 Ref<ModelResource> waterModel() {
-    auto water = Resources<ModelResource>::Get("water");
+    auto& water = Resources<ModelResource>::Get("water");
     if (water)
         return water;
 

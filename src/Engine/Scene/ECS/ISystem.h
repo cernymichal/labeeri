@@ -12,6 +12,8 @@ class Instance;
  */
 class ISystem {
 public:
+    virtual ~ISystem() = default;
+
     /**
      * @brief TODO
      */

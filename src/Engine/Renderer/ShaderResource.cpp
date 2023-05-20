@@ -5,7 +5,8 @@
 namespace labeeri::Engine {
 
 ShaderResource::~ShaderResource() {
-    LAB_RENDERER->deleteShaderProgram(*this);
+    if (LAB_RENDERER)
+        LAB_RENDERER->deleteShaderProgram(*this);
 }
 
 LAB_GL_INT ShaderResource::getUniformLocation(const std::string& name) {

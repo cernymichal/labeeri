@@ -53,7 +53,7 @@ public:
             m_indexToEntity[replaced] = lastEntity;
         }
         else
-            new (&m_components[replaced]) T();
+            m_components[replaced] = std::move(T());
 
         m_entityToIndex.erase(entity);
         m_indexToEntity.erase(last);
@@ -73,14 +73,14 @@ public:
     /**
      * @brief TODO
      */
-    void entityDestroyed(EntityId entity) override {
-        if (m_entityToIndex.find(entity) != m_entityToIndex.end())
+    virtual void entityDestroyed(EntityId entity) override {
+        if (m_entityToIndex.contains(entity))
             remove(entity);
     }
 
 private:
     std::array<T, MAX_ENTITIES> m_components;
-    size_t m_size;
+    size_t m_size = 0;
     std::unordered_map<EntityId, size_t> m_entityToIndex;
     std::unordered_map<size_t, EntityId> m_indexToEntity;
 };

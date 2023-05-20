@@ -39,8 +39,8 @@ public:
      * @brief TODO
      */
     void entityDestroyed(EntityId entity) {
-        for (const auto& element : m_systems)
-            element.second->m_entities.erase(entity);
+        for (const auto& system : m_systems | std::views::values)
+            system->m_entities.erase(entity);
     }
 
     /**

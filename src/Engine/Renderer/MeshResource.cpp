@@ -8,7 +8,8 @@ MeshResource::~MeshResource() {
     if (m_moved)
         return;
 
-    LAB_RENDERER->deleteMesh(*this);
+    if (LAB_RENDERER)
+        LAB_RENDERER->deleteMesh(*this);
 }
 
 }  // namespace labeeri::Engine

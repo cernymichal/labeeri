@@ -76,9 +76,9 @@ class Scene;
  */
 class SceneChangeEvent : public IEvent {
 public:
-    const std::shared_ptr<Scene> m_scene;
+    const Ref<Scene> m_scene;
 
-    explicit SceneChangeEvent(const std::shared_ptr<Scene>& scene) : m_scene(scene) {
+    explicit SceneChangeEvent(const Ref<Scene>& scene) : m_scene(scene) {
     }
 
     EVENT_CLASS_TYPE(SceneChange)

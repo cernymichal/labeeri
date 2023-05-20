@@ -13,15 +13,15 @@ public:
      * @brief TODO
      */
     explicit CharacterController(Entity entity, float speed = 4.0f, double mouseSensitivity = 0.002)
-        : m_speed(speed), m_mouseSensitivity(mouseSensitivity), IScript(entity) {
+        : IScript(entity), m_speed(speed), m_mouseSensitivity(mouseSensitivity) {
     }
 
 protected:
-    virtual void onMouseMove(const MouseMoveEvent& e);
+    virtual void onMouseMove(const MouseMoveEvent& e) override;
 
-    virtual void onKeyboardPress(const KeyboardPressEvent& e);
+    virtual void onKeyboardPress(const KeyboardPressEvent& e) override;
 
-    virtual void onKeyboardRelease(const KeyboardReleaseEvent& e);
+    virtual void onKeyboardRelease(const KeyboardReleaseEvent& e) override;
 
 private:
     float m_speed;

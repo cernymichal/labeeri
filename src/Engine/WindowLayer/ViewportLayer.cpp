@@ -2,7 +2,6 @@
 
 #include "Engine/Application.h"
 #include "Engine/Renderer/IRenderer.h"
-#include "Engine/Resources/Resources.h"
 #include "Engine/Scene/Components/Camera.h"
 #include "Engine/Scene/Components/Transform.h"
 #include "Engine/Window/IWindow.h"
@@ -144,7 +143,7 @@ void ViewportLayer::clickOnObject(const glm::uvec2& mousePosition) {
 
     EntityId id = NULL_ENTITY;
     LAB_RENDERER->readFramebuffer(TextureFormat::RedInt, TextureDataType::UInt32, glm::uvec2(mousePosition.x, m_size.y - mousePosition.y - 1), glm::uvec2(1), &id);
-    if (id >= NULL_ENTITY && id < MAX_ENTITIES)
+    if (id != NULL_ENTITY && id < MAX_ENTITIES)
         LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(id));
 
     LAB_LOG_RENDERAPI_ERROR();

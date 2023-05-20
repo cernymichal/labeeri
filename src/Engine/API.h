@@ -5,3 +5,5 @@
 #include "Engine/Resources/Load.h"
 #include "Engine/Resources/Resources.h"
 #include "Engine/Scene/Components/Components.h"
+
+using namespace labeeri::Engine;

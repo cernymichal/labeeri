@@ -55,7 +55,7 @@ ImGuiLayer::~ImGuiLayer() {
 }
 
 IImGuiWindow* ImGuiLayer::addWindow(std::unique_ptr<IImGuiWindow>&& window) {
-    auto windowFound = std::find_if(m_windows.begin(), m_windows.end(), [&window](const auto& other) { return *window == *other; });
+    auto windowFound = std::ranges::find_if(m_windows, [&](const auto& other) { return *window == *other; });
     if (windowFound != m_windows.end())
         return windowFound->get();
 
@@ -86,7 +86,7 @@ void ImGuiLayer::setupImGui() {
     }
 
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWWindow*>(LAB_WINDOW)->windowObject(), true);
+    ImGui_ImplGlfw_InitForOpenGL(dynamic_cast<GLFWWindow*>(LAB_WINDOW)->windowObject(), true);
     ImGui_ImplOpenGL3_Init(GLSL_VERSION);
 
     LAB_LOG_RENDERAPI_ERROR();

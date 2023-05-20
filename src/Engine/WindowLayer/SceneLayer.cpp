@@ -1,13 +1,13 @@
 #include "SceneLayer.h"
 
 #include "Engine/Application.h"
-#include "Engine/Events/SceneEvent.h"
 
 namespace labeeri::Engine {
 
 void SceneLayer::setScene(const Ref<Scene>& scene) {
     m_scene = scene;
-    LAB_ECS = scene->ecs();
+    LAB_ECS = m_scene ? scene->ecs() : nullptr;
+
     auto event = SceneChangeEvent(scene);
     LAB_APP.emitEvent(event);
 }

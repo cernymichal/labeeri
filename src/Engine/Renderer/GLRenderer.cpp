@@ -297,6 +297,9 @@ void GLRenderer::endScene() {
     m_pointLights.clear();
     m_spotLights.clear();
 
+    m_currentShaderProgram = nullptr;
+    m_currentMesh = nullptr;
+
     LAB_LOG_RENDERAPI_ERROR();
 }
 
