@@ -123,7 +123,7 @@ struct STBImageResource : ImageResource {
 
         if (flip)
             stbi_set_flip_vertically_on_load(true);
-        else 
+        else
             stbi_set_flip_vertically_on_load(false);
 
         int channels;
