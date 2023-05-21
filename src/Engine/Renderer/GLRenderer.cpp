@@ -381,6 +381,10 @@ void GLRenderer::bindUniform(const char* name, const vec2& value) {
     glUniform2fv(m_currentShaderProgram->getUniformLocation(name), 1, glm::value_ptr(value));
 }
 
+void GLRenderer::bindUniform(const char* name, const uvec2& value) {
+    glUniform2uiv(m_currentShaderProgram->getUniformLocation(name), 1, glm::value_ptr(value));
+}
+
 void GLRenderer::bindUniform(const char* name, const vec3& value) {
     glUniform3fv(m_currentShaderProgram->getUniformLocation(name), 1, glm::value_ptr(value));
 }
@@ -440,8 +444,8 @@ void GLRenderer::deleteShaderProgram(ShaderResource& shaderProgram) const {
 }
 
 MeshResource GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
-                            const float* normals, const float* tangents,
-                            const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const {
+                                    const float* normals, const float* tangents,
+                                    const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const {
     GLuint VAO;
     GLuint VBO;
     GLuint EBO;
@@ -527,7 +531,7 @@ void GLRenderer::deleteMesh(MeshResource& mesh) const {
 }
 
 TextureResource GLRenderer::createTexture(TextureType type, const ImageResource& image, bool generateMipmap,
-                                  TextureFilter filter, TextureWrap wrap) const {
+                                          TextureFilter filter, TextureWrap wrap) const {
     int typeGL = textureTypeGL(type);
     int internalFormatGL = textureInternalFormatGL(image.internalFormat);
     int formatGL = textureFormatGL(image.format);

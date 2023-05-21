@@ -25,4 +25,28 @@ public:
     virtual void bindUniforms() const override;
 };
 
+/**
+ * @brief TODO
+ */
+class FlareMaterial : public MaterialResource {
+public:
+    /**
+     * @brief TODO
+     */
+    explicit FlareMaterial() : MaterialResource(Resources<ShaderResource>::Get("resources/labeeri/shaders/videotexture")) {
+    }
+
+    virtual bool opaque() const override {
+        return false;
+    }
+
+    virtual void bindUniforms() const override;
+
+private:
+    Ref<TextureResource> m_texture = loadTexture("resources/labeeri/textures/flare_sequence.png", true, TextureType::Rectangle);
+    uvec2 m_size = uvec2(204);
+    uvec2 m_count = uvec2(13, 2);
+    float m_fps = 24.0f;
+};
+
 }  // namespace labeeri

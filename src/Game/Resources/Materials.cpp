@@ -18,4 +18,12 @@ void WaterMaterial::bindUniforms() const {
     LAB_LOG_RENDERAPI_ERROR();
 }
 
+void FlareMaterial::bindUniforms() const {
+    LAB_RENDERER->bindTexture(TextureType::Rectangle, *m_texture, 0);
+    LAB_RENDERER->bindUniform("u_texture", 0);
+    LAB_RENDERER->bindUniform("u_frame_size", m_size);
+    LAB_RENDERER->bindUniform("u_frame_count", m_count);
+    LAB_RENDERER->bindUniform("u_fps", m_fps);
+}
+
 };  // namespace labeeri

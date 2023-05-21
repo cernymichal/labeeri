@@ -45,6 +45,8 @@ public:
 
     virtual void bindUniform(const char* name, const vec2& value) override;
 
+    virtual void bindUniform(const char* name, const uvec2& value) override;
+
     virtual void bindUniform(const char* name, const vec3& value) override;
 
     virtual void bindPVM(const mat4& modelMatrix) override;

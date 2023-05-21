@@ -293,6 +293,8 @@
     <None Include="resources\engine\shaders\postprocess.vert" />
     <None Include="resources\engine\shaders\skybox.frag" />
     <None Include="resources\engine\shaders\skybox.vert" />
+    <None Include="resources\labeeri\shaders\videotexture.frag" />
+    <None Include="resources\labeeri\shaders\videotexture.vert" />
     <None Include="resources\labeeri\shaders\water.frag" />
     <None Include="resources\labeeri\shaders\water.geom" />
     <None Include="resources\labeeri\shaders\water.vert" />

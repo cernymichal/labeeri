@@ -98,6 +98,18 @@ Ref<Scene> loadLabyrinthScene() {
         water.addComponent<Model>(Model(waterModel()), scene->ecs());
     }
 
+    {  // Plane
+        auto plane = Entity::Create(scene->ecs());
+
+        auto transform = plane.getComponent<Transform>(scene->ecs());
+        transform->setPosition(vec3(0.0f, 1.0f, 0.0f));
+        transform->setScale(vec3(0.5f));
+        transform->setRotation(vec3(glm::radians(90.0f), 0.0f, 0.0f));
+
+        auto model = makeRef<ModelResource>(makeRef<FlareMaterial>(), Resources<MeshResource>::Get("plane.obj"));
+        plane.addComponent<Model>(Model(model), scene->ecs());
+    }
+
     scene->m_renderParameters.skybox = loadCubemap("resources/labeeri/textures/cubemaps/dikhololo_night");
     scene->m_renderParameters.fog.color = vec3(0.08f, 0.07f, 0.06f);
     scene->m_renderParameters.fog.density = 0.07f;

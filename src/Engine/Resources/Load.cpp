@@ -159,9 +159,9 @@ struct STBImageResource : ImageResource {
     }
 };
 
-Ref<TextureResource> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected) {
+Ref<TextureResource> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected, TextureType type) {
     STBImageResource image(filePath, gammaCorrected);
-    auto texture = LAB_RENDERER->createTexture(TextureType::Texture2D, image);
+    auto texture = LAB_RENDERER->createTexture(type, image);
 
     return makeRef<TextureResource>(std::move(texture));
 }

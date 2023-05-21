@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Renderer/RendererParameters.h"
 #include "Engine/Resources/MaterialResource.h"
 #include "Engine/Resources/ModelResource.h"
 
@@ -9,7 +10,7 @@ Ref<ShaderResource> loadShader(const std::filesystem::path& path);
 
 Ref<MeshResource> loadMesh(const std::filesystem::path& filePath);
 
-Ref<TextureResource> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected = true);
+Ref<TextureResource> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected = true, TextureType type = TextureType::Texture2D);
 
 Ref<TextureResource> loadCubemap(const std::filesystem::path& folderPath, bool gammaCorrected = true);
 

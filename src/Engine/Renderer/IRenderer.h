@@ -98,6 +98,11 @@ public:
     /**
      * @brief TODO
      */
+    virtual void bindUniform(const char* name, const uvec2& value) = 0;
+
+    /**
+     * @brief TODO
+     */
     virtual void bindUniform(const char* name, const vec3& value) = 0;
 
     /**
