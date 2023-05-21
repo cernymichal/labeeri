@@ -25,7 +25,7 @@ void PlayerController::onUpdate(const UpdateEvent& e) {
 
     if (m_direction != glm::vec3(0.0f)) {
         auto directionWorld = glm::normalize(glm::quat(glm::vec3(0.0f, m_viewAngles.x, 0.0f)) * m_direction);
-        rigidBody->m_velocity = directionWorld * m_speed;
+        rigidBody->m_velocity = directionWorld * m_speed * (m_sprinting ? 1.5f : 1.0f);
     }
     else
         rigidBody->m_velocity = glm::vec3(0.0f);
@@ -43,11 +43,17 @@ void PlayerController::onMouseMove(const MouseMoveEvent& e) {
 void PlayerController::onKeyboardPress(const KeyboardPressEvent& e) {
     glm::vec3 direction = directionFromKey(e.m_key);
     m_direction += direction;
+
+    if (e.m_key == KeyboardKey::LeftShift)
+        m_sprinting = true;
 }
 
 void PlayerController::onKeyboardRelease(const KeyboardReleaseEvent& e) {
     glm::vec3 direction = directionFromKey(e.m_key);
     m_direction -= direction;
+
+    if (e.m_key == KeyboardKey::LeftShift)
+        m_sprinting = false;
 }
 
 }  // namespace labeeri::Engine

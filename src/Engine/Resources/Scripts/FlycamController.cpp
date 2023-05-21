@@ -32,7 +32,7 @@ void FlycamController::onUpdate(const UpdateEvent& e) {
 
     if (horizontalDirection != glm::vec3(0.0f)) {
         auto directionWorld = glm::normalize(transform->rotation() * horizontalDirection);
-        rigidBody->m_velocity = directionWorld * m_speed;
+        rigidBody->m_velocity = directionWorld * m_speed * (m_sprinting ? 2.0f : 1.0f);
     }
     else
         rigidBody->m_velocity = glm::vec3(0.0f);
@@ -52,11 +52,17 @@ void FlycamController::onMouseMove(const MouseMoveEvent& e) {
 void FlycamController::onKeyboardPress(const KeyboardPressEvent& e) {
     glm::vec3 direction = directionFromKey(e.m_key);
     m_direction += direction;
+
+    if (e.m_key == KeyboardKey::LeftShift)
+        m_sprinting = true;
 }
 
 void FlycamController::onKeyboardRelease(const KeyboardReleaseEvent& e) {
     glm::vec3 direction = directionFromKey(e.m_key);
     m_direction -= direction;
+
+    if (e.m_key == KeyboardKey::LeftShift)
+        m_sprinting = false;
 }
 
 }  // namespace labeeri::Engine

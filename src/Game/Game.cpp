@@ -11,7 +11,7 @@ Game::Game() {
 }
 
 void Game::setup() {
-    auto scene = testScene();
+    auto scene = Scenes::showcase();
 
     LAB_APP.setScene(scene);
 }
