@@ -2,14 +2,13 @@
 
 #include "Engine/Renderer/IRenderer.h"
 #include "Engine/Resources/Resources.h"
-#include "Engine/Scene/Components/Light.h"
 #include "Engine/Scene/Components/Model.h"
 #include "Engine/Scene/Components/Transform.h"
 #include "Engine/Scene/ECS/Instance.h"
 
 namespace labeeri::Engine {
 
-void drawModel(const Ref<ModelResource>& model, const glm::mat4& modelMatrix) {
+static void drawModel(const Ref<ModelResource>& model, const glm::mat4& modelMatrix) {
     auto& shader = model->m_material->m_shader;
     if (!shader)
         shader = Resources<ShaderResource>::Get("flat");
@@ -31,7 +30,7 @@ ECS::ComponentSignature RenderSystem::signature(const ECS::Instance& ecs) const 
     return signature;
 }
 
-void RenderSystem::drawOpaque() {
+void RenderSystem::drawOpaque() const {
     for (Entity entity : entities()) {
         auto& model = entity.getComponent<Model>()->m_ref;
         if (!model->m_material->opaque())
@@ -42,7 +41,7 @@ void RenderSystem::drawOpaque() {
     }
 }
 
-void RenderSystem::drawTransparent() {
+void RenderSystem::drawTransparent() const {
     for (Entity entity : entities()) {
         auto& model = entity.getComponent<Model>()->m_ref;
         if (model->m_material->opaque())
@@ -53,7 +52,7 @@ void RenderSystem::drawTransparent() {
     }
 }
 
-void RenderSystem::drawIds() {
+void RenderSystem::drawIds() const {
     LAB_RENDERER->useShaderProgram(Resources<ShaderResource>::Get("id"));
 
     for (Entity entity : entities()) {
@@ -64,22 +63,6 @@ void RenderSystem::drawIds() {
         LAB_RENDERER->bindPVM(transform->modelMatrix());
         LAB_RENDERER->bindUniform("u_id", static_cast<EntityId>(entity));
         LAB_RENDERER->drawMesh();
-    }
-}
-
-ECS::ComponentSignature LightSystem::signature(const ECS::Instance& ecs) const {
-    ECS::ComponentSignature signature;
-    signature.set(ecs.m_componentManager->getComponentType<Transform>());
-    signature.set(ecs.m_componentManager->getComponentType<Light>());
-    return signature;
-}
-
-void LightSystem::bindLights() {
-    for (Entity entity : entities()) {
-        auto transform = entity.getComponent<Transform>();
-        auto light = entity.getComponent<Light>();
-
-        light->submit(*transform);
     }
 }
 

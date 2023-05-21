@@ -15,6 +15,11 @@ Entity Flycam(Scene& scene, float speed = 4.0, double sensitivity = 0.002);
 /**
  * @brief TODO
  */
+Entity Player(Scene& scene, float speed = 4.0, double sensitivity = 0.002, float height = 1.75f);
+
+/**
+ * @brief TODO
+ */
 Entity DirectionalLight(Scene& scene, const glm::vec3& rotation, float intensity = 1.0);
 
 /**

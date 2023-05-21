@@ -9,11 +9,11 @@
 
 namespace labeeri::Engine {
 
-void materialSectionDefault(const Ref<MaterialResource>& material) {
+static void materialSectionDefault(const Ref<MaterialResource>& material) {
     ImGui::SeparatorText("Unknown Material");
 }
 
-void materialSectionFlat(const Ref<FlatMaterialResource>& material) {
+static void materialSectionFlat(const Ref<FlatMaterialResource>& material) {
     ImGui::SeparatorText("Flat Material");
 
     ImGui::ColorEdit3("Color", glm::value_ptr(material->m_color));
@@ -26,7 +26,7 @@ void materialSectionFlat(const Ref<FlatMaterialResource>& material) {
     ImGui::EndDisabled();
 }
 
-void materialSectionShaded(const Ref<ShadedMaterialResource>& material) {
+static void materialSectionShaded(const Ref<ShadedMaterialResource>& material) {
     ImGui::SeparatorText("Shaded Material");
 
     ImGui::ColorEdit3("Diffuse", glm::value_ptr(material->m_diffuse));
@@ -48,14 +48,14 @@ void materialSectionShaded(const Ref<ShadedMaterialResource>& material) {
     ImGui::EndDisabled();
 }
 
-void meshSection(const Ref<MeshResource>& mesh) {
+static void meshSection(const Ref<MeshResource>& mesh) {
     ImGui::SeparatorText("Mesh");
 
     ImGui::Text("Vertex Array Object: %d", mesh->m_vertexArrayObject);
     ImGui::Text("Triangle Count : %d", mesh->m_triangleCount);
 }
 
-void modelSection(Model* model) {
+static void modelSection(Model* model) {
     if (!model)
         return;
 
@@ -82,7 +82,7 @@ void modelSection(Model* model) {
     ImGui::Dummy(ImVec2(0.0f, 20.0f));
 }
 
-const char* lightTypeToString(LightType type) {
+static const char* lightTypeToString(LightType type) {
     switch (type) {
         case LightType::Directional:
             return "Directional";
@@ -95,7 +95,7 @@ const char* lightTypeToString(LightType type) {
     }
 }
 
-void lightSection(Light* light) {
+static void lightSection(Light* light) {
     if (!light)
         return;
 

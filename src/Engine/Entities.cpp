@@ -2,7 +2,8 @@
 
 #include "Engine/Application.h"
 #include "Engine/Resources/Resources.h"
-#include "Engine/Resources/Scripts/CharacterController.h"
+#include "Engine/Resources/Scripts/FlycamController.h"
+#include "Engine/Resources/Scripts/PlayerController.h"
 #include "Engine/Scene/Components/Components.h"
 
 namespace labeeri::Engine {
@@ -12,7 +13,22 @@ Entity Entities::Flycam(Scene& scene, float speed, double sensitivity) {
 
     entity.addComponent<Camera>(Camera(), *scene.ecs());
     entity.addComponent<RigidBody>(RigidBody(), *scene.ecs());
-    scene.addScript<CharacterController>(entity, speed, sensitivity);
+    entity.addComponent<Collider>(Collider::AABB(glm::vec3(0.16f)), *scene.ecs());
+    scene.addScript<FlycamController>(entity, speed, sensitivity);
+
+    return entity;
+}
+
+Entity Entities::Player(Scene& scene, float speed, double sensitivity, float height) {
+    auto entity = Entity::Create(*scene.ecs());
+
+    auto transform = entity.getComponent<Transform>(*scene.ecs());
+    transform->setPosition(LAB_UP * height);
+
+    entity.addComponent<Camera>(Camera(), *scene.ecs());
+    entity.addComponent<RigidBody>(RigidBody(), *scene.ecs());
+    entity.addComponent<Collider>(Collider::AABB(glm::vec3(0.16f, height / 2, 0.16f), LAB_UP * (height / 2)), *scene.ecs());
+    scene.addScript<PlayerController>(entity, speed, sensitivity);
 
     return entity;
 }

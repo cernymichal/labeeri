@@ -11,6 +11,7 @@ Scene::Scene() {
     registerDefaultComponents(*m_ecs);
 
     m_systems.physics = m_ecs->registerSystem<PhysicsSystem>();
+    m_systems.camera = m_ecs->registerSystem<CameraSystem>();
     m_systems.light = m_ecs->registerSystem<LightSystem>();
     m_systems.render = m_ecs->registerSystem<RenderSystem>();
 }

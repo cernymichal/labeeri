@@ -29,7 +29,7 @@ private:
     GLuint m_shader;
 };
 
-Shader compileShader(const char* source, ShaderType shaderType) {
+static Shader compileShader(const char* source, ShaderType shaderType) {
     int type;
     const char* typeStr;
     switch (shaderType) {
@@ -79,7 +79,7 @@ Shader compileShader(const char* source, ShaderType shaderType) {
     throw std::runtime_error("Failed to compile shader");
 }
 
-void linkShaderProgram(GLuint program) {
+static void linkShaderProgram(GLuint program) {
     glLinkProgram(program);
 
     GLint status = GL_FALSE;
@@ -103,7 +103,7 @@ void linkShaderProgram(GLuint program) {
     throw std::runtime_error("Failed to link shader program");
 }
 
-int clearBuffersGL(int buffers) {
+static int clearBuffersGL(int buffers) {
     int buffersGL = 0;
     if (buffers & static_cast<int>(ClearBuffer::Color))
         buffersGL |= GL_COLOR_BUFFER_BIT;
@@ -115,7 +115,7 @@ int clearBuffersGL(int buffers) {
     return buffersGL;
 }
 
-int textureTypeGL(TextureType type) {
+static int textureTypeGL(TextureType type) {
     switch (type) {
         case TextureType::Texture2D:
             return GL_TEXTURE_2D;
@@ -128,7 +128,7 @@ int textureTypeGL(TextureType type) {
     }
 }
 
-int textureInternalFormatGL(TextureInternalFormat format) {
+static int textureInternalFormatGL(TextureInternalFormat format) {
     switch (format) {
         case TextureInternalFormat::RGB:
             return GL_RGB;
@@ -155,7 +155,7 @@ int textureInternalFormatGL(TextureInternalFormat format) {
     }
 }
 
-int textureFormatGL(TextureFormat format) {
+static int textureFormatGL(TextureFormat format) {
     switch (format) {
         case TextureFormat::Red:
             return GL_RED;
@@ -172,7 +172,7 @@ int textureFormatGL(TextureFormat format) {
     }
 }
 
-int textureDataTypeGL(TextureDataType type) {
+static int textureDataTypeGL(TextureDataType type) {
     switch (type) {
         case TextureDataType::UByte:
             return GL_UNSIGNED_BYTE;
@@ -187,7 +187,7 @@ int textureDataTypeGL(TextureDataType type) {
     }
 }
 
-std::pair<int, int> textureFilterGL(TextureFilter filter, bool usingMipmap) {
+static std::pair<int, int> textureFilterGL(TextureFilter filter, bool usingMipmap) {
     int minFilterGL, magFilterGL;
     switch (filter) {
         case TextureFilter::Nearest:
@@ -205,7 +205,7 @@ std::pair<int, int> textureFilterGL(TextureFilter filter, bool usingMipmap) {
     return {minFilterGL, magFilterGL};
 }
 
-int textureWrapGL(TextureWrap wrap) {
+static int textureWrapGL(TextureWrap wrap) {
     switch (wrap) {
         case TextureWrap::ClampToEdge:
             return GL_CLAMP_TO_EDGE;

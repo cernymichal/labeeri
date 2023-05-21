@@ -7,6 +7,6 @@ namespace labeeri {
 /**
  * @brief TODO
  */
-std::shared_ptr<Engine::Scene> defaultScene();
+Ref<Engine::Scene> testScene();
 
 }  // namespace labeeri

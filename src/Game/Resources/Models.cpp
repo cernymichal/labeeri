@@ -7,7 +7,7 @@
 
 namespace labeeri {
 
-MeshResource createWaterMesh() {
+static MeshResource createWaterMesh() {
     GLuint VAO;
     GLuint VBO;
     GLuint EBO;

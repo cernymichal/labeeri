@@ -10,10 +10,6 @@
 
 namespace labeeri::Engine {
 
-glm::ivec2 GLFWWindow::s_frameBufferSize = glm::ivec2(0);
-bool GLFWWindow::s_minimized = false;
-glm::dvec2 GLFWWindow::s_mousePosition = glm::dvec2(0.0);
-
 GLFWWindow::GLFWWindow() {
     setupGLFW();
 

@@ -68,9 +68,9 @@ private:
     glm::ivec2 m_windowedPosition = glm::ivec2(0);
     glm::ivec2 m_windowedSize = glm::ivec2(0);
 
-    static glm::ivec2 s_frameBufferSize;
-    static bool s_minimized;
-    static glm::dvec2 s_mousePosition;
+    static inline glm::ivec2 s_frameBufferSize = glm::ivec2(0);
+    static inline bool s_minimized = false;
+    static inline glm::dvec2 s_mousePosition = glm::dvec2(0);
 
     void setupGLFW();
 

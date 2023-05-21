@@ -11,13 +11,9 @@ Game::Game() {
 }
 
 void Game::setup() {
-    auto scene = defaultScene();
-
-    auto flycam = Entities::Flycam(*scene);
-    flycam.getComponent<Transform>(*scene->ecs())->move(glm::vec3(0.0, 2.5, 0.0));
+    auto scene = testScene();
 
     LAB_APP.setScene(scene);
-    LAB_CURRENT_CAMERA = flycam;
 }
 
 }  // namespace labeeri

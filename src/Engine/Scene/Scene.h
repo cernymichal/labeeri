@@ -5,8 +5,7 @@
 #include "Engine/Renderer/RendererParameters.h"
 #include "Engine/Resources/Scripts/IScript.h"
 #include "Engine/Scene/ECS/Instance.h"
-#include "Engine/Scene/Systems/PhysicsSystem.h"
-#include "Engine/Scene/Systems/RenderSystem.h"
+#include "Engine/Scene/Systems/Systems.h"
 
 namespace labeeri::Engine {
 
@@ -41,6 +40,13 @@ public:
     /**
      * @brief TODO
      */
+    const std::set<EntityId>& cameras() const {
+        return m_systems.camera->entities();
+    }
+
+    /**
+     * @brief TODO
+     */
     template <typename T, typename... Args>
     T* addScript(Args&&... args) {
         IScript* script = m_scripts.emplace_back(makeScoped<T>(std::forward<Args>(args)...)).get();
@@ -53,6 +59,7 @@ private:
     std::shared_ptr<ECS::Instance> m_ecs = std::make_shared<ECS::Instance>();
     struct {
         std::shared_ptr<PhysicsSystem> physics;
+        std::shared_ptr<CameraSystem> camera;
         std::shared_ptr<LightSystem> light;
         std::shared_ptr<RenderSystem> render;
     } m_systems;

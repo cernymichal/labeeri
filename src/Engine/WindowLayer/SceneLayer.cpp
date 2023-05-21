@@ -6,7 +6,16 @@ namespace labeeri::Engine {
 
 void SceneLayer::setScene(const Ref<Scene>& scene) {
     m_scene = scene;
-    LAB_ECS = m_scene ? scene->ecs() : nullptr;
+
+    if (m_scene) {
+        LAB_ECS = scene->ecs();
+        auto& cameras = m_scene->cameras();
+        LAB_CURRENT_CAMERA = cameras.empty() ? NULL_ENTITY : *cameras.begin();
+    }
+    else {
+        LAB_ECS = nullptr;
+        LAB_CURRENT_CAMERA = NULL_ENTITY;
+    }
 
     auto event = SceneChangeEvent(scene);
     LAB_APP.emitEvent(event);

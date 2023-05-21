@@ -13,7 +13,7 @@
 
 namespace labeeri::Engine {
 
-std::string loadShader(const std::string& path) {
+static std::string loadSingleShader(const std::string& path) {
     std::ifstream file(path, std::ios::in | std::ios::binary);
     std::stringstream contentBuffer;
 
@@ -32,17 +32,17 @@ Ref<ShaderResource> loadShader(const std::filesystem::path& path) {
     shaders.reserve(3);
 
     auto vertexPath = path.string() + ".vert";
-    std::string vertexShaderSource = loadShader(vertexPath);
+    std::string vertexShaderSource = loadSingleShader(vertexPath);
     shaders.emplace_back(ShaderType::Vertex, vertexShaderSource.c_str());
 
     auto fragmentPath = path.string() + ".frag";
-    std::string fragmentShaderSource = loadShader(fragmentPath);
+    std::string fragmentShaderSource = loadSingleShader(fragmentPath);
     shaders.emplace_back(ShaderType::Fragment, fragmentShaderSource.c_str());
 
     auto geometryPath = path.string() + ".geom";
     std::string geometryShaderSource;
     if (std::filesystem::exists(geometryPath)) {
-        geometryShaderSource = loadShader(geometryPath);
+        geometryShaderSource = loadSingleShader(geometryPath);
         shaders.emplace_back(ShaderType::Geometry, geometryShaderSource.c_str());
     }
 

@@ -14,30 +14,17 @@ public:
     /**
      * @brief TODO
      */
-    void drawOpaque();
+    void drawOpaque() const;
 
     /**
      * @brief TODO
      */
-    void drawTransparent();
+    void drawTransparent() const;
 
     /**
      * @brief TODO
      */
-    void drawIds();
-};
-
-/**
- * @brief TODO
- */
-class LightSystem : public ECS::ISystem {
-public:
-    virtual ECS::ComponentSignature signature(const ECS::Instance& ecs) const override;
-
-    /**
-     * @brief TODO
-     */
-    void bindLights();
+    void drawIds() const;
 };
 
 }  // namespace labeeri::Engine

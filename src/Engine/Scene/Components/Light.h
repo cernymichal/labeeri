@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Renderer/Light.h"
-#include "Engine/Scene/Components/Transform.h"
 
 namespace labeeri::Engine {
 
@@ -27,10 +26,9 @@ public:
         : m_type(type), m_properties(properties), m_attenuation(attenuation), m_innerCutoff(innerCutoff), m_outerCutoff(outerCutoff) {
     }
 
-    /**
-     * @brief TODO
-     */
-    void submit(const Transform& transform) const;
+    LightProperties scaledProperties() const {
+        return m_properties * m_intensity;
+    }
 
     /**
      * @brief TODO

@@ -8,7 +8,7 @@
 
 namespace labeeri::Engine {
 
-void postprocessingSection() {
+static void postprocessingSection() {
     if (!ImGui::CollapsingHeader("Postprocessing"))
         return;
 
@@ -24,7 +24,7 @@ void postprocessingSection() {
     ImGui::InputFloat("Gamma", &parameters.postprocessing.gamma);
 }
 
-void fogSection() {
+static void fogSection() {
     if (!ImGui::CollapsingHeader("Fog"))
         return;
 
