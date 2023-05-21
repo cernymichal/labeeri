@@ -26,8 +26,11 @@ ECS::ComponentSignature PhysicsSystem::signature(const ECS::Instance& ecs) const
 
 void PhysicsSystem::update(double deltaTime) {
     for (Entity entity : entities()) {
-        auto transform = entity.getComponent<Transform>();
         auto rigidBody = entity.getComponent<RigidBody>();
+        if (rigidBody->m_static)
+            continue;
+
+        auto transform = entity.getComponent<Transform>();
         auto collider = entity.getComponent<Collider>();
 
         rigidBody->m_velocity += rigidBody->m_acceleration * static_cast<float>(deltaTime);

@@ -30,8 +30,13 @@ public:
         if (m_moved)
             return;
 
-        while (!m_children.empty())
-            m_children.front().getComponent<Transform>()->setParent(m_parent);
+        while (!m_children.empty()) {
+            auto childTransform = m_children.front().getComponent<Transform>();
+            if (childTransform)
+                childTransform->setParent(m_parent);
+            else
+                m_children.pop_front();
+        }
 
         m_children.clear();
         removeParent();
@@ -100,7 +105,7 @@ public:
     /**
      * @brief TODO
      */
-    void setRotation(const glm::quat& rotation) {
+    void setRotation(const quat& rotation) {
         m_rotation = rotation;
         m_modelMatrixValid = false;
     }
@@ -108,8 +113,8 @@ public:
     /**
      * @brief TODO
      */
-    void rotate(const glm::quat& offset) {
-        setRotation(m_rotation * offset);
+    void rotate(const quat& offset) {
+        setRotation(offset * m_rotation);
     }
 
     /**
@@ -178,7 +183,7 @@ public:
     /**
      * @brief TODO
      */
-    glm::quat rotation() const {
+    quat rotation() const {
         return m_rotation;
     }
 
@@ -223,7 +228,7 @@ public:
 
 private:
     vec3 m_position = vec3(0.0f, 0.0f, 0.0f);
-    glm::quat m_rotation = glm::quat(vec3(0.0f, 0.0f, 0.0f));
+    quat m_rotation = quat(vec3(0.0f, 0.0f, 0.0f));
     vec3 m_scale = vec3(1.0f, 1.0f, 1.0f);
 
     mutable mat4 m_modelMatrix = mat4(1.0);
@@ -242,7 +247,11 @@ private:
         if (!m_parent)
             return m_modelMatrixValid;
 
-        return m_parent.getComponent<Transform>()->modelMatrixValid() && m_modelMatrixValid;
+        auto parentTransform = m_parent.getComponent<Transform>();
+        if (!parentTransform)
+            return m_modelMatrixValid;
+
+        return parentTransform->modelMatrixValid() && m_modelMatrixValid;
     }
 
     /**
@@ -256,13 +265,19 @@ private:
 
         m_modelMatrix = localModelMatrix;
 
-        if (m_parent)
-            m_modelMatrix = m_parent.getComponent<Transform>()->modelMatrix() * m_modelMatrix;
+        if (m_parent) {
+            auto parentTransform = m_parent.getComponent<Transform>();
+            if (parentTransform)
+                m_modelMatrix = parentTransform->modelMatrix() * m_modelMatrix;
+        }
 
         m_modelMatrixValid = true;
 
-        for (auto& child : m_children)
-            child.getComponent<Transform>()->m_modelMatrixValid = false;
+        for (auto& child : m_children) {
+            auto childTransform = child.getComponent<Transform>();
+            if (childTransform)
+                childTransform->m_modelMatrixValid = false;
+        }
     }
 
     /**
@@ -274,7 +289,10 @@ private:
 
         setPosition(worldPosition());
 
-        m_parent.getComponent<Transform>()->m_children.remove(m_entity);
+        auto parentTransform = m_parent.getComponent<Transform>();
+        if (parentTransform)
+            parentTransform->m_children.remove(m_entity);
+
         m_parent = NULL_ENTITY;
         m_modelMatrixValid = false;
     }

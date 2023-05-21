@@ -38,7 +38,7 @@ Entity Entities::ColliderCube(const Ref<Scene>& scene, vec3 position, vec3 size)
     auto entity = Entity::Create(scene->ecs());
 
     entity.getComponent<Transform>(scene->ecs())->setPosition(position);
-    entity.addComponent<RigidBody>(RigidBody(), scene->ecs());
+    entity.addComponent<RigidBody>(RigidBody::Static(), scene->ecs());
     entity.addComponent<Collider>(Collider::AABB(size / 2.0f), scene->ecs());
 
     return entity;

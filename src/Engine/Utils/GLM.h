@@ -15,6 +15,7 @@ using uvec4 = glm::uvec4;
 using mat2 = glm::mat2;
 using mat3 = glm::mat3;
 using mat4 = glm::mat4;
+using quat = glm::quat;
 
 template <typename T>
 inline std::ostream& operator<<(std::ostream& os, const glm::vec<2, T>& v) {

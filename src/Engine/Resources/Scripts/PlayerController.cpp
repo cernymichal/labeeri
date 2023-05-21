@@ -24,7 +24,7 @@ void PlayerController::onUpdate(const UpdateEvent& e) {
     auto rigidBody = m_entity.getComponent<RigidBody>();
 
     if (m_direction != vec3(0.0f)) {
-        auto directionWorld = glm::normalize(glm::quat(vec3(0.0f, m_viewAngles.x, 0.0f)) * m_direction);
+        auto directionWorld = glm::normalize(quat(vec3(0.0f, m_viewAngles.x, 0.0f)) * m_direction);
         rigidBody->m_velocity = directionWorld * m_speed * (m_sprinting ? 2.0f : 1.0f);
     }
     else

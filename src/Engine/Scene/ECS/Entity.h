@@ -54,7 +54,10 @@ public:
      * @brief TODO
      */
     static Entity Create() {
-        return Create(ECS::CURRENT_INSTANCE);
+        if (ECS::CURRENT_INSTANCE)
+            return Create(ECS::CURRENT_INSTANCE);
+        else
+            return NULL_ENTITY;
     }
 
     /**
@@ -71,7 +74,8 @@ public:
      * @brief TODO
      */
     void destroy() {
-        destroy(ECS::CURRENT_INSTANCE);
+        if (ECS::CURRENT_INSTANCE)
+            destroy(ECS::CURRENT_INSTANCE);
     }
 
     /**
@@ -95,7 +99,10 @@ public:
      */
     template <typename T>
     T* addComponent(T&& component) const {
-        return addComponent<T>(std::forward<T>(component), *ECS::CURRENT_INSTANCE);
+        if (ECS::CURRENT_INSTANCE)
+            return addComponent<T>(std::forward<T>(component), *ECS::CURRENT_INSTANCE);
+        else
+            return nullptr;
     }
 
     /**
@@ -117,7 +124,8 @@ public:
      */
     template <typename T>
     void removeComponent() const {
-        removeComponent<T>(ECS::CURRENT_INSTANCE);
+        if (ECS::CURRENT_INSTANCE)
+            return removeComponent<T>(ECS::CURRENT_INSTANCE);
     }
 
     /**
@@ -133,7 +141,10 @@ public:
      */
     template <typename T>
     T* getComponent() const {
-        return getComponent<T>(ECS::CURRENT_INSTANCE);
+        if (ECS::CURRENT_INSTANCE)
+            return getComponent<T>(ECS::CURRENT_INSTANCE);
+        else
+            return nullptr;
     }
 };
 

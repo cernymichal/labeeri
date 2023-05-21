@@ -195,7 +195,7 @@ vec3 sample_reflection(vec3 view_direction, vec3 normal) {
 }
 
 vec3 calculate_reflection(MaterialSample material, vec3 view_direction) {
-    float fresnel = pow(1.0 - clamp(dot(view_direction, material.normal), 0.0, 1.0), 8.0);
+    float fresnel = pow(1.0 - clamp(dot(view_direction, material.normal), 0.0, 1.0), 10.0);
     vec3 reflection = sample_reflection(view_direction, material.normal) * mix(vec3(fresnel), material.diffuse, material.metallic);
     return reflection;
 }

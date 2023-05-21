@@ -277,6 +277,8 @@
     <ClInclude Include="src\Game\Resources\plane.h" />
     <ClInclude Include="src\Game\Resources\Materials.h" />
     <ClInclude Include="src\Game\Resources\Models.h" />
+    <ClInclude Include="src\Game\Resources\Scripts\FloatingController.h" />
+    <ClInclude Include="src\Game\Resources\Scripts\RotatingController.h" />
     <ClInclude Include="src\Game\Scenes.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>

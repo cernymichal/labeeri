@@ -6,21 +6,43 @@ Entity labeeri::roomPrefab(const Ref<Scene>& scene, vec2 offset, Entity setpiece
     static bool initialized = false;
 
     if (!initialized) {
-        Resources<MaterialResource>::Set("room") = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
-        Resources<ModelResource>::Set("room") = makeRef<ModelResource>(Resources<MaterialResource>::Get("room"), Resources<MeshResource>::Get("resources/labeeri/models/room.obj"));
+        auto groundMaterial = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
+        groundMaterial->m_diffuseMap = Resources<TextureResource>::Get("resources/labeeri/textures/concrete_ground/diffuse_lin.png");
+        groundMaterial->m_specular = vec3(0.4f);
+        groundMaterial->m_normalMap = Resources<TextureResource>::Get("resources/labeeri/textures/concrete_ground/normal.hdr");
+        Resources<MaterialResource>::Set("room_ground") = groundMaterial;
+        Resources<ModelResource>::Set("room_ground") = makeRef<ModelResource>(Resources<MaterialResource>::Get("room_ground"), Resources<MeshResource>::Get("resources/labeeri/models/ground.obj"));
 
-        Resources<MaterialResource>::Set("table") = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
-        Resources<ModelResource>::Set("table") = makeRef<ModelResource>(Resources<MaterialResource>::Get("table"), Resources<MeshResource>::Get("resources/labeeri/models/table.obj"));
+        auto wallMaterial = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
+        wallMaterial->m_diffuseMap = Resources<TextureResource>::Get("resources/labeeri/textures/concrete_wall/diffuse_lin.png");
+        groundMaterial->m_specular = vec3(0.1f);
+        wallMaterial->m_normalMap = Resources<TextureResource>::Get("resources/labeeri/textures/concrete_wall/normal.hdr");
+        Resources<MaterialResource>::Set("room_walls") = wallMaterial;
+        Resources<ModelResource>::Set("room_walls") = makeRef<ModelResource>(Resources<MaterialResource>::Get("room_walls"), Resources<MeshResource>::Get("resources/labeeri/models/walls.obj"));
+
+        auto tableMaterial = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
+        tableMaterial->m_diffuse = vec3(0.6f);
+        tableMaterial->m_specular = vec3(0.7f);
+        Resources<MaterialResource>::Set("room_table") = tableMaterial;
+        Resources<ModelResource>::Set("room_table") = makeRef<ModelResource>(Resources<MaterialResource>::Get("room_table"), Resources<MeshResource>::Get("resources/labeeri/models/table.obj"));
 
         initialized = true;
     }
 
-    auto room = Entity::Create(scene->ecs());
+    auto ground = Entity::Create(scene->ecs());
     auto table = Entity::Create(scene->ecs());
 
-    {  // Room
-        room.getComponent<Transform>(scene->ecs())->setPosition(vec3(offset.x, 0.0f, offset.y));
-        room.addComponent<Model>(Model(Resources<ModelResource>::Get("room")), scene->ecs());
+    {  // Ground
+        ground.getComponent<Transform>(scene->ecs())->setPosition(vec3(offset.x, 0.0f, offset.y));
+        ground.addComponent<Model>(Model(Resources<ModelResource>::Get("room_ground")), scene->ecs());
+    }
+
+    {  // Walls
+        auto walls = Entity::Create(scene->ecs());
+        auto transform = walls.getComponent<Transform>(scene->ecs());
+        transform->setPosition(vec3(offset.x, 0.0f, offset.y));
+        transform->setParent(ground);
+        walls.addComponent<Model>(Model(Resources<ModelResource>::Get("room_walls")), scene->ecs());
     }
 
     {  // Colliders
@@ -39,15 +61,15 @@ Entity labeeri::roomPrefab(const Ref<Scene>& scene, vec2 offset, Entity setpiece
         for (auto& collider : colliders) {
             auto transform = collider.getComponent<Transform>(scene->ecs());
             transform->move(vec3(offset.x, 0.0f, offset.y));
-            transform->setParent(room);
+            transform->setParent(ground);
         }
     }
 
     {  // Table
         auto transform = table.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(offset.x, 0.0f, offset.y));
-        transform->setParent(room);
-        table.addComponent<Model>(Model(Resources<ModelResource>::Get("table")), scene->ecs());
+        transform->setParent(ground);
+        table.addComponent<Model>(Model(Resources<ModelResource>::Get("room_table")), scene->ecs());
         table.addComponent<RigidBody>(RigidBody(), scene->ecs());
         table.addComponent<Collider>(Collider(ColliderType::AABB, vec3(1.0f, 0.35f, 1.0f), LAB_UP * 0.35f), scene->ecs());
     }
@@ -60,7 +82,7 @@ Entity labeeri::roomPrefab(const Ref<Scene>& scene, vec2 offset, Entity setpiece
 
     // TODO add table float script
 
-    return room;
+    return ground;
 }
 
 }  // namespace labeeri
