@@ -1,8 +1,8 @@
-#include "Entities.h"
+#include "Prefabs.h"
 
 namespace labeeri {
 
-Entity labeeri::roomEntity(const Ref<Scene>& scene, vec2 offset, Entity setpiece) {
+Entity labeeri::roomPrefab(const Ref<Scene>& scene, vec2 offset, Entity setpiece) {
     static bool initialized = false;
 
     if (!initialized) {
@@ -46,7 +46,7 @@ Entity labeeri::roomEntity(const Ref<Scene>& scene, vec2 offset, Entity setpiece
     {  // Table
         auto transform = table.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(offset.x, 0.0f, offset.y));
-        //transform->setParent(room);
+        transform->setParent(room);
         table.addComponent<Model>(Model(Resources<ModelResource>::Get("table")), scene->ecs());
         table.addComponent<RigidBody>(RigidBody(), scene->ecs());
         table.addComponent<Collider>(Collider(ColliderType::AABB, vec3(1.0f, 0.35f, 1.0f), LAB_UP * 0.35f), scene->ecs());

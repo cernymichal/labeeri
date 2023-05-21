@@ -251,7 +251,7 @@ private:
     void updateModelMatrix() const {
         mat4 localModelMatrix = mat4(1.0f);
         localModelMatrix = glm::translate(localModelMatrix, m_position);
-        localModelMatrix *= mat4_cast(m_rotation);
+        localModelMatrix *= glm::mat4_cast(m_rotation);
         localModelMatrix = glm::scale(localModelMatrix, m_scale);
 
         m_modelMatrix = localModelMatrix;

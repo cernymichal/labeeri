@@ -1,8 +1,8 @@
 #include "scenes.h"
 
-#include "Game/Resources/Entities.h"
 #include "Game/Resources/Materials.h"
 #include "Game/Resources/Models.h"
+#include "Game/Resources/Prefabs.h"
 
 namespace labeeri {
 
@@ -67,7 +67,7 @@ Ref<Scene> loadLabyrinthScene() {
     LAB_APP.setScene(scene);
 
     {  // Lights
-        auto sun = Entities::DirectionalLight(scene, vec3(glm::radians(-110.0), glm::radians(30.0), 0), 0.8f);
+        auto sun = Entities::DirectionalLight(scene, vec3(glm::radians(-110.0), glm::radians(30.0), 0), 0.05f);
     }
 
     {  // Rooms
@@ -75,18 +75,12 @@ Ref<Scene> loadLabyrinthScene() {
         float roomSize = 10.0f;
         for (float x = -(axisCount - 1) * roomSize / 2.0f; x <= (axisCount - 1) * roomSize / 2.0f; x += roomSize) {
             for (float z = -(axisCount - 1) * roomSize / 2.0f; z <= (axisCount - 1) * roomSize / 2.0f; z += roomSize)
-                roomEntity(scene, vec2(x, z));
+                roomPrefab(scene, vec2(x, z));
         }
     }
 
-    {  // Water
-        auto water = Entity::Create(scene->ecs());
-
-        auto transform = water.getComponent<Transform>(scene->ecs());
-        transform->setPosition(vec3(0.0f, 0.45f, 0.0f));
-        transform->setScale(vec3(8.0f));
-
-        water.addComponent<Model>(Model(waterModel()), scene->ecs());
+    {  // Light
+        auto pointLight = Entities::PointLight(scene, vec3(0.0f, 3.0f, 0.0f), 2.0f);
     }
 
     {  // Player
@@ -94,7 +88,21 @@ Ref<Scene> loadLabyrinthScene() {
         player.getComponent<Transform>(scene->ecs())->move(vec3(0.0f, 0.0f, 2.0f));
     }
 
-    scene->m_renderParameters.skybox = Resources<TextureResource>::Get("the_sky_is_on_fire");
+    {  // Water
+        auto water = Entity::Create(scene->ecs());
+
+        auto transform = water.getComponent<Transform>(scene->ecs());
+        transform->setPosition(vec3(0.0f, 0.1f, 0.0f));
+        transform->setScale(vec3(2.5f, 4.0f, 2.5f));
+
+        water.addComponent<Model>(Model(waterModel()), scene->ecs());
+    }
+
+    scene->m_renderParameters.skybox = loadCubemap("resources/labeeri/textures/cubemaps/dikhololo_night");
+    scene->m_renderParameters.fog.color = vec3(0.08f, 0.07f, 0.06f);
+    scene->m_renderParameters.fog.density = 0.07f;
+    scene->m_renderParameters.postprocessing.exposure = 0.6f;
+    scene->m_renderParameters.postprocessing.gamma = 2.0f;
 
     return scene;
 }

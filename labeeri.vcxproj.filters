@@ -114,7 +114,7 @@
     <ClCompile Include="src\Engine\Scene\Systems\LightSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\Resources\Entities.cpp">
+    <ClCompile Include="src\Game\Resources\Prefabs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -341,7 +341,7 @@
     <ClInclude Include="src\Engine\Scene\Systems\Systems.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\Resources\Entities.h">
+    <ClInclude Include="src\Game\Resources\Prefabs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Utils\GLM.h">

@@ -134,6 +134,7 @@ bool EntityWindow::draw() {
     auto transform = m_entity.getComponent<Transform>();
     m_position = transform->position();
     m_rotationEuler = glm::degrees(glm::eulerAngles(transform->rotation()));
+    m_scale = transform->scale();
 
     ImGui::SetNextWindowSize(ImVec2(300, 800), ImGuiCond_Once);
 
@@ -146,6 +147,9 @@ bool EntityWindow::draw() {
 
         if (ImGui::InputFloat3("Rotation", glm::value_ptr(m_rotationEuler)))
             transform->setRotation(glm::radians(m_rotationEuler));
+
+        if (ImGui::InputFloat3("Scale", glm::value_ptr(m_scale)))
+            transform->setScale(m_scale);
 
         ImGui::Dummy(ImVec2(0.0f, 20.0f));
     }

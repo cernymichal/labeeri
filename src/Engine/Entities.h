@@ -10,12 +10,12 @@ namespace Entities {
 /**
  * @brief TODO
  */
-Entity Flycam(const Ref<Scene>& scene, float speed = 4.0, double sensitivity = 0.002);
+Entity Flycam(const Ref<Scene>& scene, float speed = 3.0f, double sensitivity = 0.002);
 
 /**
  * @brief TODO
  */
-Entity Player(const Ref<Scene>& scene, float speed = 4.0, double sensitivity = 0.002, float height = 1.75f);
+Entity Player(const Ref<Scene>& scene, float speed = 3.0f, double sensitivity = 0.002, float height = 1.75f);
 
 /**
  * @brief TODO

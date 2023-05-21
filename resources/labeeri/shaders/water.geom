@@ -93,8 +93,10 @@ void instantiate_triangle(vec3 offset) {
 
 
 void main() {
-    for (float x_offset = 0; x_offset < 4.0; x_offset += 1) {
-		for (float z_offset = 0; z_offset < 4.0; z_offset += 1) {
+    float axisCount = 4.0;
+    float boundry_offset = (axisCount - 1) / 2;
+    for (float x_offset = -boundry_offset; x_offset <= boundry_offset + 0.1; x_offset += 1) {
+		for (float z_offset = -boundry_offset; z_offset <= boundry_offset + 0.1; z_offset += 1) {
 			instantiate_triangle(vec3(x_offset, 0.0, z_offset));
 		}
 	}

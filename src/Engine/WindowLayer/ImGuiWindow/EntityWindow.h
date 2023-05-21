@@ -28,6 +28,7 @@ private:
     std::string m_name;
     vec3 m_position = vec3(0);
     vec3 m_rotationEuler = vec3(0);
+    vec3 m_scale = vec3(0);
 };
 
 }  // namespace labeeri::Engine
