@@ -4,6 +4,7 @@
 
 #include "Engine/Application.h"
 #include "Engine/Window/IWindow.h"
+#include "Engine/WindowLayer/ImGuiWindow/HelpWindow.h"
 #include "Engine/WindowLayer/ImGuiWindow/LogWindow.h"
 
 namespace labeeri::Engine {
@@ -45,6 +46,11 @@ bool MenuWindow::draw() {
     ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiCond_FirstUseEver);
 
     ImGui::Begin(m_name.c_str());
+
+    if (ImGui::Button("Open Help"))
+        LAB_IMGUI->addWindow(std::make_unique<HelpWindow>());
+
+    ImGui::SameLine();
 
     if (ImGui::Button("Open Log"))
         LAB_IMGUI->addWindow(std::make_unique<LogWindow>());

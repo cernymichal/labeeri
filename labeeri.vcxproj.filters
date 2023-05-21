@@ -117,6 +117,9 @@
     <ClCompile Include="src\Game\Resources\Prefabs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\WindowLayer\ImGuiWindow\HelpWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Application.h">
@@ -348,6 +351,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Utils\Ptr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\HelpWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

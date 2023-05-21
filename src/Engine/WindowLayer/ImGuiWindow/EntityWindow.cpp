@@ -160,8 +160,6 @@ bool EntityWindow::draw() {
     ImGui::End();
 
     return shouldContinue;
-
-    return true;
 }
 
 }  // namespace labeeri::Engine
