@@ -40,13 +40,13 @@ public:
 class FlatMaterialResource : public MaterialResource {
 public:
     Ref<TextureResource> m_texture = nullptr;
-    glm::vec3 m_color = FALLBACK_COLOR;
+    vec3 m_color = FALLBACK_COLOR;
     float m_alpha = 1.0f;
 
     /**
      * @brief TODO
      */
-    FlatMaterialResource(const Ref<ShaderResource>& shader, const glm::vec3& color)
+    FlatMaterialResource(const Ref<ShaderResource>& shader, const vec3& color)
         : MaterialResource(shader), m_color(color) {
     }
 
@@ -69,9 +69,9 @@ public:
  */
 class ShadedMaterialResource : public MaterialResource {
 public:
-    glm::vec3 m_diffuse = FALLBACK_COLOR;
+    vec3 m_diffuse = FALLBACK_COLOR;
     Ref<TextureResource> m_diffuseMap = nullptr;
-    glm::vec3 m_specular = glm::vec3(0.2f);
+    vec3 m_specular = vec3(0.2f);
     Ref<TextureResource> m_specularMap = nullptr;
     float m_shininess = 32.0f;
     float m_metallic = 0;
@@ -88,7 +88,7 @@ public:
     /**
      * @brief TODO
      */
-    ShadedMaterialResource(const Ref<ShaderResource>& shader, glm::vec3 diffuse) : ShadedMaterialResource(shader) {
+    ShadedMaterialResource(const Ref<ShaderResource>& shader, vec3 diffuse) : ShadedMaterialResource(shader) {
         m_diffuse = diffuse;
     }
 

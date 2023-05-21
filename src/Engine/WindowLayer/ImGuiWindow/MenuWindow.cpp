@@ -62,6 +62,7 @@ bool MenuWindow::draw() {
 
     auto framerate = ImGui::GetIO().Framerate;
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / framerate, framerate);
+    ImGui::Text("%u entities", LAB_ECS ? LAB_ECS->m_entityManager->entityCount() : 0);
 
     ImGui::End();
 

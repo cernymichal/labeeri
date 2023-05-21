@@ -17,8 +17,8 @@ public:
      * @brief TODO
      */
     explicit WaterMaterial() : ShadedMaterialResource(Resources<ShaderResource>::Get("resources/labeeri/shaders/water")) {
-        m_diffuse = glm::vec3(0.37f, 0.65f, 0.78f);
-        m_specular = glm::vec3(0.5f);
+        m_diffuse = vec3(0.37f, 0.65f, 0.78f);
+        m_specular = vec3(0.5f);
         m_alpha = 0.6f;
     }
 

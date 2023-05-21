@@ -32,12 +32,12 @@ public:
     /**
      * @brief TODO
      */
-    virtual void setClearColor(const glm::vec4& color) = 0;
+    virtual void setClearColor(const vec4& color) = 0;
 
     /**
      * @brief TODO
      */
-    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix,
+    virtual void beginScene(double time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix,
                             const RenderSceneParameters& parameters = RenderSceneParameters()) = 0;
 
     /**
@@ -88,22 +88,22 @@ public:
     /**
      * @brief TODO
      */
-    virtual void bindUniform(const char* name, const glm::mat4& value) = 0;
+    virtual void bindUniform(const char* name, const mat4& value) = 0;
 
     /**
      * @brief TODO
      */
-    virtual void bindUniform(const char* name, const glm::vec2& value) = 0;
+    virtual void bindUniform(const char* name, const vec2& value) = 0;
 
     /**
      * @brief TODO
      */
-    virtual void bindUniform(const char* name, const glm::vec3& value) = 0;
+    virtual void bindUniform(const char* name, const vec3& value) = 0;
 
     /**
      * @brief TODO
      */
-    virtual void bindPVM(const glm::mat4& modelMatrix) = 0;
+    virtual void bindPVM(const mat4& modelMatrix) = 0;
 
     /**
      * @brief TODO
@@ -162,7 +162,7 @@ public:
      * @brief TODO
      */
     virtual void readFramebuffer(TextureFormat format, TextureDataType dataType,
-                                 glm::uvec2 position, glm::uvec2 size, void* result) const = 0;
+                                 uvec2 position, uvec2 size, void* result) const = 0;
 
     /**
      * @brief TODO
@@ -172,7 +172,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual Framebuffer createFramebuffer(glm::uvec2 size, std::map<FramebufferAttachment, Ref<TextureResource>>&& attachments) const = 0;
+    virtual Framebuffer createFramebuffer(uvec2 size, std::map<FramebufferAttachment, Ref<TextureResource>>&& attachments) const = 0;
 
     /**
      * @brief TODO

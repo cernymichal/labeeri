@@ -16,7 +16,7 @@ struct PostprocessingParameters {
 };
 
 struct FogParameters {
-    glm::vec3 color = glm::vec3(0.8f);
+    vec3 color = vec3(0.8f);
     float density = 0.02f;
 };
 

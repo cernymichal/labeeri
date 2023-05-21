@@ -53,11 +53,11 @@ void GLFWWindow::setFullscreen(bool enabled) {
     int monitorCount;
     GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
     for (int i = 0; i < monitorCount; i++) {
-        glm::ivec2 monitorPosition;
+        ivec2 monitorPosition;
         glfwGetMonitorPos(monitors[i], &monitorPosition.x, &monitorPosition.y);
 
         const GLFWvidmode* mode = glfwGetVideoMode(monitors[i]);
-        glm::ivec2 monitorSize = glm::ivec2(mode->width, mode->height);
+        ivec2 monitorSize = ivec2(mode->width, mode->height);
 
         if (glm::all(glm::lessThan(m_windowedPosition - monitorPosition, monitorSize))) {
             monitor = monitors[i];
@@ -149,12 +149,12 @@ void GLFWWindow::GLFWErrorCallback(int error, const char* description) {
 }
 
 void GLFWWindow::GLFWFramebufferSizeCallback(GLFWwindow* window, int width, int height) {
-    s_frameBufferSize = glm::uvec2(width, height);
+    s_frameBufferSize = uvec2(width, height);
 
     if (LAB_WINDOW->minimized())
         return;
 
-    WindowResizeEvent resizeEvent(glm::uvec2(width, height));
+    WindowResizeEvent resizeEvent(uvec2(width, height));
     LAB_APP.emitEvent(resizeEvent);
 
     // rerender
@@ -193,8 +193,8 @@ void GLFWWindow::GLFWKeyboardCallback(GLFWwindow* window, int keyInt, int scanCo
 }
 
 void GLFWWindow::GLFWCursorPosCallback(GLFWwindow* window, double x, double y) {
-    glm::dvec2 newPosition(x, y);
-    glm::dvec2 delta = newPosition - s_mousePosition;
+    dvec2 newPosition(x, y);
+    dvec2 delta = newPosition - s_mousePosition;
     s_mousePosition = newPosition;
 
     MouseMoveEvent event(newPosition, delta);
@@ -208,7 +208,7 @@ void GLFWWindow::GLFWMouseButtonCallback(GLFWwindow* window, int buttonInt, int 
     if (action == KeyAction::Repeat)
         return;
 
-    glm::dvec2 position;
+    dvec2 position;
     glfwGetCursorPos(window, &position.x, &position.y);
 
     switch (action) {

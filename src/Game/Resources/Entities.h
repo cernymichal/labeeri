@@ -7,12 +7,6 @@ namespace labeeri {
 /**
  * @brief TODO
  */
-Ref<Engine::Scene> testScene();
-
-
-/**
- * @brief TODO
- */
-Ref<Engine::Scene> loadLabyrinthScene();
+Entity roomEntity(const Ref<Scene>& scene, vec2 offset = vec2(0.0f), Entity setpiece = NULL_ENTITY);
 
 }  // namespace labeeri

@@ -8,7 +8,7 @@
 
 namespace labeeri::Engine {
 
-static void drawModel(const Ref<ModelResource>& model, const glm::mat4& modelMatrix) {
+static void drawModel(const Ref<ModelResource>& model, const mat4& modelMatrix) {
     auto& shader = model->m_material->m_shader;
     if (!shader)
         shader = Resources<ShaderResource>::Get("flat");

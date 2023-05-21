@@ -51,9 +51,9 @@ Ref<MaterialResource> tryFindMaterial(const char* name) {
     auto nameStr = std::string(name);
 
     if (nameStr == "flatWhite")
-        return makeRef<FlatMaterialResource>(Resources<ShaderResource>::Get("flat"), glm::vec3(1.0f));
-    if (nameStr == "grey")
-        return makeRef<ShadedMaterialResource>(Resources<ShaderResource>::Get("phong"), glm::vec3(0.7f));
+        return makeRef<FlatMaterialResource>(Resources<ShaderResource>::Get("flat"), vec3(1.0f));
+    if (nameStr == "gray")
+        return makeRef<ShadedMaterialResource>(Resources<ShaderResource>::Get("phong"), vec3(0.7f));
     if (nameStr == "UVTest")
         return makeRef<FlatMaterialResource>(Resources<ShaderResource>::Get("flat"), Resources<TextureResource>::Get("uv_test.png"));
 
@@ -70,13 +70,13 @@ Ref<ModelResource> tryFindModel(const char* name) {
     if (nameStr == "whiteCone")
         return makeRef<ModelResource>(Resources<MaterialResource>::Get("flatWhite"), Resources<MeshResource>::Get("cone.obj"));
     if (nameStr == "basicCube")
-        return makeRef<ModelResource>(Resources<MaterialResource>::Get("grey"), Resources<MeshResource>::Get("cube.obj"));
+        return makeRef<ModelResource>(Resources<MaterialResource>::Get("gray"), Resources<MeshResource>::Get("cube.obj"));
     if (nameStr == "basicSphere")
-        return makeRef<ModelResource>(Resources<MaterialResource>::Get("grey"), Resources<MeshResource>::Get("sphere.obj"));
+        return makeRef<ModelResource>(Resources<MaterialResource>::Get("gray"), Resources<MeshResource>::Get("sphere.obj"));
     if (nameStr == "basicPlane")
-        return makeRef<ModelResource>(Resources<MaterialResource>::Get("grey"), Resources<MeshResource>::Get("plane.obj"));
+        return makeRef<ModelResource>(Resources<MaterialResource>::Get("gray"), Resources<MeshResource>::Get("plane.obj"));
     if (nameStr == "basicCone")
-        return makeRef<ModelResource>(Resources<MaterialResource>::Get("grey"), Resources<MeshResource>::Get("cone.obj"));
+        return makeRef<ModelResource>(Resources<MaterialResource>::Get("gray"), Resources<MeshResource>::Get("cone.obj"));
 
     return nullptr;
 }

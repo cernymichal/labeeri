@@ -11,7 +11,7 @@ Game::Game() {
 }
 
 void Game::setup() {
-    auto scene = Scenes::showcase();
+    auto scene = loadLabyrinthScene();
 
     LAB_APP.setScene(scene);
 }

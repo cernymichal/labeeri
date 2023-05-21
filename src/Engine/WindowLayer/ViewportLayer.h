@@ -24,7 +24,7 @@ public:
     virtual void onEvent(IEvent& e) override;
 
 private:
-    glm::uvec2 m_size = glm::uvec2(0);
+    uvec2 m_size = uvec2(0);
     Ref<Framebuffer> m_viewFramebuffer;
     Ref<Framebuffer> m_idFramebuffer;
 
@@ -40,7 +40,7 @@ private:
 
     void updateIdFramebuffer();
 
-    void clickOnObject(const glm::uvec2& mousePosition);
+    void clickOnObject(const uvec2& mousePosition);
 };
 
 }  // namespace labeeri::Engine

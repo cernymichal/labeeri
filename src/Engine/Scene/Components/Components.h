@@ -12,13 +12,13 @@ namespace labeeri::Engine {
 /**
  * @brief TODO
  */
-static void registerDefaultComponents(const ECS::Instance& ecs) {
-    ecs.m_componentManager->registerComponent<Camera>();
-    ecs.m_componentManager->registerComponent<Collider>();
-    ecs.m_componentManager->registerComponent<Light>();
-    ecs.m_componentManager->registerComponent<Model>();
-    ecs.m_componentManager->registerComponent<RigidBody>();
-    ecs.m_componentManager->registerComponent<Transform>();
+static void registerDefaultComponents(const Ref<ECS::Instance>& ecs) {
+    ecs->m_componentManager->registerComponent<Camera>();
+    ecs->m_componentManager->registerComponent<Collider>();
+    ecs->m_componentManager->registerComponent<Light>();
+    ecs->m_componentManager->registerComponent<Model>();
+    ecs->m_componentManager->registerComponent<RigidBody>();
+    ecs->m_componentManager->registerComponent<Transform>();
 }
 
 }  // namespace labeeri::Engine

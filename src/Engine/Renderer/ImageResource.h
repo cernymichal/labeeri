@@ -5,7 +5,7 @@
 namespace labeeri::Engine {
 
 struct ImageResource {
-    glm::uvec2 size = glm::uvec2(0);
+    uvec2 size = uvec2(0);
     void* data = nullptr;
     TextureDataType dataType = TextureDataType::UByte;
     TextureFormat format = TextureFormat::RGB;
@@ -13,7 +13,7 @@ struct ImageResource {
 
     ImageResource() = default;
 
-    ImageResource(glm::uvec2 size, void* data, TextureDataType dataType, TextureFormat format, TextureInternalFormat internalFormat)
+    ImageResource(uvec2 size, void* data, TextureDataType dataType, TextureFormat format, TextureInternalFormat internalFormat)
         : size(size), data(data), dataType(dataType), format(format), internalFormat(internalFormat) {
     }
 

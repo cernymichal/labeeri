@@ -4,8 +4,8 @@
 
 namespace labeeri::Engine {
 
-Entity Entity::Create(const ECS::Instance& ecs) {
-    Entity entity = ecs.m_entityManager->createEntity();
+Entity Entity::Create(const Ref<ECS::Instance>& ecs) {
+    Entity entity = ecs->m_entityManager->createEntity();
     entity.addComponent<Transform>(Transform(entity), ecs);
 
     return entity;

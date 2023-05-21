@@ -253,11 +253,11 @@ void GLRenderer::clearBuffer(int buffers, uint32_t value) {
     glClearBufferuiv(buffersGL, 0, &value);
 }
 
-void GLRenderer::setClearColor(const glm::vec4& color) {
+void GLRenderer::setClearColor(const vec4& color) {
     glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void GLRenderer::beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const RenderSceneParameters& parameters) {
+void GLRenderer::beginScene(double time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix, const RenderSceneParameters& parameters) {
     m_time = time;
     m_cameraPosition = cameraPosition;
     m_matrices.view = viewMatrix;
@@ -304,7 +304,7 @@ void GLRenderer::endScene() {
 }
 
 void GLRenderer::drawToScreen() const {
-    glm::uvec2 frameSize = m_currentFramebuffer->m_size;
+    uvec2 frameSize = m_currentFramebuffer->m_size;
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, *m_currentFramebuffer);
     glBlitFramebuffer(0, 0, frameSize.x, frameSize.y, 0, 0, frameSize.x, frameSize.y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
@@ -373,27 +373,27 @@ void GLRenderer::bindUniform(const char* name, uint32_t value) {
     glUniform1ui(m_currentShaderProgram->getUniformLocation(name), value);
 }
 
-void GLRenderer::bindUniform(const char* name, const glm::mat4& value) {
+void GLRenderer::bindUniform(const char* name, const mat4& value) {
     glUniformMatrix4fv(m_currentShaderProgram->getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void GLRenderer::bindUniform(const char* name, const glm::vec2& value) {
+void GLRenderer::bindUniform(const char* name, const vec2& value) {
     glUniform2fv(m_currentShaderProgram->getUniformLocation(name), 1, glm::value_ptr(value));
 }
 
-void GLRenderer::bindUniform(const char* name, const glm::vec3& value) {
+void GLRenderer::bindUniform(const char* name, const vec3& value) {
     glUniform3fv(m_currentShaderProgram->getUniformLocation(name), 1, glm::value_ptr(value));
 }
 
-void GLRenderer::bindPVM(const glm::mat4& modelMatrix) {
-    glm::mat4 PVM = m_matrices.projection * m_matrices.view * modelMatrix;
+void GLRenderer::bindPVM(const mat4& modelMatrix) {
+    mat4 PVM = m_matrices.projection * m_matrices.view * modelMatrix;
 
-    const glm::mat4 modelRotationMatrix = glm::mat4(
+    const mat4 modelRotationMatrix = mat4(
         modelMatrix[0],
         modelMatrix[1],
         modelMatrix[2],
-        glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-    glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelRotationMatrix));
+        vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    mat4 normalMatrix = glm::transpose(glm::inverse(modelRotationMatrix));
 
     bindUniform("u_PVM_matrix", PVM);
     bindUniform("u_model_matrix", modelMatrix);
@@ -589,7 +589,7 @@ void GLRenderer::bindTexture(TextureType type, const TextureResource& texture, u
 }
 
 void GLRenderer::readFramebuffer(TextureFormat format, TextureDataType dataType,
-                                 glm::uvec2 position, glm::uvec2 size, void* result) const {
+                                 uvec2 position, uvec2 size, void* result) const {
     int formatGL = textureFormatGL(format);
     int dataTypeGL = textureDataTypeGL(dataType);
 
@@ -601,7 +601,7 @@ void GLRenderer::deleteTexture(TextureResource& texure) const {
     glDeleteTextures(1, &texureGL);
 }
 
-Framebuffer GLRenderer::createFramebuffer(glm::uvec2 size, std::map<FramebufferAttachment, Ref<TextureResource>>&& attachments) const {
+Framebuffer GLRenderer::createFramebuffer(uvec2 size, std::map<FramebufferAttachment, Ref<TextureResource>>&& attachments) const {
     GLuint FBO;
     glGenFramebuffers(1, &FBO);
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);

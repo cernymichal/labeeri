@@ -115,7 +115,7 @@ void ViewportLayer::updateIdFramebuffer() {
             m_size, {{FramebufferAttachment::Color, idBuffer}, {FramebufferAttachment::Depth, m_viewFramebuffer->m_attachments.at(FramebufferAttachment::Depth)}}));
 }
 
-void ViewportLayer::clickOnObject(const glm::uvec2& mousePosition) {
+void ViewportLayer::clickOnObject(const uvec2& mousePosition) {
     if (!LAB_CURRENT_SCENE)
         return;
 
@@ -142,7 +142,7 @@ void ViewportLayer::clickOnObject(const glm::uvec2& mousePosition) {
     LAB_RENDERER->bindFramebuffer(m_idFramebuffer);
 
     EntityId id = NULL_ENTITY;
-    LAB_RENDERER->readFramebuffer(TextureFormat::RedInt, TextureDataType::UInt32, glm::uvec2(mousePosition.x, m_size.y - mousePosition.y - 1), glm::uvec2(1), &id);
+    LAB_RENDERER->readFramebuffer(TextureFormat::RedInt, TextureDataType::UInt32, uvec2(mousePosition.x, m_size.y - mousePosition.y - 1), uvec2(1), &id);
     if (id != NULL_ENTITY && id < MAX_ENTITIES)
         LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(id));
 

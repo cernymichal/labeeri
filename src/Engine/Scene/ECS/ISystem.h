@@ -17,7 +17,14 @@ public:
     /**
      * @brief TODO
      */
-    virtual ComponentSignature signature(const Instance& ecs) const = 0;
+    virtual ComponentSignature signature(const ECS::Instance& ecs) const = 0;
+
+    /**
+     * @brief TODO
+     */
+    ComponentSignature signature(const Ref<ECS::Instance>& ecs) const {
+        return signature(*ecs);
+    };
 
     /**
      * @brief TODO

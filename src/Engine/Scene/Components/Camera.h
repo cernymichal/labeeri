@@ -16,9 +16,9 @@ public:
     /**
      * @brief TODO
      */
-    glm::mat4 viewMatrix(const Transform& transform) const {
-        glm::vec3 cameraPosition = transform.worldPosition();
-        glm::vec3 center = cameraPosition + transform.forward();
+    mat4 viewMatrix(const Transform& transform) const {
+        vec3 cameraPosition = transform.worldPosition();
+        vec3 center = cameraPosition + transform.forward();
 
         return glm::lookAt(cameraPosition, center, transform.up());
     }
@@ -26,14 +26,14 @@ public:
     /**
      * @brief TODO
      */
-    glm::mat4 projectionMatrix(glm::uvec2 viewportSize) const {
+    mat4 projectionMatrix(uvec2 viewportSize) const {
         float aspectRatio = (float)viewportSize.x / (float)viewportSize.y;
 
         if (m_far != std::numeric_limits<float>::infinity())
             return glm::perspectiveZO(glm::radians(m_FOV), aspectRatio, m_far, m_near);  // Z reversed
 
         float f = 1.0f / tan(glm::radians(m_FOV) / 2.0f);
-        return glm::mat4(
+        return mat4(
             f / aspectRatio, 0.0f, 0.0f, 0.0f,
             0.0f, f, 0.0f, 0.0f,
             0.0f, 0.0f, 0.0f, -1.0f,

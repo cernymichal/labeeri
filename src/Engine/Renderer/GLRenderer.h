@@ -18,9 +18,9 @@ public:
 
     virtual void clearBuffer(int buffers, uint32_t value) override;
 
-    virtual void setClearColor(const glm::vec4& color) override;
+    virtual void setClearColor(const vec4& color) override;
 
-    virtual void beginScene(double time, const glm::vec3& cameraPosition, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix,
+    virtual void beginScene(double time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix,
                             const RenderSceneParameters& parameters = RenderSceneParameters()) override;
 
     virtual void endOpaque() override;
@@ -41,13 +41,13 @@ public:
 
     virtual void bindUniform(const char* name, uint32_t value) override;
 
-    virtual void bindUniform(const char* name, const glm::mat4& value) override;
+    virtual void bindUniform(const char* name, const mat4& value) override;
 
-    virtual void bindUniform(const char* name, const glm::vec2& value) override;
+    virtual void bindUniform(const char* name, const vec2& value) override;
 
-    virtual void bindUniform(const char* name, const glm::vec3& value) override;
+    virtual void bindUniform(const char* name, const vec3& value) override;
 
-    virtual void bindPVM(const glm::mat4& modelMatrix) override;
+    virtual void bindPVM(const mat4& modelMatrix) override;
 
     virtual LAB_GL_INT getUniformLocation(ShaderResource& shaderProgram, const char* name) override;
 
@@ -73,11 +73,11 @@ public:
     virtual void bindTexture(TextureType type, const TextureResource& texture, unsigned slot) const override;
 
     virtual void readFramebuffer(TextureFormat format, TextureDataType dataType,
-                             glm::uvec2 position, glm::uvec2 size, void* result) const override;
+                             uvec2 position, uvec2 size, void* result) const override;
 
     virtual void deleteTexture(TextureResource& texure) const override;
 
-    virtual Framebuffer createFramebuffer(glm::uvec2 size, std::map<FramebufferAttachment, Ref<TextureResource>>&& attachments) const override;
+    virtual Framebuffer createFramebuffer(uvec2 size, std::map<FramebufferAttachment, Ref<TextureResource>>&& attachments) const override;
 
     virtual void bindFramebuffer(const Ref<Framebuffer>& framebuffer) override;
 
@@ -100,12 +100,12 @@ private:
     Ref<ShaderResource> m_currentShaderProgram;
     Ref<MeshResource> m_currentMesh;
     double m_time = 0.0;
-    glm::vec3 m_cameraPosition = glm::vec3(0.0f);
+    vec3 m_cameraPosition = vec3(0.0f);
     struct Matrices {
-        glm::mat4 view = glm::mat4(1.0);
-        glm::mat4 viewInverse = glm::mat4(1.0);
-        glm::mat4 projection = glm::mat4(1.0);
-        glm::mat4 projectionInverse = glm::mat4(1.0);
+        mat4 view = mat4(1.0);
+        mat4 viewInverse = mat4(1.0);
+        mat4 projection = mat4(1.0);
+        mat4 projectionInverse = mat4(1.0);
     } m_matrices;
     RenderSceneParameters m_sceneParameters;
 

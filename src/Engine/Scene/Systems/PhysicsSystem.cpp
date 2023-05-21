@@ -8,10 +8,10 @@
 namespace labeeri::Engine {
 
 static bool collistionCheckAABB(const Transform* transfromA, const Collider* colliderA, const Transform* transfromB, const Collider* colliderB) {
-    glm::vec3 minA = transfromA->worldPosition() + colliderA->m_center - colliderA->m_extents * transfromA->scale();
-    glm::vec3 maxA = transfromA->worldPosition() + colliderA->m_center + colliderA->m_extents * transfromA->scale();
-    glm::vec3 minB = transfromB->worldPosition() + colliderB->m_center - colliderB->m_extents * transfromB->scale();
-    glm::vec3 maxB = transfromB->worldPosition() + colliderB->m_center + colliderB->m_extents * transfromB->scale();
+    vec3 minA = transfromA->worldPosition() + colliderA->m_center - colliderA->m_extents * transfromA->scale();
+    vec3 maxA = transfromA->worldPosition() + colliderA->m_center + colliderA->m_extents * transfromA->scale();
+    vec3 minB = transfromB->worldPosition() + colliderB->m_center - colliderB->m_extents * transfromB->scale();
+    vec3 maxB = transfromB->worldPosition() + colliderB->m_center + colliderB->m_extents * transfromB->scale();
 
     return glm::all(glm::lessThanEqual(minA, maxB)) && glm::all(glm::greaterThanEqual(maxA, minB));
 }

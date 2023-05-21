@@ -10,10 +10,10 @@ namespace labeeri::Engine {
  */
 class MouseMoveEvent : public IEvent {
 public:
-    const glm::dvec2 m_position;
-    const glm::dvec2 m_delta;
+    const dvec2 m_position;
+    const dvec2 m_delta;
 
-    MouseMoveEvent(const glm::dvec2& postition, const glm::dvec2& delta)
+    MouseMoveEvent(const dvec2& postition, const dvec2& delta)
         : m_position(postition), m_delta(delta) {
     }
 
@@ -44,12 +44,12 @@ class MouseButtonEvent : public IEvent {
 public:
     const MouseButton m_button;
     const int m_mods;
-    const glm::dvec2 m_position;
+    const dvec2 m_position;
 
     EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Input) | static_cast<int>(EventCategory::Mouse))
 
 protected:
-    MouseButtonEvent(MouseButton button, int mods, glm::dvec2 positon)
+    MouseButtonEvent(MouseButton button, int mods, dvec2 positon)
         : m_button(button), m_mods(mods), m_position(positon) {
     }
 };
@@ -59,7 +59,7 @@ protected:
  */
 class MouseButtonPressEvent : public MouseButtonEvent {
 public:
-    MouseButtonPressEvent(MouseButton button, int mods, glm::dvec2 position)
+    MouseButtonPressEvent(MouseButton button, int mods, dvec2 position)
         : MouseButtonEvent(button, mods, position) {
     }
 
@@ -71,7 +71,7 @@ public:
  */
 class MouseButtonReleaseEvent : public MouseButtonEvent {
 public:
-    MouseButtonReleaseEvent(MouseButton button, int mods, glm::dvec2 position)
+    MouseButtonReleaseEvent(MouseButton button, int mods, dvec2 position)
         : MouseButtonEvent(button, mods, position) {
     }
 

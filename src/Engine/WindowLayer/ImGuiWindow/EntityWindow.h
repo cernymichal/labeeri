@@ -26,8 +26,8 @@ public:
 private:
     Entity m_entity;
     std::string m_name;
-    glm::vec3 m_position = glm::vec3(0);
-    glm::vec3 m_rotationEuler = glm::vec3(0);
+    vec3 m_position = vec3(0);
+    vec3 m_rotationEuler = vec3(0);
 };
 
 }  // namespace labeeri::Engine

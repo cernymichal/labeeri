@@ -8,7 +8,7 @@ namespace labeeri::Engine {
 Scene::Scene() {
     LAB_LOGH2("Scene::Scene()");
 
-    registerDefaultComponents(*m_ecs);
+    registerDefaultComponents(m_ecs);
 
     m_systems.physics = m_ecs->registerSystem<PhysicsSystem>();
     m_systems.camera = m_ecs->registerSystem<CameraSystem>();

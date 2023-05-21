@@ -48,22 +48,22 @@ public:
     /**
      * @brief TODO
      */
-    static Entity Create(const ECS::Instance& ecs);
+    static Entity Create(const Ref<ECS::Instance>& ecs);
 
     /**
      * @brief TODO
      */
     static Entity Create() {
-        return Create(*ECS::CURRENT_INSTANCE);
+        return Create(ECS::CURRENT_INSTANCE);
     }
 
     /**
      * @brief TODO
      */
-    void destroy(const ECS::Instance& ecs) {
-        ecs.m_entityManager->destroyEntity(*this);
-        ecs.m_componentManager->entityDestroyed(*this);
-        ecs.m_systemManager->entityDestroyed(*this);
+    void destroy(const Ref<ECS::Instance>& ecs) {
+        ecs->m_entityManager->destroyEntity(*this);
+        ecs->m_componentManager->entityDestroyed(*this);
+        ecs->m_systemManager->entityDestroyed(*this);
         m_id = NULL_ENTITY;
     }
 
@@ -71,21 +71,21 @@ public:
      * @brief TODO
      */
     void destroy() {
-        destroy(*ECS::CURRENT_INSTANCE);
+        destroy(ECS::CURRENT_INSTANCE);
     }
 
     /**
      * @brief TODO
      */
     template <typename T>
-    T* addComponent(T&& component, const ECS::Instance& ecs) const {
-        T* placedComponent = ecs.m_componentManager->addComponent<T>(*this, std::forward<T>(component));
+    T* addComponent(T&& component, const Ref<ECS::Instance>& ecs) const {
+        T* placedComponent = ecs->m_componentManager->addComponent<T>(*this, std::forward<T>(component));
 
-        auto signature = ecs.m_entityManager->getSignature(*this);
-        signature.set(ecs.m_componentManager->getComponentType<T>(), true);
-        ecs.m_entityManager->setSignature(*this, signature);
+        auto signature = ecs->m_entityManager->getSignature(*this);
+        signature.set(ecs->m_componentManager->getComponentType<T>(), true);
+        ecs->m_entityManager->setSignature(*this, signature);
 
-        ecs.m_systemManager->entitySignatureChanged(*this, signature);
+        ecs->m_systemManager->entitySignatureChanged(*this, signature);
 
         return placedComponent;
     }
@@ -102,14 +102,14 @@ public:
      * @brief TODO
      */
     template <typename T>
-    void removeComponent(const ECS::Instance& ecs) const {
-        ecs.m_componentManager->removeComponent<T>(*this);
+    void removeComponent(const Ref<ECS::Instance>& ecs) const {
+        ecs->m_componentManager->removeComponent<T>(*this);
 
-        auto signature = ecs.m_entityManager->getSignature(*this);
-        signature.set(ecs.m_componentManager->getComponentType<T>(), false);
-        ecs.m_entityManager->setSignature(*this, signature);
+        auto signature = ecs->m_entityManager->getSignature(*this);
+        signature.set(ecs->m_componentManager->getComponentType<T>(), false);
+        ecs->m_entityManager->setSignature(*this, signature);
 
-        ecs.m_systemManager->entitySignatureChanged(*this, signature);
+        ecs->m_systemManager->entitySignatureChanged(*this, signature);
     }
 
     /**
@@ -117,15 +117,15 @@ public:
      */
     template <typename T>
     void removeComponent() const {
-        removeComponent<T>(*ECS::CURRENT_INSTANCE);
+        removeComponent<T>(ECS::CURRENT_INSTANCE);
     }
 
     /**
      * @brief TODO
      */
     template <typename T>
-    T* getComponent(const ECS::Instance& ecs) const {
-        return ecs.m_componentManager->getComponent<T>(*this);
+    T* getComponent(const Ref<ECS::Instance>& ecs) const {
+        return ecs->m_componentManager->getComponent<T>(*this);
     }
 
     /**
@@ -133,7 +133,7 @@ public:
      */
     template <typename T>
     T* getComponent() const {
-        return getComponent<T>(*ECS::CURRENT_INSTANCE);
+        return getComponent<T>(ECS::CURRENT_INSTANCE);
     }
 };
 

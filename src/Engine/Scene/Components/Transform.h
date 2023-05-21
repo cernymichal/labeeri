@@ -64,7 +64,7 @@ public:
     /**
      * @brief TODO
      */
-    void setPosition(const glm::vec3& position) {
+    void setPosition(const vec3& position) {
         m_position = position;
         m_modelMatrixValid = false;
     }
@@ -72,28 +72,28 @@ public:
     /**
      * @brief TODO
      */
-    void move(const glm::vec3& offset) {
-        setPosition(position() + glm::vec3(modelMatrix() * glm::vec4(offset, 0.0f)));
+    void move(const vec3& offset) {
+        setPosition(position() + vec3(modelMatrix() * vec4(offset, 0.0f)));
     }
 
     /**
      * @brief TODO
      */
-    void setWorldPosition(const glm::vec3& position) {
+    void setWorldPosition(const vec3& position) {
         if (!m_parent) {
             setPosition(position);
             return;
         }
 
-        glm::mat4 parentInverseModelMatrix = glm::inverse(m_parent.getComponent<Transform>()->modelMatrix());
-        glm::vec3 localPosition = glm::vec3(parentInverseModelMatrix * glm::vec4(position, 1.0f));
+        mat4 parentInverseModelMatrix = glm::inverse(m_parent.getComponent<Transform>()->modelMatrix());
+        vec3 localPosition = vec3(parentInverseModelMatrix * vec4(position, 1.0f));
         setPosition(localPosition);
     }
 
     /**
      * @brief TODO
      */
-    void moveWorld(const glm::vec3& offset) {
+    void moveWorld(const vec3& offset) {
         setPosition(position() + offset);
     }
 
@@ -115,7 +115,7 @@ public:
     /**
      * @brief TODO
      */
-    void setScale(const glm::vec3& scale) {
+    void setScale(const vec3& scale) {
         m_scale = scale;
         m_modelMatrixValid = false;
     }
@@ -123,7 +123,7 @@ public:
     /**
      * @brief TODO
      */
-    void scale(const glm::vec3& amount) {
+    void scale(const vec3& amount) {
         setScale(m_scale * amount);
     }
 
@@ -164,15 +164,15 @@ public:
     /**
      * @brief TODO
      */
-    glm::vec3 position() const {
+    vec3 position() const {
         return m_position;
     }
 
     /**
      * @brief TODO
      */
-    glm::vec3 worldPosition() const {
-        return glm::vec3(modelMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    vec3 worldPosition() const {
+        return vec3(modelMatrix() * vec4(0.0f, 0.0f, 0.0f, 1.0f));
     }
 
     /**
@@ -185,14 +185,14 @@ public:
     /**
      * @brief TODO
      */
-    glm::vec3 scale() const {
+    vec3 scale() const {
         return m_scale;
     }
 
     /**
      * @brief TODO
      */
-    const glm::mat4& modelMatrix() const {
+    const mat4& modelMatrix() const {
         if (!modelMatrixValid())
             updateModelMatrix();
 
@@ -203,30 +203,30 @@ public:
      * @brief TODO
      */
 
-    glm::vec3 forward() const {
-        return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(LAB_FORWARD, 0.0f)));
+    vec3 forward() const {
+        return glm::normalize(vec3(modelMatrix() * vec4(LAB_FORWARD, 0.0f)));
     }
 
     /**
      * @brief TODO
      */
-    glm::vec3 up() const {
-        return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(LAB_UP, 0.0f)));
+    vec3 up() const {
+        return glm::normalize(vec3(modelMatrix() * vec4(LAB_UP, 0.0f)));
     }
 
     /**
      * @brief TODO
      */
-    glm::vec3 right() const {
-        return glm::normalize(glm::vec3(modelMatrix() * glm::vec4(LAB_RIGHT, 0.0f)));
+    vec3 right() const {
+        return glm::normalize(vec3(modelMatrix() * vec4(LAB_RIGHT, 0.0f)));
     }
 
 private:
-    glm::vec3 m_position = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::quat m_rotation = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
-    glm::vec3 m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    vec3 m_position = vec3(0.0f, 0.0f, 0.0f);
+    glm::quat m_rotation = glm::quat(vec3(0.0f, 0.0f, 0.0f));
+    vec3 m_scale = vec3(1.0f, 1.0f, 1.0f);
 
-    mutable glm::mat4 m_modelMatrix = glm::mat4(1.0);
+    mutable mat4 m_modelMatrix = mat4(1.0);
     mutable bool m_modelMatrixValid = true;
 
     Entity m_entity;
@@ -249,9 +249,9 @@ private:
      * @brief TODO
      */
     void updateModelMatrix() const {
-        glm::mat4 localModelMatrix = glm::mat4(1.0f);
+        mat4 localModelMatrix = mat4(1.0f);
         localModelMatrix = glm::translate(localModelMatrix, m_position);
-        localModelMatrix *= glm::mat4_cast(m_rotation);
+        localModelMatrix *= mat4_cast(m_rotation);
         localModelMatrix = glm::scale(localModelMatrix, m_scale);
 
         m_modelMatrix = localModelMatrix;

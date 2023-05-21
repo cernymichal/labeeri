@@ -9,9 +9,9 @@ namespace labeeri::Engine {
  */
 class WindowResizeEvent : public IEvent {
 public:
-    const glm::uvec2 m_windowSize;
+    const uvec2 m_windowSize;
 
-    explicit WindowResizeEvent(const glm::uvec2& windowSize) : m_windowSize(windowSize) {
+    explicit WindowResizeEvent(const uvec2& windowSize) : m_windowSize(windowSize) {
     }
 
     EVENT_CLASS_TYPE(WindowResize)

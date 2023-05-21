@@ -56,6 +56,13 @@ public:
         m_signatures[entity] = signature;
     }
 
+    /**
+     * @brief TODO
+     */
+    uint32_t entityCount() const {
+        return m_entityCount;
+    }
+
 private:
     uint32_t m_entityCount = 0;
     EntityId m_nextEntityId = NULL_ENTITY + 1;

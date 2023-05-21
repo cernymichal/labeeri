@@ -127,7 +127,7 @@ struct STBImageResource : ImageResource {
             stbi_set_flip_vertically_on_load(false);
 
         int channels;
-        glm::ivec2 sizeInt;
+        ivec2 sizeInt;
 
         const auto filePathStr = filePath.string();
         if (stbi_is_hdr(filePathStr.c_str())) {
