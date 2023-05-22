@@ -10,6 +10,7 @@
 namespace labeeri::Engine {
 
 class ViewportLayer;
+class Entity;
 
 /**
  * @brief TODO
@@ -70,7 +71,10 @@ private:
 
     bool onFixedUpdate(const FixedUpdateEvent& e);
 
+    void destroyEntity(EntityId id);
+
     friend class ViewportLayer;
+    friend class Entity;
 };
 
 }  // namespace labeeri::Engine

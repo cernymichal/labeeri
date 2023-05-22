@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 #include "Engine/Scene/Components/Components.h"
-#include "Engine/Scene/ECS/Instance.h"
+#include "Engine/Scene/ECS/Entity.h"
 
 namespace labeeri::Engine {
 
@@ -44,6 +44,10 @@ bool Scene::onUpdate(const UpdateEvent& e) {
 
 bool Scene::onFixedUpdate(const FixedUpdateEvent& e) {
     return false;
+}
+
+void Scene::destroyEntity(EntityId id) {
+    m_scripts.remove_if([id](const auto& script) { return script->m_entity.m_id == id; });
 }
 
 }  // namespace labeeri::Engine

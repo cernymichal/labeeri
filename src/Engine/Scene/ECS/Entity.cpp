@@ -1,5 +1,6 @@
 #include "Entity.h"
 
+#include "Engine/Application.h"
 #include "Engine/Scene/Components/Transform.h"
 
 namespace labeeri::Engine {
@@ -9,6 +10,16 @@ Entity Entity::Create(const Ref<ECS::Instance>& ecs) {
     entity.addComponent<Transform>(Transform(entity), ecs);
 
     return entity;
+}
+
+void Entity::destroy(const Ref<ECS::Instance>& ecs) {
+    if (LAB_CURRENT_SCENE)
+        LAB_CURRENT_SCENE->destroyEntity(*this);
+
+    ecs->m_entityManager->destroyEntity(*this);
+    ecs->m_componentManager->entityDestroyed(*this);
+    ecs->m_systemManager->entityDestroyed(*this);
+    m_id = NULL_ENTITY;
 }
 
 }  // namespace labeeri::Engine

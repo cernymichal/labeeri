@@ -63,12 +63,7 @@ public:
     /**
      * @brief TODO
      */
-    void destroy(const Ref<ECS::Instance>& ecs) {
-        ecs->m_entityManager->destroyEntity(*this);
-        ecs->m_componentManager->entityDestroyed(*this);
-        ecs->m_systemManager->entityDestroyed(*this);
-        m_id = NULL_ENTITY;
-    }
+    void destroy(const Ref<ECS::Instance>& ecs);
 
     /**
      * @brief TODO

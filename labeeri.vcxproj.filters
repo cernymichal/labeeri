@@ -362,6 +362,9 @@
     <ClInclude Include="src\Game\Resources\Scripts\RotatingController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\Resources\Scripts\CameraSwitcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\shaders\flat.vert" />

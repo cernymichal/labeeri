@@ -3,6 +3,7 @@
 #include "Game/Resources/Materials.h"
 #include "Game/Resources/Models.h"
 #include "Game/Resources/Prefabs.h"
+#include "Game/Resources/Scripts/CameraSwitcher.h"
 #include "Game/Resources/Scripts/FloatingController.h"
 #include "Game/Resources/Scripts/RotatingController.h"
 
@@ -70,7 +71,7 @@ Ref<Scene> loadLabyrinthScene() {
 
     {  // Lights
         auto sun = Entities::DirectionalLight(scene, vec3(glm::radians(-110.0), glm::radians(30.0), 0), 0.05f);
-        sun.getComponent<Transform>()->move(vec3(0.0f, -1.0f, 0.0f));
+        sun.getComponent<Transform>()->move(vec3(0.0f, -2.0f, 0.0f));
     }
 
     {  // Rooms
@@ -93,6 +94,32 @@ Ref<Scene> loadLabyrinthScene() {
     {  // Player
         auto player = Entities::Player(scene);
         player.getComponent<Transform>(scene->ecs())->move(vec3(0.0f, 0.0f, 2.0f));
+
+        std::vector<Entity> cameras;
+        {  // Bottom view
+            auto camera = Entity::Create(scene->ecs());
+
+            auto transform = camera.getComponent<Transform>(scene->ecs());
+            transform->setPosition(vec3(4.0f, 0.3f, 4.0f));
+            transform->setRotation(glm::radians(vec3(20.0f, 45.0f, 0.0f)));
+
+            camera.addComponent<Camera>(Camera(110.0f), scene->ecs());
+
+            cameras.push_back(camera);
+        }
+        {  // Knot view
+            auto camera = Entity::Create(scene->ecs());
+
+            auto transform = camera.getComponent<Transform>(scene->ecs());
+            transform->setPosition(vec3(0.0f, 2.0f, -25.0f));
+            transform->setRotation(glm::radians(vec3(-10.0f, 180.0f, 0.0f)));
+
+            camera.addComponent<Camera>(Camera(30.0f), scene->ecs());
+
+            cameras.push_back(camera);
+        }
+
+        scene->addScript<CameraSwitcher>(player, cameras);
     }
 
     {  // Water

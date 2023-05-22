@@ -12,8 +12,8 @@ public:
     /**
      * @brief TODO
      */
-    explicit PlayerController(Entity entity, float speed = 2.0f, double mouseSensitivity = 0.002)
-        : IScript(entity), m_speed(speed), m_mouseSensitivity(mouseSensitivity) {
+    explicit PlayerController(Entity player, float speed = 2.0f, double mouseSensitivity = 0.002)
+        : IScript(player), m_speed(speed), m_mouseSensitivity(mouseSensitivity) {
     }
 
 protected:

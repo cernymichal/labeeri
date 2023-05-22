@@ -261,6 +261,7 @@
     <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\IImGuiWindow.h" />
     <ClInclude Include="src\Engine\WindowLayer\SceneLayer.h" />
     <ClInclude Include="src\Engine\Window\IWindow.h" />
+    <ClInclude Include="src\Game\Resources\Scripts\CameraSwitcher.h" />
     <ClInclude Include="src\Game\Resources\Prefabs.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Engine\Resources\Resources.h" />

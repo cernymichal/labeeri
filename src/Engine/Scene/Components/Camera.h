@@ -9,9 +9,13 @@ namespace labeeri::Engine {
  */
 class Camera {
 public:
-    float m_FOV = 90.0f;
-    float m_near = 0.1f;
-    float m_far = std::numeric_limits<float>::infinity();
+    float m_FOV;
+    float m_near;
+    float m_far;
+
+    explicit Camera(float FOV = 90.0f, float near = 0.1f, float far = std::numeric_limits<float>::infinity())
+        : m_FOV(FOV), m_near(near), m_far(far) {
+    }
 
     /**
      * @brief TODO

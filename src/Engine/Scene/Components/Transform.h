@@ -78,7 +78,7 @@ public:
      * @brief TODO
      */
     void move(const vec3& offset) {
-        setPosition(position() + vec3(modelMatrix() * vec4(offset, 0.0f)));
+        setPosition(position() + offset);
     }
 
     /**
@@ -99,7 +99,7 @@ public:
      * @brief TODO
      */
     void moveWorld(const vec3& offset) {
-        setPosition(position() + offset);
+        setWorldPosition(worldPosition() + offset);
     }
 
     /**
