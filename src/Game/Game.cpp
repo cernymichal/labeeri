@@ -3,8 +3,6 @@
 #include "Engine/API.h"
 #include "Game/Scenes.h"
 
-using namespace labeeri::Engine;
-
 namespace labeeri {
 
 Game::Game() {

@@ -16,6 +16,7 @@ public:
     ColliderType m_type;
     vec3 m_center;
     vec3 m_extents;
+    bool m_enabled = true;
 
     explicit Collider(ColliderType type = ColliderType::AABB, vec3 extents = vec3(0.5f), vec3 center = vec3(0.0f))
         : m_type(type), m_center(center), m_extents(extents) {}

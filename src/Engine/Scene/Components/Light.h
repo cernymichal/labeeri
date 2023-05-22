@@ -22,7 +22,7 @@ public:
     float m_outerCutoff;
     float m_intensity = 1.0;
 
-    explicit Light(LightType type = LightType::Point, const LightProperties& properties = LightProperties(), const LightAttenuation& attenuation = LightAttenuation(), float innerCutoff = 0.91f, float outerCutoff = 0.82f)
+    explicit Light(LightType type = LightType::Point, const LightProperties& properties = LightProperties(), const LightAttenuation& attenuation = LightAttenuation(), float innerCutoff = 0.82f, float outerCutoff = 0.91f)
         : m_type(type), m_properties(properties), m_attenuation(attenuation), m_innerCutoff(innerCutoff), m_outerCutoff(outerCutoff) {
     }
 

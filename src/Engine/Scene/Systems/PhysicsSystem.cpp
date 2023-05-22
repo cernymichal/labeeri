@@ -46,12 +46,18 @@ bool PhysicsSystem::collides(Entity entity) const {
     auto transformA = entity.getComponent<Transform>();
     auto colliderA = entity.getComponent<Collider>();
 
+    if (!colliderA->m_enabled)
+        return false;
+
     for (Entity entityB : entities()) {
         if (entity == entityB)
             continue;
 
         auto transformB = entityB.getComponent<Transform>();
         auto colliderB = entityB.getComponent<Collider>();
+
+        if (!colliderB->m_enabled)
+            continue;
 
         if (colliderA->m_type != ColliderType::AABB || colliderB->m_type != ColliderType::AABB) {
             LAB_LOG("Collision checking for other types than AABB not implemented!");

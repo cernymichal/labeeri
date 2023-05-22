@@ -2,7 +2,7 @@
 
 #include "Engine/API.h"
 
-namespace labeeri::Engine {
+namespace labeeri {
 
 /**
  * @brief TODO

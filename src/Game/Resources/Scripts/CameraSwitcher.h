@@ -2,7 +2,7 @@
 
 #include "Engine/API.h"
 
-namespace labeeri::Engine {
+namespace labeeri {
 
 /**
  * @brief TODO
@@ -34,7 +34,6 @@ private:
     std::vector<Entity> m_cameras;
     size_t m_currentCamera = 0;
     Entity m_freeCamera = NULL_ENTITY;
-    Collider m_playerCollider;
 
     void switchToStatic(size_t index) {
         if (m_cameras.size() == 0)
@@ -68,16 +67,9 @@ private:
     }
 
     void switchPlayerMovement(bool enable) {
-        auto collider = m_entity.getComponent<Collider>();
-        if (enable)
-            *collider = m_playerCollider;
-        else {
-            m_playerCollider = *collider;
-            collider->m_extents *= 0.0f;
-        }
-
+        m_entity.getComponent<Collider>()->m_enabled = enable;
         m_entity.getComponent<RigidBody>()->m_static = !enable;
     }
 };
 
-}  // namespace labeeri::Engine
+}  // namespace labeeri

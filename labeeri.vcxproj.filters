@@ -365,6 +365,15 @@
     <ClInclude Include="src\Game\Resources\Scripts\CameraSwitcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\Resources\Scripts\FloatingMovement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Resources\Scripts\RotatingMovement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Resources\Scripts\FlashlightController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\shaders\flat.vert" />

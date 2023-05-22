@@ -4,8 +4,9 @@
 #include "Game/Resources/Models.h"
 #include "Game/Resources/Prefabs.h"
 #include "Game/Resources/Scripts/CameraSwitcher.h"
-#include "Game/Resources/Scripts/FloatingController.h"
-#include "Game/Resources/Scripts/RotatingController.h"
+#include "Game/Resources/Scripts/FlashlightController.h"
+#include "Game/Resources/Scripts/FloatingMovement.h"
+#include "Game/Resources/Scripts/RotatingMovement.h"
 
 namespace labeeri {
 
@@ -94,13 +95,15 @@ Ref<Scene> loadLabyrinthScene() {
     {  // Player
         auto player = Entities::Player(scene);
         player.getComponent<Transform>(scene->ecs())->move(vec3(0.0f, 0.0f, 2.0f));
+        player.addComponent<Light>(Light::Spot(LightProperties(vec3(0.0f), vec3(2.0f), vec3(1.0f))), scene->ecs())
+            ->m_intensity = 0.0f;
 
         std::vector<Entity> cameras;
         {  // Bottom view
             auto camera = Entity::Create(scene->ecs());
 
             auto transform = camera.getComponent<Transform>(scene->ecs());
-            transform->setPosition(vec3(4.0f, 0.3f, 4.0f));
+            transform->setPosition(vec3(4.0f, 0.4f, 4.0f));
             transform->setRotation(glm::radians(vec3(20.0f, 45.0f, 0.0f)));
 
             camera.addComponent<Camera>(Camera(110.0f), scene->ecs());
@@ -120,16 +123,23 @@ Ref<Scene> loadLabyrinthScene() {
         }
 
         scene->addScript<CameraSwitcher>(player, cameras);
+        scene->addScript<FlashlightController>(player);
     }
 
     {  // Water
-        auto water = Entity::Create(scene->ecs());
+        int axisCount = 2;
+        float tileSize = 25.0f;
+        for (float x = -(axisCount - 1) * tileSize / 2.0f; x <= (axisCount - 1) * tileSize / 2.0f; x += tileSize) {
+            for (float z = -(axisCount - 1) * tileSize / 2.0f; z <= (axisCount - 1) * tileSize / 2.0f; z += tileSize) {
+                auto water = Entity::Create(scene->ecs());
 
-        auto transform = water.getComponent<Transform>(scene->ecs());
-        transform->setPosition(vec3(0.0f, 0.02f, 0.0f));
-        transform->setScale(vec3(7.5f, 2.0f, 7.5f));
+                auto transform = water.getComponent<Transform>(scene->ecs());
+                transform->setPosition(vec3(x, 0.02f, z));
+                transform->setScale(vec3(12.5f / 2, 3.0f, 12.5f / 2));
 
-        water.addComponent<Model>(Model(waterModel()), scene->ecs());
+                water.addComponent<Model>(Model(waterModel()), scene->ecs());
+            }
+        }
     }
 
     {  // Sphere system
