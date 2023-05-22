@@ -22,7 +22,7 @@ public:
     virtual void onEvent(IEvent& e) override final {
         e.dispatch<UpdateEvent>([this](auto& e) {onUpdate(e); return false; });
         e.dispatch<FixedUpdateEvent>([this](auto& e) {onFixedUpdate(e); return false; });
-        e.dispatch<EntityClickEvent>([this](auto& e) {onClickEvent(e); return false; });
+        e.dispatch<EntityClickEvent>([this](auto& e) {onEntityClick(e); return false; });
         e.dispatch<MouseMoveEvent>([this](auto& e) {onMouseMove(e); return false; });
         e.dispatch<KeyboardPressEvent>([this](auto& e) {onKeyboardPress(e); return false; });
         e.dispatch<KeyboardReleaseEvent>([this](auto& e) {onKeyboardRelease(e); return false; });
@@ -39,7 +39,7 @@ protected:
     virtual void onFixedUpdate(const FixedUpdateEvent& e) {
     }
 
-    virtual void onClickEvent(const EntityClickEvent& e) {
+    virtual void onEntityClick(const EntityClickEvent& e) {
     }
 
     virtual void onMouseMove(const MouseMoveEvent& e) {

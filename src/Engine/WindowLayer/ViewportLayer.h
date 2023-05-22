@@ -40,7 +40,7 @@ private:
 
     void updateIdFramebuffer();
 
-    void clickOnObject(const uvec2& mousePosition);
+    EntityId clickObject(const uvec2& mousePosition);
 };
 
 }  // namespace labeeri::Engine

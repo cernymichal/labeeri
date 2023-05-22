@@ -24,8 +24,9 @@ void Scene::onEvent(IEvent& e) {
     e.dispatch<FixedUpdateEvent>(LAB_BIND_EVENT_FUNC(onFixedUpdate));
 
     if (e.eventType() == EventType::EntityClick) {
+        auto& clickEvent = dynamic_cast<EntityClickEvent&>(e);
         for (const auto& script : m_scripts) {
-            if (script->m_entity == dynamic_cast<EntityClickEvent&>(e).m_entity)
+            if (script->m_entity == clickEvent.m_entity)
                 script->onEvent(e);
         }
     }

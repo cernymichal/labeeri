@@ -7,12 +7,12 @@ namespace labeeri {
 /**
  * @brief TODO
  */
-class FloatingController : public IScript {
+class FloatingMovement : public IScript {
 public:
     /**
      * @brief TODO
      */
-    explicit FloatingController(Entity entity, float maxDelta = 1.0f)
+    explicit FloatingMovement(Entity entity, float maxDelta = 1.0f)
         : IScript(entity), m_maxDelta(maxDelta) {
     }
 

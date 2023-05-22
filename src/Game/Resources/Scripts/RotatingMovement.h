@@ -7,12 +7,12 @@ namespace labeeri {
 /**
  * @brief TODO
  */
-class RotatingController : public IScript {
+class RotatingMovement : public IScript {
 public:
     /**
      * @brief TODO
      */
-    explicit RotatingController(Entity entity, quat rotation)
+    explicit RotatingMovement(Entity entity, quat rotation)
         : IScript(entity), m_rotation(rotation) {
     }
 

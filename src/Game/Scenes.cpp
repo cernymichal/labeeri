@@ -3,9 +3,12 @@
 #include "Game/Resources/Materials.h"
 #include "Game/Resources/Models.h"
 #include "Game/Resources/Prefabs.h"
+#include "Game/Resources/Scripts/BloodyFaceInteraction.h"
 #include "Game/Resources/Scripts/CameraSwitcher.h"
 #include "Game/Resources/Scripts/FlashlightController.h"
 #include "Game/Resources/Scripts/FloatingMovement.h"
+#include "Game/Resources/Scripts/LightSwitchInteraction.h"
+#include "Game/Resources/Scripts/MaxwellInteraction.h"
 #include "Game/Resources/Scripts/RotatingMovement.h"
 
 namespace labeeri {
@@ -85,11 +88,15 @@ Ref<Scene> loadLabyrinthScene() {
     }
 
     {  // Light
-        Entities::PointLight(scene, vec3(0.0f, 3.0f, 0.0f), 1.8f);
-        Entities::PointLight(scene, vec3(10.0f, 3.0f, 0.0f), 1.2f);
-        Entities::PointLight(scene, vec3(0.0f, 3.0f, 10.0f), 1.2f);
-        Entities::PointLight(scene, vec3(-10.0f, 3.0f, 0.0f), 1.2f);
-        Entities::PointLight(scene, vec3(0.0f, 3.0f, -10.0f), 1.2f);
+        std::array<Entity, 5> lights = {
+            Entities::PointLight(scene, vec3(0.0f, 3.0f, 0.0f), 1.8f),
+            Entities::PointLight(scene, vec3(10.0f, 3.0f, 0.0f), 1.2f),
+            Entities::PointLight(scene, vec3(0.0f, 3.0f, 10.0f), 1.2f),
+            Entities::PointLight(scene, vec3(-10.0f, 3.0f, 0.0f), 1.2f),
+            Entities::PointLight(scene, vec3(0.0f, 3.0f, -10.0f), 1.2f)};
+
+        for (Entity light : lights)
+            scene->addScript<LightSwitchInteraction>(light);
     }
 
     {  // Player
@@ -106,7 +113,7 @@ Ref<Scene> loadLabyrinthScene() {
             transform->setPosition(vec3(4.0f, 0.4f, 4.0f));
             transform->setRotation(glm::radians(vec3(20.0f, 45.0f, 0.0f)));
 
-            camera.addComponent<Camera>(Camera(110.0f), scene->ecs());
+            camera.addComponent<Camera>(Camera(false, 110.0f), scene->ecs());
 
             cameras.push_back(camera);
         }
@@ -117,7 +124,7 @@ Ref<Scene> loadLabyrinthScene() {
             transform->setPosition(vec3(0.0f, 2.0f, -25.0f));
             transform->setRotation(glm::radians(vec3(-10.0f, 180.0f, 0.0f)));
 
-            camera.addComponent<Camera>(Camera(30.0f), scene->ecs());
+            camera.addComponent<Camera>(Camera(false, 30.0f), scene->ecs());
 
             cameras.push_back(camera);
         }
@@ -145,7 +152,7 @@ Ref<Scene> loadLabyrinthScene() {
     {  // Sphere system
         auto sphereAMaterial = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
         sphereAMaterial->m_diffuseMap = Resources<TextureResource>::Get("resources/labeeri/textures/slab_tiles/diffuse.png");
-        sphereAMaterial->m_specular = vec3(0.7f);
+        sphereAMaterial->m_specular = vec3(0.4f);
         sphereAMaterial->m_normalMap = Resources<TextureResource>::Get("resources/labeeri/textures/slab_tiles/normal.hdr");
 
         auto sphereBMaterial = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
@@ -161,8 +168,8 @@ Ref<Scene> loadLabyrinthScene() {
         auto transformA = sphereA.getComponent<Transform>(scene->ecs());
         transformA->setPosition(vec3(0.0f, 1.5f, 0.0f));
         transformA->setScale(vec3(0.6f));
-        scene->addScript<FloatingController>(sphereA, 0.1f);
-        scene->addScript<RotatingController>(sphereA, quat(vec3(0.0f, glm::radians(0.2f), 0.0f)));
+        scene->addScript<FloatingMovement>(sphereA, 0.1f);
+        scene->addScript<RotatingMovement>(sphereA, quat(vec3(0.0f, glm::radians(0.2f), 0.0f)));
         auto model = sphereA.addComponent<Model>(Model(clone(Resources<ModelResource>::Get("basicSphere"))), scene->ecs());
         model->m_ref->m_material = sphereAMaterial;
 
@@ -171,7 +178,7 @@ Ref<Scene> loadLabyrinthScene() {
         transformB->setPosition(vec3(0.6f, 1.5f, 0.0f));
         transformB->setScale(vec3(0.4f));
         transformB->setParent(sphereA);
-        scene->addScript<RotatingController>(sphereB, quat(vec3(0.0f, glm::radians(-0.6f), 0.0f)));
+        scene->addScript<RotatingMovement>(sphereB, quat(vec3(0.0f, glm::radians(-0.6f), 0.0f)));
         model = sphereB.addComponent<Model>(Model(clone(Resources<ModelResource>::Get("basicSphere"))), scene->ecs());
         model->m_ref->m_material = sphereBMaterial;
 
@@ -186,7 +193,7 @@ Ref<Scene> loadLabyrinthScene() {
         auto transformCHolder = sphereCHolder.getComponent<Transform>(scene->ecs());
         transformCHolder->setParent(sphereA);
         *transformCHolder = *transformB;
-        scene->addScript<RotatingController>(sphereCHolder, quat(vec3(glm::radians(-0.3f), 0.0f, 0.0f)));
+        scene->addScript<RotatingMovement>(sphereCHolder, quat(vec3(glm::radians(-0.3f), 0.0f, 0.0f)));
 
         auto sphereC = Entity::Create(scene->ecs());
         auto transformC = sphereC.getComponent<Transform>(scene->ecs());
@@ -237,6 +244,8 @@ Ref<Scene> loadLabyrinthScene() {
         transform->rotate(vec3(0.0f, glm::radians(110.0f), 0.0f));
         transform->setScale(vec3(1.0f));
         auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("maxwell.obj"))), scene->ecs());
+
+        scene->addScript<MaxwellInteraction>(entity);
     }
 
     {  // Ball
@@ -281,6 +290,8 @@ Ref<Scene> loadLabyrinthScene() {
         transform->setPosition(vec3(10.0f, 1.2f, -10.0f));
         transform->setScale(vec3(2.0f));
         auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/labeeri/models/head.obj"))), scene->ecs());
+
+        scene->addScript<BloodyFaceInteraction>(entity);
     }
 
     {  // Knot

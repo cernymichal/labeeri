@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Events/KeyboardEvent.h"
+#include "Engine/Events/SceneEvent.h"
 #include "Engine/WindowLayer/IWindowLayer.h"
 #include "Engine/WindowLayer/ImGuiWindow/IImGuiWindow.h"
 
@@ -39,6 +40,8 @@ private:
     bool onRender(const IEvent& e);
 
     bool onKeyboardPress(const KeyboardPressEvent& e);
+
+    bool onEntityClick(const EntityClickEvent& e);
 };
 
 }  // namespace labeeri::Engine

@@ -12,7 +12,7 @@ namespace labeeri::Engine {
 Entity Entities::Flycam(const Ref<Scene>& scene, float speed, double sensitivity) {
     auto entity = Entity::Create(scene->ecs());
 
-    entity.addComponent<Camera>(Camera(), scene->ecs());
+    entity.addComponent<Camera>(Camera(true), scene->ecs());
     entity.addComponent<RigidBody>(RigidBody(), scene->ecs());
     entity.addComponent<Collider>(Collider::AABB(vec3(0.16f)), scene->ecs());
     scene->addScript<FlycamController>(entity, speed, sensitivity);
@@ -26,7 +26,7 @@ Entity Entities::Player(const Ref<Scene>& scene, float speed, double sensitivity
     auto transform = entity.getComponent<Transform>(scene->ecs());
     transform->setPosition(LAB_UP * height);
 
-    entity.addComponent<Camera>(Camera(), scene->ecs());
+    entity.addComponent<Camera>(Camera(true), scene->ecs());
     entity.addComponent<RigidBody>(RigidBody(), scene->ecs());
     entity.addComponent<Collider>(Collider::AABB(vec3(0.16f, height / 2, 0.16f), -LAB_UP * (height / 2)), scene->ecs());
     scene->addScript<PlayerController>(entity, speed, sensitivity);

@@ -45,7 +45,7 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     LAB_CURRENT_SCENE->m_systems.render->drawTransparent();
 
     LAB_RENDERER->endScene();
-    LAB_RENDERER->drawToScreenPostprocessed();
+    LAB_RENDERER->drawToScreenPostprocessed(camera->m_crosshair);
     LAB_LOG_RENDERAPI_ERROR();
 
     return false;
@@ -65,9 +65,17 @@ bool ViewportLayer::onMouseButtonPress(const MouseButtonPressEvent& e) {
         return true;
     }
 
-    if (e.m_button == MouseButton::Left && e.m_mods & LAB_MOD_CONTROL && LAB_APP.focus() != ApplicationFocus::Viewport) {
-        clickOnObject(e.m_position);
-        return true;
+    if (e.m_button == MouseButton::Left) {
+        if (e.m_mods & LAB_MOD_CONTROL && LAB_APP.focus() != ApplicationFocus::Viewport) {
+            auto event = EntityClickEvent(clickObject(e.m_position));
+            LAB_APP.emitEvent(event);
+            return true;
+        }
+        else if (LAB_APP.focus() == ApplicationFocus::Viewport) {
+            auto event = EntityClickEvent(clickObject(vec2(m_size.x / 2, m_size.y / 2)));
+            LAB_APP.emitEvent(event);
+            return true;
+        }
     }
 
     return false;
@@ -115,9 +123,9 @@ void ViewportLayer::updateIdFramebuffer() {
             m_size, {{FramebufferAttachment::Color, idBuffer}, {FramebufferAttachment::Depth, m_viewFramebuffer->m_attachments.at(FramebufferAttachment::Depth)}}));
 }
 
-void ViewportLayer::clickOnObject(const uvec2& mousePosition) {
+EntityId ViewportLayer::clickObject(const uvec2& mousePosition) {
     if (!LAB_CURRENT_SCENE)
-        return;
+        return NULL_ENTITY;
 
     if (!m_idFramebuffer)
         updateIdFramebuffer();
@@ -143,12 +151,12 @@ void ViewportLayer::clickOnObject(const uvec2& mousePosition) {
 
     EntityId id = NULL_ENTITY;
     LAB_RENDERER->readFramebuffer(TextureFormat::RedInt, TextureDataType::UInt32, uvec2(mousePosition.x, m_size.y - mousePosition.y - 1), uvec2(1), &id);
-    if (id != NULL_ENTITY && id < MAX_ENTITIES)
-        LAB_IMGUI->addWindow(std::make_unique<EntityWindow>(id));
 
     LAB_LOG_RENDERAPI_ERROR();
 
     LAB_LOG("Clicked on object with id " << id);
+
+    return id;
 }
 
 }  // namespace labeeri::Engine

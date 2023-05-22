@@ -313,7 +313,7 @@ void GLRenderer::drawToScreen() const {
     LAB_LOG_RENDERAPI_ERROR();
 }
 
-void GLRenderer::drawToScreenPostprocessed() {
+void GLRenderer::drawToScreenPostprocessed(bool crosshair) {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     useShaderProgram(m_postprocessShader);
@@ -324,6 +324,7 @@ void GLRenderer::drawToScreenPostprocessed() {
     bindUniform("u_depth_buffer", 1);
     bindUniform("u_gamma", m_sceneParameters.postprocessing.gamma);
     bindUniform("u_exposure", m_sceneParameters.postprocessing.exposure);
+    bindUniform("u_crosshair", crosshair);
     drawMesh();
 
     LAB_LOG_RENDERAPI_ERROR();

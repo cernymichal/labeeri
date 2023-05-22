@@ -58,7 +58,7 @@ public:
     /**
      * @brief TODO
      */
-    virtual void drawToScreenPostprocessed() = 0;
+    virtual void drawToScreenPostprocessed(bool crosshair = false) = 0;
 
     /**
      * @brief TODO

@@ -8,6 +8,7 @@
 #include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Renderer/IRenderer.h"
 #include "Engine/Window/GLFWWindow.h"
+#include "Engine/WindowLayer/ImGuiWindow/EntityWindow.h"
 #include "Engine/WindowLayer/ImGuiWindow/MenuWindow.h"
 
 namespace labeeri::Engine {
@@ -100,6 +101,7 @@ void ImGuiLayer::onEvent(IEvent& e) {
 
     e.dispatch<ApplicationRenderEvent>(LAB_BIND_EVENT_FUNC(onRender));
     e.dispatch<KeyboardPressEvent>(LAB_BIND_EVENT_FUNC(onKeyboardPress));
+    e.dispatch<EntityClickEvent>(LAB_BIND_EVENT_FUNC(onEntityClick));
 }
 
 bool ImGuiLayer::onRender(const IEvent& e) {
@@ -124,6 +126,14 @@ bool ImGuiLayer::onKeyboardPress(const KeyboardPressEvent& e) {
     }
 
     return false;
+}
+
+bool ImGuiLayer::onEntityClick(const EntityClickEvent& e) {
+    if (!e.m_entity || LAB_APP.focus() != ApplicationFocus::UI)
+        return false;
+
+    addWindow(std::make_unique<EntityWindow>(e.m_entity));
+    return true;
 }
 
 }  // namespace labeeri::Engine

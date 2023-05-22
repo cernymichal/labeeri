@@ -29,7 +29,7 @@ public:
 
     virtual void drawToScreen() const override;
 
-    virtual void drawToScreenPostprocessed() override;
+    virtual void drawToScreenPostprocessed(bool crosshair = false) override;
 
     virtual void waitForFrame() override;
 

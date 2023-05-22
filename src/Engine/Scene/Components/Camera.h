@@ -12,9 +12,10 @@ public:
     float m_FOV;
     float m_near;
     float m_far;
+    bool m_crosshair;
 
-    explicit Camera(float FOV = 90.0f, float near = 0.1f, float far = std::numeric_limits<float>::infinity())
-        : m_FOV(FOV), m_near(near), m_far(far) {
+    explicit Camera(bool crosshair = false, float FOV = 90.0f, float near = 0.1f, float far = std::numeric_limits<float>::infinity())
+        : m_crosshair(crosshair), m_FOV(FOV), m_near(near), m_far(far) {
     }
 
     /**
