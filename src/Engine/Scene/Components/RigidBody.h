@@ -3,7 +3,7 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Rigidbody component.
  */
 class RigidBody {
 public:
@@ -12,7 +12,11 @@ public:
     bool m_static = false;
 
     /**
-     * @brief TODO
+     * @brief Create a new static rigid body.
+     * 
+     * Useful for colliders that are not supposed to move.
+     *
+     * @return The created rigid body.
      */
     static RigidBody Static() {
         RigidBody rigidBody;

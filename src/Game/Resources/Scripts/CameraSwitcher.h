@@ -5,12 +5,16 @@
 namespace labeeri {
 
 /**
- * @brief TODO
+ * @brief Script that allows switching between cameras for the player.
+ *
+ * Switches between static cameras and a free or player view.
+ * Should be instantiated on the player entity.
  */
 class CameraSwitcher : public IScript {
 public:
     /**
-     * @brief TODO
+     * @param player The player entity.
+     * @param cameras A list of static cameras to switch between.
      */
     explicit CameraSwitcher(Entity player, const std::vector<Entity>& cameras = {})
         : IScript(player), m_cameras(cameras) {

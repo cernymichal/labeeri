@@ -5,12 +5,12 @@
 namespace labeeri {
 
 /**
- * @brief TODO
+ * @brief Script for controlling a spotlight that the player entity has.
  */
 class FlashlightController : public IScript {
 public:
     /**
-     * @brief TODO
+     * @param player The player entity.
      */
     explicit FlashlightController(Entity player)
         : IScript(player) {

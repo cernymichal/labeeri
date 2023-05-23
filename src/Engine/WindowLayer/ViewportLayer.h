@@ -10,14 +10,14 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief A window layer that renders the scene from a camera.
  */
 class ViewportLayer : public IWindowLayer {
 public:
     Entity m_camera;
 
     /**
-     * @brief TODO
+     * @brief Creates the viewport layer and its framebuffers.
      */
     ViewportLayer();
 

@@ -3,7 +3,7 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief A shared mesh resource.
  */
 class MeshResource {
 public:
@@ -13,14 +13,17 @@ public:
     const uint32_t m_triangleCount;
 
     /**
-     * @brief TODO
+     * @param vertexArrayObject The vertex array object.
+     * @param vertexBufferObject The vertex buffer object.
+     * @param elementBufferObject The element buffer object.
+     * @param triangleCount The number of triangles in the mesh.
      */
     MeshResource(LAB_GL_HANDLE vertexArrayObject, LAB_GL_HANDLE vertexBufferObject, LAB_GL_HANDLE elementBufferObject, uint32_t triangleCount)
         : m_vertexArrayObject(vertexArrayObject), m_vertexBufferObject(vertexBufferObject), m_elementBufferObject(elementBufferObject), m_triangleCount(triangleCount) {
     }
 
     /**
-     * @brief TODO
+     * @param other The mesh resource to move.
      */
     MeshResource(MeshResource&& other) noexcept
         : m_vertexArrayObject(other.m_vertexArrayObject), m_vertexBufferObject(other.m_vertexBufferObject), m_elementBufferObject(other.m_elementBufferObject), m_triangleCount(other.m_triangleCount) {
@@ -29,6 +32,9 @@ public:
 
     MeshResource& operator=(const MeshResource&) = delete;
 
+    /**
+     * @param other The mesh resource to move.
+     */
     MeshResource& operator=(MeshResource&& other) noexcept {
         if (this == &other)
             return *this;
@@ -39,7 +45,7 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Destroy the mesh resource. Calls deleteMesh on the renderer.
      */
     ~MeshResource();
 

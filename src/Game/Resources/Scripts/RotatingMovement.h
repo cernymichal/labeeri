@@ -5,12 +5,13 @@
 namespace labeeri {
 
 /**
- * @brief TODO
+ * @brief Script for rotation an entity over time
  */
 class RotatingMovement : public IScript {
 public:
     /**
-     * @brief TODO
+     * @param entity The entity to rotate.
+     * @param rotation The rotation to apply to the entity.
      */
     explicit RotatingMovement(Entity entity, quat rotation)
         : IScript(entity), m_rotation(rotation) {
@@ -26,4 +27,4 @@ private:
     quat m_rotation;
 };
 
-}  // namespace labeeri::Engine
+}  // namespace labeeri

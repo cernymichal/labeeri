@@ -3,7 +3,7 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Describes the attenuation of a light.
  */
 struct LightAttenuation {
     float constant = 1.0f;
@@ -18,7 +18,7 @@ struct LightAttenuation {
 };
 
 /**
- * @brief TODO
+ * @brief Lights color and other properties.
  */
 struct LightProperties {
     vec3 ambient = vec3(1.0, 0.97, 0.98) * 0.05f;
@@ -27,10 +27,21 @@ struct LightProperties {
 
     LightProperties() = default;
 
+    /**
+     * @param ambient The ambient color of the light.
+     * @param diffuse The diffuse color of the light.
+     * @param specular The specular color of the light.
+     */
     LightProperties(const vec3& ambient, const vec3& diffuse, const vec3& specular)
         : ambient(ambient), diffuse(diffuse), specular(specular) {
     }
 
+    /**
+     * @brief Multiplies all properties with the given factor.
+     *
+     * @param factor The factor to multiply with.
+     * @return The multiplied properties.
+     */
     LightProperties operator*(float factor) const {
         LightProperties result(*this);
         result.ambient *= factor;
@@ -45,20 +56,24 @@ const auto DefualtPointLightProperties = LightProperties(vec3(0.1f), vec3(1.0f),
 const auto DefualtSpotLightProperties = LightProperties(vec3(0.0f), vec3(1.0f), vec3(1.0f));
 
 /**
- * @brief TODO
+ * @brief Directional light for the renderer.
  */
 struct RendererDirectionalLight {
     vec3 direction;
 
     LightProperties properties;
 
+    /*
+     * @param direction The direction of the light.
+     * @param properties The properties of the light.
+     */
     RendererDirectionalLight(const vec3& direction, const LightProperties& properties)
         : direction(direction), properties(properties) {
     }
 };
 
 /**
- * @brief TODO
+ * @brief Point light for the renderer.
  */
 struct RendererPointLight {
     vec3 position;
@@ -66,13 +81,18 @@ struct RendererPointLight {
     LightProperties properties;
     LightAttenuation attenuation;
 
+    /*
+     * @param position The position of the light.
+     * @param properties The properties of the light.
+     * @param attenuation The attenuation of the light.
+     */
     RendererPointLight(const vec3& position, const LightProperties& properties, const LightAttenuation& attenuation)
         : position(position), properties(properties), attenuation(attenuation) {
     }
 };
 
 /**
- * @brief TODO
+ * @brief Spot light for the renderer.
  */
 struct RendererSpotLight {
     vec3 position;
@@ -84,6 +104,14 @@ struct RendererSpotLight {
     LightProperties properties;
     LightAttenuation attenuation;
 
+    /*
+     * @param position The position of the light.
+     * @param direction The direction of the light.
+     * @param innerCutoff The inner cutoff of the light.
+     * @param outerCutoff The outer cutoff of the light.
+     * @param properties The properties of the light.
+     * @param attenuation The attenuation of the light.
+     */
     RendererSpotLight(const vec3& position, const vec3& direction, float innerCutoff, float outerCutoff, const LightProperties& properties, const LightAttenuation& attenuation)
         : position(position), direction(direction), innerCutoff(innerCutoff), outerCutoff(outerCutoff), properties(properties), attenuation(attenuation) {
     }

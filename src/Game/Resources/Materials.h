@@ -5,7 +5,7 @@
 namespace labeeri {
 
 /**
- * @brief TODO
+ * @brief Water-like material resource.
  */
 class WaterMaterial : public ShadedMaterialResource {
 public:
@@ -13,9 +13,6 @@ public:
     float m_displacementStrength = 0.1f;
     float m_timeMultiplier = 0.015625f;
 
-    /**
-     * @brief TODO
-     */
     explicit WaterMaterial() : ShadedMaterialResource(Resources<ShaderResource>::Get("resources/labeeri/shaders/water")) {
         m_diffuse = vec3(0.07f, 0.10f, 0.14f);
         m_specular = vec3(0.5f);
@@ -26,13 +23,10 @@ public:
 };
 
 /**
- * @brief TODO
+ * @brief Flare material resource. Uses a videa texture.
  */
 class FlareMaterial : public MaterialResource {
 public:
-    /**
-     * @brief TODO
-     */
     explicit FlareMaterial() : MaterialResource(Resources<ShaderResource>::Get("resources/labeeri/shaders/videotexture")) {
     }
 

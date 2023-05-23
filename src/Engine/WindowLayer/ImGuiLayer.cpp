@@ -88,7 +88,7 @@ void ImGuiLayer::setupImGui() {
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(dynamic_cast<GLFWWindow*>(LAB_WINDOW)->windowObject(), true);
-    ImGui_ImplOpenGL3_Init(GLSL_VERSION);
+    ImGui_ImplOpenGL3_Init(GL_VERSION.glsl);
 
     LAB_LOG_RENDERAPI_ERROR();
 }

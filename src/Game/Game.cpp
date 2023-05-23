@@ -5,9 +5,6 @@
 
 namespace labeeri {
 
-Game::Game() {
-}
-
 void Game::setup() {
     auto scene = loadLabyrinthScene();
 

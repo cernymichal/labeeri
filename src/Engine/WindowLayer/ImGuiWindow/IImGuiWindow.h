@@ -3,24 +3,26 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief ImGui window interface.
  */
 class IImGuiWindow {
 public:
     virtual ~IImGuiWindow() = default;
 
     /**
-     * @brief TODO
+     * @return The name of the window.
      */
     virtual const std::string& name() const = 0;
 
     /**
-     * @brief TODO
+     * @brief Draws the window.
+     *
+     * @return True if the window is open, false if it should be closed.
      */
     virtual bool draw() = 0;
 
     /**
-     * @brief TODO
+     * @brief Compares two windows by their name.
      */
     bool operator==(const IImGuiWindow& other) const {
         return name() == other.name();

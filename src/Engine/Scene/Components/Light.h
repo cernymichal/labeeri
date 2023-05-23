@@ -4,6 +4,9 @@
 
 namespace labeeri::Engine {
 
+/**
+ * @brief The type of a light component.
+ */
 enum class LightType {
     Directional,
     Point,
@@ -11,7 +14,7 @@ enum class LightType {
 };
 
 /**
- * @brief TODO
+ * @brief Light component.
  */
 class Light {
 public:
@@ -22,30 +25,53 @@ public:
     float m_outerCutoff;
     float m_intensity = 1.0;
 
+    /**
+     * @param type Type of the light.
+     * @param properties Properties of the light.
+     * @param attenuation Attenuation of the light.
+     * @param innerCutoff Inner cutoff of the light.
+     * @param outerCutoff Outer cutoff of the light.
+     */
     explicit Light(LightType type = LightType::Point, const LightProperties& properties = LightProperties(), const LightAttenuation& attenuation = LightAttenuation(), float innerCutoff = 0.82f, float outerCutoff = 0.91f)
         : m_type(type), m_properties(properties), m_attenuation(attenuation), m_innerCutoff(innerCutoff), m_outerCutoff(outerCutoff) {
     }
 
+    /**
+     * @return The scaled properties of the light by its intensity.
+     */
     LightProperties scaledProperties() const {
         return m_properties * m_intensity;
     }
 
     /**
-     * @brief TODO
+     * @brief Creates a new directional light component.
+     *
+     * @param properties Properties of the light.
+     * @return The created light component.
      */
     static Light Directional(const LightProperties& properties = DefualtDirectionalLightProperties) {
         return Light(LightType::Directional, properties);
     }
 
     /**
-     * @brief TODO
+     * @brief Creates a new point light component.
+     *
+     * @param properties Properties of the light.
+     * @param attenuation Attenuation of the light.
+     * @return The created light component.
      */
     static Light Point(const LightProperties& properties = DefualtPointLightProperties, const LightAttenuation& attenuation = LightAttenuation()) {
         return Light(LightType::Point, properties, attenuation);
     }
 
     /**
-     * @brief TODO
+     * @brief Creates a new spot light component.
+     *
+     * @param properties Properties of the light.
+     * @param attenuation Attenuation of the light.
+     * @param innerCutoff Inner cutoff of the light.
+     * @param outerCutoff Outer cutoff of the light.
+     * @return The created light component.
      */
     static Light Spot(const LightProperties& properties = DefualtSpotLightProperties, const LightAttenuation& attenuation = LightAttenuation(), float innerCutoff = 0.91f, float outerCutoff = 0.82f) {
         return Light(LightType::Spot, properties, attenuation, innerCutoff, outerCutoff);

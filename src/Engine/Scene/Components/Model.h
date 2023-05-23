@@ -5,14 +5,14 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Model component. Only hold a reference to a model resource.
  */
 class Model {
 public:
     Ref<ModelResource> m_ref;
 
     /**
-     * @brief TODO
+     * @return The model resource.
      */
     Ref<ModelResource>& operator*() {
         return m_ref;

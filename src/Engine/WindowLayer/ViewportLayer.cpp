@@ -12,7 +12,7 @@ namespace labeeri::Engine {
 ViewportLayer::ViewportLayer() {
     LAB_LOGH2("ViewportLayer::ViewportLayer()");
 
-    m_size = LAB_WINDOW->m_frameBufferSize();
+    m_size = LAB_WINDOW->frameSize();
     updateViewFramebuffer();
 }
 

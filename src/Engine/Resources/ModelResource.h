@@ -6,7 +6,7 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief A shared model resource. Pair of a material and a mesh.
  */
 class ModelResource {
 public:
@@ -14,7 +14,8 @@ public:
     Ref<MeshResource> m_mesh;
 
     /**
-     * @brief TODO
+     * @param material The material of the model.
+     * @param mesh The mesh of the model.
      */
     ModelResource(const Ref<MaterialResource>& material, const Ref<MeshResource>& mesh) : m_material(material), m_mesh(mesh) {
     }

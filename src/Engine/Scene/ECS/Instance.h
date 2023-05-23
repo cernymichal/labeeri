@@ -7,7 +7,7 @@
 namespace labeeri::Engine::ECS {
 
 /**
- * @brief TODO
+ * @brief An ECS system instance.
  */
 class Instance {
 public:
@@ -16,7 +16,7 @@ public:
     std::unique_ptr<ECS::SystemManager> m_systemManager;
 
     /**
-     * @brief TODO
+     * @brief Creates all the ECS managers.
      */
     Instance() {
         m_entityManager = std::make_unique<ECS::EntityManager>();
@@ -25,7 +25,9 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Add a new component to the ECS.
+     *
+     * @tparam T The type of the component.
      */
     template <typename T>
     void registerComponent() {
@@ -33,7 +35,8 @@ public:
     }
 
     /**
-     * @brief TODO
+     *  @tparam T The type of the component.
+     * @return The id of the component.
      */
     template <typename T>
     ComponentType getComponentType() {
@@ -41,17 +44,23 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Adds a new system to the ECS.
+     *
+     * @tparam T The type of the system.
+     * @return A pointer to the system.
      */
-    template <typename T>
-    std::shared_ptr<T> registerSystem() {
-        auto system = m_systemManager->registerSystem<T>();
+    template <typename T, typename... Args>
+    std::shared_ptr<T> registerSystem(Args... args) {
+        auto system = m_systemManager->registerSystem<T>(std::forward<Args>(args)...);
         setSystemSignature<T>(system->signature(*this));
         return system;
     }
 
     /**
-     * @brief TODO
+     * @brief Sets the component signature of a system.
+     *
+     * @tparam T The type of the system.
+     * @param signature The component signature.
      */
     template <typename T>
     void setSystemSignature(ComponentSignature signature) {

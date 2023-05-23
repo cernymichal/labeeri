@@ -5,7 +5,10 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Component describin a camera. Entity with this component is used as the viewport camera.
+ * 
+ * Far plane at infinity is supported.
+ * Uses reversed-Z for depth buffer.
  */
 class Camera {
 public:
@@ -19,7 +22,10 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Calculates a view matrix for the camera and the passed transforms location.
+     * 
+     * @param transform Transform of the camera.
+     * @return The calculated view matrix.
      */
     mat4 viewMatrix(const Transform& transform) const {
         vec3 cameraPosition = transform.worldPosition();
@@ -29,7 +35,10 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Calculates a projection matrix for the camera and the passed viewport size.
+     * 
+     * @param viewportSize Size of the viewport in pixels.
+     * @return The calculated projection matrix.
      */
     mat4 projectionMatrix(uvec2 viewportSize) const {
         float aspectRatio = (float)viewportSize.x / (float)viewportSize.y;

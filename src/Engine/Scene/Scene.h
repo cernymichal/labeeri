@@ -13,40 +13,47 @@ class ViewportLayer;
 class Entity;
 
 /**
- * @brief TODO
+ * @brief Hold all data for a scene. (ECS, systems, scripts, ...)
  */
 class Scene : IEventReceiver {
 public:
     RenderSceneParameters m_renderParameters;
 
     /**
-     * @brief TODO
+     * @brief Create a new scene.
+     *
+     * Instantiates ECS.
      */
     Scene();
 
     /**
-     * @brief TODO
+     * @return The ECS instance.
      */
     const std::shared_ptr<ECS::Instance>& ecs() const {
         return m_ecs;
     }
 
     /**
-     * @brief TODO
+     * @return The current scene time.
      */
     double time() const {
         return m_time;
     }
 
     /**
-     * @brief TODO
+     * &return The cameras in the scene.
      */
     const std::set<EntityId>& cameras() const {
         return m_systems.camera->entities();
     }
 
     /**
-     * @brief TODO
+     * @brief Add a new script to the scene.
+     *
+     * @tparam T The type of the script.
+     * @tparam Args The types of the arguments to pass to the constructor.
+     * @param args The arguments to pass to the constructor.
+     * @return The created script.
      */
     template <typename T, typename... Args>
     T* addScript(Args&&... args) {

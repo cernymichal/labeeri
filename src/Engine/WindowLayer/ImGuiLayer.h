@@ -8,28 +8,28 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Handles all ImGui windows.
  */
 class ImGuiLayer : public IWindowLayer {
 public:
     /**
-     * @brief TODO
+     * @brief Initializes ImGui.
      */
     ImGuiLayer();
 
     /**
-     * @brief TODO
+     * @brief Disposes of the ImGui context.
      */
     virtual ~ImGuiLayer() override;
 
     /**
-     * @brief TODO
+     * @brief Adds a window to the layer if it is not already added.
+     *
+     * @param window The window to add.
+     * @return IImGuiWindow* The window that was added.
      */
     IImGuiWindow* addWindow(std::unique_ptr<IImGuiWindow>&& window);
 
-    /**
-     * @brief TODO
-     */
     virtual void onEvent(IEvent& e) override;
 
 private:

@@ -5,7 +5,7 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief An event describing a window resize.
  */
 class WindowResizeEvent : public IEvent {
 public:
@@ -20,7 +20,7 @@ public:
 };
 
 /**
- * @brief TODO
+ * @brief An event sent out when the window is minimized (iconified).
  */
 class WindowMinimizeEvent : public IEvent {
 public:
@@ -35,7 +35,7 @@ public:
 };
 
 /**
- * @brief TODO
+ * @brief An event signaling that a new frame should be rendered.
  */
 class ApplicationRenderEvent : public IEvent {
 public:
@@ -45,7 +45,7 @@ public:
 };
 
 /**
- * @brief TODO
+ * @brief Update event distributed once per frame.
  */
 class UpdateEvent : public IEvent {
 public:
@@ -60,7 +60,7 @@ public:
 };
 
 /**
- * @brief TODO
+ * @brief Fixed update event is distributed a a fix rate of 50Hz. (1 / FIXED_UPDATE_INTERVAL)
  */
 class FixedUpdateEvent : public IEvent {
 public:
@@ -72,7 +72,7 @@ public:
 class Scene;
 
 /**
- * @brief TODO
+ * @brief An event signaling that the current scene has been switched.
  */
 class SceneChangeEvent : public IEvent {
 public:

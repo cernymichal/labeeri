@@ -7,19 +7,19 @@ struct GLFWwindow;
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief GLFW window abstraction.
  */
 class GLFWWindow : public IWindow {
 public:
     /**
-     * @brief TODO
+     * @brief Initializes the GLFW window.
      */
     GLFWWindow();
 
     virtual ~GLFWWindow() override;
 
     /**
-     * @brief TODO
+     * @return The GLFW window object.
      */
     GLFWwindow* windowObject() const {
         return m_window;
@@ -27,7 +27,7 @@ public:
 
     virtual double currentTime() const override;
 
-    virtual uvec2 m_frameBufferSize() const override {
+    virtual uvec2 frameSize() const override {
         return s_frameBufferSize;
     }
 

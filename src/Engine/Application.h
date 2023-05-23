@@ -16,12 +16,14 @@ enum class ApplicationFocus : uint8_t {
 };
 
 /**
- * @brief TODO
+ * @brief Singleton class that manages the event system and window layers.
  */
 class Application {
 public:
     /**
-     * @brief TODO
+     * @brief Get a reference to the singleton instance, creates one if it doesn't exist.
+     *
+     * @return A reference to the singleton instance.
      */
     static Application& Instance() {
         static Application instance;
@@ -33,72 +35,78 @@ public:
     Application& operator=(const Application&) = delete;
 
     /**
-     * @brief TODO
+     * @brief Creates all the window layers. Needs to be called!
      */
     void initialize();
 
     /**
-     * @brief TODO
+     * @brief Enter the main loop. Queries window events and calls the window layers.
      */
     void run();
 
     /**
-     * @brief TODO
+     * @brief Creates and propagates a new event through the window layers.
+     *
+     * @param e The event to be emitted.
      */
     void emitEvent(IEvent& e) const;
 
     /**
-     * @brief TODO
+     * @brief Renders the window layers back to front and swaps the buffers.
+     *
+     * @param e The event to be emitted.
      */
     void emitEvent(ApplicationRenderEvent& e);
 
     /**
-     * @brief TODO
+     * @return A reference to the viewport camera entity.
      */
     Entity& camera() const {
         return m_viewportLayer->m_camera;
     }
 
     /**
-     * @brief TODO
+     * @return The current scene.
      */
     const Ref<Scene>& scene() const {
         return m_sceneLayer->scene();
     }
 
     /**
-     * @brief TODO
+     * @brief Sets a new scene. Needs to be called so that the ECS system can be updated.
+     *
+     * @param scene The new scene.
      */
     void setScene(const Ref<Scene>& scene) const {
         return m_sceneLayer->setScene(scene);
     }
 
     /**
-     * @brief TODO
+     * @return The application's ImGuiLayer.
      */
     ImGuiLayer* imGuiLayer() const {
         return m_imGuiLayer;
     }
 
     /**
-     * @brief TODO
+     * @return The application's focus state.
      */
     ApplicationFocus focus() const {
         return m_focus;
     }
 
     /**
-     * @brief TODO
+     * @brief Focuses the UI overlay.
      */
     void focusUI();
 
     /**
-     * @brief TODO
+     * @brief Focuses the viewport.
      */
     void focusViewport();
 
     /**
-     * @brief TODO
+     * @return If the application was closed.
      */
     bool closed() const {
         return m_closed;
@@ -113,7 +121,7 @@ private:
     SceneLayer* m_sceneLayer = nullptr;
 
     /**
-     * @brief TODO
+     * @brief Construct a new Application object. The rendrerer and window abstractions are initialized here.
      */
     Application();
 

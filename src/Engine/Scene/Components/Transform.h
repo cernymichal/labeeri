@@ -5,18 +5,18 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Tranform component. (Position, rotation, scale)
  */
 class Transform {
 public:
     /**
-     * @brief TODO
+     * @param entity The entity this transform belongs to. (for hierarchy)
      */
     explicit Transform(Entity entity = NULL_ENTITY) : m_entity(entity) {
     }
 
     /**
-     * @brief TODO
+     * @param other The transform to move.
      */
     Transform(Transform&& other) noexcept
         : m_position(other.m_position), m_rotation(other.m_rotation), m_scale(other.m_scale), m_modelMatrix(other.m_modelMatrix), m_modelMatrixValid(other.m_modelMatrixValid), m_entity(other.m_entity), m_parent(other.m_parent), m_children(other.m_children), m_moved(other.m_moved) {
@@ -24,7 +24,7 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Destroy the transform and remove it from the hierarchy.
      */
     ~Transform() {
         if (m_moved)
@@ -43,7 +43,10 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Set the position and rotation from another transform.
+     *
+     * @param other The transform to copy.
+     * @return This transform.
      */
     Transform& operator=(const Transform& other) {
         if (this == &other)
@@ -55,7 +58,7 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @param other The transform to move.
      */
     Transform& operator=(Transform&& other) noexcept {
         if (this == &other)
@@ -67,7 +70,9 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Set a new model space position.
+     *
+     * @param position The new position.
      */
     void setPosition(const vec3& position) {
         m_position = position;
@@ -75,14 +80,18 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Move in model space.
+     *
+     * @param offset The offset to move.
      */
     void move(const vec3& offset) {
         setPosition(position() + offset);
     }
 
     /**
-     * @brief TODO
+     * @brief Set a new world space position.
+     *
+     * @param position The new position.
      */
     void setWorldPosition(const vec3& position) {
         if (!m_parent) {
@@ -96,14 +105,18 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Move in world space.
+     *
+     * @param offset The offset to move.
      */
     void moveWorld(const vec3& offset) {
         setWorldPosition(worldPosition() + offset);
     }
 
     /**
-     * @brief TODO
+     * @brief Set a new rotation.
+     *
+     * @param rotation The new rotation.
      */
     void setRotation(const quat& rotation) {
         m_rotation = rotation;
@@ -111,14 +124,18 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Rotate in model space.
+     *
+     * @param offset The offset to rotate.
      */
     void rotate(const quat& offset) {
         setRotation(offset * m_rotation);
     }
 
     /**
-     * @brief TODO
+     * @brief Set a model space scale.
+     *
+     * @param scale The new scale.
      */
     void setScale(const vec3& scale) {
         m_scale = scale;
@@ -126,14 +143,18 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Scale in model space.
+     *
+     * @param amount The amount to scale.
      */
     void scale(const vec3& amount) {
         setScale(m_scale * amount);
     }
 
     /**
-     * @brief TODO
+     * @brief Set a new parent.
+     *
+     * @param parent The new parent.
      */
     void setParent(Entity parent) {
         if (!m_parent && !parent)
@@ -153,49 +174,49 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @return The transform's parent.
      */
     Entity parent() const {
         return m_parent;
     }
 
     /**
-     * @brief TODO
+     * @return The transform's children.
      */
     const std::list<Entity>& children() const {
         return m_children;
     }
 
     /**
-     * @brief TODO
+     * @return Model space position.
      */
     vec3 position() const {
         return m_position;
     }
 
     /**
-     * @brief TODO
+     * @return World space position.
      */
     vec3 worldPosition() const {
         return vec3(modelMatrix() * vec4(0.0f, 0.0f, 0.0f, 1.0f));
     }
 
     /**
-     * @brief TODO
+     * @return Model space rotation.
      */
     quat rotation() const {
         return m_rotation;
     }
 
     /**
-     * @brief TODO
+     * @return Model space scale.
      */
     vec3 scale() const {
         return m_scale;
     }
 
     /**
-     * @brief TODO
+     * @return Calculated model matrix.
      */
     const mat4& modelMatrix() const {
         if (!modelMatrixValid())
@@ -205,22 +226,21 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @return Forward vector in world space.
      */
-
     vec3 forward() const {
         return glm::normalize(vec3(modelMatrix() * vec4(LAB_FORWARD, 0.0f)));
     }
 
     /**
-     * @brief TODO
+     * @return Up vector in world space.
      */
     vec3 up() const {
         return glm::normalize(vec3(modelMatrix() * vec4(LAB_UP, 0.0f)));
     }
 
     /**
-     * @brief TODO
+     * @return Right vector in world space.
      */
     vec3 right() const {
         return glm::normalize(vec3(modelMatrix() * vec4(LAB_RIGHT, 0.0f)));
@@ -241,7 +261,7 @@ private:
     bool m_moved = false;
 
     /**
-     * @brief TODO
+     * @brief Check whether the model matrix is valid.
      */
     bool modelMatrixValid() const {
         if (!m_parent)
@@ -255,7 +275,7 @@ private:
     }
 
     /**
-     * @brief TODO
+     * @brief Recalculate the model matrix.
      */
     void updateModelMatrix() const {
         mat4 localModelMatrix = mat4(1.0f);
@@ -281,7 +301,7 @@ private:
     }
 
     /**
-     * @brief TODO
+     * @brief Remove the current parent.
      */
     void removeParent() {
         if (!m_parent || !m_entity)

@@ -5,12 +5,13 @@
 namespace labeeri {
 
 /**
- * @brief TODO
+ * @brief Script moving the entity up and down in world space.
  */
 class FloatingMovement : public IScript {
 public:
     /**
-     * @brief TODO
+     * @param entity The entity to move.
+     * @param maxDelta The maximum delta to move the entity.
      */
     explicit FloatingMovement(Entity entity, float maxDelta = 1.0f)
         : IScript(entity), m_maxDelta(maxDelta) {
@@ -26,4 +27,4 @@ private:
     float m_maxDelta;
 };
 
-}  // namespace labeeri::Engine
+}  // namespace labeeri

@@ -7,7 +7,7 @@ namespace labeeri::Engine {
 namespace Scenes {
 
 /**
- * @brief TODO
+ * @brief Showcase scene.
  */
 Ref<Scene> showcase();
 

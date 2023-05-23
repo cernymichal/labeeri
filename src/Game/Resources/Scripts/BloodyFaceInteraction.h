@@ -5,7 +5,7 @@
 namespace labeeri {
 
 /**
- * @brief TODO
+ * @brief Entity script that lerps the material to a blood like color áfter click.
  */
 class BloodyFaceInteraction : public IScript {
 private:
@@ -17,9 +17,6 @@ private:
     };
 
 public:
-    /**
-     * @brief TODO
-     */
     explicit BloodyFaceInteraction(Entity entity)
         : IScript(entity) {
     }
@@ -44,7 +41,7 @@ protected:
         if (!m_started || (m_started && currentTime > m_startTime + m_duration))
             return;
 
-        auto factor = (currentTime - m_startTime) / m_duration;
+        auto factor = glm::smoothstep(0.0, 1.0, (currentTime - m_startTime) / m_duration);
         auto material = castRef<ShadedMaterialResource>(m_entity.getComponent<Model>()->m_ref->m_material);
         material->m_diffuse = glm::mix(m_originalMaterial.diffuse, m_targetMaterial.diffuse, factor);
         material->m_specular = glm::mix(m_originalMaterial.specular, m_targetMaterial.specular, factor);
@@ -57,7 +54,11 @@ private:
     double m_startTime = 0.0;
     double m_duration = 3.0;
 
-    MaterialSample m_originalMaterial;
+    MaterialSample m_originalMaterial = {
+        vec3(0.0f),
+        vec3(0.0f),
+        0.0f,
+        0.0f};
     MaterialSample m_targetMaterial = {
         vec3(0.39f, 0.05f, 0.09f),
         vec3(0.5f, 0.49f, 0.94f),

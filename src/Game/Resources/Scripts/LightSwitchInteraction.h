@@ -5,13 +5,10 @@
 namespace labeeri {
 
 /**
- * @brief TODO
+ * @brief Script for turning light on and off.
  */
 class LightSwitchInteraction : public IScript {
 public:
-    /**
-     * @brief TODO
-     */
     explicit LightSwitchInteraction(Entity entity)
         : IScript(entity) {
     }

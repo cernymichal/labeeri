@@ -7,19 +7,24 @@ namespace labeeri::Engine {
 class Entity;
 
 /**
- * @brief TODO
+ * @brief Physics system handeling RigidBody updates and collisions.
  */
 class PhysicsSystem : public ECS::ISystem {
 public:
     virtual ECS::ComponentSignature signature(const ECS::Instance& ecs) const override;
 
     /**
-     * @brief TODO
+     * @brief Update the RigidBody components and check for collisions.
+     *
+     * @param deltaTime The time since the last update.
      */
     void update(double deltaTime);
 
     /**
-     * @brief TODO
+     * @brief Check if the entity collides with any other entity.
+     *
+     * @param entity The entity to check for collisions.
+     * @return true If the entity collides with any other entity.
      */
     bool collides(Entity entity) const;
 };

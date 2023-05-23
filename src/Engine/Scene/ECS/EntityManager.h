@@ -7,12 +7,14 @@ namespace labeeri::Engine::ECS {
 class Entity;
 
 /**
- * @brief TODO
+ * @brief Manages the creation and destruction of entities.
  */
 class EntityManager {
 public:
     /**
-     * @brief TODO
+     * @brief Creates a new entity.
+     *
+     * @return The created entity.
      */
     EntityId createEntity() {
         assert(m_entityCount < MAX_ENTITIES && "Too many entities in existence.");
@@ -28,7 +30,9 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Destroys an entity.
+     *
+     * @param entity The entity to destroy.
      */
     void destroyEntity(EntityId entity) {
         assert(entity < MAX_ENTITIES && "Entity out of range.");
@@ -39,7 +43,10 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Gets the component signature of an entity.
+     *
+     * @param entity The entity.
+     * @return The signature of the entity's components.
      */
     const ComponentSignature& getSignature(EntityId entity) const {
         assert(entity < MAX_ENTITIES && "Entity out of range.");
@@ -48,7 +55,10 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Sets the component signature of an entity.
+     *
+     * @param entity The entity.
+     * @param signature The signature of the entity's components.
      */
     void setSignature(EntityId entity, ComponentSignature signature) {
         assert(entity < MAX_ENTITIES && "Entity out of range.");
@@ -57,7 +67,7 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @return The number of entities in existence.
      */
     uint32_t entityCount() const {
         return m_entityCount;

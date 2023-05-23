@@ -6,7 +6,7 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Mouse moved event.
  */
 class MouseMoveEvent : public IEvent {
 public:
@@ -23,7 +23,7 @@ public:
 };
 
 /**
- * @brief TODO
+ * @brief Scroll wheel event.
  */
 class MouseScrollEvent : public IEvent {
 public:
@@ -38,7 +38,7 @@ public:
 };
 
 /**
- * @brief TODO
+ * @brief General mouse button event.
  */
 class MouseButtonEvent : public IEvent {
 public:
@@ -55,7 +55,7 @@ protected:
 };
 
 /**
- * @brief TODO
+ * @brief Mouse button pressed event.
  */
 class MouseButtonPressEvent : public MouseButtonEvent {
 public:
@@ -67,7 +67,7 @@ public:
 };
 
 /**
- * @brief TODO
+ * @brief Mouse button released event.
  */
 class MouseButtonReleaseEvent : public MouseButtonEvent {
 public:

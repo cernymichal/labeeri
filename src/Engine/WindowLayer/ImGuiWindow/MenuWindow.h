@@ -5,13 +5,10 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief ImGui window for editing basic renderer settings and displaying other windows.
  */
 class MenuWindow : public IImGuiWindow {
 public:
-    /**
-     * @brief TODO
-     */
     MenuWindow();
 
     virtual const std::string& name() const override {

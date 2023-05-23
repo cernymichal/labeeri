@@ -5,12 +5,14 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Script that controls the player entity on a 2D plane, with sprint.
  */
 class PlayerController : public IScript {
 public:
     /**
-     * @brief TODO
+     * @param player The player entity.
+     * @param speed The speed to move the player.
+     * @param mouseSensitivity The mouse sensitivity to rotate the player.
      */
     explicit PlayerController(Entity player, float speed = 2.0f, double mouseSensitivity = 0.002)
         : IScript(player), m_speed(speed), m_mouseSensitivity(mouseSensitivity) {

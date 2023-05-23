@@ -121,8 +121,8 @@ void GLFWWindow::setupGLFW() {
         throw std::runtime_error("glfwInit failed");
 
     // GL version hints
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GL_VERSION_MAJOR);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION_MINOR);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GL_VERSION.major);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION.minor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 

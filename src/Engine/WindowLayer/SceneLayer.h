@@ -6,19 +6,24 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Window layer holding the current scene.
  */
 class SceneLayer : public IWindowLayer {
 public:
+    /**
+     * @return The current scene.
+     */
     const Ref<Scene>& scene() const {
         return m_scene;
     }
 
+    /**
+     * @brief Switch scenes.
+     *
+     * @param scene The new scene.
+     */
     void setScene(const Ref<Scene>& scene);
 
-    /**
-     * @brief TODO
-     */
     virtual void onEvent(IEvent& e) override;
 
 private:

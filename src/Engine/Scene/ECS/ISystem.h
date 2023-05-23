@@ -8,26 +8,28 @@ class SystemManager;
 class Instance;
 
 /**
- * @brief TODO
+ * @brief The ECS system interface.
  */
 class ISystem {
 public:
     virtual ~ISystem() = default;
 
     /**
-     * @brief TODO
+     * @param ecs The ECS instance the system belongs into.
+     * @return The component signature of the system.
      */
     virtual ComponentSignature signature(const ECS::Instance& ecs) const = 0;
 
     /**
-     * @brief TODO
+     * @param ecs The ECS instance the system belongs into.
+     * @return The component signature of the system.
      */
     ComponentSignature signature(const Ref<ECS::Instance>& ecs) const {
         return signature(*ecs);
     };
 
     /**
-     * @brief TODO
+     * @return The entities in the system.
      */
     const std::set<EntityId>& entities() const {
         return m_entities;

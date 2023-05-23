@@ -4,6 +4,9 @@
 
 namespace labeeri::Engine {
 
+/**
+ * @brief Buffer types of the framebuffer attachments.
+ */
 enum class FramebufferAttachment {
     Color,
     Depth,
@@ -11,7 +14,7 @@ enum class FramebufferAttachment {
 };
 
 /**
- * @brief TODO
+ * @brief Describes a framebuffer object in the renderer.
  */
 class Framebuffer {
 public:
@@ -19,7 +22,8 @@ public:
     std::map<FramebufferAttachment, Ref<TextureResource>> m_attachments;
 
     /**
-     * @brief TODO
+     * @param size The dimensions of the framebuffer.
+     * @param attachments The attachments of the framebuffer.
      */
     Framebuffer(LAB_GL_HANDLE framebufferObject, uvec2 size, std::map<FramebufferAttachment, Ref<TextureResource>>&& attachments)
         : m_size(size), m_attachments(attachments), m_framebufferObject(framebufferObject) {
@@ -28,7 +32,7 @@ public:
     Framebuffer(const TextureResource&) = delete;
 
     /**
-     * @brief TODO
+     * @param other The framebuffer to move.
      */
     Framebuffer(Framebuffer&& other) noexcept
         : m_size(other.m_size), m_attachments(std::move(other.m_attachments)), m_framebufferObject(other.m_framebufferObject) {
@@ -37,6 +41,9 @@ public:
 
     Framebuffer& operator=(const TextureResource&) = delete;
 
+    /**
+     * @param other The framebuffer to move.
+     */
     Framebuffer& operator=(Framebuffer&& other) noexcept {
         this->~Framebuffer();
         new (this) Framebuffer(std::move(other));
@@ -44,10 +51,15 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Destroys the framebuffer.
+     *
+     * Calls deleteFramebuffer on the renderer.
      */
     ~Framebuffer();
 
+    /**
+     * @brief The framebuffer handle.
+     */
     operator LAB_GL_HANDLE() const {
         return m_framebufferObject;
     }

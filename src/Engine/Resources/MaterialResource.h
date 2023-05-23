@@ -6,36 +6,33 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief A shared material resource.
  */
 class MaterialResource {
 public:
     Ref<ShaderResource> m_shader;
 
     /**
-     * @brief TODO
+     * @param shader The shader to use for the material.
      */
     explicit MaterialResource(const Ref<ShaderResource>& shader) : m_shader(shader) {
     }
 
-    /**
-     * @brief TODO
-     */
     virtual ~MaterialResource() = default;
 
     /**
-     * @brief TODO
+     * @return Whether the material is opaque or not.
      */
     virtual bool opaque() const = 0;
 
     /**
-     * @brief TODO
+     * @brief Bind the materials uniforms.
      */
     virtual void bindUniforms() const = 0;
 };
 
 /**
- * @brief TODO
+ * @brief Non-shaded flat material.
  */
 class FlatMaterialResource : public MaterialResource {
 public:
@@ -44,14 +41,16 @@ public:
     float m_alpha = 1.0f;
 
     /**
-     * @brief TODO
+     * @param shader The shader to use for the material.
+     * @param color The color of the material.
      */
     FlatMaterialResource(const Ref<ShaderResource>& shader, const vec3& color)
         : MaterialResource(shader), m_color(color) {
     }
 
     /**
-     * @brief TODO
+     * @param shader The shader to use for the material.
+     * @param texture The texture of the material.
      */
     FlatMaterialResource(const Ref<ShaderResource>& shader, const Ref<TextureResource>& texture)
         : MaterialResource(shader), m_texture(texture) {
@@ -65,7 +64,7 @@ public:
 };
 
 /**
- * @brief TODO
+ * @brief Phong-shaded material.
  */
 class ShadedMaterialResource : public MaterialResource {
 public:
@@ -80,13 +79,14 @@ public:
     float m_alpha = 1.0f;
 
     /**
-     * @brief TODO
+     * @param shader The shader to use for the material.
      */
     explicit ShadedMaterialResource(const Ref<ShaderResource>& shader) : MaterialResource(shader) {
     }
 
     /**
-     * @brief TODO
+     * @param shader The shader to use for the material.
+     * @param diffuse The diffuse color of the material.
      */
     ShadedMaterialResource(const Ref<ShaderResource>& shader, vec3 diffuse) : ShadedMaterialResource(shader) {
         m_diffuse = diffuse;

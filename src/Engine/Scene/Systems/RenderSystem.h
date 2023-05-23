@@ -5,24 +5,24 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief A system holding all renderable entities in the scene for rendering.
  */
 class RenderSystem : public ECS::ISystem {
 public:
     virtual ECS::ComponentSignature signature(const ECS::Instance& ecs) const override;
 
     /**
-     * @brief TODO
+     * @brief Draw all opaque objects
      */
     void drawOpaque() const;
 
     /**
-     * @brief TODO
+     * @brief Draw all transparent objects
      */
     void drawTransparent() const;
 
     /**
-     * @brief TODO
+     * @brief Draw integer ids of all objects
      */
     void drawIds() const;
 };

@@ -4,6 +4,9 @@
 
 namespace labeeri::Engine {
 
+/**
+ * @brief Buffer types to be cleared.
+ */
 enum class ClearBuffer {
     Color = LAB_BIT(0),
     Depth = LAB_BIT(1),
@@ -20,6 +23,9 @@ struct FogParameters {
     float density = 0.02f;
 };
 
+/**
+ * @brief Scenes parameters for rendering.
+ */
 struct RenderSceneParameters {
     FogParameters fog;
     PostprocessingParameters postprocessing;
@@ -66,11 +72,17 @@ enum class TextureDataType : uint8_t {
     Float32
 };
 
+/**
+ * @brief Texture magnification / minification filter.
+ */
 enum class TextureFilter : uint8_t {
     Nearest,
     Linear
 };
 
+/**
+ * @brief Texture edge wrapping mode.
+ */
 enum class TextureWrap : uint8_t {
     ClampToEdge,
     Repeat,

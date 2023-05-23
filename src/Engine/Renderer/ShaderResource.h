@@ -3,12 +3,12 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief A shadered shader resource.
  */
 class ShaderResource {
 public:
     /**
-     * @brief TODO
+     * @param program The OpenGL handle to the shader program.
      */
     explicit ShaderResource(LAB_GL_HANDLE program) : m_program(program) {
     }
@@ -16,7 +16,7 @@ public:
     ShaderResource(const ShaderResource&) = delete;
 
     /**
-     * @brief TODO
+     * @param other The shader resource to move.
      */
     ShaderResource(ShaderResource&& other) noexcept : m_program(other.m_program), m_uniforms(std::move(other.m_uniforms)) {
         other.m_program = 0;
@@ -24,6 +24,9 @@ public:
 
     ShaderResource& operator=(const ShaderResource&) = delete;
 
+    /**
+     * @param other The shader resource to move.
+     */
     ShaderResource& operator=(ShaderResource&& other) noexcept {
         if (this == &other)
             return *this;
@@ -34,17 +37,20 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Destroy the shader resource. Calls deleteShader on the renderer.
      */
     ~ShaderResource();
 
     /**
-     * @brief TODO
+     * @brief Get the location of a uniform in the shader.
+     *
+     * @param name The name of the uniform.
+     * @return The location of the uniform.
      */
     LAB_GL_INT getUniformLocation(const std::string& name);
 
     /**
-     * @brief TODO
+     * @brief The shader program handle.
      */
     operator LAB_GL_HANDLE() const {
         return m_program;

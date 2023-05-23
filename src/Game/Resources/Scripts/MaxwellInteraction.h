@@ -5,13 +5,10 @@
 namespace labeeri {
 
 /**
- * @brief TODO
+ * @brief Script to rotate Maxwell when clicked.
  */
 class MaxwellInteraction : public IScript {
 public:
-    /**
-     * @brief TODO
-     */
     explicit MaxwellInteraction(Entity entity)
         : IScript(entity) {
     }

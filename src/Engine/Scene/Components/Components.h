@@ -10,7 +10,11 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Registers all default components into the ECS system.
+ *
+ * (Camera, Collider, Light, Model, RigidBody, Transform)
+ *
+ * @param ecs The ECS instance to register the components into.
  */
 static void registerDefaultComponents(const Ref<ECS::Instance>& ecs) {
     ecs->m_componentManager->registerComponent<Camera>();

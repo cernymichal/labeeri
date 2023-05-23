@@ -12,9 +12,6 @@ namespace labeeri::Engine {
 #define EVENT_CLASS_CATEGORY(category) \
     virtual int categoryFlags() const override { return category; }
 
-/**
- * @brief TODO
- */
 enum class EventType : uint8_t {
     None,
     WindowResize,
@@ -32,9 +29,6 @@ enum class EventType : uint8_t {
     EntityClick
 };
 
-/**
- * @brief TODO
- */
 enum class EventCategory : int {
     None = 0,
     Application = LAB_BIT(0),
@@ -45,7 +39,7 @@ enum class EventCategory : int {
 };
 
 /**
- * @brief TODO
+ * @brief Event object interface.
  */
 class IEvent {
 public:
@@ -54,29 +48,34 @@ public:
     virtual ~IEvent() = default;
 
     /**
-     * @brief TODO
+     * @return The type of the event.
      */
     virtual EventType eventType() const = 0;
 
     /**
-     * @brief TODO
+     * @return The name of the event.
      */
     virtual const char* name() const = 0;
 
     /**
-     * @brief TODO
+     * @return The categories of the event.
      */
     virtual int categoryFlags() const = 0;
 
     /**
-     * @brief TODO
+     * @return If the event is in the given category.
      */
     bool isInCategory(EventCategory category) const {
         return categoryFlags() & static_cast<int>(category);
     }
 
     /**
-     * @brief TODO
+     * @brief Dispatches the handler if the event is of the given type.
+     *
+     * @tparam T The type of the event.
+     * @tparam F The type of the handler.
+     * @param handler The handler to dispatch.
+     * @return If the event was handled.
      */
     template <typename T, typename F>
     bool dispatch(const F& handler) {

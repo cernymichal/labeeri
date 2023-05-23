@@ -27,15 +27,17 @@ inline constexpr auto DEFAULT_MESH_DIRECTORY = "resources/engine/models";
 inline constexpr auto DEFAULT_TEXTURE_DIRECTORY = "resources/engine/textures";
 
 // GL 4.5 + GLSL 450
-inline constexpr auto GL_VERSION_MAJOR = 4;
-inline constexpr auto GL_VERSION_MINOR = 5;
-inline constexpr auto GLSL_VERSION = "#version 450";
+inline constexpr struct GlVersion {
+    int major = 4;
+    int minor = 5;
+    const char* glsl = "#version 450 core";
+} GL_VERSION;
 
 inline constexpr auto FIXED_UPDATE_INTERVAL = (1.0 / 50.0);  // 50 Hz
 
-inline constexpr auto LAB_FORWARD = vec3(0.0f, 0.0f, -1.0f);
-inline constexpr auto LAB_UP = vec3(0.0f, 1.0f, 0.0f);
-inline constexpr auto LAB_RIGHT = vec3(1.0f, 0.0f, 0.0f);
+inline constexpr auto LAB_FORWARD = vec3(0.0f, 0.0f, -1.0f);  // Forward is -Z
+inline constexpr auto LAB_UP = vec3(0.0f, 1.0f, 0.0f);        // Up is +Y
+inline constexpr auto LAB_RIGHT = vec3(1.0f, 0.0f, 0.0f);     // Right is +X
 
 inline constexpr auto FALLBACK_COLOR = vec3(0.9, 0.0, 0.9);
 

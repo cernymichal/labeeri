@@ -5,12 +5,14 @@
 namespace labeeri::Engine::ECS {
 
 /**
- * @brief TODO
+ * @brief Manages all the components types and their arrays.
  */
 class ComponentManager {
 public:
     /**
-     * @brief TODO
+     * @brief Add a new component type to the manager.
+     *
+     * @tparam T The type of the component.
      */
     template <typename T>
     void registerComponent() {
@@ -24,7 +26,10 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Get the id of a component type.
+     *
+     * @tparam T The type of the component.
+     * @return ComponentType The id of the component type.
      */
     template <typename T>
     ComponentType getComponentType() const {
@@ -36,7 +41,12 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Add a component to an entity.
+     *
+     * @tparam T The type of the component.
+     * @param entity The entity to add the component to.
+     * @param component The component to add. (is moved inside)
+     * @return T* A pointer to the component.
      */
     template <typename T>
     T* addComponent(EntityId entity, T&& component) {
@@ -44,7 +54,10 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Remove a component from an entity.
+     *
+     * @tparam T The type of the component.
+     * @param entity The entity to remove the component from.
      */
     template <typename T>
     void removeComponent(EntityId entity) {
@@ -52,7 +65,13 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Get a component from an entity.
+     * 
+     * Return nullptr if the entity doesn't have the component.
+     * 
+     * @tparam T The type of the component.
+     * @param entity The entity to get the component from.
+     * @return T* A pointer to the component.
      */
     template <typename T>
     T* getComponent(EntityId entity) const {
@@ -60,7 +79,9 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Called when an entity is destroyed. Removes the entity from all component arrays.
+     * 
+     * @param entity The entity that was destroyed.
      */
     void entityDestroyed(EntityId entity) {
         for (const auto& array : m_componentArrays | std::views::values)

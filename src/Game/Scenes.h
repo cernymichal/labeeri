@@ -5,13 +5,12 @@
 namespace labeeri {
 
 /**
- * @brief TODO
+ * @brief Testing scene.
  */
 Ref<Engine::Scene> testScene();
 
-
 /**
- * @brief TODO
+ * @brief Labirynth scene.
  */
 Ref<Engine::Scene> loadLabyrinthScene();
 

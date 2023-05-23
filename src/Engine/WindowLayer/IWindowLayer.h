@@ -5,12 +5,12 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Window layer interface.
  */
 class IWindowLayer : public IEventReceiver {
 public:
     /**
-     * @brief TODO
+     * @return Whether the window layer is enabled. (is drawn)
      */
     bool enabled() const {
         return m_enabled;

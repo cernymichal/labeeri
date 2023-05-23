@@ -7,7 +7,7 @@ namespace labeeri::Engine {
 class Entity;
 
 /**
- * @brief TODO
+ * @brief A system holding all cameras in the scene.
  */
 class CameraSystem : public ECS::ISystem {
 public:

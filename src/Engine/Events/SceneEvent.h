@@ -6,7 +6,7 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Entity clicked event.
  */
 class EntityClickEvent : public IEvent {
 public:

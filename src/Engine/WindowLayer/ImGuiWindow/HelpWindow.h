@@ -5,7 +5,7 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief ImGui window for displaying help information.
  */
 class HelpWindow : public IImGuiWindow {
 public:

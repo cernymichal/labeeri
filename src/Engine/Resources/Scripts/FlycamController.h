@@ -5,12 +5,14 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Script for controlling a flying entity.
  */
 class FlycamController : public IScript {
 public:
     /**
-     * @brief TODO
+     * @param entity The entity to control.
+     * @param speed The speed to move the entity.
+     * @param mouseSensitivity The mouse sensitivity to rotate the entity.
      */
     explicit FlycamController(Entity entity, float speed = 2.0f, double mouseSensitivity = 0.002)
         : IScript(entity), m_speed(speed), m_mouseSensitivity(mouseSensitivity) {

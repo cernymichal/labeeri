@@ -5,6 +5,9 @@ inline std::shared_ptr<T> copyShared(const std::shared_ptr<T>& ptr) {
     return std::make_shared<T>(*ptr);
 }
 
+/*
+ * @brief A shared object.
+ */
 template <typename T>
 using Ref = std::shared_ptr<T>;
 
@@ -28,6 +31,9 @@ inline Ref<T> cloneAs(const Ref<S>& ref) {
     return clone(castRef<T>(ref));
 }
 
+/*
+ * @brief A single owner object.
+ */
 template <typename T>
 using Scoped = std::unique_ptr<T>;
 

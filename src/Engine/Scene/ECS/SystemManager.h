@@ -5,26 +5,34 @@
 namespace labeeri::Engine::ECS {
 
 /**
- * @brief TODO
+ * @brief ECS systems manager.
  */
 class SystemManager {
 public:
     /**
-     * @brief TODO
+     * @brief Add a system to the manager.
+     *
+     * @tparam T The type of the system.
+     * @tparam Args The types of the arguments to pass to the system constructor.
+     * @param args The arguments to pass to the system constructor.
+     * @return The added system.
      */
-    template <typename T>
-    std::shared_ptr<T> registerSystem() {
+    template <typename T, typename... Args>
+    std::shared_ptr<T> registerSystem(Args... args) {
         const char* typeName = typeid(T).name();
 
         assert(m_systems.find(typeName) == m_systems.end() && "Registering system more than once.");
 
-        m_systems[typeName] = std::make_shared<T>();
+        m_systems[typeName] = std::make_shared<T>(std::forward<Args>(args)...);
 
         return std::static_pointer_cast<T>(m_systems[typeName]);
     }
 
     /**
-     * @brief TODO
+     * @brief Set a component signature for a system.
+     *
+     * @tparam T The type of the system.
+     * @param signature The signature to set.
      */
     template <typename T>
     void setSignature(ComponentSignature signature) {
@@ -36,7 +44,9 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Called when an entity is destroyed. Erases it from all systems.
+     *
+     * @param entity The destroyed entity.
      */
     void entityDestroyed(EntityId entity) {
         for (const auto& system : m_systems | std::views::values)
@@ -44,7 +54,10 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Called when an entity's signature changes. Updates all systems.
+     *
+     * @param entity The entity whose signature changed.
+     * @param entitySignature The new signature of the entity.
      */
     void entitySignatureChanged(EntityId entity, ComponentSignature entitySignature) {
         for (const auto& element : m_systems) {

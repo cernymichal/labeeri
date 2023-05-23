@@ -6,7 +6,7 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief General keyboard event.
  */
 class KeyboardEvent : public IEvent {
 public:
@@ -23,7 +23,7 @@ protected:
 };
 
 /**
- * @brief TODO
+ * @brief Keyboard key pressed event.
  */
 class KeyboardPressEvent : public KeyboardEvent {
 public:
@@ -35,7 +35,7 @@ public:
 };
 
 /**
- * @brief TODO
+ * @brief Keyboard key released event.
  */
 class KeyboardReleaseEvent : public KeyboardEvent {
 public:
@@ -47,7 +47,7 @@ public:
 };
 
 /**
- * @brief TODO
+ * @brief Keyboard key repeat event.
  */
 class KeyboardRepeatEvent : public KeyboardEvent {
 public:

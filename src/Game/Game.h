@@ -3,17 +3,12 @@
 namespace labeeri {
 
 /**
- * @brief TODO
+ * @brief The main game class.
  */
 class Game {
 public:
     /**
-     * @brief TODO
-     */
-    Game();
-
-    /**
-     * @brief TODO
+     * @brief Loads the game scene.
      */
     void setup();
 };

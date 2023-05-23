@@ -5,53 +5,64 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief Represents an entity in the ECS system.
+ *
+ * Only a wrapper around it's id.
  */
 class Entity {
 public:
     EntityId m_id;
 
     /**
-     * @brief TODO
+     * @brief Construct a new Entity object.
+     *
+     * Doesn't create an entity in the ECS system!
+     *
+     * @param id The id of the entity.
      */
     Entity(EntityId id = NULL_ENTITY) : m_id(id) {
     }
 
     /**
-     * @brief TODO
+     * @brief Casts the entity to it's id.
      */
     operator EntityId() const {
         return m_id;
     }
 
     /**
-     * @brief TODO
+     * @brief Returns true if the entity is valid in the ECS system.
      */
     operator bool() const {
         return m_id != NULL_ENTITY && m_id <= MAX_ENTITIES;
     }
 
     /**
-     * @brief TODO
+     * @brief Returns true if the entity is invalid in the ECS system.
      */
     bool operator!() const {
         return !static_cast<bool>(*this);
     }
 
     /**
-     * @brief TODO
+     * @brief Compares two entity ids.
      */
     bool operator==(const Entity& other) const {
         return m_id == other.m_id;
     }
 
     /**
-     * @brief TODO
+     * @brief Creates a new entity in the ECS system.
+     *
+     * @param ecs The ECS instance to create the entity in.
+     * @return The created entity.
      */
     static Entity Create(const Ref<ECS::Instance>& ecs);
 
     /**
-     * @brief TODO
+     * @brief Creates a new entity in the current ECS system.
+     *
+     * @return The created entity.
      */
     static Entity Create() {
         if (ECS::CURRENT_INSTANCE)
@@ -61,12 +72,14 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Removes the entity from the ECS system.
+     *
+     * @param ecs The ECS instance to remove the entity from.
      */
     void destroy(const Ref<ECS::Instance>& ecs);
 
     /**
-     * @brief TODO
+     * @brief Removes the entity from current ECS system.
      */
     void destroy() {
         if (ECS::CURRENT_INSTANCE)
@@ -74,7 +87,12 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Adds a component to the entity.
+     *
+     * @tparam T The type of the component.
+     * @param component The component to add.
+     * @param ecs The ECS instance to add the component to.
+     * @return The added component.
      */
     template <typename T>
     T* addComponent(T&& component, const Ref<ECS::Instance>& ecs) const {
@@ -90,7 +108,11 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Adds a component to the entity in the current ECS system.
+     *
+     * @tparam T The type of the component.
+     * @param component The component to add.
+     * @return The added component.
      */
     template <typename T>
     T* addComponent(T&& component) const {
@@ -101,7 +123,10 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Removes a component from the entity.
+     *
+     * @tparam T The type of the component.
+     * @param ecs The ECS instance to remove the component from.
      */
     template <typename T>
     void removeComponent(const Ref<ECS::Instance>& ecs) const {
@@ -115,7 +140,9 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Removes a component from the entity in the current ECS system.
+     *
+     * @tparam T The type of the component.
      */
     template <typename T>
     void removeComponent() const {
@@ -124,7 +151,13 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Gets a certain component from the entity.
+     * 
+     * Returns nullptr if the entity doesn't have the component.
+     *
+     * @tparam T The type of the component.
+     * @param ecs The ECS instance to get the component from.
+     * @return The component.
      */
     template <typename T>
     T* getComponent(const Ref<ECS::Instance>& ecs) const {
@@ -132,7 +165,11 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Gets a certain component from the entity in the current ECS system.
+     *
+     * Returns nullptr if the entity doesn't have the component or if there is no current ECS system.
+     * 
+     * @tparam T The type of the component.
      */
     template <typename T>
     T* getComponent() const {

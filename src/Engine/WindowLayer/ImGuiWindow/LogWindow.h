@@ -5,7 +5,7 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief ImGui window for displaying the log.
  */
 class LogWindow : public IImGuiWindow {
 public:

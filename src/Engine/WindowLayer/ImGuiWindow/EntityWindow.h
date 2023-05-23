@@ -6,12 +6,14 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief ImGui window for editing entities and their components.
  */
 class EntityWindow : public IImGuiWindow {
 public:
     /**
-     * @brief TODO
+     * @brief Constructs a new EntityWindow. The windows name will be "Entity {id}".
+     * 
+     * @param entity The entity to edit.
      */
     explicit EntityWindow(Entity entity) : m_entity(entity) {
         m_name = std::format("Entity {:d}", static_cast<EntityId>(entity));

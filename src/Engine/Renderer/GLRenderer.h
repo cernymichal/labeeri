@@ -5,12 +5,12 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief OpenGL abstraction of the renderer.
  */
 class GLRenderer : public IRenderer {
 public:
     /**
-     * @brief TODO
+     * @brief Sets up some parameters for OpenGL.
      */
     GLRenderer();
 
@@ -62,20 +62,20 @@ public:
     virtual void deleteShaderProgram(ShaderResource& shaderProgram) const override;
 
     virtual MeshResource createMesh(const float* vertices, uint32_t vertexCount,
-                            const float* normals, const float* tangents,
-                            const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const override;
+                                    const float* normals, const float* tangents,
+                                    const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const override;
 
     virtual void deleteMesh(MeshResource& mesh) const override;
 
     virtual TextureResource createTexture(TextureType type, const ImageResource& image, bool generateMipmap = true,
-                                  TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const override;
+                                          TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const override;
 
     virtual TextureResource createCubemap(const std::array<Scoped<ImageResource>, 6>& images, TextureFilter filter = TextureFilter::Linear) const override;
 
     virtual void bindTexture(TextureType type, const TextureResource& texture, unsigned slot) const override;
 
     virtual void readFramebuffer(TextureFormat format, TextureDataType dataType,
-                             uvec2 position, uvec2 size, void* result) const override;
+                                 uvec2 position, uvec2 size, void* result) const override;
 
     virtual void deleteTexture(TextureResource& texure) const override;
 
@@ -115,6 +115,9 @@ private:
     std::vector<RendererPointLight> m_pointLights;
     std::vector<RendererSpotLight> m_spotLights;
 
+    /*
+     *  @brief Creates the screen quad and loads the skybox and postprocess shaders.
+     */
     void initialize();
 
     MeshResource createScreenQuad() const;

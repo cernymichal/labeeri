@@ -3,7 +3,7 @@
 namespace labeeri::Engine {
 
 /**
- * @brief TODO
+ * @brief The action taken on a key.
  */
 enum class KeyAction : uint8_t {
     Release = 0,
@@ -19,19 +19,19 @@ enum class KeyAction : uint8_t {
 #define LAB_MOD_NUM_LOCK LAB_BIT(5)
 
 /**
- * @brief TODO
+ * @brief GLFW Keyboard key codes.
  */
 enum class KeyboardKey : int {
-    /* The unknown key */
+    // The unknown key
     Unknown = -1,
 
-    /* Printable keys */
+    // Printable keys
     Space = 32,
-    Apostrophe = 39 /* ' */,
-    Comma = 44 /* , */,
-    Minus = 45 /* - */,
-    Period = 46 /* . */,
-    Slash = 47 /* / */,
+    Apostrophe = 39,  // '
+    Comma = 44,       // ,
+    Minus = 45,       // -
+    Period = 46,      // .
+    Slash = 47,       // /
     Number0 = 48,
     Number1 = 49,
     Number2 = 50,
@@ -42,8 +42,8 @@ enum class KeyboardKey : int {
     Number7 = 55,
     Number8 = 56,
     Number9 = 57,
-    Semicolon = 59 /* ; */,
-    Equal = 61 /* = */,
+    Semicolon = 59,  // ;
+    Equal = 61,      // =
     A = 65,
     B = 66,
     C = 67,
@@ -70,14 +70,14 @@ enum class KeyboardKey : int {
     X = 88,
     Y = 89,
     Z = 90,
-    LeftBracket = 91 /* [ */,
-    Backslash = 92 /* \ */,
-    RightBracket = 93 /* ] */,
-    GraveAccent = 96 /* ` */,
-    World1 = 161 /* non-US #1 */,
-    World2 = 162 /* non-US #2 */,
+    LeftBracket = 91,  // [
+    Backslash = 92,    // \ 
+    RightBracket = 93, // ]
+    GraveAccent = 96,  // `
+    World1 = 161,      // non-US #1
+    World2 = 162,      // non-US #2
 
-    /* Function keys */
+    // Function keys
     Escape = 256,
     Enter = 257,
     Tab = 258,
@@ -151,7 +151,7 @@ enum class KeyboardKey : int {
 };
 
 /**
- * @brief TODO
+ * @brief GLFW Mouse button codes.
  */
 enum class MouseButton : uint8_t {
     Button1 = 0,

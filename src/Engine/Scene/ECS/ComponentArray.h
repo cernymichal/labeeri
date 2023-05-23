@@ -5,26 +5,29 @@
 namespace labeeri::Engine::ECS {
 
 /**
- * @brief TODO
+ * @brief Component array inferface. Exists because of templated component arrays.
  */
 class IComponentArray {
 public:
     virtual ~IComponentArray() = default;
 
-    /**
-     * @brief TODO
-     */
     virtual void entityDestroyed(EntityId entity) = 0;
 };
 
 /**
- * @brief TODO
+ * @brief Holds all of the instances of a component type.
+ *
+ * @tparam T The type of the component.
  */
 template <typename T>
 class ComponentArray : public IComponentArray {
 public:
     /**
-     * @brief TODO
+     * @brief Insert a new component into the array associated with a particular entity.
+     *
+     * @param entity The entity to associate the component with.
+     * @param component The component to insert. (is moved inside)
+     * @return A pointer to inserted the component.
      */
     T* insert(EntityId entity, T&& component) {
         assert(m_entityToIndex.find(entity) == m_entityToIndex.end() && "Component added to same entity more than once.");
@@ -38,7 +41,9 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Remove a certain entity and its component from the array.
+     *
+     * @param entity The entity to remove.
      */
     void remove(EntityId entity) {
         assert(m_entityToIndex.find(entity) != m_entityToIndex.end() && "Removing non-existent component.");
@@ -62,7 +67,12 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Get a component associated with an entity.
+     *
+     * Return nullptr if the entity doesn't have the component.
+     *
+     * @param entity The entity to get the component of.
+     * @return A pointer to the component.
      */
     T* operator[](EntityId entity) {
         if (!m_entityToIndex.contains(entity))
@@ -72,7 +82,9 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Called when an entity is destroyed. Used to remove the entity's components.
+     *
+     * @param entity The entity that was destroyed.
      */
     virtual void entityDestroyed(EntityId entity) override {
         if (m_entityToIndex.contains(entity))
