@@ -6,6 +6,7 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <random>
 #include <ranges>
 #include <stdexcept>
 #include <utility>

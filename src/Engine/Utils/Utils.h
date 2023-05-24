@@ -3,6 +3,7 @@
 #include "Engine/Utils/GLM.h"
 #include "Engine/Utils/Log.h"
 #include "Engine/Utils/Ptr.h"
+#include "Engine/Utils/Random.h"
 
 #define LAB_BIT(x) (1 << (x))
 

@@ -23,6 +23,13 @@ static vec3 directionFromKey(KeyboardKey key) {
     return direction;
 }
 
+FlycamController::FlycamController(Entity entity, float speed, double mouseSensitivity)
+    : IScript(entity), m_speed(speed), m_mouseSensitivity(mouseSensitivity) {
+    auto transform = m_entity.getComponent<Transform>();
+    vec3 eulerAngles = glm::eulerAngles(transform->rotation());
+    m_viewAngles = {eulerAngles.y, eulerAngles.x};
+}
+
 void FlycamController::onUpdate(const UpdateEvent& e) {
     auto transform = m_entity.getComponent<Transform>();
     auto rigidBody = m_entity.getComponent<RigidBody>();

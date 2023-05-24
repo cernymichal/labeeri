@@ -435,7 +435,7 @@ ShaderResource GLRenderer::createShaderProgram(const std::vector<std::pair<Shade
     LAB_LOG_RENDERAPI_ERROR();
 
     linkShaderProgram(program);
-    LAB_LOG(program.operator unsigned int());
+    LAB_DEBUG_ONLY(LAB_LOG(program.operator unsigned int()));
 
     return program;
 }
@@ -519,7 +519,7 @@ MeshResource GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
 
     LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Attribute pointers created");
-    LAB_LOG(VAO);
+    LAB_DEBUG_ONLY(LAB_LOG(VAO));
 
     glBindVertexArray(0);
     return MeshResource(VAO, VBO, EBO, faceCount);
@@ -555,7 +555,7 @@ TextureResource GLRenderer::createTexture(TextureType type, const ImageResource&
 
     LAB_LOG_RENDERAPI_ERROR();
     glBindTexture(typeGL, 0);
-    LAB_LOG(texture);
+    LAB_DEBUG_ONLY(LAB_LOG(texture));
 
     return TextureResource(texture);
 }
@@ -583,7 +583,7 @@ TextureResource GLRenderer::createCubemap(const std::array<Scoped<ImageResource>
 
     LAB_LOG_RENDERAPI_ERROR();
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-    LAB_LOG(texture);
+    LAB_DEBUG_ONLY(LAB_LOG(texture));
 
     return TextureResource(texture);
 }

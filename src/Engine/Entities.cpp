@@ -9,8 +9,12 @@
 
 namespace labeeri::Engine {
 
-Entity Entities::Flycam(const Ref<Scene>& scene, float speed, double sensitivity) {
+Entity Entities::Flycam(const Ref<Scene>& scene, vec3 position, quat rotation, float speed, double sensitivity) {
     auto entity = Entity::Create(scene->ecs());
+
+    auto transform = entity.getComponent<Transform>(scene->ecs());
+    transform->setPosition(position);
+    transform->setRotation(rotation);
 
     entity.addComponent<Camera>(Camera(true), scene->ecs());
     entity.addComponent<RigidBody>(RigidBody(), scene->ecs());
@@ -20,11 +24,13 @@ Entity Entities::Flycam(const Ref<Scene>& scene, float speed, double sensitivity
     return entity;
 }
 
-Entity Entities::Player(const Ref<Scene>& scene, float speed, double sensitivity, float height) {
+Entity Entities::Player(const Ref<Scene>& scene, vec3 position, quat rotation, float speed, double sensitivity, float height) {
     auto entity = Entity::Create(scene->ecs());
 
     auto transform = entity.getComponent<Transform>(scene->ecs());
     transform->setPosition(LAB_UP * height);
+    transform->move(position);
+    transform->setRotation(rotation);
 
     entity.addComponent<Camera>(Camera(true), scene->ecs());
     entity.addComponent<RigidBody>(RigidBody(), scene->ecs());

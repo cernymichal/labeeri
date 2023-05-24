@@ -14,9 +14,7 @@ public:
      * @param speed The speed to move the player.
      * @param mouseSensitivity The mouse sensitivity to rotate the player.
      */
-    explicit PlayerController(Entity player, float speed = 2.0f, double mouseSensitivity = 0.002)
-        : IScript(player), m_speed(speed), m_mouseSensitivity(mouseSensitivity) {
-    }
+    explicit PlayerController(Entity player, float speed = 2.0f, double mouseSensitivity = 0.002);
 
 protected:
     virtual void onUpdate(const UpdateEvent& e) override;

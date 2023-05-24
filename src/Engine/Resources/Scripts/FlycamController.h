@@ -14,9 +14,7 @@ public:
      * @param speed The speed to move the entity.
      * @param mouseSensitivity The mouse sensitivity to rotate the entity.
      */
-    explicit FlycamController(Entity entity, float speed = 2.0f, double mouseSensitivity = 0.002)
-        : IScript(entity), m_speed(speed), m_mouseSensitivity(mouseSensitivity) {
-    }
+    explicit FlycamController(Entity entity, float speed = 2.0f, double mouseSensitivity = 0.002);
 
 protected:
     virtual void onUpdate(const UpdateEvent& e) override;

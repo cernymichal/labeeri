@@ -7,6 +7,7 @@
 #include "Game/Resources/Scripts/CameraSwitcher.h"
 #include "Game/Resources/Scripts/FlashlightController.h"
 #include "Game/Resources/Scripts/FloatingMovement.h"
+#include "Game/Resources/Scripts/LightBlinking.h"
 #include "Game/Resources/Scripts/LightSwitchInteraction.h"
 #include "Game/Resources/Scripts/MaxwellInteraction.h"
 #include "Game/Resources/Scripts/RotatingMovement.h"
@@ -73,6 +74,18 @@ Ref<Scene> loadLabyrinthScene() {
     auto scene = makeRef<Scene>();
     LAB_APP.setScene(scene);
 
+    Entity player;
+    std::vector<Entity> cameras;
+
+    {  // Player
+        player = Entities::Player(scene);
+        player.getComponent<Transform>(scene->ecs())->move(vec3(0.0f, 0.0f, 2.0f));
+        player.addComponent<Light>(Light::Spot(LightProperties(vec3(0.0f), vec3(2.0f), vec3(1.0f))), scene->ecs())
+            ->m_intensity = 0.0f;
+
+        scene->addScript<FlashlightController>(player);
+    }
+
     {  // Lights
         auto sun = Entities::DirectionalLight(scene, vec3(glm::radians(-110.0), glm::radians(30.0), 0), 0.05f);
         sun.getComponent<Transform>()->move(vec3(0.0f, -2.0f, 0.0f));
@@ -97,40 +110,8 @@ Ref<Scene> loadLabyrinthScene() {
 
         for (Entity light : lights)
             scene->addScript<LightSwitchInteraction>(light);
-    }
 
-    {  // Player
-        auto player = Entities::Player(scene);
-        player.getComponent<Transform>(scene->ecs())->move(vec3(0.0f, 0.0f, 2.0f));
-        player.addComponent<Light>(Light::Spot(LightProperties(vec3(0.0f), vec3(2.0f), vec3(1.0f))), scene->ecs())
-            ->m_intensity = 0.0f;
-
-        std::vector<Entity> cameras;
-        {  // Bottom view
-            auto camera = Entity::Create(scene->ecs());
-
-            auto transform = camera.getComponent<Transform>(scene->ecs());
-            transform->setPosition(vec3(4.0f, 0.4f, 4.0f));
-            transform->setRotation(glm::radians(vec3(20.0f, 45.0f, 0.0f)));
-
-            camera.addComponent<Camera>(Camera(false, 110.0f), scene->ecs());
-
-            cameras.push_back(camera);
-        }
-        {  // Knot view
-            auto camera = Entity::Create(scene->ecs());
-
-            auto transform = camera.getComponent<Transform>(scene->ecs());
-            transform->setPosition(vec3(0.0f, 2.0f, -25.0f));
-            transform->setRotation(glm::radians(vec3(-10.0f, 180.0f, 0.0f)));
-
-            camera.addComponent<Camera>(Camera(false, 30.0f), scene->ecs());
-
-            cameras.push_back(camera);
-        }
-
-        scene->addScript<CameraSwitcher>(player, cameras);
-        scene->addScript<FlashlightController>(player);
+        scene->addScript<LightBlinking>(lights[4]);
     }
 
     {  // Water
@@ -202,6 +183,31 @@ Ref<Scene> loadLabyrinthScene() {
         transformC->setParent(sphereCHolder);
         model = sphereC.addComponent<Model>(Model(clone(Resources<ModelResource>::Get("basicCube"))), scene->ecs());
         model->m_ref->m_material = sphereCMaterial;
+        scene->addScript<RotatingMovement>(sphereC, quat(vec3(0.0f, glm::radians(0.6f), 0.0f)));
+
+        {  // Sphere view
+            auto camera = Entity::Create(scene->ecs());
+
+            auto transform = camera.getComponent<Transform>(scene->ecs());
+            transform->setPosition(vec3(0.6f, 1.6f, 0.0f));
+            transform->setParent(sphereA);
+
+            camera.addComponent<Camera>(Camera(false, 90.0f), scene->ecs());
+
+            cameras.push_back(camera);
+        }
+    }
+
+    {  // Bottom view
+        auto camera = Entity::Create(scene->ecs());
+
+        auto transform = camera.getComponent<Transform>(scene->ecs());
+        transform->setPosition(vec3(4.0f, 0.4f, 4.0f));
+        transform->setRotation(glm::radians(vec3(20.0f, 45.0f, 0.0f)));
+
+        camera.addComponent<Camera>(Camera(false, 110.0f), scene->ecs());
+
+        cameras.push_back(camera);
     }
 
     {  // Bunny
@@ -307,6 +313,20 @@ Ref<Scene> loadLabyrinthScene() {
         transform->setScale(vec3(1.0f));
         auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/labeeri/models/knot.obj"))), scene->ecs());
     }
+
+    {  // Knot view
+        auto camera = Entity::Create(scene->ecs());
+
+        auto transform = camera.getComponent<Transform>(scene->ecs());
+        transform->setPosition(vec3(0.0f, 2.0f, -25.0f));
+        transform->setRotation(glm::radians(vec3(-10.0f, 180.0f, 0.0f)));
+
+        camera.addComponent<Camera>(Camera(false, 30.0f), scene->ecs());
+
+        cameras.push_back(camera);
+    }
+
+    scene->addScript<CameraSwitcher>(player, cameras);
 
     scene->m_renderParameters.skybox = loadCubemap("resources/labeeri/textures/cubemaps/dikhololo_night");
     scene->m_renderParameters.fog.color = vec3(0.08f, 0.07f, 0.06f);

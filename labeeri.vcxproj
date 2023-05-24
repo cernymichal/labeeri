@@ -246,6 +246,7 @@
     <ClInclude Include="src\Engine\Scene\Systems\LightSystem.h" />
     <ClInclude Include="src\Engine\Scene\Systems\RenderSystem.h" />
     <ClInclude Include="src\Engine\Scene\Systems\Systems.h" />
+    <ClInclude Include="src\Engine\Utils\Random.h" />
     <ClInclude Include="src\Engine\Utils\Utils.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\EntityWindow.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\HelpWindow.h" />
@@ -272,6 +273,7 @@
     <ClInclude Include="src\Game\Resources\Models.h" />
     <ClInclude Include="src\Game\Resources\Scripts\FlashlightController.h" />
     <ClInclude Include="src\Game\Resources\Scripts\FloatingMovement.h" />
+    <ClInclude Include="src\Game\Resources\Scripts\LightBlinking.h" />
     <ClInclude Include="src\Game\Resources\Scripts\LightSwitchInteraction.h" />
     <ClInclude Include="src\Game\Resources\Scripts\MaxwellInteraction.h" />
     <ClInclude Include="src\Game\Resources\Scripts\RotatingMovement.h" />

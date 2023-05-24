@@ -11,22 +11,26 @@ namespace Entities {
  * @brief Creates a new entity with the FlycamController script.
  *
  * @param scene The scene to create the entity in.
+ * @param position The position of the flycam.
+ * @param rotation The rotation of the flycam.
  * @param speed The speed of the flycam.
  * @param sensitivity The mouse sensitivity of the camera.
  * @return The created entity.
  */
-Entity Flycam(const Ref<Scene>& scene, float speed = 3.0f, double sensitivity = 0.002);
+Entity Flycam(const Ref<Scene>& scene, vec3 position = vec3(0.0f), quat rotation = quat(), float speed = 3.0f, double sensitivity = 0.002);
 
 /**
  * @brief Creates a new entity with the PlayerController script.
  *
  * @param scene The scene to create the entity in.
+ * @param position The position of the player.
+ * @param rotation The rotation of the player.
  * @param speed The speed of the player.
  * @param sensitivity The mouse sensitivity of the camera.
  * @param height The height of the player.
  * @return The created entity.
  */
-Entity Player(const Ref<Scene>& scene, float speed = 3.0f, double sensitivity = 0.002, float height = 1.75f);
+Entity Player(const Ref<Scene>& scene, vec3 position = vec3(0.0f), quat rotation = quat(), float speed = 3.0f, double sensitivity = 0.002, float height = 1.75f);
 
 /**
  * @brief Creates a new entity with a RigidBody and AABB collider component.

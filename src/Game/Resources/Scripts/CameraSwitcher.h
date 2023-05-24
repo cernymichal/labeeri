@@ -65,8 +65,9 @@ private:
     void switchToFree() {
         switchPlayerMovement(false);
 
-        m_freeCamera = Entities::Flycam(LAB_CURRENT_SCENE);
-        *m_freeCamera.getComponent<Transform>() = *LAB_CURRENT_CAMERA.getComponent<Transform>();
+        auto currentTransform = LAB_CURRENT_CAMERA.getComponent<Transform>();
+
+        m_freeCamera = Entities::Flycam(LAB_CURRENT_SCENE, currentTransform->worldPosition(), currentTransform->rotation());
         LAB_CURRENT_CAMERA = m_freeCamera;
     }
 
