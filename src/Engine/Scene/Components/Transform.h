@@ -19,7 +19,7 @@ public:
      * @param other The transform to move.
      */
     Transform(Transform&& other) noexcept
-        : m_position(other.m_position), m_rotation(other.m_rotation), m_scale(other.m_scale), m_modelMatrix(other.m_modelMatrix), m_modelMatrixValid(other.m_modelMatrixValid), m_entity(other.m_entity), m_parent(other.m_parent), m_children(other.m_children), m_moved(other.m_moved) {
+        : m_position(other.m_position), m_rotation(other.m_rotation), m_scale(other.m_scale), m_modelMatrix(other.m_modelMatrix), m_cacheValid(other.m_cacheValid), m_entity(other.m_entity), m_parent(other.m_parent), m_children(other.m_children), m_moved(other.m_moved) {
         other.m_moved = true;
     }
 
@@ -76,7 +76,7 @@ public:
      */
     void setPosition(const vec3& position) {
         m_position = position;
-        m_modelMatrixValid = false;
+        m_cacheValid = false;
     }
 
     /**
@@ -99,7 +99,7 @@ public:
             return;
         }
 
-        mat4 parentInverseModelMatrix = glm::inverse(m_parent.getComponent<Transform>()->modelMatrix());
+        mat4 parentInverseModelMatrix = m_parent.getComponent<Transform>()->modelMatrixInverse();
         vec3 localPosition = vec3(parentInverseModelMatrix * vec4(position, 1.0f));
         setPosition(localPosition);
     }
@@ -120,7 +120,7 @@ public:
      */
     void setRotation(const quat& rotation) {
         m_rotation = rotation;
-        m_modelMatrixValid = false;
+        m_cacheValid = false;
     }
 
     /**
@@ -139,7 +139,7 @@ public:
      */
     void setScale(const vec3& scale) {
         m_scale = scale;
-        m_modelMatrixValid = false;
+        m_cacheValid = false;
     }
 
     /**
@@ -163,7 +163,7 @@ public:
         removeParent();
 
         m_parent = parent;
-        m_modelMatrixValid = false;
+        m_cacheValid = false;
 
         if (!m_parent || !m_entity)
             return;
@@ -198,7 +198,10 @@ public:
      * @return World space position.
      */
     vec3 worldPosition() const {
-        return vec3(modelMatrix() * vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        if (!cacheValid())
+            recalculateCache();
+
+        return m_worldPosition;
     }
 
     /**
@@ -219,10 +222,20 @@ public:
      * @return Calculated model matrix.
      */
     const mat4& modelMatrix() const {
-        if (!modelMatrixValid())
-            updateModelMatrix();
+        if (!cacheValid())
+            recalculateCache();
 
         return m_modelMatrix;
+    }
+
+    /**
+     * @return Calculated model matrix.
+     */
+    const mat4& modelMatrixInverse() const {
+        if (!cacheValid())
+            recalculateCache();
+
+        return m_modelMatrixInverse;
     }
 
     /**
@@ -251,8 +264,10 @@ private:
     quat m_rotation = quat(vec3(0.0f, 0.0f, 0.0f));
     vec3 m_scale = vec3(1.0f, 1.0f, 1.0f);
 
+    mutable vec3 m_worldPosition = vec3(0.0f, 0.0f, 0.0f);
     mutable mat4 m_modelMatrix = mat4(1.0);
-    mutable bool m_modelMatrixValid = true;
+    mutable mat4 m_modelMatrixInverse = mat4(1.0);
+    mutable bool m_cacheValid = true;
 
     Entity m_entity;
     Entity m_parent = NULL_ENTITY;
@@ -261,29 +276,31 @@ private:
     bool m_moved = false;
 
     /**
-     * @brief Check whether the model matrix is valid.
+     * @brief Check whether the cached values are still valid.
      */
-    bool modelMatrixValid() const {
+    bool cacheValid() const {
         if (!m_parent)
-            return m_modelMatrixValid;
+            return m_cacheValid;
 
         auto parentTransform = m_parent.getComponent<Transform>();
         if (!parentTransform)
-            return m_modelMatrixValid;
+            return m_cacheValid;
 
-        return parentTransform->modelMatrixValid() && m_modelMatrixValid;
+        return parentTransform->cacheValid() && m_cacheValid;
     }
 
     /**
-     * @brief Recalculate the model matrix.
+     * @brief Recalculate the cached values. (model matrix, world position, ...)
      */
-    void updateModelMatrix() const {
+    void recalculateCache() const {
         mat4 localModelMatrix = mat4(1.0f);
         localModelMatrix = glm::translate(localModelMatrix, m_position);
         localModelMatrix *= glm::mat4_cast(m_rotation);
         localModelMatrix = glm::scale(localModelMatrix, m_scale);
 
         m_modelMatrix = localModelMatrix;
+        m_modelMatrixInverse = glm::inverse(m_modelMatrix);
+        m_worldPosition = vec3(m_modelMatrix * vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
         if (m_parent) {
             auto parentTransform = m_parent.getComponent<Transform>();
@@ -291,12 +308,12 @@ private:
                 m_modelMatrix = parentTransform->modelMatrix() * m_modelMatrix;
         }
 
-        m_modelMatrixValid = true;
+        m_cacheValid = true;
 
         for (auto& child : m_children) {
             auto childTransform = child.getComponent<Transform>();
             if (childTransform)
-                childTransform->m_modelMatrixValid = false;
+                childTransform->m_cacheValid = false;
         }
     }
 
@@ -314,7 +331,7 @@ private:
             parentTransform->m_children.remove(m_entity);
 
         m_parent = NULL_ENTITY;
-        m_modelMatrixValid = false;
+        m_cacheValid = false;
     }
 };
 
