@@ -299,8 +299,6 @@ private:
         localModelMatrix = glm::scale(localModelMatrix, m_scale);
 
         m_modelMatrix = localModelMatrix;
-        m_modelMatrixInverse = glm::inverse(m_modelMatrix);
-        m_worldPosition = vec3(m_modelMatrix * vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
         if (m_parent) {
             auto parentTransform = m_parent.getComponent<Transform>();
@@ -308,6 +306,8 @@ private:
                 m_modelMatrix = parentTransform->modelMatrix() * m_modelMatrix;
         }
 
+        m_modelMatrixInverse = glm::inverse(m_modelMatrix);
+        m_worldPosition = vec3(m_modelMatrix * vec4(0.0f, 0.0f, 0.0f, 1.0f));
         m_cacheValid = true;
 
         for (auto& child : m_children) {

@@ -21,7 +21,14 @@ public:
  */
 template <typename T>
 class ComponentArray : public IComponentArray {
+    static const auto INVALID_INDEX = std::numeric_limits<size_t>::max();
+
 public:
+    ComponentArray() {
+        m_entityToIndex.fill(INVALID_INDEX);
+        m_indexToEntity.fill(NULL_ENTITY);
+    }
+
     /**
      * @brief Insert a new component into the array associated with a particular entity.
      *
@@ -30,7 +37,7 @@ public:
      * @return A pointer to inserted the component.
      */
     T* insert(EntityId entity, T&& component) {
-        assert(m_entityToIndex.find(entity) == m_entityToIndex.end() && "Component added to same entity more than once.");
+        assert(m_entityToIndex[entity] == INVALID_INDEX && "Component added to same entity more than once.");
 
         size_t insertIndex = m_size++;
         m_components[insertIndex] = std::move(component);
@@ -46,7 +53,7 @@ public:
      * @param entity The entity to remove.
      */
     void remove(EntityId entity) {
-        assert(m_entityToIndex.find(entity) != m_entityToIndex.end() && "Removing non-existent component.");
+        assert(m_entityToIndex[entity] != INVALID_INDEX && "Removing non-existent component.");
 
         size_t replaced = m_entityToIndex[entity];
         size_t last = m_size - 1;
@@ -60,8 +67,8 @@ public:
         else
             m_components[replaced] = std::move(T());
 
-        m_entityToIndex.erase(entity);
-        m_indexToEntity.erase(last);
+        m_entityToIndex[entity] = INVALID_INDEX;
+        m_indexToEntity[last] = NULL_ENTITY;
 
         m_size--;
     }
@@ -75,10 +82,10 @@ public:
      * @return A pointer to the component.
      */
     T* operator[](EntityId entity) {
-        if (!m_entityToIndex.contains(entity))
+        if (m_entityToIndex[entity] == INVALID_INDEX)
             return nullptr;
 
-        return &m_components[m_entityToIndex.at(entity)];
+        return &m_components[m_entityToIndex[entity]];
     }
 
     /**
@@ -87,15 +94,15 @@ public:
      * @param entity The entity that was destroyed.
      */
     virtual void entityDestroyed(EntityId entity) override {
-        if (m_entityToIndex.contains(entity))
+        if (m_entityToIndex[entity] != INVALID_INDEX)
             remove(entity);
     }
 
 private:
     std::array<T, MAX_ENTITIES> m_components;
     size_t m_size = 0;
-    std::unordered_map<EntityId, size_t> m_entityToIndex;
-    std::unordered_map<size_t, EntityId> m_indexToEntity;
+    std::array<size_t, MAX_ENTITIES> m_entityToIndex;
+    std::array<EntityId, MAX_ENTITIES> m_indexToEntity;
 };
 
 }  // namespace labeeri::Engine::ECS
