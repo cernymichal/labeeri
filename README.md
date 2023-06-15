@@ -2,7 +2,7 @@
 
 A C++ game engine (because I hate myself).
 
-Originally made for BI-PGR.21 (B0B39PGR) as a semestral work at FIT/FEE CTU.
+Originally made for the BI-PGR.21 (B0B39PGR) course at FIT/FEE CTU as a semestral project.
 
 ## Features
 
@@ -56,3 +56,18 @@ A simple labyrinth with interesting objects in each room. I would like to add in
 Download and run the [latest release](https://github.com/cernymichal/labeeri/releases).
 
 Everything except for the standard library is linked statically for now, so you shouldn't have any dependancy issues (C++ redist is provided).
+
+### Controls
+
+- Click in the scene - enter FPS mode
+- ESC - exit FPS mode
+- WASD - movement
+- Left shift - run
+- Ctrl / Space - vertical movement (only in free camera)
+- Left click - interact with an object
+- F - toggle flashlight
+- F1 - free camera / player camera
+- F3 - toggle GUI overlay
+- F5 - fullscreen
+- Page up / Page down - switch between static cameras
+- Ctrl + left click on object - edit object (only in GUI mode)
