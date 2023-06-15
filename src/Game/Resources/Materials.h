@@ -27,7 +27,7 @@ public:
  */
 class FlareMaterial : public MaterialResource {
 public:
-    explicit FlareMaterial() : MaterialResource(Resources<ShaderResource>::Get("resources/labeeri/shaders/videotexture")) {
+    explicit FlareMaterial() : MaterialResource(Resources<ShaderResource>::Get("resources/labeeri/shaders/flipbook")) {
     }
 
     virtual bool opaque() const override {

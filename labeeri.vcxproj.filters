@@ -373,7 +373,7 @@
     <None Include="resources\labeeri\shaders\water.frag" />
     <None Include="resources\labeeri\shaders\water.geom" />
     <None Include="resources\labeeri\shaders\water.vert" />
-    <None Include="resources\labeeri\shaders\videotexture.frag" />
-    <None Include="resources\labeeri\shaders\videotexture.vert" />
+    <None Include="resources\labeeri\shaders\flipbook.frag" />
+    <None Include="resources\labeeri\shaders\flipbook.vert" />
   </ItemGroup>
 </Project>

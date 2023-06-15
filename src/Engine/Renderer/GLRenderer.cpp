@@ -392,13 +392,7 @@ void GLRenderer::bindUniform(const char* name, const vec3& value) {
 
 void GLRenderer::bindPVM(const mat4& modelMatrix) {
     mat4 PVM = m_matrices.projection * m_matrices.view * modelMatrix;
-
-    const mat4 modelRotationMatrix = mat4(
-        modelMatrix[0],
-        modelMatrix[1],
-        modelMatrix[2],
-        vec4(0.0f, 0.0f, 0.0f, 1.0f));
-    mat4 normalMatrix = glm::transpose(glm::inverse(modelRotationMatrix));
+    mat4 normalMatrix = mat4(glm::transpose(glm::inverse(mat3(modelMatrix))));
 
     bindUniform("u_PVM_matrix", PVM);
     bindUniform("u_model_matrix", modelMatrix);
