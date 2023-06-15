@@ -1,6 +1,7 @@
 # labeeri
 
-A C++ game engine (because I hate myself)
+A C++ game engine (because I hate myself).
+
 Originally made for BI-PGR.21 (B0B39PGR) as a semestral work at FIT/FEE CTU.
 
 ## Features
