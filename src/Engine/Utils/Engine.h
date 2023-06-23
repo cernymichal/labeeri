@@ -1,9 +1,7 @@
 #pragma once
 
-#include "Engine/Utils/GLM.h"
-#include "Engine/Utils/Log.h"
-#include "Engine/Utils/Ptr.h"
-#include "Engine/Utils/Random.h"
+#include "Engine/Utils/Common.h"
+#include "Engine/Utils/Math.h"
 
 #define LAB_BIT(x) (1 << (x))
 
@@ -50,3 +48,8 @@ inline constexpr auto MAX_ENTITIES = 2048;
 inline constexpr auto MAX_COMPONENTS = 32;
 
 }  // namespace labeeri::Engine
+
+/**
+ * @brief Flush render API arrors to log stream
+ */
+#define LAB_LOG_RENDERAPI_ERROR() LAB_DEBUG_ONLY(LAB_RENDERER->logError(__FILE__ ":" STR_MACRO(__LINE__)))

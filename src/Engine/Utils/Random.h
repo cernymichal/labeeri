@@ -1,5 +1,8 @@
 #pragma once
 
+#include <chrono>
+#include <random>
+
 /*
  * @brief Very fast pseudo random number generator by Sebastiano Vigna
  *
@@ -74,7 +77,7 @@ struct Xoshiro256SS {
      * @brief Generates a random uint64 and updates the state.
      */
     uint64_t constexpr operator()() {
-        uint64_t result = bítRotateLeft(state[1] * 5, 7) * 9;
+        uint64_t result = bitRotateLeft(state[1] * 5, 7) * 9;
 
         uint64_t t = state[1] << 17;
         state[2] ^= state[0];
@@ -82,7 +85,7 @@ struct Xoshiro256SS {
         state[1] ^= state[2];
         state[0] ^= state[3];
         state[2] ^= t;
-        state[3] = bítRotateLeft(state[3], 45);
+        state[3] = bitRotateLeft(state[3], 45);
 
         return result;
     }
@@ -99,12 +102,12 @@ private:
     /*
      * @return value rotated by k places left.
      */
-    static constexpr uint64_t bítRotateLeft(uint64_t value, int k) {
+    static constexpr uint64_t bitRotateLeft(uint64_t value, int k) {
         return (value << k) | (value >> (64 - k));
     }
 };
 
-static Xoshiro256SS LAB_RANDOM_GENERATOR;
+inline Xoshiro256SS LAB_RANDOM_GENERATOR;
 
 /*
  * @return A random uint64.

@@ -173,7 +173,7 @@
     <ClInclude Include="src\Engine\Events\IEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Utils\Utils.h">
+    <ClInclude Include="src\Engine\Utils\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Events\KeyboardEvent.h">
@@ -317,7 +317,7 @@
     <ClInclude Include="src\Game\Resources\Prefabs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Utils\GLM.h">
+    <ClInclude Include="src\Engine\Utils\Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Utils\Ptr.h">
@@ -354,6 +354,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Utils\Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Utils\Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

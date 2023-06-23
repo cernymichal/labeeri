@@ -25,7 +25,6 @@ Application::~Application() {
     IWindow::s_window = nullptr;
 
     LAB_LOG_RENDERAPI_ERROR();
-    LAB_DEBUG_ONLY(std::cout << LOG_STREAM.str() << std::endl);
 }
 
 void Application::initialize() {

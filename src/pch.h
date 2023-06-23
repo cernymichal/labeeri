@@ -24,11 +24,10 @@
 #include <unordered_map>
 #include <vector>
 
-// GLM
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/quaternion.hpp>
-
-// labeeri
-#include "Engine/Utils/Utils.h"
+// Utils
+#include "Engine/Utils/Common.h"
+#include "Engine/Utils/Engine.h"
+#include "Engine/Utils/Log.h"
+#include "Engine/Utils/Math.h"
+#include "Engine/Utils/Ptr.h"
+#include "Engine/Utils/Random.h"

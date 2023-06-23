@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <utility>
+
 template <typename T>
 inline std::shared_ptr<T> copyShared(const std::shared_ptr<T>& ptr) {
     return std::make_shared<T>(*ptr);

@@ -210,7 +210,8 @@
     <ClInclude Include="src\Engine\Events\KeyboardEvent.h" />
     <ClInclude Include="src\Engine\Events\MouseEvent.h" />
     <ClInclude Include="src\Engine\Events\SceneEvent.h" />
-    <ClInclude Include="src\Engine\Utils\GLM.h" />
+    <ClInclude Include="src\Engine\Utils\Common.h" />
+    <ClInclude Include="src\Engine\Utils\Math.h" />
     <ClInclude Include="src\Engine\Utils\Ptr.h" />
     <ClInclude Include="src\Engine\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Engine\Renderer\GLRenderer.h" />
@@ -247,7 +248,7 @@
     <ClInclude Include="src\Engine\Scene\Systems\RenderSystem.h" />
     <ClInclude Include="src\Engine\Scene\Systems\Systems.h" />
     <ClInclude Include="src\Engine\Utils\Random.h" />
-    <ClInclude Include="src\Engine\Utils\Utils.h" />
+    <ClInclude Include="src\Engine\Utils\Engine.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\EntityWindow.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\HelpWindow.h" />
     <ClInclude Include="src\Engine\Window\GLFWWindow.h" />
