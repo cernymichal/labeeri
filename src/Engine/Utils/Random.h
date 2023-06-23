@@ -23,7 +23,7 @@ struct SplitMix64 {
     /*
      * @brief Generates a random uint64 and updates the state.
      */
-    constexpr uint64_t operator()() {
+    constexpr inline uint64_t operator()() {
         // https://prng.di.unimi.it/splitmix64.c
 
         state += 0x9e3779b97f4a7c15Ui64;
@@ -38,11 +38,11 @@ struct SplitMix64 {
         return z;
     }
 
-    static constexpr uint64_t min() {
+    static inline constexpr uint64_t min() {
         return 0;
     }
 
-    static constexpr uint64_t max() {
+    static inline constexpr uint64_t max() {
         return uint64_t(-1);
     }
 };
@@ -76,7 +76,7 @@ struct Xoshiro256SS {
     /*
      * @brief Generates a random uint64 and updates the state.
      */
-    uint64_t constexpr operator()() {
+    constexpr inline uint64_t operator()() {
         // https://prng.di.unimi.it/xoshiro256starstar.c
 
         uint64_t result = bitRotateLeft(state[1] * 5, 7) * 9;
@@ -92,11 +92,11 @@ struct Xoshiro256SS {
         return result;
     }
 
-    static constexpr uint64_t min() {
+    static inline constexpr uint64_t min() {
         return 0;
     }
 
-    static constexpr uint64_t max() {
+    static inline constexpr uint64_t max() {
         return uint64_t(-1);
     }
 
@@ -104,7 +104,7 @@ private:
     /*
      * @return value rotated by k places left.
      */
-    static constexpr uint64_t bitRotateLeft(uint64_t value, int k) {
+    static inline constexpr uint64_t bitRotateLeft(uint64_t value, int k) {
         return (value << k) | (value >> (64 - k));
     }
 };
@@ -116,7 +116,7 @@ inline Xoshiro256SS LAB_RANDOM_GENERATOR;
  *
  * @note Uses LAB_RANDOM_GENERATOR internally.
  */
-static uint64_t randomUInt64() {
+inline uint64_t randomUInt64() {
     return LAB_RANDOM_GENERATOR();
 }
 
@@ -127,7 +127,7 @@ static uint64_t randomUInt64() {
  *
  * @note Uses LAB_RANDOM_GENERATOR internally.
  */
-static int32_t randomInt(int32_t min, int32_t max) {
+inline int32_t randomInt(int32_t min, int32_t max) {
     std::uniform_int_distribution<int32_t> distribution(min, max);
     return distribution(LAB_RANDOM_GENERATOR);
 }
@@ -139,7 +139,7 @@ static int32_t randomInt(int32_t min, int32_t max) {
  *
  * @note Uses LAB_RANDOM_GENERATOR internally.
  */
-static double randomDouble(double min, double max) {
+inline double randomDouble(double min, double max) {
     std::uniform_real_distribution<double> distribution(min, max);
     return distribution(LAB_RANDOM_GENERATOR);
 }
@@ -149,6 +149,6 @@ static double randomDouble(double min, double max) {
  *
  * @note Uses LAB_RANDOM_GENERATOR internally.
  */
-static double randomDouble() {
+inline double randomDouble() {
     return randomDouble(0.0, 1.0);
 }

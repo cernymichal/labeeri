@@ -99,6 +99,7 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,6 +125,7 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,6 +153,7 @@
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

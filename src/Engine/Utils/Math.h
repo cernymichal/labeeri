@@ -42,15 +42,15 @@ inline std::ostream& operator<<(std::ostream& os, const vec4& v) {
 }
 
 /*
- * @brief The legendary fast inverse square root
+ * @brief Fast inverse square root, use SSE versions instead
  *
  * @return Inverse square root of value
  */
-static constexpr float fastInvSqrt(float value) {
+inline constexpr float fastInvSqrt(const float value) {
     float x2 = value * 0.5f;
     float y = value;
-    int32_t i = *(int32_t*)&y;  // evil floating point bit level hacking
-    i = 0x5f3759df - (i >> 1);  // what the fuck?
+    int32_t i = std::bit_cast<std::uint32_t>(y);  // evil floating point bit level hacking
+    i = 0x5f3759df - (i >> 1);                    // what the fuck?
     y = *(float*)&i;
     y = y * (1.5f - (x2 * y * y));  // 1st iteration
     y = y * (1.5f - (x2 * y * y));  // 2nd iteration, this can be removed
@@ -59,36 +59,45 @@ static constexpr float fastInvSqrt(float value) {
 }
 
 /*
- * @brief The legendary fast inverse square root, double precision
+ * @brief SSE inverse square root
  *
  * @return Inverse square root of value
  */
-static constexpr double fastInvSqrt(double value) {
-    double x2 = value * 0.5;
-    double y = value;
-    int64_t i = *(int64_t*)&y;          // evil floating point bit level hacking
-    i = 0x5fe6eb50c7b537a9 - (i >> 1);  // what the fuck?
-    y = *(double*)&i;
-    y = y * (1.5 - (x2 * y * y));  // 1st iteration
-    y = y * (1.5 - (x2 * y * y));  // 2nd iteration, this can be removed
+inline float sseInvSqrt(const float value) {
+    __m128 temp = _mm_set_ss(value);
+    temp = _mm_rsqrt_ss(temp);
+    return _mm_cvtss_f32(temp);
 
-    return y;
+    // one step of NR could be added
 }
 
 /*
- * @brief Inverse of the fast inverse square root
+ * @brief SSE inverse square root
  *
- * @return Square root of value
+ * @return Inverse square root of value
  */
-static constexpr float fastSqrt(float value) {
-    return fastInvSqrt(value) * value;
+inline double sseInvSqrt(const double value) {
+    __m128d temp = _mm_set_sd(value);
+    temp = _mm_div_sd(_mm_set_sd(1.0), _mm_sqrt_sd(temp, temp));
+    return _mm_cvtsd_f64(temp);
 }
 
 /*
- * @brief Inverse of the fast inverse square root, double precision
+ * @brief Inverse of the SSE inverse square root
  *
  * @return Square root of value
  */
-static constexpr double fastSqrt(double value) {
-    return fastInvSqrt(value) * value;
+inline float sseSqrt(const float value) {
+    return sseInvSqrt(value) * value;
+}
+
+/*
+ * @brief SSE square root
+ *
+ * @return Square root of value
+ */
+inline double sseSqrt(const double value) {
+    __m128d temp = _mm_set_sd(value);
+    temp = _mm_sqrt_sd(temp, temp);
+    return _mm_cvtsd_f64(temp);
 }
