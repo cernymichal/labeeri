@@ -4,9 +4,7 @@
 #include <random>
 
 /*
- * @brief Very fast pseudo random number generator by Sebastiano Vigna
- *
- * https://prng.di.unimi.it/splitmix64.c
+ * @brief Fast pseudo random number generator by Sebastiano Vigna
  */
 struct SplitMix64 {
     uint64_t state;
@@ -26,6 +24,8 @@ struct SplitMix64 {
      * @brief Generates a random uint64 and updates the state.
      */
     constexpr uint64_t operator()() {
+        // https://prng.di.unimi.it/splitmix64.c
+
         state += 0x9e3779b97f4a7c15Ui64;
 
         uint64_t z = state;
@@ -48,9 +48,9 @@ struct SplitMix64 {
 };
 
 /*
- * @brief Solid pseudo random number generator by David Blackman and Sebastiano Vigna
+ * @brief Very fast solid pseudo random number generator by David Blackman and Sebastiano Vigna
  *
- * https://prng.di.unimi.it/xoshiro256starstar.c
+ * https://prng.di.unimi.it/
  */
 struct Xoshiro256SS {
     uint64_t state[4];
@@ -77,6 +77,8 @@ struct Xoshiro256SS {
      * @brief Generates a random uint64 and updates the state.
      */
     uint64_t constexpr operator()() {
+        // https://prng.di.unimi.it/xoshiro256starstar.c
+
         uint64_t result = bitRotateLeft(state[1] * 5, 7) * 9;
 
         uint64_t t = state[1] << 17;
