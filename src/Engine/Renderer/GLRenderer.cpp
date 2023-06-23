@@ -527,6 +527,10 @@ void GLRenderer::deleteMesh(MeshResource& mesh) const {
 
 TextureResource GLRenderer::createTexture(TextureType type, const ImageResource& image, bool generateMipmap,
                                           TextureFilter filter, TextureWrap wrap) const {
+    generateMipmap = generateMipmap && type != TextureType::Rectangle;
+    if (type == TextureType::Rectangle)
+        wrap = TextureWrap::ClampToEdge;
+
     int typeGL = textureTypeGL(type);
     int internalFormatGL = textureInternalFormatGL(image.internalFormat);
     int formatGL = textureFormatGL(image.format);
