@@ -2,6 +2,12 @@
 #include "Engine/Resources/Resources.h"
 #include "Game/Game.h"
 
+extern "C" {
+// Hint to aquire a dedicated GPU on laptops
+__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;  // NVIDIA
+__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;    // AMD
+}
+
 int main(int argc, char** argv) {
     LAB_APP.initialize();
 
