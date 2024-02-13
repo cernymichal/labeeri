@@ -1,5 +1,7 @@
 #pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -24,19 +26,19 @@ using mat4 = glm::mat4;
 using quat = glm::quat;
 
 template <typename T>
-inline std::ostream& operator<<(std::ostream& os, const vec2& v) {
+inline std::ostream& operator<<(std::ostream& os, const glm::vec<2, T>& v) {
     os << "(" << v.x << ", " << v.y << ")";
     return os;
 }
 
 template <typename T>
-inline std::ostream& operator<<(std::ostream& os, const vec3& v) {
+inline std::ostream& operator<<(std::ostream& os, const glm::vec<3, T>& v) {
     os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
     return os;
 }
 
 template <typename T>
-inline std::ostream& operator<<(std::ostream& os, const vec4& v) {
+inline std::ostream& operator<<(std::ostream& os, const glm::vec<4, T>& v) {
     os << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
     return os;
 }
