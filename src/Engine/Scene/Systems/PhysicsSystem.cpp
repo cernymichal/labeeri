@@ -13,7 +13,7 @@ static bool collistionCheckAABB(const Transform* transfromA, const Collider* col
     vec3 minB = transfromB->worldPosition() + colliderB->m_center - colliderB->m_extents * transfromB->scale();
     vec3 maxB = transfromB->worldPosition() + colliderB->m_center + colliderB->m_extents * transfromB->scale();
 
-    return glm::all(glm::lessThanEqual(minA, maxB)) && glm::all(glm::greaterThanEqual(maxA, minB));
+    return glm::all(minA <= maxB) && glm::all(maxA >= minB);
 }
 
 ECS::ComponentSignature PhysicsSystem::signature(const ECS::Instance& ecs) const {

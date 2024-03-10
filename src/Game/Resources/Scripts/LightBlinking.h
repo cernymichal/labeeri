@@ -34,10 +34,10 @@ protected:
         else if (currentTime - m_nextBlink >= m_blinkDuration) {
             light->m_intensity = m_originalIntensity;
             m_blinked = false;
-            if (randomDouble() < m_seriesChance)
-                m_nextBlink = currentTime + randomDouble(m_seriesMinDelay, m_seriesMaxDelay);
+            if (random<double>() < m_seriesChance)
+                m_nextBlink = currentTime + random<double>(m_seriesMinDelay, m_seriesMaxDelay);
             else
-                m_nextBlink = currentTime + randomDouble(m_minDelay, m_maxDelay);
+                m_nextBlink = currentTime + random<double>(m_minDelay, m_maxDelay);
         }
     }
 

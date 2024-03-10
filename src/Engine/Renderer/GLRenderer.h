@@ -70,7 +70,7 @@ public:
     virtual TextureResource createTexture(TextureType type, const ImageResource& image, bool generateMipmap = true,
                                           TextureFilter filter = TextureFilter::Linear, TextureWrap wrap = TextureWrap::Repeat) const override;
 
-    virtual TextureResource createCubemap(const std::array<Scoped<ImageResource>, 6>& images, TextureFilter filter = TextureFilter::Linear) const override;
+    virtual TextureResource createCubemap(const std::array<Ref<ImageResource>, 6>& images, TextureFilter filter = TextureFilter::Linear) const override;
 
     virtual void bindTexture(TextureType type, const TextureResource& texture, unsigned slot) const override;
 

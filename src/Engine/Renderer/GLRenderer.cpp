@@ -148,8 +148,8 @@ static int textureInternalFormatGL(TextureInternalFormat format) {
             return GL_RGBA32F;
         case TextureInternalFormat::RedUInt32:
             return GL_R32UI;
-        case TextureInternalFormat::DepthFloat32:
-            return GL_DEPTH_COMPONENT32F;
+        case TextureInternalFormat::DepthFixed24:
+            return GL_DEPTH_COMPONENT24;
         default:
             throw std::runtime_error("Unknown texture internal format");
     }
@@ -558,7 +558,7 @@ TextureResource GLRenderer::createTexture(TextureType type, const ImageResource&
     return TextureResource(texture);
 }
 
-TextureResource GLRenderer::createCubemap(const std::array<Scoped<ImageResource>, 6>& images, TextureFilter filter) const {
+TextureResource GLRenderer::createCubemap(const std::array<Ref<ImageResource>, 6>& images, TextureFilter filter) const {
     int internalFormatGL = textureInternalFormatGL(images[0]->internalFormat);
     int formatGL = textureFormatGL(images[0]->format);
     int dataTypeGL = textureDataTypeGL(images[0]->dataType);

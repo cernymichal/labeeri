@@ -59,7 +59,7 @@ void GLFWWindow::setFullscreen(bool enabled) {
         const GLFWvidmode* mode = glfwGetVideoMode(monitors[i]);
         ivec2 monitorSize = ivec2(mode->width, mode->height);
 
-        if (glm::all(glm::lessThan(m_windowedPosition - monitorPosition, monitorSize))) {
+        if (glm::all(m_windowedPosition - monitorPosition < monitorSize)) {
             monitor = monitors[i];
             break;
         }

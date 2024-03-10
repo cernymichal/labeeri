@@ -227,7 +227,7 @@ public:
      * @param filter The filtering to use.
      * @return The texture.
      */
-    virtual TextureResource createCubemap(const std::array<Scoped<ImageResource>, 6>& images, TextureFilter filter = TextureFilter::Linear) const = 0;
+    virtual TextureResource createCubemap(const std::array<Ref<ImageResource>, 6>& images, TextureFilter filter = TextureFilter::Linear) const = 0;
 
     /**
      * @brief Binds a texture to a slot.

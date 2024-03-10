@@ -1,13 +1,18 @@
 #include "Load.h"
 
 #define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
+#define TINYEXR_IMPLEMENTATION
+#define TINYEXR_USE_MINIZ 0
+#include <miniz/miniz.h>
+#define TINYEXR_USE_THREAD 1
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
-#include <stb_image.h>
+#include <tinyexr.h>
 
 #include <assimp/Importer.hpp>
 #include <fstream>
-#include <sstream>
 
 #include "Engine/Renderer/IRenderer.h"
 
@@ -119,8 +124,6 @@ Ref<MeshResource> loadMesh(const std::filesystem::path& filePath) {
 
 struct STBImageResource : ImageResource {
     STBImageResource(const std::filesystem::path& filePath, bool gammaCorrected, bool flip = true) {
-        LAB_LOGH3("Loading image " << filePath);
-
         if (flip)
             stbi_set_flip_vertically_on_load(true);
         else
@@ -159,15 +162,110 @@ struct STBImageResource : ImageResource {
     }
 };
 
+struct EXRImageResource : ImageResource {
+    EXRImageResource(const std::filesystem::path& filePath, bool gammaCorrected, bool flip = true) {
+        std::string pathString = filePath.string();
+        LAB_LOG("Loading texture " << pathString);
+
+        EXRVersion version;
+        int status = ParseEXRVersionFromFile(&version, pathString.c_str());
+        if (status != TINYEXR_SUCCESS || version.multipart) {
+            LAB_LOG("Invalid EXR file");
+            throw std::runtime_error("Invalid EXR file");
+        }
+
+        EXRHeader header;
+        InitEXRHeader(&header);
+        const char* error = nullptr;
+        status = ParseEXRHeaderFromFile(&header, &version, pathString.c_str(), &error);
+
+        if (status == TINYEXR_SUCCESS && header.num_channels < 3) {
+            error = "Not enough channels";
+            status = -1;
+        }
+
+        if (status != TINYEXR_SUCCESS) {
+            LAB_LOG("Invalid EXR file");
+            LAB_LOG(error);
+            FreeEXRErrorMessage(error);
+            throw std::runtime_error("Invalid EXR file");
+        }
+
+        // Read HALF channel as FLOAT.
+        for (int i = 0; i < header.num_channels; i++) {
+            if (header.pixel_types[i] == TINYEXR_PIXELTYPE_HALF)
+                header.requested_pixel_types[i] = TINYEXR_PIXELTYPE_FLOAT;
+        }
+
+        EXRImage image;
+        InitEXRImage(&image);
+        status = LoadEXRImageFromFile(&image, &header, pathString.c_str(), &error);
+        if (status != 0) {
+            LAB_LOG("Couldn't load EXR file");
+            LAB_LOG(error);
+            FreeEXRHeader(&header);
+            FreeEXRErrorMessage(error);
+            throw std::runtime_error("Couldn't load EXR file");
+        }
+
+        size = ivec2(image.width, image.height);
+        data = new float[size.x * size.y * header.num_channels];
+
+        // Load the image data to a single array, flipping it vertically if necessary
+        float* dataFloat = reinterpret_cast<float*>(data);
+        for (int channel = 0; channel < header.num_channels; channel++) {
+            auto idx = uvec2(0);
+            for (idx.y = 0; idx.y < size.y; idx.y++) {
+                for (idx.x = 0; idx.x < size.x; idx.x++) {
+                    auto i = idx.y * size.x + idx.x;
+                    auto flippedI = (flip ? size.y - 1 - idx.y : idx.y) * size.x + idx.x;
+                    dataFloat[flippedI * header.num_channels + channel] = reinterpret_cast<float*>(image.images[channel])[i];
+                }
+            }
+        }
+
+        // Swap R and B channels because of BGRA format
+        if (header.num_channels >= 3) {
+            auto idx = uvec2(0);
+            for (idx.y = 0; idx.y < size.y; idx.y++) {
+                for (idx.x = 0; idx.x < size.x; idx.x++) {
+                    auto i = (idx.y * size.x + idx.x) * header.num_channels;
+                    std::swap(dataFloat[i], dataFloat[i + 2]);
+                }
+            }
+        }
+
+        dataType = TextureDataType::Float32;
+        internalFormat = header.num_channels == 4 ? TextureInternalFormat::RGBAFloat32 : TextureInternalFormat::RGBFloat32;
+        format = header.num_channels == 4 ? TextureFormat::RGBA : TextureFormat::RGB;
+
+        FreeEXRImage(&image);
+        FreeEXRHeader(&header);
+    }
+
+    virtual ~EXRImageResource() override {
+        delete[] data;
+    }
+};
+
+static Ref<ImageResource> loadImage(const std::filesystem::path& filePath, bool gammaCorrected, bool flip = true) {
+    LAB_LOGH3("Loading image " << filePath);
+
+    if (filePath.extension() == ".exr")
+        return makeScoped<EXRImageResource>(filePath, gammaCorrected, flip);
+
+    return makeScoped<STBImageResource>(filePath, gammaCorrected, flip);
+}
+
 Ref<TextureResource> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected, TextureType type) {
-    STBImageResource image(filePath, gammaCorrected);
-    auto texture = LAB_RENDERER->createTexture(type, image);
+    auto image = loadImage(filePath, gammaCorrected);
+    auto texture = LAB_RENDERER->createTexture(type, *image);
 
     return makeRef<TextureResource>(std::move(texture));
 }
 
 Ref<TextureResource> loadCubemap(const std::filesystem::path& path, bool gammaCorrected) {
-    std::array<Scoped<ImageResource>, 6> images;
+    std::array<Ref<ImageResource>, 6> images;
 
     std::string extension;
     for (const auto& entry : std::filesystem::directory_iterator(path)) {
@@ -177,12 +275,12 @@ Ref<TextureResource> loadCubemap(const std::filesystem::path& path, bool gammaCo
         }
     }
 
-    images[0] = makeScoped<STBImageResource>((path / ("px" + extension)), gammaCorrected, false);
-    images[1] = makeScoped<STBImageResource>((path / ("nx" + extension)), gammaCorrected, false);
-    images[2] = makeScoped<STBImageResource>((path / ("py" + extension)), gammaCorrected, false);
-    images[3] = makeScoped<STBImageResource>((path / ("ny" + extension)), gammaCorrected, false);
-    images[4] = makeScoped<STBImageResource>((path / ("pz" + extension)), gammaCorrected, false);
-    images[5] = makeScoped<STBImageResource>((path / ("nz" + extension)), gammaCorrected, false);
+    images[0] = loadImage((path / ("px" + extension)), gammaCorrected, false);
+    images[1] = loadImage((path / ("nx" + extension)), gammaCorrected, false);
+    images[2] = loadImage((path / ("py" + extension)), gammaCorrected, false);
+    images[3] = loadImage((path / ("ny" + extension)), gammaCorrected, false);
+    images[4] = loadImage((path / ("pz" + extension)), gammaCorrected, false);
+    images[5] = loadImage((path / ("nz" + extension)), gammaCorrected, false);
 
     auto texture = LAB_RENDERER->createCubemap(images);
 

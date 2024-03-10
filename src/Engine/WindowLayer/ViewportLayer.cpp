@@ -103,7 +103,7 @@ void ViewportLayer::updateViewFramebuffer() {
 
     auto depthBuffer = makeRef<TextureResource>(
         LAB_RENDERER->createTexture(TextureType::Texture2D,
-                                    ImageResource(m_size, nullptr, TextureDataType::Float32, TextureFormat::Depth, TextureInternalFormat::DepthFloat32), false,
+                                    ImageResource(m_size, nullptr, TextureDataType::Float32, TextureFormat::Depth, TextureInternalFormat::DepthFixed24), false,
                                     TextureFilter::Linear, TextureWrap::ClampToEdge));
 
     m_viewFramebuffer = makeRef<Framebuffer>(

@@ -54,7 +54,7 @@ enum class TextureInternalFormat : uint8_t {
     RGBFloat32,
     RGBAFloat32,
     RedUInt32,
-    DepthFloat32
+    DepthFixed24
 };
 
 enum class TextureFormat : uint8_t {

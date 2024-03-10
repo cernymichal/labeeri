@@ -3,6 +3,8 @@
 #include <chrono>
 #include <random>
 
+#include "Math.h"
+
 /*
  * @brief Fast pseudo random number generator by Sebastiano Vigna
  */
@@ -109,46 +111,130 @@ private:
     }
 };
 
-inline Xoshiro256SS LAB_RANDOM_GENERATOR;
-
-/*
- * @return A random uint64.
- *
- * @note Uses LAB_RANDOM_GENERATOR internally.
- */
-inline uint64_t randomUInt64() {
-    return LAB_RANDOM_GENERATOR();
-}
+inline thread_local Xoshiro256SS RANDOM_GENERATOR;
 
 /*
  * @param min The minimum value of the range.
  * @param max The maximum value of the range.
- * @return A random int32 in the range [min, max).
+ * @return A random T in the range [min, max).
  *
- * @note Uses LAB_RANDOM_GENERATOR internally.
+ * @note Uses RANDOM_GENERATOR internally.
  */
-inline int32_t randomInt(int32_t min, int32_t max) {
-    std::uniform_int_distribution<int32_t> distribution(min, max);
-    return distribution(LAB_RANDOM_GENERATOR);
+template <typename T>
+inline T random(T min, T max) {
+    if constexpr (std::is_floating_point_v<T>)
+        return min + (max - min) * static_cast<T>(RANDOM_GENERATOR()) / static_cast<T>(RANDOM_GENERATOR.max());
+    else
+        return min + RANDOM_GENERATOR() % (max - min);
 }
 
 /*
- * @param min The minimum value of the range.
- * @param max The maximum value of the range.
- * @return A random double in the range [min, max).
+ * @return A random value of T or a floating-point number in the range [0, 1).
  *
- * @note Uses LAB_RANDOM_GENERATOR internally.
+ * @note Uses RANDOM_GENERATOR internally.
  */
-inline double randomDouble(double min, double max) {
-    std::uniform_real_distribution<double> distribution(min, max);
-    return distribution(LAB_RANDOM_GENERATOR);
+template <typename T>
+inline T random() {
+    if constexpr (std::is_floating_point_v<T>)
+        return random<T>(0, 1);
+    else if constexpr (std::is_same_v<T, bool>)
+        return RANDOM_GENERATOR() & 1;
+    else {
+        auto value = RANDOM_GENERATOR();
+        return *reinterpret_cast<T*>(&value);
+    }
 }
 
 /*
- * @return A random double in the range [0, 1).
+ * @return A random value from a normal distribution N(0, 1).
  *
- * @note Uses LAB_RANDOM_GENERATOR internally.
+ * @note Uses RANDOM_GENERATOR internally.
  */
-inline double randomDouble() {
-    return randomDouble(0.0, 1.0);
+template <typename T>
+inline T randomNormal() {
+    // https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
+    // faster than ratio of uniforms :( but ziggurat might be faster
+
+    thread_local std::pair<T, bool> cache(0, false);  // {cached value, valid}
+    if (cache.second) {
+        cache.second = false;
+        return cache.first;
+    }
+
+    double u1, u2;
+    do {
+        u1 = random<T>();
+    } while (u1 == 0);
+    u2 = random<T>();
+
+    auto mag = 1 * sqrt(-2.0 * log(u1));
+    auto z0 = mag * cos(TWO_PI * u2);
+    auto z1 = mag * sin(TWO_PI * u2);
+
+    cache = {z1, true};
+    return z0;
+}
+
+// Random vectors
+
+/*
+ * @return A random vector with values in the range in the range [min, max).
+ *
+ * @note Uses RANDOM_GENERATOR internally.
+ */
+template <int L, typename T = float>
+inline glm::vec<L, T> randomVec(const glm::vec<L, T>& min, const glm::vec<L, T>& max) {
+    glm::vec<L, T> result;
+    for (int i = 0; i < L; i++)
+        result[i] = random<T>(min[i], max[i]);
+
+    return result;
+}
+
+/*
+ * @return A random vector with values in the range in the range [0, 1).
+ *
+ * @note Uses RANDOM_GENERATOR internally.
+ */
+template <int L, typename T = float>
+inline glm::vec<L, T> randomVec() {
+    return randomVec<L, T>(glm::vec<L, T>(0), glm::vec<L, T>(1));
+}
+
+/*
+ * @return A random unit vec3.
+ *
+ * @note Uses RANDOM_GENERATOR internally.
+ */
+inline vec3 randomUnitVec3() {
+    // faster than sampling a gaussian distribution and normalizing - tested with box-muller transform
+
+    while (true) {
+        vec3 v = randomVec<3>(vec3(-1), vec3(1));
+        if (glm::length2(v) <= 1.0)
+            return glm::normalize(v);
+    }
+}
+
+/*
+ * @return A random unit vec3 on a hemisphere given by a normal.
+ *
+ * @note Uses RANDOM_GENERATOR internally.
+ */
+inline vec3 randomVecOnHemisphere(const vec3& normal) {
+    auto v = randomUnitVec3();
+    return glm::dot(v, normal) >= 0.0f ? v : -v;
+}
+
+/*
+ * @return A random unit vec3 in a disk in the xy plane.
+ *
+ * @note Uses RANDOM_GENERATOR internally.
+ */
+inline vec3 randomInUnitDisk() {
+    while (true) {
+        auto p = randomVec<2>(vec2(-1), vec2(1));
+        if (glm::length2(p) <= 1.0)
+            return vec3(p, 0);
+    }
 }
