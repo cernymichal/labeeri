@@ -14,12 +14,12 @@ static MeshResource createWaterMesh() {
 
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, 11 * sizeof(float) * plane::vertexCount, nullptr, GL_STATIC_DRAW);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, 8 * sizeof(float) * plane::vertexCount, plane::vertices);
+    glBufferData(GL_ARRAY_BUFFER, 11 * sizeof(f32) * plane::vertexCount, nullptr, GL_STATIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, 8 * sizeof(f32) * plane::vertexCount, plane::vertices);
 
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * plane::faceCount * 3, plane::indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * plane::faceCount * 3, plane::indices, GL_STATIC_DRAW);
 
     auto& shader = Resources<ShaderResource>::Get("phong");
     if (!shader)
@@ -37,16 +37,16 @@ static MeshResource createWaterMesh() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     glEnableVertexAttribArray(positionLocation);
-    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), nullptr);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(f32), nullptr);
 
     glEnableVertexAttribArray(normalLocation);
-    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(f32), (void*)(3 * sizeof(f32)));
 
     glEnableVertexAttribArray(tangentLocation);
-    glVertexAttribPointer(tangentLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(8 * sizeof(float) * plane::vertexCount));
+    glVertexAttribPointer(tangentLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(8 * sizeof(f32) * plane::vertexCount));
 
     glEnableVertexAttribArray(UVLocation);
-    glVertexAttribPointer(UVLocation, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glVertexAttribPointer(UVLocation, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(f32), (void*)(6 * sizeof(f32)));
 
     glBindVertexArray(0);
     return MeshResource(VAO, VBO, EBO, plane::faceCount);

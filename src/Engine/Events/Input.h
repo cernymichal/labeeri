@@ -5,7 +5,7 @@ namespace labeeri::Engine {
 /**
  * @brief The action taken on a key.
  */
-enum class KeyAction : uint8_t {
+enum class KeyAction : u8 {
     Release = 0,
     Press = 1,
     Repeat = 2
@@ -21,7 +21,7 @@ enum class KeyAction : uint8_t {
 /**
  * @brief GLFW Keyboard key codes.
  */
-enum class KeyboardKey : int {
+enum class KeyboardKey : i32 {
     // The unknown key
     Unknown = -1,
 
@@ -153,7 +153,7 @@ enum class KeyboardKey : int {
 /**
  * @brief GLFW Mouse button codes.
  */
-enum class MouseButton : uint8_t {
+enum class MouseButton : u8 {
     Button1 = 0,
     Button2 = 1,
     Button3 = 2,

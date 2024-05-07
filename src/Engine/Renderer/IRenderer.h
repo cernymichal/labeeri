@@ -24,7 +24,7 @@ public:
      *
      * @param buffers The buffers to clear.
      */
-    virtual void clear(int buffers) = 0;
+    virtual void clear(i32 buffers) = 0;
 
     /**
      * @brief Clears buffers with a value.
@@ -32,7 +32,7 @@ public:
      * @param buffers The buffers to clear.
      * @param value The value to clear the buffers with.
      */
-    virtual void clearBuffer(int buffers, uint32_t value) = 0;
+    virtual void clearBuffer(i32 buffers, u32 value) = 0;
 
     /**
      * @brief Sets the clear color.
@@ -50,7 +50,7 @@ public:
      * @param projectionMatrix The projection matrix of the camera.
      * @param parameters The parameters of the scene.
      */
-    virtual void beginScene(double time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix,
+    virtual void beginScene(f64 time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix,
                             const RenderSceneParameters& parameters = RenderSceneParameters()) = 0;
 
     /**
@@ -93,7 +93,7 @@ public:
      * @param name The name of the uniform.
      * @param value The value to bind.
      */
-    virtual void bindUniform(const char* name, float value) = 0;
+    virtual void bindUniform(const char* name, f32 value) = 0;
 
     /**
      * @brief Binds a value to uniform.
@@ -101,7 +101,7 @@ public:
      * @param name The name of the uniform.
      * @param value The value to bind.
      */
-    virtual void bindUniform(const char* name, int32_t value) = 0;
+    virtual void bindUniform(const char* name, i32 value) = 0;
 
     /**
      * @brief Binds a value to uniform.
@@ -109,7 +109,7 @@ public:
      * @param name The name of the uniform.
      * @param value The value to bind.
      */
-    virtual void bindUniform(const char* name, uint32_t value) = 0;
+    virtual void bindUniform(const char* name, u32 value) = 0;
 
     /**
      * @brief Binds a value to uniform.
@@ -196,9 +196,9 @@ public:
      * @param faceCount The number of faces.
      * @return The mesh.
      */
-    virtual MeshResource createMesh(const float* vertices, uint32_t vertexCount,
-                                    const float* normals, const float* tangets,
-                                    const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const = 0;
+    virtual MeshResource createMesh(const f32* vertices, u32 vertexCount,
+                                    const f32* normals, const f32* tangets,
+                                    const std::vector<const f32*>& uvs, const u32* indices, u32 faceCount) const = 0;
 
     /**
      * @brief Deletes a mesh.
@@ -236,7 +236,7 @@ public:
      * @param texture The texture to bind.
      * @param slot The slot to bind to.
      */
-    virtual void bindTexture(TextureType type, const TextureResource& texture, unsigned slot = 0) const = 0;
+    virtual void bindTexture(TextureType type, const TextureResource& texture, u32 slot = 0) const = 0;
 
     /**
      * @brief Reads the current framebuffer data.

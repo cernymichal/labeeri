@@ -16,7 +16,7 @@ public:
 
     EVENT_CLASS_TYPE(WindowResize)
 
-    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application))
+    EVENT_CLASS_CATEGORY(static_cast<i32>(EventCategory::Application))
 };
 
 /**
@@ -31,7 +31,7 @@ public:
 
     EVENT_CLASS_TYPE(WindowResize)
 
-    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application))
+    EVENT_CLASS_CATEGORY(static_cast<i32>(EventCategory::Application))
 };
 
 /**
@@ -41,7 +41,7 @@ class ApplicationRenderEvent : public IEvent {
 public:
     EVENT_CLASS_TYPE(ApplicationRender)
 
-    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application))
+    EVENT_CLASS_CATEGORY(static_cast<i32>(EventCategory::Application))
 };
 
 /**
@@ -49,14 +49,14 @@ public:
  */
 class UpdateEvent : public IEvent {
 public:
-    const double m_deltaTime;
+    const f64 m_deltaTime;
 
-    explicit UpdateEvent(double deltaTime) : m_deltaTime(deltaTime) {
+    explicit UpdateEvent(f64 deltaTime) : m_deltaTime(deltaTime) {
     }
 
     EVENT_CLASS_TYPE(ApplicationUpdate)
 
-    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application) | static_cast<int>(EventCategory::Scene))
+    EVENT_CLASS_CATEGORY(static_cast<i32>(EventCategory::Application) | static_cast<i32>(EventCategory::Scene))
 };
 
 /**
@@ -66,7 +66,7 @@ class FixedUpdateEvent : public IEvent {
 public:
     EVENT_CLASS_TYPE(ApplicationFixedUpdate)
 
-    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application) | static_cast<int>(EventCategory::Scene))
+    EVENT_CLASS_CATEGORY(static_cast<i32>(EventCategory::Application) | static_cast<i32>(EventCategory::Scene))
 };
 
 class Scene;
@@ -83,7 +83,7 @@ public:
 
     EVENT_CLASS_TYPE(SceneChange)
 
-    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application))
+    EVENT_CLASS_CATEGORY(static_cast<i32>(EventCategory::Application))
 };
 
 }  // namespace labeeri::Engine

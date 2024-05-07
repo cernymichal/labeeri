@@ -38,7 +38,7 @@ class FlatMaterialResource : public MaterialResource {
 public:
     Ref<TextureResource> m_texture = nullptr;
     vec3 m_color = FALLBACK_COLOR;
-    float m_alpha = 1.0f;
+    f32 m_alpha = 1.0f;
 
     /**
      * @param shader The shader to use for the material.
@@ -72,11 +72,11 @@ public:
     Ref<TextureResource> m_diffuseMap = nullptr;
     vec3 m_specular = vec3(0.2f);
     Ref<TextureResource> m_specularMap = nullptr;
-    float m_shininess = 32.0f;
-    float m_metallic = 0;
+    f32 m_shininess = 32.0f;
+    f32 m_metallic = 0;
     Ref<TextureResource> m_metallicMap = nullptr;
     Ref<TextureResource> m_normalMap = nullptr;
-    float m_alpha = 1.0f;
+    f32 m_alpha = 1.0f;
 
     /**
      * @param shader The shader to use for the material.

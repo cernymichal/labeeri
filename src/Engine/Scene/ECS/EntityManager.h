@@ -69,12 +69,12 @@ public:
     /**
      * @return The number of entities in existence.
      */
-    uint32_t entityCount() const {
+    u32 entityCount() const {
         return m_entityCount;
     }
 
 private:
-    uint32_t m_entityCount = 0;
+    u32 m_entityCount = 0;
     EntityId m_nextEntityId = NULL_ENTITY + 1;
     std::stack<EntityId, std::vector<EntityId>> m_recycledIds;
     std::array<ComponentSignature, MAX_ENTITIES> m_signatures;

@@ -29,7 +29,7 @@ protected:
 
 private:
     bool m_enabled = true;
-    float m_intensity = 1.0f;
+    f32 m_intensity = 1.0f;
 };
 
 }  // namespace labeeri

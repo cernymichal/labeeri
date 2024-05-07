@@ -80,7 +80,7 @@ Entity labeeri::roomPrefab(const Ref<Scene>& scene, vec2 offset, Entity setpiece
         transform->setParent(table);
     }
 
-    // TODO add table float script
+    // TODO add table f32 script
 
     return ground;
 }

@@ -10,7 +10,7 @@ struct GLFWwindow;
 
 namespace labeeri::Engine {
 
-enum class ApplicationFocus : uint8_t {
+enum class ApplicationFocus : u8 {
     UI,
     Viewport
 };

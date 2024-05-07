@@ -31,3 +31,4 @@
 #include "Engine/Utils/Math.h"
 #include "Engine/Utils/Ptr.h"
 #include "Engine/Utils/Random.h"
+#include "Engine/Utils/Scalars.h"

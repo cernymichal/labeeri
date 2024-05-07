@@ -2,10 +2,10 @@
 
 namespace labeeri::plane {
 
-constexpr int attribsPerVertex = 8;
-constexpr int vertexCount = 25;
-constexpr int faceCount = 32;
-constexpr float vertices[] = {
+constexpr i32 attribsPerVertex = 8;
+constexpr i32 vertexCount = 25;
+constexpr i32 faceCount = 32;
+constexpr f32 vertices[] = {
     0.25f,0.0f,-0.25f,0.0f,1.0f,0.0f,0.75f,0.75f,
     0.5f,0.0f,-0.25f,0.0f,1.0f,0.0f,1.0f,0.75f,
     0.5f,0.0f,-0.5f,0.0f,1.0f,0.0f,1.0f,1.0f,
@@ -32,7 +32,7 @@ constexpr float vertices[] = {
     0.5f,0.0f,0.25f,0.0f,1.0f,0.0f,1.0f,0.25f,
     0.5f,0.0f,0.0f,0.0f,1.0f,0.0f,1.0f,0.5f,
 };
-constexpr unsigned indices[] = {
+constexpr u32 indices[] = {
     0, 1, 2,
     0, 2, 3,
     4, 5, 6,

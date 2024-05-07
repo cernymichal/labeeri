@@ -14,13 +14,13 @@ public:
      */
     GLRenderer();
 
-    virtual void clear(int buffers) override;
+    virtual void clear(i32 buffers) override;
 
-    virtual void clearBuffer(int buffers, uint32_t value) override;
+    virtual void clearBuffer(i32 buffers, u32 value) override;
 
     virtual void setClearColor(const vec4& color) override;
 
-    virtual void beginScene(double time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix,
+    virtual void beginScene(f64 time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix,
                             const RenderSceneParameters& parameters = RenderSceneParameters()) override;
 
     virtual void endOpaque() override;
@@ -35,11 +35,11 @@ public:
 
     virtual void useShaderProgram(const Ref<ShaderResource>& shaderProgram) override;
 
-    virtual void bindUniform(const char* name, float value) override;
+    virtual void bindUniform(const char* name, f32 value) override;
 
-    virtual void bindUniform(const char* name, int32_t value) override;
+    virtual void bindUniform(const char* name, i32 value) override;
 
-    virtual void bindUniform(const char* name, uint32_t value) override;
+    virtual void bindUniform(const char* name, u32 value) override;
 
     virtual void bindUniform(const char* name, const mat4& value) override;
 
@@ -61,9 +61,9 @@ public:
 
     virtual void deleteShaderProgram(ShaderResource& shaderProgram) const override;
 
-    virtual MeshResource createMesh(const float* vertices, uint32_t vertexCount,
-                                    const float* normals, const float* tangents,
-                                    const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const override;
+    virtual MeshResource createMesh(const f32* vertices, u32 vertexCount,
+                                    const f32* normals, const f32* tangents,
+                                    const std::vector<const f32*>& uvs, const u32* indices, u32 faceCount) const override;
 
     virtual void deleteMesh(MeshResource& mesh) const override;
 
@@ -72,7 +72,7 @@ public:
 
     virtual TextureResource createCubemap(const std::array<Ref<ImageResource>, 6>& images, TextureFilter filter = TextureFilter::Linear) const override;
 
-    virtual void bindTexture(TextureType type, const TextureResource& texture, unsigned slot) const override;
+    virtual void bindTexture(TextureType type, const TextureResource& texture, u32 slot) const override;
 
     virtual void readFramebuffer(TextureFormat format, TextureDataType dataType,
                                  uvec2 position, uvec2 size, void* result) const override;
@@ -101,7 +101,7 @@ private:
     Ref<Framebuffer> m_currentFramebuffer;
     Ref<ShaderResource> m_currentShaderProgram;
     Ref<MeshResource> m_currentMesh;
-    double m_time = 0.0;
+    f64 m_time = 0.0;
     vec3 m_cameraPosition = vec3(0.0f);
     struct Matrices {
         mat4 view = mat4(1.0);

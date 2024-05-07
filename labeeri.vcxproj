@@ -252,6 +252,7 @@
     <ClInclude Include="src\Engine\Scene\Systems\Systems.h" />
     <ClInclude Include="src\Engine\Utils\Random.h" />
     <ClInclude Include="src\Engine\Utils\Engine.h" />
+    <ClInclude Include="src\Engine\Utils\Scalars.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\EntityWindow.h" />
     <ClInclude Include="src\Engine\WindowLayer\ImGuiWindow\HelpWindow.h" />
     <ClInclude Include="src\Engine\Window\GLFWWindow.h" />

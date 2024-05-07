@@ -12,8 +12,8 @@ private:
     struct MaterialSample {
         vec3 diffuse;
         vec3 specular;
-        float shininess;
-        float metallic;
+        f32 shininess;
+        f32 metallic;
     };
 
 public:
@@ -51,8 +51,8 @@ protected:
 
 private:
     bool m_started = false;
-    double m_startTime = 0.0;
-    double m_duration = 3.0;
+    f64 m_startTime = 0.0;
+    f64 m_duration = 3.0;
 
     MaterialSample m_originalMaterial = {
         vec3(0.0f),

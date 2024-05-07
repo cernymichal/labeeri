@@ -6,13 +6,13 @@ namespace labeeri::Engine {
  * @brief Describes the attenuation of a light.
  */
 struct LightAttenuation {
-    float constant = 1.0f;
-    float linear = 0.0f;
-    float quadratic = 0.1f;
+    f32 constant = 1.0f;
+    f32 linear = 0.0f;
+    f32 quadratic = 0.1f;
 
     LightAttenuation() = default;
 
-    LightAttenuation(float constant, float linear, float quadratic)
+    LightAttenuation(f32 constant, f32 linear, f32 quadratic)
         : constant(constant), linear(linear), quadratic(quadratic) {
     }
 };
@@ -42,7 +42,7 @@ struct LightProperties {
      * @param factor The factor to multiply with.
      * @return The multiplied properties.
      */
-    LightProperties operator*(float factor) const {
+    LightProperties operator*(f32 factor) const {
         LightProperties result(*this);
         result.ambient *= factor;
         result.diffuse *= factor;
@@ -98,8 +98,8 @@ struct RendererSpotLight {
     vec3 position;
     vec3 direction;
 
-    float innerCutoff;
-    float outerCutoff;
+    f32 innerCutoff;
+    f32 outerCutoff;
 
     LightProperties properties;
     LightAttenuation attenuation;
@@ -112,7 +112,7 @@ struct RendererSpotLight {
      * @param properties The properties of the light.
      * @param attenuation The attenuation of the light.
      */
-    RendererSpotLight(const vec3& position, const vec3& direction, float innerCutoff, float outerCutoff, const LightProperties& properties, const LightAttenuation& attenuation)
+    RendererSpotLight(const vec3& position, const vec3& direction, f32 innerCutoff, f32 outerCutoff, const LightProperties& properties, const LightAttenuation& attenuation)
         : position(position), direction(direction), innerCutoff(innerCutoff), outerCutoff(outerCutoff), properties(properties), attenuation(attenuation) {
     }
 };

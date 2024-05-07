@@ -9,7 +9,7 @@
 
 namespace labeeri::Engine {
 
-Entity Entities::Flycam(const Ref<Scene>& scene, vec3 position, quat rotation, float speed, double sensitivity) {
+Entity Entities::Flycam(const Ref<Scene>& scene, vec3 position, quat rotation, f32 speed, f64 sensitivity) {
     auto entity = Entity::Create(scene->ecs());
 
     auto transform = entity.getComponent<Transform>(scene->ecs());
@@ -24,7 +24,7 @@ Entity Entities::Flycam(const Ref<Scene>& scene, vec3 position, quat rotation, f
     return entity;
 }
 
-Entity Entities::Player(const Ref<Scene>& scene, vec3 position, quat rotation, float speed, double sensitivity, float height) {
+Entity Entities::Player(const Ref<Scene>& scene, vec3 position, quat rotation, f32 speed, f64 sensitivity, f32 height) {
     auto entity = Entity::Create(scene->ecs());
 
     auto transform = entity.getComponent<Transform>(scene->ecs());
@@ -50,7 +50,7 @@ Entity Entities::ColliderCube(const Ref<Scene>& scene, vec3 position, vec3 size)
     return entity;
 }
 
-Entity Entities::DirectionalLight(const Ref<Scene>& scene, const vec3& rotation, float intensity) {
+Entity Entities::DirectionalLight(const Ref<Scene>& scene, const vec3& rotation, f32 intensity) {
     auto entity = Entity::Create(scene->ecs());
 
     auto transform = entity.getComponent<Transform>(scene->ecs());
@@ -66,7 +66,7 @@ Entity Entities::DirectionalLight(const Ref<Scene>& scene, const vec3& rotation,
     return entity;
 }
 
-Entity Entities::PointLight(const Ref<Scene>& scene, const vec3& position, float intensity) {
+Entity Entities::PointLight(const Ref<Scene>& scene, const vec3& position, f32 intensity) {
     auto entity = Entity::Create(scene->ecs());
 
     auto transform = entity.getComponent<Transform>(scene->ecs());
@@ -81,7 +81,7 @@ Entity Entities::PointLight(const Ref<Scene>& scene, const vec3& position, float
     return entity;
 }
 
-Entity Entities::SpotLight(const Ref<Scene>& scene, const vec3& position, const vec3& rotation, float intensity) {
+Entity Entities::SpotLight(const Ref<Scene>& scene, const vec3& position, const vec3& rotation, f32 intensity) {
     auto entity = Entity::Create(scene->ecs());
 
     auto transform = entity.getComponent<Transform>(scene->ecs());

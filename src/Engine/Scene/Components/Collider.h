@@ -4,7 +4,7 @@
 
 namespace labeeri::Engine {
 
-enum class ColliderType : uint8_t {
+enum class ColliderType : u8 {
     AABB  // Axis Aligned Bounding Box
 };
 

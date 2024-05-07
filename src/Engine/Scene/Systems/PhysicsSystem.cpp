@@ -24,7 +24,7 @@ ECS::ComponentSignature PhysicsSystem::signature(const ECS::Instance& ecs) const
     return signature;
 }
 
-void PhysicsSystem::update(double deltaTime) {
+void PhysicsSystem::update(f64 deltaTime) {
     for (Entity entity : entities()) {
         auto rigidBody = entity.getComponent<RigidBody>();
         if (rigidBody->m_static)
@@ -33,8 +33,8 @@ void PhysicsSystem::update(double deltaTime) {
         auto transform = entity.getComponent<Transform>();
         auto collider = entity.getComponent<Collider>();
 
-        rigidBody->m_velocity += rigidBody->m_acceleration * static_cast<float>(deltaTime);
-        auto delta = rigidBody->m_velocity * static_cast<float>(deltaTime);
+        rigidBody->m_velocity += rigidBody->m_acceleration * static_cast<f32>(deltaTime);
+        auto delta = rigidBody->m_velocity * static_cast<f32>(deltaTime);
         transform->moveWorld(delta);
 
         if (collides(entity))

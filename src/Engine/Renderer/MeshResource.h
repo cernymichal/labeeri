@@ -10,7 +10,7 @@ public:
     const LAB_GL_HANDLE m_vertexArrayObject;
     const LAB_GL_HANDLE m_vertexBufferObject;
     const LAB_GL_HANDLE m_elementBufferObject;
-    const uint32_t m_triangleCount;
+    const u32 m_triangleCount;
 
     /**
      * @param vertexArrayObject The vertex array object.
@@ -18,7 +18,7 @@ public:
      * @param elementBufferObject The element buffer object.
      * @param triangleCount The number of triangles in the mesh.
      */
-    MeshResource(LAB_GL_HANDLE vertexArrayObject, LAB_GL_HANDLE vertexBufferObject, LAB_GL_HANDLE elementBufferObject, uint32_t triangleCount)
+    MeshResource(LAB_GL_HANDLE vertexArrayObject, LAB_GL_HANDLE vertexBufferObject, LAB_GL_HANDLE elementBufferObject, u32 triangleCount)
         : m_vertexArrayObject(vertexArrayObject), m_vertexBufferObject(vertexBufferObject), m_elementBufferObject(elementBufferObject), m_triangleCount(triangleCount) {
     }
 

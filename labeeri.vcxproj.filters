@@ -359,6 +359,9 @@
     <ClInclude Include="src\Engine\Utils\Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Utils\Scalars.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine\shaders\flat.vert" />

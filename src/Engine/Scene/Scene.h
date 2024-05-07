@@ -36,7 +36,7 @@ public:
     /**
      * @return The current scene time.
      */
-    double time() const {
+    f64 time() const {
         return m_time;
     }
 
@@ -72,7 +72,7 @@ private:
         std::shared_ptr<RenderSystem> render;
     } m_systems;
     std::list<Scoped<IScript>> m_scripts;
-    double m_time = 0.0;
+    f64 m_time = 0.0;
 
     bool onUpdate(const UpdateEvent& e);
 

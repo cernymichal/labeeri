@@ -14,7 +14,7 @@ public:
      * @param speed The speed to move the entity.
      * @param mouseSensitivity The mouse sensitivity to rotate the entity.
      */
-    explicit FlycamController(Entity entity, float speed = 2.0f, double mouseSensitivity = 0.002);
+    explicit FlycamController(Entity entity, f32 speed = 2.0f, f64 mouseSensitivity = 0.002);
 
 protected:
     virtual void onUpdate(const UpdateEvent& e) override;
@@ -26,8 +26,8 @@ protected:
     virtual void onKeyboardRelease(const KeyboardReleaseEvent& e) override;
 
 private:
-    float m_speed;
-    double m_mouseSensitivity;
+    f32 m_speed;
+    f64 m_mouseSensitivity;
     bool m_sprinting = false;
     vec2 m_viewAngles = vec2(0.0f);
     vec3 m_direction = vec3(0.0f);

@@ -14,13 +14,13 @@ enum class ClearBuffer {
 };
 
 struct PostprocessingParameters {
-    float exposure = 1.0f;
-    float gamma = 2.2f;
+    f32 exposure = 1.0f;
+    f32 gamma = 2.2f;
 };
 
 struct FogParameters {
     vec3 color = vec3(0.8f);
-    float density = 0.02f;
+    f32 density = 0.02f;
 };
 
 /**
@@ -32,19 +32,19 @@ struct RenderSceneParameters {
     Ref<TextureResource> skybox;
 };
 
-enum class ShaderType : uint8_t {
+enum class ShaderType : u8 {
     Vertex,
     Fragment,
     Geometry
 };
 
-enum class TextureType : uint8_t {
+enum class TextureType : u8 {
     Texture2D,
     Rectangle,
     Cubemap
 };
 
-enum class TextureInternalFormat : uint8_t {
+enum class TextureInternalFormat : u8 {
     RGB,
     RGBA,
     SRGB,
@@ -57,7 +57,7 @@ enum class TextureInternalFormat : uint8_t {
     DepthFixed24
 };
 
-enum class TextureFormat : uint8_t {
+enum class TextureFormat : u8 {
     Red,
     RGB,
     RGBA,
@@ -65,7 +65,7 @@ enum class TextureFormat : uint8_t {
     Depth
 };
 
-enum class TextureDataType : uint8_t {
+enum class TextureDataType : u8 {
     UByte,
     UInt32,
     Float16,
@@ -75,7 +75,7 @@ enum class TextureDataType : uint8_t {
 /**
  * @brief Texture magnification / minification filter.
  */
-enum class TextureFilter : uint8_t {
+enum class TextureFilter : u8 {
     Nearest,
     Linear
 };
@@ -83,7 +83,7 @@ enum class TextureFilter : uint8_t {
 /**
  * @brief Texture edge wrapping mode.
  */
-enum class TextureWrap : uint8_t {
+enum class TextureWrap : u8 {
     ClampToEdge,
     Repeat,
     MirroredRepeat,

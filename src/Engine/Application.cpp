@@ -75,13 +75,13 @@ void Application::emitEvent(ApplicationRenderEvent& e) {
 void Application::run() {
     LAB_LOGH1("Application::run()");
 
-    double previousUpdateTime = LAB_WINDOW->currentTime();
-    double fixedUpdateTimeAccumulator = 0;
+    f64 previousUpdateTime = LAB_WINDOW->currentTime();
+    f64 fixedUpdateTimeAccumulator = 0;
     while (!LAB_WINDOW->shouldClose()) {
         LAB_WINDOW->pollEvents();
 
-        double currentTime = LAB_WINDOW->currentTime();
-        double deltaTime = currentTime - previousUpdateTime;
+        f64 currentTime = LAB_WINDOW->currentTime();
+        f64 deltaTime = currentTime - previousUpdateTime;
         previousUpdateTime = currentTime;
 
         if (LAB_WINDOW->minimized())

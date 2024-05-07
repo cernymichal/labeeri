@@ -21,9 +21,9 @@ public:
     LightType m_type;
     LightProperties m_properties;
     LightAttenuation m_attenuation;
-    float m_innerCutoff;
-    float m_outerCutoff;
-    float m_intensity = 1.0;
+    f32 m_innerCutoff;
+    f32 m_outerCutoff;
+    f32 m_intensity = 1.0;
 
     /**
      * @param type Type of the light.
@@ -32,7 +32,7 @@ public:
      * @param innerCutoff Inner cutoff of the light.
      * @param outerCutoff Outer cutoff of the light.
      */
-    explicit Light(LightType type = LightType::Point, const LightProperties& properties = LightProperties(), const LightAttenuation& attenuation = LightAttenuation(), float innerCutoff = 0.82f, float outerCutoff = 0.91f)
+    explicit Light(LightType type = LightType::Point, const LightProperties& properties = LightProperties(), const LightAttenuation& attenuation = LightAttenuation(), f32 innerCutoff = 0.82f, f32 outerCutoff = 0.91f)
         : m_type(type), m_properties(properties), m_attenuation(attenuation), m_innerCutoff(innerCutoff), m_outerCutoff(outerCutoff) {
     }
 
@@ -73,7 +73,7 @@ public:
      * @param outerCutoff Outer cutoff of the light.
      * @return The created light component.
      */
-    static Light Spot(const LightProperties& properties = DefualtSpotLightProperties, const LightAttenuation& attenuation = LightAttenuation(), float innerCutoff = 0.91f, float outerCutoff = 0.82f) {
+    static Light Spot(const LightProperties& properties = DefualtSpotLightProperties, const LightAttenuation& attenuation = LightAttenuation(), f32 innerCutoff = 0.91f, f32 outerCutoff = 0.82f) {
         return Light(LightType::Spot, properties, attenuation, innerCutoff, outerCutoff);
     }
 };

@@ -92,10 +92,10 @@ Ref<Scene> loadLabyrinthScene() {
     }
 
     {  // Rooms
-        int axisCount = 5;
-        float roomSize = 10.0f;
-        for (float x = -(axisCount - 1) * roomSize / 2.0f; x <= (axisCount - 1) * roomSize / 2.0f; x += roomSize) {
-            for (float z = -(axisCount - 1) * roomSize / 2.0f; z <= (axisCount - 1) * roomSize / 2.0f; z += roomSize)
+        i32 axisCount = 5;
+        f32 roomSize = 10.0f;
+        for (f32 x = -(axisCount - 1) * roomSize / 2.0f; x <= (axisCount - 1) * roomSize / 2.0f; x += roomSize) {
+            for (f32 z = -(axisCount - 1) * roomSize / 2.0f; z <= (axisCount - 1) * roomSize / 2.0f; z += roomSize)
                 roomPrefab(scene, vec2(x, z));
         }
     }
@@ -115,10 +115,10 @@ Ref<Scene> loadLabyrinthScene() {
     }
 
     {  // Water
-        int axisCount = 2;
-        float tileSize = 25.0f;
-        for (float x = -(axisCount - 1) * tileSize / 2.0f; x <= (axisCount - 1) * tileSize / 2.0f; x += tileSize) {
-            for (float z = -(axisCount - 1) * tileSize / 2.0f; z <= (axisCount - 1) * tileSize / 2.0f; z += tileSize) {
+        i32 axisCount = 2;
+        f32 tileSize = 25.0f;
+        for (f32 x = -(axisCount - 1) * tileSize / 2.0f; x <= (axisCount - 1) * tileSize / 2.0f; x += tileSize) {
+            for (f32 z = -(axisCount - 1) * tileSize / 2.0f; z <= (axisCount - 1) * tileSize / 2.0f; z += tileSize) {
                 auto water = Entity::Create(scene->ecs());
 
                 auto transform = water.getComponent<Transform>(scene->ecs());

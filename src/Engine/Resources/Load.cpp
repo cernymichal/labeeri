@@ -82,14 +82,14 @@ Ref<MeshResource> loadMesh(const std::filesystem::path& filePath) {
 
     const aiMesh* assimpMesh = scene->mMeshes[0];
 
-    uint32_t vertexCount = assimpMesh->mNumVertices;
-    uint32_t faceCount = assimpMesh->mNumFaces;
-    auto vertices = reinterpret_cast<float*>(assimpMesh->mVertices);
-    float* normals = assimpMesh->HasNormals() ? reinterpret_cast<float*>(assimpMesh->mNormals) : nullptr;
-    float* tangents = assimpMesh->HasTangentsAndBitangents() ? reinterpret_cast<float*>(assimpMesh->mTangents) : nullptr;
+    u32 vertexCount = assimpMesh->mNumVertices;
+    u32 faceCount = assimpMesh->mNumFaces;
+    auto vertices = reinterpret_cast<f32*>(assimpMesh->mVertices);
+    f32* normals = assimpMesh->HasNormals() ? reinterpret_cast<f32*>(assimpMesh->mNormals) : nullptr;
+    f32* tangents = assimpMesh->HasTangentsAndBitangents() ? reinterpret_cast<f32*>(assimpMesh->mTangents) : nullptr;
 
     // UVs
-    std::vector<std::vector<float>> UVs;
+    std::vector<std::vector<f32>> UVs;
     if (assimpMesh->HasTextureCoords(0)) {
         UVs.emplace_back();
         UVs[0].reserve((size_t)vertexCount * 2);
@@ -100,13 +100,13 @@ Ref<MeshResource> loadMesh(const std::filesystem::path& filePath) {
             UVs[0].push_back(vector.y);
         }
     }
-    std::vector<const float*> uvPtrs;
+    std::vector<const f32*> uvPtrs;
     uvPtrs.reserve(UVs.size());
     for (const auto& map : UVs)
         uvPtrs.push_back(map.data());
 
     // indices
-    std::vector<unsigned int> indices;
+    std::vector<u32> indices;
     indices.reserve((size_t)assimpMesh->mNumFaces * 3);
 
     for (size_t i = 0; i < assimpMesh->mNumFaces; i++) {
@@ -129,7 +129,7 @@ struct STBImageResource : ImageResource {
         else
             stbi_set_flip_vertically_on_load(false);
 
-        int channels;
+        i32 channels;
         ivec2 sizeInt;
 
         const auto filePathStr = filePath.string();
@@ -168,7 +168,7 @@ struct EXRImageResource : ImageResource {
         LAB_LOG("Loading texture " << pathString);
 
         EXRVersion version;
-        int status = ParseEXRVersionFromFile(&version, pathString.c_str());
+        i32 status = ParseEXRVersionFromFile(&version, pathString.c_str());
         if (status != TINYEXR_SUCCESS || version.multipart) {
             LAB_LOG("Invalid EXR file");
             throw std::runtime_error("Invalid EXR file");
@@ -191,8 +191,8 @@ struct EXRImageResource : ImageResource {
             throw std::runtime_error("Invalid EXR file");
         }
 
-        // Read HALF channel as FLOAT.
-        for (int i = 0; i < header.num_channels; i++) {
+        // Read HALF channel as f32.
+        for (i32 i = 0; i < header.num_channels; i++) {
             if (header.pixel_types[i] == TINYEXR_PIXELTYPE_HALF)
                 header.requested_pixel_types[i] = TINYEXR_PIXELTYPE_FLOAT;
         }
@@ -209,17 +209,17 @@ struct EXRImageResource : ImageResource {
         }
 
         size = ivec2(image.width, image.height);
-        data = new float[size.x * size.y * header.num_channels];
+        data = new f32[size.x * size.y * header.num_channels];
 
         // Load the image data to a single array, flipping it vertically if necessary
-        float* dataFloat = reinterpret_cast<float*>(data);
-        for (int channel = 0; channel < header.num_channels; channel++) {
+        f32* dataFloat = reinterpret_cast<f32*>(data);
+        for (i32 channel = 0; channel < header.num_channels; channel++) {
             auto idx = uvec2(0);
             for (idx.y = 0; idx.y < size.y; idx.y++) {
                 for (idx.x = 0; idx.x < size.x; idx.x++) {
                     auto i = idx.y * size.x + idx.x;
                     auto flippedI = (flip ? size.y - 1 - idx.y : idx.y) * size.x + idx.x;
-                    dataFloat[flippedI * header.num_channels + channel] = reinterpret_cast<float*>(image.images[channel])[i];
+                    dataFloat[flippedI * header.num_channels + channel] = reinterpret_cast<f32*>(image.images[channel])[i];
                 }
             }
         }

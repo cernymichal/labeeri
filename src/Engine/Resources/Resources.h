@@ -51,6 +51,7 @@ Ref<ModelResource> tryFindModel(const char* name);
  * @param name The name of the resource.
  * @return The resource if found, otherwise nullptr.
  * */
+
 template <typename T>
 static Ref<T> tryFindResource(const char* name) {
     throw std::runtime_error("Finding defautls of this resource type not supported");

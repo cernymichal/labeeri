@@ -30,7 +30,7 @@ private:
 };
 
 static Shader compileShader(const char* source, ShaderType shaderType) {
-    int type;
+    i32 type;
     const char* typeStr;
     switch (shaderType) {
         case (ShaderType::Vertex):
@@ -103,19 +103,19 @@ static void linkShaderProgram(GLuint program) {
     throw std::runtime_error("Failed to link shader program");
 }
 
-static int clearBuffersGL(int buffers) {
-    int buffersGL = 0;
-    if (buffers & static_cast<int>(ClearBuffer::Color))
+static i32 clearBuffersGL(i32 buffers) {
+    i32 buffersGL = 0;
+    if (buffers & static_cast<i32>(ClearBuffer::Color))
         buffersGL |= GL_COLOR_BUFFER_BIT;
-    if (buffers & static_cast<int>(ClearBuffer::Depth))
+    if (buffers & static_cast<i32>(ClearBuffer::Depth))
         buffersGL |= GL_DEPTH_BUFFER_BIT;
-    if (buffers & static_cast<int>(ClearBuffer::Stencil))
+    if (buffers & static_cast<i32>(ClearBuffer::Stencil))
         buffersGL |= GL_STENCIL_BUFFER_BIT;
 
     return buffersGL;
 }
 
-static int textureTypeGL(TextureType type) {
+static i32 textureTypeGL(TextureType type) {
     switch (type) {
         case TextureType::Texture2D:
             return GL_TEXTURE_2D;
@@ -128,7 +128,7 @@ static int textureTypeGL(TextureType type) {
     }
 }
 
-static int textureInternalFormatGL(TextureInternalFormat format) {
+static i32 textureInternalFormatGL(TextureInternalFormat format) {
     switch (format) {
         case TextureInternalFormat::RGB:
             return GL_RGB;
@@ -155,7 +155,7 @@ static int textureInternalFormatGL(TextureInternalFormat format) {
     }
 }
 
-static int textureFormatGL(TextureFormat format) {
+static i32 textureFormatGL(TextureFormat format) {
     switch (format) {
         case TextureFormat::Red:
             return GL_RED;
@@ -172,7 +172,7 @@ static int textureFormatGL(TextureFormat format) {
     }
 }
 
-static int textureDataTypeGL(TextureDataType type) {
+static i32 textureDataTypeGL(TextureDataType type) {
     switch (type) {
         case TextureDataType::UByte:
             return GL_UNSIGNED_BYTE;
@@ -187,8 +187,8 @@ static int textureDataTypeGL(TextureDataType type) {
     }
 }
 
-static std::pair<int, int> textureFilterGL(TextureFilter filter, bool usingMipmap) {
-    int minFilterGL, magFilterGL;
+static std::pair<i32, i32> textureFilterGL(TextureFilter filter, bool usingMipmap) {
+    i32 minFilterGL, magFilterGL;
     switch (filter) {
         case TextureFilter::Nearest:
             minFilterGL = usingMipmap ? GL_NEAREST_MIPMAP_LINEAR : GL_NEAREST;
@@ -205,7 +205,7 @@ static std::pair<int, int> textureFilterGL(TextureFilter filter, bool usingMipma
     return {minFilterGL, magFilterGL};
 }
 
-static int textureWrapGL(TextureWrap wrap) {
+static i32 textureWrapGL(TextureWrap wrap) {
     switch (wrap) {
         case TextureWrap::ClampToEdge:
             return GL_CLAMP_TO_EDGE;
@@ -236,18 +236,18 @@ GLRenderer::GLRenderer() {
     glFrontFace(GL_CCW);
 }
 
-void GLRenderer::clear(int buffers) {
+void GLRenderer::clear(i32 buffers) {
     glClearDepth(0.0);
     glClear(clearBuffersGL(buffers));
 }
 
-void GLRenderer::clearBuffer(int buffers, uint32_t value) {
-    int buffersGL = 0;
-    if (buffers & static_cast<int>(ClearBuffer::Color))
+void GLRenderer::clearBuffer(i32 buffers, u32 value) {
+    i32 buffersGL = 0;
+    if (buffers & static_cast<i32>(ClearBuffer::Color))
         buffersGL |= GL_COLOR;
-    if (buffers & static_cast<int>(ClearBuffer::Depth))
+    if (buffers & static_cast<i32>(ClearBuffer::Depth))
         buffersGL |= GL_DEPTH;
-    if (buffers & static_cast<int>(ClearBuffer::Stencil))
+    if (buffers & static_cast<i32>(ClearBuffer::Stencil))
         buffersGL |= GL_STENCIL;
 
     glClearBufferuiv(buffersGL, 0, &value);
@@ -257,7 +257,7 @@ void GLRenderer::setClearColor(const vec4& color) {
     glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void GLRenderer::beginScene(double time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix, const RenderSceneParameters& parameters) {
+void GLRenderer::beginScene(f64 time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix, const RenderSceneParameters& parameters) {
     m_time = time;
     m_cameraPosition = cameraPosition;
     m_matrices.view = viewMatrix;
@@ -342,7 +342,7 @@ void GLRenderer::useShaderProgram(const Ref<ShaderResource>& shaderProgram) {
     m_currentShaderProgram = shaderProgram;
     glUseProgram(*m_currentShaderProgram);
 
-    bindUniform("u_time", (float)m_time);
+    bindUniform("u_time", (f32)m_time);
     bindUniform("u_camera_position", m_cameraPosition);
     bindUniform("u_view_matrix", m_matrices.view);
     bindUniform("u_view_matrix_inverse", m_matrices.viewInverse);
@@ -362,15 +362,15 @@ void GLRenderer::useShaderProgram(const Ref<ShaderResource>& shaderProgram) {
     LAB_LOG_RENDERAPI_ERROR();
 }
 
-void GLRenderer::bindUniform(const char* name, float value) {
+void GLRenderer::bindUniform(const char* name, f32 value) {
     glUniform1f(m_currentShaderProgram->getUniformLocation(name), value);
 }
 
-void GLRenderer::bindUniform(const char* name, int32_t value) {
+void GLRenderer::bindUniform(const char* name, i32 value) {
     glUniform1i(m_currentShaderProgram->getUniformLocation(name), value);
 }
 
-void GLRenderer::bindUniform(const char* name, uint32_t value) {
+void GLRenderer::bindUniform(const char* name, u32 value) {
     glUniform1ui(m_currentShaderProgram->getUniformLocation(name), value);
 }
 
@@ -429,7 +429,7 @@ ShaderResource GLRenderer::createShaderProgram(const std::vector<std::pair<Shade
     LAB_LOG_RENDERAPI_ERROR();
 
     linkShaderProgram(program);
-    LAB_DEBUG_ONLY(LAB_LOG(program.operator unsigned int()));
+    LAB_DEBUG_ONLY(LAB_LOG(program.operator u32()));
 
     return program;
 }
@@ -438,9 +438,9 @@ void GLRenderer::deleteShaderProgram(ShaderResource& shaderProgram) const {
     glDeleteProgram(shaderProgram);
 }
 
-MeshResource GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
-                                    const float* normals, const float* tangents,
-                                    const std::vector<const float*>& uvs, const unsigned int* indices, uint32_t faceCount) const {
+MeshResource GLRenderer::createMesh(const f32* vertices, u32 vertexCount,
+                                    const f32* normals, const f32* tangents,
+                                    const std::vector<const f32*>& uvs, const u32* indices, u32 faceCount) const {
     GLuint VAO;
     GLuint VBO;
     GLuint EBO;
@@ -448,27 +448,27 @@ MeshResource GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
     // VBO
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, 11 * sizeof(float) * vertexCount, nullptr, GL_STATIC_DRAW);  // vertices, normals, tangents and UVs
+    glBufferData(GL_ARRAY_BUFFER, 11 * sizeof(f32) * vertexCount, nullptr, GL_STATIC_DRAW);  // vertices, normals, tangents and UVs
 
     // vertices
-    glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * sizeof(float) * vertexCount, vertices);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * sizeof(f32) * vertexCount, vertices);
     LAB_LOG("Uploaded vertices");
 
     // normals
     if (normals) {
-        glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(float) * vertexCount, 3 * sizeof(float) * vertexCount, normals);
+        glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(f32) * vertexCount, 3 * sizeof(f32) * vertexCount, normals);
         LAB_LOG("Uploaded normals");
     }
 
     // tangents
     if (tangents) {
-        glBufferSubData(GL_ARRAY_BUFFER, 6 * sizeof(float) * vertexCount, 3 * sizeof(float) * vertexCount, tangents);
+        glBufferSubData(GL_ARRAY_BUFFER, 6 * sizeof(f32) * vertexCount, 3 * sizeof(f32) * vertexCount, tangents);
         LAB_LOG("Uploaded tangents");
     }
 
     // UVs
     for (const auto& map : uvs) {  // TODO more than one UV map
-        glBufferSubData(GL_ARRAY_BUFFER, 9 * sizeof(float) * vertexCount, 2 * sizeof(float) * vertexCount, map);
+        glBufferSubData(GL_ARRAY_BUFFER, 9 * sizeof(f32) * vertexCount, 2 * sizeof(f32) * vertexCount, map);
         LAB_LOG("Uploaded UV map");
     }
 
@@ -477,7 +477,7 @@ MeshResource GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
     // EBO
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * faceCount * 3, indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * faceCount * 3, indices, GL_STATIC_DRAW);
 
     LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Uploaded " << faceCount << " faces");
@@ -503,13 +503,13 @@ MeshResource GLRenderer::createMesh(const float* vertices, uint32_t vertexCount,
     glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
     glEnableVertexAttribArray(normalLocation);
-    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(3 * sizeof(float) * vertexCount));
+    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(3 * sizeof(f32) * vertexCount));
 
     glEnableVertexAttribArray(tangentLocation);
-    glVertexAttribPointer(tangentLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(6 * sizeof(float) * vertexCount));
+    glVertexAttribPointer(tangentLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(6 * sizeof(f32) * vertexCount));
 
     glEnableVertexAttribArray(UVLocation);
-    glVertexAttribPointer(UVLocation, 2, GL_FLOAT, GL_FALSE, 0, (void*)(9 * sizeof(float) * vertexCount));
+    glVertexAttribPointer(UVLocation, 2, GL_FLOAT, GL_FALSE, 0, (void*)(9 * sizeof(f32) * vertexCount));
 
     LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Attribute pointers created");
@@ -531,14 +531,14 @@ TextureResource GLRenderer::createTexture(TextureType type, const ImageResource&
     if (type == TextureType::Rectangle)
         wrap = TextureWrap::ClampToEdge;
 
-    int typeGL = textureTypeGL(type);
-    int internalFormatGL = textureInternalFormatGL(image.internalFormat);
-    int formatGL = textureFormatGL(image.format);
-    int dataTypeGL = textureDataTypeGL(image.dataType);
+    i32 typeGL = textureTypeGL(type);
+    i32 internalFormatGL = textureInternalFormatGL(image.internalFormat);
+    i32 formatGL = textureFormatGL(image.format);
+    i32 dataTypeGL = textureDataTypeGL(image.dataType);
     auto [minFilterGL, magFilterGL] = textureFilterGL(filter, generateMipmap);
-    int wrapGL = textureWrapGL(wrap);
+    i32 wrapGL = textureWrapGL(wrap);
 
-    unsigned int texture;
+    u32 texture;
     glGenTextures(1, &texture);
     glBindTexture(typeGL, texture);
 
@@ -559,12 +559,12 @@ TextureResource GLRenderer::createTexture(TextureType type, const ImageResource&
 }
 
 TextureResource GLRenderer::createCubemap(const std::array<Ref<ImageResource>, 6>& images, TextureFilter filter) const {
-    int internalFormatGL = textureInternalFormatGL(images[0]->internalFormat);
-    int formatGL = textureFormatGL(images[0]->format);
-    int dataTypeGL = textureDataTypeGL(images[0]->dataType);
+    i32 internalFormatGL = textureInternalFormatGL(images[0]->internalFormat);
+    i32 formatGL = textureFormatGL(images[0]->format);
+    i32 dataTypeGL = textureDataTypeGL(images[0]->dataType);
     auto [minFilterGL, magFilterGL] = textureFilterGL(filter, false);
 
-    unsigned int texture;
+    u32 texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
 
@@ -574,7 +574,7 @@ TextureResource GLRenderer::createCubemap(const std::array<Ref<ImageResource>, 6
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, minFilterGL);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, magFilterGL);
 
-    for (int i = 0; i < 6; i++) {
+    for (i32 i = 0; i < 6; i++) {
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormatGL, images[i]->size.x, images[i]->size.y, 0,
                      formatGL, dataTypeGL, images[i]->data);
     }
@@ -586,15 +586,15 @@ TextureResource GLRenderer::createCubemap(const std::array<Ref<ImageResource>, 6
     return TextureResource(texture);
 }
 
-void GLRenderer::bindTexture(TextureType type, const TextureResource& texture, unsigned slot) const {
+void GLRenderer::bindTexture(TextureType type, const TextureResource& texture, u32 slot) const {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(textureTypeGL(type), texture);
 }
 
 void GLRenderer::readFramebuffer(TextureFormat format, TextureDataType dataType,
                                  uvec2 position, uvec2 size, void* result) const {
-    int formatGL = textureFormatGL(format);
-    int dataTypeGL = textureDataTypeGL(dataType);
+    i32 formatGL = textureFormatGL(format);
+    i32 dataTypeGL = textureDataTypeGL(dataType);
 
     glReadPixels(position.x, position.y, size.x, size.y, formatGL, dataTypeGL, result);
 }
@@ -700,7 +700,7 @@ void GLRenderer::bindDirectionalLights() {
     if (m_currentShaderProgram->getUniformLocation("u_directional_light_count") == -1)
         return;
 
-    bindUniform("u_directional_light_count", static_cast<int>(m_directionalLights.size()));
+    bindUniform("u_directional_light_count", static_cast<i32>(m_directionalLights.size()));
     for (size_t i = 0; i < m_directionalLights.size(); i++) {
         const auto& light = m_directionalLights[i];
         const std::string structLocation = std::format("u_directional_lights[{}]", i);
@@ -716,19 +716,19 @@ void GLRenderer::bindDirectionalLights() {
 }
 
 MeshResource GLRenderer::createScreenQuad() const {
-    float vertices[] = {
+    f32 vertices[] = {
         -1.0f, -1.0f, 0.0f,
         1.0f, -1.0f, 0.0f,
         1.0f, 1.0f, 0.0f,
         -1.0f, 1.0f, 0.0f};
 
-    float UVs[] = {
+    f32 UVs[] = {
         0.0f, 0.0f,
         1.0f, 0.0f,
         1.0f, 1.0f,
         0.0f, 1.0f};
 
-    unsigned int indices[] = {
+    u32 indices[] = {
         0, 1, 2,
         2, 3, 0};
 
@@ -739,7 +739,7 @@ void GLRenderer::bindPointLights() {
     if (m_currentShaderProgram->getUniformLocation("u_point_light_count") == -1)
         return;
 
-    bindUniform("u_point_light_count", static_cast<int>(m_pointLights.size()));
+    bindUniform("u_point_light_count", static_cast<i32>(m_pointLights.size()));
     for (size_t i = 0; i < m_pointLights.size(); i++) {
         const auto& light = m_pointLights[i];
         const std::string structLocation = std::format("u_point_lights[{}]", i);
@@ -764,7 +764,7 @@ void GLRenderer::bindSpotLights() {
     if (m_currentShaderProgram->getUniformLocation("u_spot_light_count") == -1)
         return;
 
-    bindUniform("u_spot_light_count", static_cast<int>(m_spotLights.size()));
+    bindUniform("u_spot_light_count", static_cast<i32>(m_spotLights.size()));
     for (size_t i = 0; i < m_spotLights.size(); i++) {
         const auto& light = m_spotLights[i];
         const std::string structLocation = std::format("u_spot_lights[{}]", i);

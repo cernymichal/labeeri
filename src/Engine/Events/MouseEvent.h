@@ -19,7 +19,7 @@ public:
 
     EVENT_CLASS_TYPE(MouseMove)
 
-    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Input) | static_cast<int>(EventCategory::Mouse))
+    EVENT_CLASS_CATEGORY(static_cast<i32>(EventCategory::Input) | static_cast<i32>(EventCategory::Mouse))
 };
 
 /**
@@ -27,14 +27,14 @@ public:
  */
 class MouseScrollEvent : public IEvent {
 public:
-    const double m_delta;
+    const f64 m_delta;
 
-    explicit MouseScrollEvent(double delta) : m_delta(delta) {
+    explicit MouseScrollEvent(f64 delta) : m_delta(delta) {
     }
 
     EVENT_CLASS_TYPE(MouseScroll)
 
-    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Input) | static_cast<int>(EventCategory::Mouse))
+    EVENT_CLASS_CATEGORY(static_cast<i32>(EventCategory::Input) | static_cast<i32>(EventCategory::Mouse))
 };
 
 /**
@@ -43,13 +43,13 @@ public:
 class MouseButtonEvent : public IEvent {
 public:
     const MouseButton m_button;
-    const int m_mods;
+    const i32 m_mods;
     const dvec2 m_position;
 
-    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Input) | static_cast<int>(EventCategory::Mouse))
+    EVENT_CLASS_CATEGORY(static_cast<i32>(EventCategory::Input) | static_cast<i32>(EventCategory::Mouse))
 
 protected:
-    MouseButtonEvent(MouseButton button, int mods, dvec2 positon)
+    MouseButtonEvent(MouseButton button, i32 mods, dvec2 positon)
         : m_button(button), m_mods(mods), m_position(positon) {
     }
 };
@@ -59,7 +59,7 @@ protected:
  */
 class MouseButtonPressEvent : public MouseButtonEvent {
 public:
-    MouseButtonPressEvent(MouseButton button, int mods, dvec2 position)
+    MouseButtonPressEvent(MouseButton button, i32 mods, dvec2 position)
         : MouseButtonEvent(button, mods, position) {
     }
 
@@ -71,7 +71,7 @@ public:
  */
 class MouseButtonReleaseEvent : public MouseButtonEvent {
 public:
-    MouseButtonReleaseEvent(MouseButton button, int mods, dvec2 position)
+    MouseButtonReleaseEvent(MouseButton button, i32 mods, dvec2 position)
         : MouseButtonEvent(button, mods, position) {
     }
 

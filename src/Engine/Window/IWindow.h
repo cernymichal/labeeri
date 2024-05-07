@@ -7,7 +7,7 @@ class Application;
 /**
  * @brief Wheter  not the cursor should be visible and/or disabled.
  */
-enum class CursorMode : uint8_t {
+enum class CursorMode : u8 {
     Normal,
     Hidden,
     Disabled
@@ -23,7 +23,7 @@ public:
     /**
      * @return The current time in seconds.
      */
-    virtual double currentTime() const = 0;
+    virtual f64 currentTime() const = 0;
 
     /**
      * @return The size of the window in pixels.

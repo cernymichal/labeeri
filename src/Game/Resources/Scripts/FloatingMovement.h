@@ -13,7 +13,7 @@ public:
      * @param entity The entity to move.
      * @param maxDelta The maximum delta to move the entity.
      */
-    explicit FloatingMovement(Entity entity, float maxDelta = 1.0f)
+    explicit FloatingMovement(Entity entity, f32 maxDelta = 1.0f)
         : IScript(entity), m_maxDelta(maxDelta) {
     }
 
@@ -24,7 +24,7 @@ protected:
     }
 
 private:
-    float m_maxDelta;
+    f32 m_maxDelta;
 };
 
 }  // namespace labeeri

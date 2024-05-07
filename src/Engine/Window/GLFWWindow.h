@@ -25,7 +25,7 @@ public:
         return m_window;
     }
 
-    virtual double currentTime() const override;
+    virtual f64 currentTime() const override;
 
     virtual uvec2 frameSize() const override {
         return s_frameBufferSize;
@@ -74,19 +74,19 @@ private:
 
     void setupGLFW();
 
-    static void GLFWErrorCallback(int error, const char* description);
+    static void GLFWErrorCallback(i32 error, const char* description);
 
-    static void GLFWFramebufferSizeCallback(GLFWwindow* window, int width, int height);
+    static void GLFWFramebufferSizeCallback(GLFWwindow* window, i32 width, i32 height);
 
-    static void GLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
+    static void GLFWWindowIconifyCallback(GLFWwindow* window, i32 iconified);
 
-    static void GLFWKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods);
+    static void GLFWKeyboardCallback(GLFWwindow* window, i32 keyInt, i32 scanCode, i32 actionInt, i32 mods);
 
-    static void GLFWCursorPosCallback(GLFWwindow* window, double x, double y);
+    static void GLFWCursorPosCallback(GLFWwindow* window, f64 x, f64 y);
 
-    static void GLFWMouseButtonCallback(GLFWwindow* window, int buttonInt, int actionInt, int mods);
+    static void GLFWMouseButtonCallback(GLFWwindow* window, i32 buttonInt, i32 actionInt, i32 mods);
 
-    static void GLFWScrollCallback(GLFWwindow* window, double deltaX, double deltaY);
+    static void GLFWScrollCallback(GLFWwindow* window, f64 deltaX, f64 deltaY);
 };
 
 }  // namespace labeeri::Engine

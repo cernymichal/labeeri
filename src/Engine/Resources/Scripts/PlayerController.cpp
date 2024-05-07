@@ -19,7 +19,7 @@ static vec3 directionFromKey(KeyboardKey key) {
     return direction;
 }
 
-PlayerController::PlayerController(Entity player, float speed, double mouseSensitivity)
+PlayerController::PlayerController(Entity player, f32 speed, f64 mouseSensitivity)
     : IScript(player), m_speed(speed), m_mouseSensitivity(mouseSensitivity) {
     auto transform = m_entity.getComponent<Transform>();
     vec3 eulerAngles = glm::eulerAngles(transform->rotation());
@@ -41,8 +41,8 @@ void PlayerController::onUpdate(const UpdateEvent& e) {
 void PlayerController::onMouseMove(const MouseMoveEvent& e) {
     m_viewAngles += e.m_delta * -m_mouseSensitivity;
 
-    m_viewAngles.y = glm::clamp(m_viewAngles.y, -glm::half_pi<float>(), glm::half_pi<float>());
-    m_viewAngles.x = glm::mod(m_viewAngles.x, glm::two_pi<float>());
+    m_viewAngles.y = glm::clamp(m_viewAngles.y, -glm::half_pi<f32>(), glm::half_pi<f32>());
+    m_viewAngles.x = glm::mod(m_viewAngles.x, glm::two_pi<f32>());
 
     m_entity.getComponent<Transform>()->setRotation(vec3(m_viewAngles.y, m_viewAngles.x, 0.0f));
 }

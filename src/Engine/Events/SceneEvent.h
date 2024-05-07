@@ -17,7 +17,7 @@ public:
 
     EVENT_CLASS_TYPE(EntityClick)
 
-    EVENT_CLASS_CATEGORY(static_cast<int>(EventCategory::Application) | static_cast<int>(EventCategory::Scene))
+    EVENT_CLASS_CATEGORY(static_cast<i32>(EventCategory::Application) | static_cast<i32>(EventCategory::Scene))
 };
 
 }  // namespace labeeri::Engine

@@ -10,9 +10,9 @@ namespace labeeri::Engine {
     virtual const char* name() const override { return #type; }
 
 #define EVENT_CLASS_CATEGORY(category) \
-    virtual int categoryFlags() const override { return category; }
+    virtual i32 categoryFlags() const override { return category; }
 
-enum class EventType : uint8_t {
+enum class EventType : u8 {
     None,
     WindowResize,
     ApplicationRender,
@@ -29,7 +29,7 @@ enum class EventType : uint8_t {
     EntityClick
 };
 
-enum class EventCategory : int {
+enum class EventCategory : i32 {
     None = 0,
     Application = LAB_BIT(0),
     Input = LAB_BIT(1),
@@ -60,13 +60,13 @@ public:
     /**
      * @return The categories of the event.
      */
-    virtual int categoryFlags() const = 0;
+    virtual i32 categoryFlags() const = 0;
 
     /**
      * @return If the event is in the given category.
      */
     bool isInCategory(EventCategory category) const {
-        return categoryFlags() & static_cast<int>(category);
+        return categoryFlags() & static_cast<i32>(category);
     }
 
     /**

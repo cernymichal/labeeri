@@ -5,8 +5,8 @@
 
 #define LAB_BIT(x) (1 << (x))
 
-using LAB_GL_UINT = unsigned int;  // so that we dont have to include GLAD everywhere
-using LAB_GL_INT = int;
+using LAB_GL_UINT = u32;  // so that we dont have to include GLAD everywhere
+using LAB_GL_INT = i32;
 using LAB_GL_HANDLE = LAB_GL_UINT;
 
 #define LAB_APP labeeri::Engine::Application::Instance()
@@ -27,8 +27,8 @@ inline constexpr auto DEFAULT_TEXTURE_DIRECTORY = "resources/engine/textures";
 
 // GL 4.5 + GLSL 450
 inline constexpr struct GlVersion {
-    int major = 4;
-    int minor = 5;
+    i32 major = 4;
+    i32 minor = 5;
     const char* glsl = "#version 450 core";
 } GL_VERSION;
 

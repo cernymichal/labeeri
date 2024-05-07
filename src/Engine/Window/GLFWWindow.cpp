@@ -24,7 +24,7 @@ GLFWWindow::~GLFWWindow() {
     glfwTerminate();
 }
 
-double GLFWWindow::currentTime() const {
+f64 GLFWWindow::currentTime() const {
     return glfwGetTime();
 }
 
@@ -50,9 +50,9 @@ void GLFWWindow::setFullscreen(bool enabled) {
 
     // find current monitor
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-    int monitorCount;
+    i32 monitorCount;
     GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
-    for (int i = 0; i < monitorCount; i++) {
+    for (i32 i = 0; i < monitorCount; i++) {
         ivec2 monitorPosition;
         glfwGetMonitorPos(monitors[i], &monitorPosition.x, &monitorPosition.y);
 
@@ -83,7 +83,7 @@ void GLFWWindow::pollEvents() {
 }
 
 void GLFWWindow::setCursorMode(CursorMode mode) {
-    int glfwMode = GLFW_CURSOR_NORMAL;
+    i32 glfwMode = GLFW_CURSOR_NORMAL;
     switch (mode) {
         case CursorMode::Normal:
             glfwMode = GLFW_CURSOR_NORMAL;
@@ -144,11 +144,11 @@ void GLFWWindow::setupGLFW() {
     glfwSetScrollCallback(m_window, GLFWScrollCallback);
 }
 
-void GLFWWindow::GLFWErrorCallback(int error, const char* description) {
+void GLFWWindow::GLFWErrorCallback(i32 error, const char* description) {
     LAB_LOG("GLFW Error " << error << ": " << description);
 }
 
-void GLFWWindow::GLFWFramebufferSizeCallback(GLFWwindow* window, int width, int height) {
+void GLFWWindow::GLFWFramebufferSizeCallback(GLFWwindow* window, i32 width, i32 height) {
     s_frameBufferSize = uvec2(width, height);
 
     if (LAB_WINDOW->minimized())
@@ -162,14 +162,14 @@ void GLFWWindow::GLFWFramebufferSizeCallback(GLFWwindow* window, int width, int 
     LAB_APP.emitEvent(renderEvent);
 }
 
-void GLFWWindow::GLFWWindowIconifyCallback(GLFWwindow* window, int iconified) {
+void GLFWWindow::GLFWWindowIconifyCallback(GLFWwindow* window, i32 iconified) {
     s_minimized = iconified;
 
     WindowMinimizeEvent event(iconified);
     LAB_APP.emitEvent(event);
 }
 
-void GLFWWindow::GLFWKeyboardCallback(GLFWwindow* window, int keyInt, int scanCode, int actionInt, int mods) {
+void GLFWWindow::GLFWKeyboardCallback(GLFWwindow* window, i32 keyInt, i32 scanCode, i32 actionInt, i32 mods) {
     auto key = static_cast<KeyboardKey>(keyInt);
     auto action = static_cast<KeyAction>(actionInt);
 
@@ -192,7 +192,7 @@ void GLFWWindow::GLFWKeyboardCallback(GLFWwindow* window, int keyInt, int scanCo
     }
 }
 
-void GLFWWindow::GLFWCursorPosCallback(GLFWwindow* window, double x, double y) {
+void GLFWWindow::GLFWCursorPosCallback(GLFWwindow* window, f64 x, f64 y) {
     dvec2 newPosition(x, y);
     dvec2 delta = newPosition - s_mousePosition;
     s_mousePosition = newPosition;
@@ -201,7 +201,7 @@ void GLFWWindow::GLFWCursorPosCallback(GLFWwindow* window, double x, double y) {
     LAB_APP.emitEvent(event);
 }
 
-void GLFWWindow::GLFWMouseButtonCallback(GLFWwindow* window, int buttonInt, int actionInt, int mods) {
+void GLFWWindow::GLFWMouseButtonCallback(GLFWwindow* window, i32 buttonInt, i32 actionInt, i32 mods) {
     auto button = static_cast<MouseButton>(buttonInt);
     auto action = static_cast<KeyAction>(actionInt);
 
@@ -227,7 +227,7 @@ void GLFWWindow::GLFWMouseButtonCallback(GLFWwindow* window, int buttonInt, int 
     }
 }
 
-void GLFWWindow::GLFWScrollCallback(GLFWwindow* window, double deltaX, double deltaY) {
+void GLFWWindow::GLFWScrollCallback(GLFWwindow* window, f64 deltaX, f64 deltaY) {
     MouseScrollEvent event(deltaY);
     LAB_APP.emitEvent(event);
 }

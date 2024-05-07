@@ -17,7 +17,7 @@ namespace Entities {
  * @param sensitivity The mouse sensitivity of the camera.
  * @return The created entity.
  */
-Entity Flycam(const Ref<Scene>& scene, vec3 position = vec3(0.0f), quat rotation = quat(), float speed = 3.0f, double sensitivity = 0.002);
+Entity Flycam(const Ref<Scene>& scene, vec3 position = vec3(0.0f), quat rotation = quat(), f32 speed = 3.0f, f64 sensitivity = 0.002);
 
 /**
  * @brief Creates a new entity with the PlayerController script.
@@ -30,7 +30,7 @@ Entity Flycam(const Ref<Scene>& scene, vec3 position = vec3(0.0f), quat rotation
  * @param height The height of the player.
  * @return The created entity.
  */
-Entity Player(const Ref<Scene>& scene, vec3 position = vec3(0.0f), quat rotation = quat(), float speed = 3.0f, double sensitivity = 0.002, float height = 1.75f);
+Entity Player(const Ref<Scene>& scene, vec3 position = vec3(0.0f), quat rotation = quat(), f32 speed = 3.0f, f64 sensitivity = 0.002, f32 height = 1.75f);
 
 /**
  * @brief Creates a new entity with a RigidBody and AABB collider component.
@@ -50,7 +50,7 @@ Entity ColliderCube(const Ref<Scene>& scene, vec3 position, vec3 size);
  * @param intensity The intensity of the light.
  * @return The created entity.
  */
-Entity DirectionalLight(const Ref<Scene>& scene, const vec3& rotation, float intensity = 1.0);
+Entity DirectionalLight(const Ref<Scene>& scene, const vec3& rotation, f32 intensity = 1.0);
 
 /**
  * @brief Creates a new entity with with a Light component - point and a model to visualize it.
@@ -60,7 +60,7 @@ Entity DirectionalLight(const Ref<Scene>& scene, const vec3& rotation, float int
  * @param intensity The intensity of the light.
  * @return The created entity.
  */
-Entity PointLight(const Ref<Scene>& scene, const vec3& position, float intensity = 1.0);
+Entity PointLight(const Ref<Scene>& scene, const vec3& position, f32 intensity = 1.0);
 
 /**
  * @brief Creates a new entity with with a Light component - spot and a model to visualize it.
@@ -71,7 +71,7 @@ Entity PointLight(const Ref<Scene>& scene, const vec3& position, float intensity
  * @param intensity The intensity of the light.
  * @return The created entity.
  */
-Entity SpotLight(const Ref<Scene>& scene, const vec3& position, const vec3& rotation, float intensity = 1.0);
+Entity SpotLight(const Ref<Scene>& scene, const vec3& position, const vec3& rotation, f32 intensity = 1.0);
 
 };  // namespace Entities
 

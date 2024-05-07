@@ -18,7 +18,7 @@ public:
      *
      * @param deltaTime The time since the last update.
      */
-    void update(double deltaTime);
+    void update(f64 deltaTime);
 
     /**
      * @brief Check if the entity collides with any other entity.

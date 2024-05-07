@@ -10,8 +10,8 @@ namespace labeeri {
 class WaterMaterial : public ShadedMaterialResource {
 public:
     Ref<TextureResource> m_displacementMap = Resources<TextureResource>::Get("resources/labeeri/textures/perlin512_lin.png");
-    float m_displacementStrength = 0.1f;
-    float m_timeMultiplier = 0.015625f;
+    f32 m_displacementStrength = 0.1f;
+    f32 m_timeMultiplier = 0.015625f;
 
     explicit WaterMaterial() : ShadedMaterialResource(Resources<ShaderResource>::Get("resources/labeeri/shaders/water")) {
         m_diffuse = vec3(0.07f, 0.10f, 0.14f);
@@ -40,7 +40,7 @@ private:
     Ref<TextureResource> m_texture = loadTexture("resources/labeeri/textures/flare_sequence.png", true, TextureType::Rectangle);
     uvec2 m_size = uvec2(204);
     uvec2 m_count = uvec2(13, 2);
-    float m_fps = 24.0f;
+    f32 m_fps = 24.0f;
 };
 
 }  // namespace labeeri

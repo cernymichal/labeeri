@@ -34,7 +34,7 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
 
     LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), cameraPosition->worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
     LAB_RENDERER->bindFramebuffer(m_viewFramebuffer);
-    LAB_RENDERER->clear(static_cast<int>(ClearBuffer::Depth));
+    LAB_RENDERER->clear(static_cast<i32>(ClearBuffer::Depth));
 
     LAB_CURRENT_SCENE->m_systems.light->bindLights();
 
@@ -138,8 +138,8 @@ EntityId ViewportLayer::clickObject(const uvec2& mousePosition) {
 
     LAB_RENDERER->beginScene(LAB_CURRENT_SCENE->time(), cameraPosition->worldPosition(), viewMatrix, projectionMatrix, LAB_CURRENT_SCENE->m_renderParameters);
     LAB_RENDERER->bindFramebuffer(m_idFramebuffer);
-    LAB_RENDERER->clear(static_cast<int>(ClearBuffer::Depth));
-    LAB_RENDERER->clearBuffer(static_cast<int>(ClearBuffer::Color), NULL_ENTITY);
+    LAB_RENDERER->clear(static_cast<i32>(ClearBuffer::Depth));
+    LAB_RENDERER->clearBuffer(static_cast<i32>(ClearBuffer::Color), NULL_ENTITY);
 
     LAB_CURRENT_SCENE->m_systems.render->drawIds();
 

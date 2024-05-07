@@ -61,9 +61,9 @@ Ref<Scene> Scenes::showcase() {
         model->m_ref->m_material = brickWallMaterial;
 
         /*
-        sphere->m_onUpdate = [](Entity& self, double deltaTime) {
-            self.transform()->move(vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.5, 0) * (float)deltaTime);
-            self.transform()->rotate(vec3(0, glm::radians(-15.0f), 0) * (float)deltaTime);
+        sphere->m_onUpdate = [](Entity& self, f64 deltaTime) {
+            self.transform()->move(vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.5, 0) * (f32)deltaTime);
+            self.transform()->rotate(vec3(0, glm::radians(-15.0f), 0) * (f32)deltaTime);
         };
         */
     }
@@ -81,9 +81,9 @@ Ref<Scene> Scenes::showcase() {
         cube.addComponent<Collider>(Collider::AABB(), scene->ecs());
 
         /*
-        cube->m_onUpdate = [](Entity& self, double deltaTime) {
-            self.transform()->move(vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.15, 0) * (float)deltaTime);
-            self.transform()->rotate(vec3(0, glm::radians(20.0f), 0) * (float)deltaTime);
+        cube->m_onUpdate = [](Entity& self, f64 deltaTime) {
+            self.transform()->move(vec3(0, glm::sin(LAB_CURRENT_SCENE->time()) * 0.15, 0) * (f32)deltaTime);
+            self.transform()->rotate(vec3(0, glm::radians(20.0f), 0) * (f32)deltaTime);
         };
         */
     }

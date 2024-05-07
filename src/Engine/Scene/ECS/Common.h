@@ -2,7 +2,7 @@
 
 namespace labeeri::Engine {
 
-using EntityId = uint32_t;
+using EntityId = u32;
 inline constexpr EntityId NULL_ENTITY = -1;
 
 namespace ECS {
@@ -10,7 +10,7 @@ namespace ECS {
 /*
  * @brief The id of a component type.
  */
-using ComponentType = uint8_t;
+using ComponentType = u8;
 
 /*
  * @brief The signature of an entity - what components it has.
