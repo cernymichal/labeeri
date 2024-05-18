@@ -56,8 +56,6 @@ static Shader compileShader(const char* source, ShaderType shaderType) {
     GLint status;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 
-    LAB_LOG_RENDERAPI_ERROR();
-
     if (status == GL_TRUE) {
         LAB_LOG(typeStr << " shader compiled");
         return shader;
@@ -218,13 +216,110 @@ static i32 textureWrapGL(TextureWrap wrap) {
     }
 }
 
+static void APIENTRY debugMessageCallback(GLenum source, GLenum type, u32 id, GLenum severity, GLsizei length, const char* message, const void* userParam) {
+    // ignore non-significant error/warning codes
+    if (id == 131169 || id == 131185 || id == 131218 || id == 131204)
+        return;
+
+    std::string_view sourceStr;
+    switch (source) {
+        case GL_DEBUG_SOURCE_API:
+            sourceStr = "SOURCE_API";
+            break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+            sourceStr = "SOURCE_WINDOW_SYSTEM";
+            break;
+        case GL_DEBUG_SOURCE_SHADER_COMPILER:
+            sourceStr = "SOURCE_SHADER_COMPILER";
+            break;
+        case GL_DEBUG_SOURCE_THIRD_PARTY:
+            sourceStr = "SOURCE_THIRD_PARTY";
+            break;
+        case GL_DEBUG_SOURCE_APPLICATION:
+            sourceStr = "SOURCE_APPLICATION";
+            break;
+        case GL_DEBUG_SOURCE_OTHER:
+            sourceStr = "SOURCE_OTHER";
+            break;
+        default:
+            sourceStr = "SOURCE_UNKNOWN";
+            break;
+    }
+
+    std::string_view typeStr;
+    switch (type) {
+        case GL_DEBUG_TYPE_ERROR:
+            typeStr = "TYPE_ERROR";
+            break;
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+            typeStr = "TYPE_DEPRECATED_BEHAVIOR";
+            break;
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+            typeStr = "TYPE_UNDEFINED_BEHAVIOR";
+            break;
+        case GL_DEBUG_TYPE_PORTABILITY:
+            typeStr = "TYPE_PORTABILITY";
+            break;
+        case GL_DEBUG_TYPE_PERFORMANCE:
+            typeStr = "TYPE_PERFORMANCE";
+            break;
+        case GL_DEBUG_TYPE_MARKER:
+            typeStr = "TYPE_MARKER";
+            break;
+        case GL_DEBUG_TYPE_PUSH_GROUP:
+            typeStr = "TYPE_PUSH_GROUP";
+            break;
+        case GL_DEBUG_TYPE_POP_GROUP:
+            typeStr = "TYPE_POP_GROUP";
+            break;
+        case GL_DEBUG_TYPE_OTHER:
+            typeStr = "TYPE_OTHER";
+            break;
+        default:
+            typeStr = "TYPE_UNKNOWN";
+            break;
+    }
+
+    std::string_view severityStr;
+    switch (severity) {
+        case GL_DEBUG_SEVERITY_HIGH:
+            severityStr = "SEVERITY_HIGH";
+            break;
+        case GL_DEBUG_SEVERITY_MEDIUM:
+            severityStr = "SEVERITY_MEDIUM";
+            break;
+        case GL_DEBUG_SEVERITY_LOW:
+            severityStr = "SEVERITY_LOW";
+            break;
+        case GL_DEBUG_SEVERITY_NOTIFICATION:
+            severityStr = "SEVERITY_NOTIFICATION";
+            break;
+        default:
+            severityStr = "SEVERITY_UNKNOWN";
+            break;
+    }
+
+    LAB_LOG("OpenGL message: " << id << " \"" << message << "\" (" << sourceStr << ", " << typeStr << ", " << severityStr << ")");
+}
+
 GLRenderer::GLRenderer() {
     LAB_LOGH3("GLRenderer::GLRenderer()");
 
     if (!gladLoadGLLoader((GLADloadproc)LAB_WINDOW->procAddressGetter()))
         throw std::runtime_error("gladLoadGLLoader failed");
 
-    LAB_LOG("OpenGL version: " << glGetString(GL_VERSION));
+    int flags;
+    glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+    bool debugContext = flags & GL_CONTEXT_FLAG_DEBUG_BIT;
+
+    if (debugContext) {
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        glDebugMessageCallback(debugMessageCallback, nullptr);
+        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+    }
+
+    LAB_LOG("OpenGL version: " << glGetString(GL_VERSION) << (debugContext ? " (DEBUG)" : ""));
     LAB_LOG("Shading language version: " << glGetString(GL_SHADING_LANGUAGE_VERSION));
     LAB_LOG("Vendor: " << glGetString(GL_VENDOR));
     LAB_LOG("Renderer: " << glGetString(GL_RENDERER));
@@ -276,7 +371,12 @@ void GLRenderer::beginScene(f64 time, const vec3& cameraPosition, const mat4& vi
     glDepthFunc(GL_GREATER);
     glDepthMask(GL_TRUE);
 
-    LAB_LOG_RENDERAPI_ERROR();
+    // Flush the commands and sync with the GPU - blocking
+    auto fence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    auto status = glClientWaitSync(fence, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+    if (status != GL_ALREADY_SIGNALED && status != GL_CONDITION_SATISFIED)
+        throw std::runtime_error("glClientWaitSync timeout");
+    glDeleteSync(fence);
 }
 
 void GLRenderer::endOpaque() {
@@ -284,8 +384,6 @@ void GLRenderer::endOpaque() {
     glDepthMask(GL_FALSE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void GLRenderer::endScene() {
@@ -299,8 +397,6 @@ void GLRenderer::endScene() {
 
     m_currentShaderProgram = nullptr;
     m_currentMesh = nullptr;
-
-    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void GLRenderer::drawToScreen() const {
@@ -309,8 +405,6 @@ void GLRenderer::drawToScreen() const {
     glBindFramebuffer(GL_READ_FRAMEBUFFER, *m_currentFramebuffer);
     glBlitFramebuffer(0, 0, frameSize.x, frameSize.y, 0, 0, frameSize.x, frameSize.y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void GLRenderer::drawToScreenPostprocessed(bool crosshair) {
@@ -326,8 +420,6 @@ void GLRenderer::drawToScreenPostprocessed(bool crosshair) {
     bindUniform("u_exposure", m_sceneParameters.postprocessing.exposure);
     bindUniform("u_crosshair", crosshair);
     drawMesh();
-
-    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void GLRenderer::waitForFrame() {
@@ -358,8 +450,6 @@ void GLRenderer::useShaderProgram(const Ref<ShaderResource>& shaderProgram) {
     if (m_sceneParameters.skybox)
         bindTexture(TextureType::Cubemap, *m_sceneParameters.skybox, 16);
     bindUniform("u_using_cubemap", m_sceneParameters.skybox != nullptr);
-
-    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void GLRenderer::bindUniform(const char* name, f32 value) {
@@ -426,10 +516,7 @@ ShaderResource GLRenderer::createShaderProgram(const std::vector<std::pair<Shade
         glAttachShader(program, compiledShader);
     }
 
-    LAB_LOG_RENDERAPI_ERROR();
-
     linkShaderProgram(program);
-    LAB_DEBUG_ONLY(LAB_LOG(program.operator u32()));
 
     return program;
 }
@@ -472,14 +559,11 @@ MeshResource GLRenderer::createMesh(const f32* vertices, u32 vertexCount,
         LAB_LOG("Uploaded UV map");
     }
 
-    LAB_LOG_RENDERAPI_ERROR();
-
     // EBO
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * faceCount * 3, indices, GL_STATIC_DRAW);
 
-    LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Uploaded " << faceCount << " faces");
 
     auto& shader = Resources<ShaderResource>::Get("phong");
@@ -497,8 +581,6 @@ MeshResource GLRenderer::createMesh(const f32* vertices, u32 vertexCount,
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    LAB_LOG_RENDERAPI_ERROR();
-
     glEnableVertexAttribArray(positionLocation);
     glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
@@ -511,9 +593,7 @@ MeshResource GLRenderer::createMesh(const f32* vertices, u32 vertexCount,
     glEnableVertexAttribArray(UVLocation);
     glVertexAttribPointer(UVLocation, 2, GL_FLOAT, GL_FALSE, 0, (void*)(9 * sizeof(f32) * vertexCount));
 
-    LAB_LOG_RENDERAPI_ERROR();
     LAB_LOG("Attribute pointers created");
-    LAB_DEBUG_ONLY(LAB_LOG(VAO));
 
     glBindVertexArray(0);
     return MeshResource(VAO, VBO, EBO, faceCount);
@@ -551,9 +631,7 @@ TextureResource GLRenderer::createTexture(TextureType type, const ImageResource&
     if (generateMipmap)
         glGenerateMipmap(typeGL);
 
-    LAB_LOG_RENDERAPI_ERROR();
     glBindTexture(typeGL, 0);
-    LAB_DEBUG_ONLY(LAB_LOG(texture));
 
     return TextureResource(texture);
 }
@@ -579,9 +657,7 @@ TextureResource GLRenderer::createCubemap(const std::array<Ref<ImageResource>, 6
                      formatGL, dataTypeGL, images[i]->data);
     }
 
-    LAB_LOG_RENDERAPI_ERROR();
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-    LAB_DEBUG_ONLY(LAB_LOG(texture));
 
     return TextureResource(texture);
 }
@@ -662,32 +738,6 @@ void GLRenderer::submitLight(const RendererSpotLight& light) {
     }
 
     m_spotLights.emplace_back(light);
-}
-
-void GLRenderer::logError(const char* location) const {
-    for (GLenum error = glGetError(); error != GL_NO_ERROR; error = glGetError()) {
-        std::string errorStr = "UNKNOWN";
-        switch (error) {
-            case GL_INVALID_ENUM:
-                errorStr = "GL_INVALID_ENUM";
-                break;
-            case GL_INVALID_VALUE:
-                errorStr = "GL_INVALID_VALUE";
-                break;
-            case GL_INVALID_OPERATION:
-                errorStr = "GL_INVALID_OPERATION";
-                break;
-            case GL_INVALID_FRAMEBUFFER_OPERATION:
-                errorStr = "GL_INVALID_FRAMEBUFFER_OPERATION";
-                break;
-            case GL_OUT_OF_MEMORY:
-                errorStr = "GL_OUT_OF_MEMORY";
-                break;
-            default:;
-        }
-
-        LAB_LOG("OpenGL error: " << errorStr << " at " << location);
-    }
 }
 
 void GLRenderer::initialize() {

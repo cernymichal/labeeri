@@ -126,6 +126,10 @@ void GLFWWindow::setupGLFW() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
+    LAB_DEBUG_ONLY(glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE));
+
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
+
     // Create window with graphics context
     m_window = glfwCreateWindow(INITIAL_WINDOW_SIZE.x, INITIAL_WINDOW_SIZE.y, "labeeri", nullptr, nullptr);
     if (!m_window) {

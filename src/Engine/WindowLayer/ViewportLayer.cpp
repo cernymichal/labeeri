@@ -46,7 +46,6 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
 
     LAB_RENDERER->endScene();
     LAB_RENDERER->drawToScreenPostprocessed(camera->m_crosshair);
-    LAB_LOG_RENDERAPI_ERROR();
 
     return false;
 }
@@ -145,14 +144,11 @@ EntityId ViewportLayer::clickObject(const uvec2& mousePosition) {
 
     LAB_RENDERER->endScene();
     LAB_RENDERER->waitForFrame();
-    LAB_LOG_RENDERAPI_ERROR();
 
     LAB_RENDERER->bindFramebuffer(m_idFramebuffer);
 
     EntityId id = NULL_ENTITY;
     LAB_RENDERER->readFramebuffer(TextureFormat::RedInt, TextureDataType::UInt32, uvec2(mousePosition.x, m_size.y - mousePosition.y - 1), uvec2(1), &id);
-
-    LAB_LOG_RENDERAPI_ERROR();
 
     LAB_LOG("Clicked on object with id " << id);
 

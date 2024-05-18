@@ -91,8 +91,6 @@ public:
 
     virtual void submitLight(const RendererSpotLight& light) override;
 
-    virtual void logError(const char* location) const override;
-
 private:
     Ref<MeshResource> m_screenQuad;
     Ref<ShaderResource> m_postprocessShader;

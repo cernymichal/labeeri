@@ -17,8 +17,6 @@ void FlatMaterialResource::bindUniforms() const {
         LAB_RENDERER->bindUniform("u_color", m_color);
 
     LAB_RENDERER->bindUniform("u_alpha", m_alpha);
-
-    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void ShadedMaterialResource::bindUniforms() const {
@@ -59,8 +57,6 @@ void ShadedMaterialResource::bindUniforms() const {
     }
 
     LAB_RENDERER->bindUniform("u_alpha", m_alpha);
-
-    LAB_LOG_RENDERAPI_ERROR();
 }
 
 }  // namespace labeeri::Engine

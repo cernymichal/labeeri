@@ -23,8 +23,6 @@ Application::~Application() {
     m_layers.clear();
 
     IWindow::s_window = nullptr;
-
-    LAB_LOG_RENDERAPI_ERROR();
 }
 
 void Application::initialize() {

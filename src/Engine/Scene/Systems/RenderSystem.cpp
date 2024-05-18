@@ -19,8 +19,6 @@ static void drawModel(const Ref<ModelResource>& model, const mat4& modelMatrix) 
     model->m_material->bindUniforms();
 
     LAB_RENDERER->drawMesh();
-
-    LAB_LOG_RENDERAPI_ERROR();
 }
 
 ECS::ComponentSignature RenderSystem::signature(const ECS::Instance& ecs) const {

@@ -48,8 +48,3 @@ inline constexpr auto MAX_ENTITIES = 2048;
 inline constexpr auto MAX_COMPONENTS = 32;
 
 }  // namespace labeeri::Engine
-
-/**
- * @brief Flush render API arrors to log stream
- */
-#define LAB_LOG_RENDERAPI_ERROR() LAB_DEBUG_ONLY(LAB_RENDERER->logError(__FILE__ ":" STR_MACRO(__LINE__)))

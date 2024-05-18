@@ -301,11 +301,6 @@ public:
     virtual void submitLight(const RendererSpotLight& light) = 0;
 
     /**
-     * @brief Logs the Render API error if any.
-     */
-    virtual void logError(const char* location) const = 0;
-
-    /**
      * @return The current renderer.
      */
     static IRenderer* Instance() {
