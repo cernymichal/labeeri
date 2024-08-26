@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Events/KeyboardEvent.h"
 #include "Engine/Events/SceneEvent.h"
 #include "Engine/WindowLayer/IWindowLayer.h"
@@ -37,7 +38,9 @@ private:
 
     void setupImGui();
 
-    bool onRender(const IEvent& e);
+    bool onRender(const ApplicationRenderEvent& e);
+
+    bool onWindowResize(const WindowResizeEvent& e);
 
     bool onKeyboardPress(const KeyboardPressEvent& e);
 

@@ -31,6 +31,11 @@ public:
     virtual uvec2 frameSize() const = 0;
 
     /**
+     * @return The content scale of the window. For example for high DPI displays.
+     */
+    virtual vec2 contentScale() const = 0;
+
+    /**
      * @return If vertical sync is enabled.
      */
     virtual bool VSync() const = 0;

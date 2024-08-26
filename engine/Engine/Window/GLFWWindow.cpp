@@ -15,6 +15,7 @@ GLFWWindow::GLFWWindow() {
     setupGLFW();
 
     glfwGetFramebufferSize(m_window, &s_frameBufferSize.x, &s_frameBufferSize.y);
+    glfwGetWindowContentScale(m_window, &s_contentScale.x, &s_contentScale.y);
     s_minimized = glfwGetWindowAttrib(m_window, GLFW_ICONIFIED);
     glfwGetCursorPos(m_window, &s_mousePosition.x, &s_mousePosition.y);
     GLFWWindow::setVSync(true);
@@ -142,6 +143,7 @@ void GLFWWindow::setupGLFW() {
     glfwMakeContextCurrent(m_window);
 
     glfwSetFramebufferSizeCallback(m_window, GLFWFramebufferSizeCallback);
+    glfwSetWindowContentScaleCallback(m_window, GLFWWindowContentScaleCallback);
     glfwSetWindowIconifyCallback(m_window, GLFWWindowIconifyCallback);
     glfwSetKeyCallback(m_window, GLFWKeyboardCallback);
     glfwSetCursorPosCallback(m_window, GLFWCursorPosCallback);
@@ -159,12 +161,22 @@ void GLFWWindow::GLFWFramebufferSizeCallback(GLFWwindow* window, i32 width, i32 
     if (LAB_WINDOW->minimized())
         return;
 
-    WindowResizeEvent resizeEvent(uvec2(width, height));
+    WindowResizeEvent resizeEvent(s_frameBufferSize, s_contentScale);
     LAB_APP.emitEvent(resizeEvent);
 
     // rerender
     ApplicationRenderEvent renderEvent;
     LAB_APP.emitEvent(renderEvent);
+}
+
+void GLFWWindow::GLFWWindowContentScaleCallback(GLFWwindow* window, f32 xScale, f32 yScale) {
+    s_contentScale = vec2(xScale, yScale);
+
+    if (LAB_WINDOW->minimized())
+        return;
+
+    WindowResizeEvent resizeEvent(s_frameBufferSize, s_contentScale);
+    LAB_APP.emitEvent(resizeEvent);
 }
 
 void GLFWWindow::GLFWWindowIconifyCallback(GLFWwindow* window, i32 iconified) {

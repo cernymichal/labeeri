@@ -31,6 +31,10 @@ public:
         return s_frameBufferSize;
     }
 
+    virtual vec2 contentScale() const override {
+        return s_contentScale;
+    }
+
     virtual bool VSync() const override {
         return m_VSync;
     }
@@ -68,7 +72,9 @@ private:
     ivec2 m_windowedPosition = ivec2(0);
     ivec2 m_windowedSize = ivec2(0);
 
+    // TODO remove static for callbacks
     static inline ivec2 s_frameBufferSize = ivec2(0);
+    static inline vec2 s_contentScale = vec2(1);
     static inline bool s_minimized = false;
     static inline dvec2 s_mousePosition = dvec2(0);
 
@@ -77,6 +83,8 @@ private:
     static void GLFWErrorCallback(i32 error, const char* description);
 
     static void GLFWFramebufferSizeCallback(GLFWwindow* window, i32 width, i32 height);
+
+    static void GLFWWindowContentScaleCallback(GLFWwindow* window, f32 xScale, f32 yScale);
 
     static void GLFWWindowIconifyCallback(GLFWwindow* window, i32 iconified);
 

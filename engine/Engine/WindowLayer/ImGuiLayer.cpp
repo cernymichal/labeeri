@@ -5,7 +5,6 @@
 #include <imgui_impl_opengl3.h>
 
 #include "Engine/Application.h"
-#include "Engine/Events/ApplicationEvent.h"
 #include "Engine/Renderer/IRenderer.h"
 #include "Engine/Window/GLFWWindow.h"
 #include "Engine/WindowLayer/ImGuiWindow/EntityWindow.h"
@@ -85,9 +84,14 @@ void ImGuiLayer::setupImGui() {
         style.WindowRounding = 0.0f;
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
+    io.FontGlobalScale = LAB_WINDOW->contentScale().y;
+    style.ScaleAllSizes(LAB_WINDOW->contentScale().y);
 
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(dynamic_cast<GLFWWindow*>(LAB_WINDOW)->windowObject(), true);
+    const GLFWWindow* window = dynamic_cast<GLFWWindow*>(LAB_WINDOW);
+    assert(window != nullptr && "ImGuiLayer::setupImGui() - window is not a GLFWWindow.");
+
+    ImGui_ImplGlfw_InitForOpenGL(window->windowObject(), true);
     ImGui_ImplOpenGL3_Init(LAB_GL_VERSION.glsl);
 }
 
@@ -102,7 +106,7 @@ void ImGuiLayer::onEvent(IEvent& e) {
     e.dispatch<EntityClickEvent>(LAB_BIND_EVENT_FUNC(onEntityClick));
 }
 
-bool ImGuiLayer::onRender(const IEvent& e) {
+bool ImGuiLayer::onRender(const ApplicationRenderEvent& e) {
     ImGuiFrame frame;
 
     for (size_t i = 0; i < m_windows.size(); ++i) {
