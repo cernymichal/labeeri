@@ -1,7 +1,6 @@
 #include "scenes.h"
 
 #include "Resources/Materials.h"
-#include "Resources/Models.h"
 #include "Resources/Prefabs.h"
 #include "Resources/Scripts/BloodyFaceInteraction.h"
 #include "Resources/Scripts/CameraSwitcher.h"
@@ -36,7 +35,9 @@ Ref<Scene> testScene() {
         transform->setPosition(vec3(0.0f, 0.45f, 0.0f));
         transform->setScale(vec3(8.0f));
 
-        water.addComponent<Model>(Model(waterModel()), scene->ecs());
+        Resources<ModelResource>::Set("water") = makeRef<ModelResource>(makeRef<WaterMaterial>(WaterMaterial()), Resources<MeshResource>::Get("resources/labeeri/models/water_plane.obj"));
+
+        water.addComponent<Model>(Model(Resources<ModelResource>::Get("water")), scene->ecs());
     }
 
     {  // Sphere
@@ -115,6 +116,8 @@ Ref<Scene> loadLabyrinthScene() {
     }
 
     {  // Water
+        Resources<ModelResource>::Set("water") = makeRef<ModelResource>(makeRef<WaterMaterial>(WaterMaterial()), Resources<MeshResource>::Get("resources/labeeri/models/water_plane.obj"));
+
         i32 axisCount = 2;
         f32 tileSize = 25.0f;
         for (f32 x = -(axisCount - 1) * tileSize / 2.0f; x <= (axisCount - 1) * tileSize / 2.0f; x += tileSize) {
@@ -125,7 +128,7 @@ Ref<Scene> loadLabyrinthScene() {
                 transform->setPosition(vec3(x, 0.02f, z));
                 transform->setScale(vec3(12.5f / 2, 3.0f, 12.5f / 2));
 
-                water.addComponent<Model>(Model(waterModel()), scene->ecs());
+                water.addComponent<Model>(Model(Resources<ModelResource>::Get("water")), scene->ecs());
             }
         }
     }

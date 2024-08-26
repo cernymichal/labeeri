@@ -5,11 +5,11 @@
 namespace labeeri::Engine {
 
 /**
- * @brief Model component. Only hold a reference to a model resource.
+ * @brief Model component. Only holds a reference to a model resource.
  */
 class Model {
 public:
-    Ref<ModelResource> m_ref;
+    Ref<ModelResource> m_ref;    
 
     /**
      * @return The model resource.

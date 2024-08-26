@@ -349,8 +349,6 @@
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\Resources\Materials.h" />
-    <ClInclude Include="src\Resources\Models.h" />
-    <ClInclude Include="src\Resources\plane.h" />
     <ClInclude Include="src\Resources\Prefabs.h" />
     <ClInclude Include="src\Resources\Scripts\BloodyFaceInteraction.h" />
     <ClInclude Include="src\Resources\Scripts\CameraSwitcher.h" />
@@ -374,7 +372,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release LAB_DEBUG|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Resources\Materials.cpp" />
-    <ClCompile Include="src\Resources\Models.cpp" />
     <ClCompile Include="src\Resources\Prefabs.cpp" />
     <ClCompile Include="src\Scenes.cpp" />
   </ItemGroup>
