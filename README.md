@@ -1,6 +1,6 @@
 # labeeri
 
-A C++ game engine (because I hate myself).
+A C++ game engine.
 
 Originally made for the BI-PGR.21 (B0B39PGR) course at FIT/FEE CTU as a semestral project.
 
@@ -24,12 +24,14 @@ Originally made for the BI-PGR.21 (B0B39PGR) course at FIT/FEE CTU as a semestra
 
 WebGPU backend and Rust rewrite coming soon???
 
-## Installation
+## Building
 
-- C++20
-- Visual Studio 2022
+- Visual Studio 2022, C++
+- vcpkg
 
-The project uses Vcpkg for all dependencies (vcpkg.json), Visual Studio should install them for you automagically.
+The project uses vcpkg for all dependencies (vcpkg.json), Visual Studio should install them for you automagically.
+
+Before running the Game project, make sure to set the "Debugging/Working Directory" setting to `$(SolutionDir)`.
 
 ## Docs
 
