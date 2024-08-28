@@ -5,11 +5,11 @@
  */
 class WaterMaterial : public ShadedMaterialResource {
 public:
-    Ref<TextureResource> m_displacementMap = Resources<TextureResource>::Get("resources/labeeri/textures/perlin512_lin.png");
+    Ref<TextureResource> m_displacementMap = Resources<TextureResource>::Get("resources/Game/textures/perlin512_lin.png");
     f32 m_displacementStrength = 0.1f;
     f32 m_timeMultiplier = 0.015625f;
 
-    explicit WaterMaterial() : ShadedMaterialResource(Resources<ShaderResource>::Get("resources/labeeri/shaders/water")) {
+    explicit WaterMaterial() : ShadedMaterialResource(Resources<ShaderResource>::Get("resources/Game/shaders/water")) {
         m_diffuse = vec3(0.07f, 0.10f, 0.14f);
         m_specular = vec3(0.5f);
         m_alpha = 0.8f;
@@ -23,7 +23,7 @@ public:
  */
 class FlareMaterial : public MaterialResource {
 public:
-    explicit FlareMaterial() : MaterialResource(Resources<ShaderResource>::Get("resources/labeeri/shaders/flipbook")) {
+    explicit FlareMaterial() : MaterialResource(Resources<ShaderResource>::Get("resources/Game/shaders/flipbook")) {
     }
 
     virtual bool opaque() const override {
@@ -33,7 +33,7 @@ public:
     virtual void bindUniforms() const override;
 
 private:
-    Ref<TextureResource> m_texture = loadTexture("resources/labeeri/textures/flare_sequence.png", true, TextureType::Rectangle);
+    Ref<TextureResource> m_texture = loadTexture("resources/Game/textures/flare_sequence.png", true, TextureType::Rectangle);
     uvec2 m_size = uvec2(204);
     uvec2 m_count = uvec2(13, 2);
     f32 m_fps = 24.0f;

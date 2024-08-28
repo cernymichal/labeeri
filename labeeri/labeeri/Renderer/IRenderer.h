@@ -73,7 +73,7 @@ public:
      *
      * @param crosshair Whether to draw the crosshair.
      */
-    virtual void drawToScreenPostprocessed(bool crosshair = false) = 0;
+    virtual void drawToScreenPostprocessed(float crosshairScale = 0.0f) = 0;
 
     /**
      * @brief Waits for the API to flush all the commands.

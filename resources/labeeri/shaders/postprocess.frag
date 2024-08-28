@@ -8,7 +8,7 @@ uniform sampler2D u_color_buffer;
 uniform sampler2D u_depth_buffer;
 uniform float u_gamma;
 uniform float u_exposure;
-uniform bool u_crosshair;
+uniform float u_crosshair_scale;
 
 out vec4 frag_color;
 
@@ -24,9 +24,9 @@ vec3 narkowicz_ACES(vec3 color) {
 
 vec4 crosshair() {
 	float dist = length((UV  - vec2(0.5)) * u_screen_size);
-    float innerMask = 1.0 - step(2.0, dist);
-    float outerMask = (1.0 - step(3.0, dist)) * 0.7;
-	return vec4(vec3(innerMask), u_crosshair ? outerMask : 0.0);
+    float innerMask = 1.0 - step(2.0 * u_crosshair_scale, dist);
+    float outerMask = (1.0 - step(3.0 * u_crosshair_scale, dist)) * 0.7;
+	return vec4(vec3(innerMask), outerMask);
 }
 
 void main() {

@@ -407,7 +407,7 @@ void GLRenderer::drawToScreen() const {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void GLRenderer::drawToScreenPostprocessed(bool crosshair) {
+void GLRenderer::drawToScreenPostprocessed(f32 crosshairScale) {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     useShaderProgram(m_postprocessShader);
@@ -418,7 +418,7 @@ void GLRenderer::drawToScreenPostprocessed(bool crosshair) {
     bindUniform("u_depth_buffer", 1);
     bindUniform("u_gamma", m_sceneParameters.postprocessing.gamma);
     bindUniform("u_exposure", m_sceneParameters.postprocessing.exposure);
-    bindUniform("u_crosshair", crosshair);
+    bindUniform("u_crosshair_scale", crosshairScale);
     drawMesh();
 }
 

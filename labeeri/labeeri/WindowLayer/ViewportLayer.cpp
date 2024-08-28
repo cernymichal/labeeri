@@ -45,7 +45,7 @@ bool ViewportLayer::onRender(const ApplicationRenderEvent& e) {
     LAB_CURRENT_SCENE->m_systems.render->drawTransparent();
 
     LAB_RENDERER->endScene();
-    LAB_RENDERER->drawToScreenPostprocessed(camera->m_crosshair);
+    LAB_RENDERER->drawToScreenPostprocessed(camera->m_crosshair ? LAB_WINDOW->contentScale().y : 0.0f);
 
     return false;
 }

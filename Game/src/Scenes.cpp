@@ -56,7 +56,7 @@ Ref<Scene> loadLabyrinthScene() {
     }
 
     {  // Water
-        Resources<ModelResource>::Set("water") = makeRef<ModelResource>(makeRef<WaterMaterial>(WaterMaterial()), Resources<MeshResource>::Get("resources/labeeri/models/water_plane.obj"));
+        Resources<ModelResource>::Set("water") = makeRef<ModelResource>(makeRef<WaterMaterial>(WaterMaterial()), Resources<MeshResource>::Get("resources/Game/models/water_plane.obj"));
 
         i32 axisCount = 2;
         f32 tileSize = 25.0f;
@@ -75,9 +75,9 @@ Ref<Scene> loadLabyrinthScene() {
 
     {  // Sphere system
         auto sphereAMaterial = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
-        sphereAMaterial->m_diffuseMap = Resources<TextureResource>::Get("resources/labeeri/textures/slab_tiles/diffuse.png");
+        sphereAMaterial->m_diffuseMap = Resources<TextureResource>::Get("resources/Game/textures/slab_tiles/diffuse.png");
         sphereAMaterial->m_specular = vec3(0.4f);
-        sphereAMaterial->m_normalMap = Resources<TextureResource>::Get("resources/labeeri/textures/slab_tiles/normal.hdr");
+        sphereAMaterial->m_normalMap = Resources<TextureResource>::Get("resources/Game/textures/slab_tiles/normal.hdr");
 
         auto sphereBMaterial = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
         sphereBMaterial->m_diffuse = vec3(1.0f);
@@ -208,7 +208,7 @@ Ref<Scene> loadLabyrinthScene() {
         auto transform = entity.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(0.0f, 1.3f, -10.0f));
         transform->setScale(vec3(1.0f));
-        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/labeeri/models/ball.obj"))), scene->ecs());
+        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/Game/models/ball.obj"))), scene->ecs());
     }
 
     {  // Dynamic ball
@@ -223,7 +223,7 @@ Ref<Scene> loadLabyrinthScene() {
         auto transform = entity.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(10.0f, 1.3f, 10.0f));
         transform->setScale(vec3(1.0f));
-        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/labeeri/models/dynamic_ball.obj"))), scene->ecs());
+        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/Game/models/dynamic_ball.obj"))), scene->ecs());
     }
 
     {  // Head
@@ -238,7 +238,7 @@ Ref<Scene> loadLabyrinthScene() {
         auto transform = entity.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(10.0f, 1.2f, -10.0f));
         transform->setScale(vec3(2.0f));
-        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/labeeri/models/head.obj"))), scene->ecs());
+        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/Game/models/head.obj"))), scene->ecs());
 
         scene->addScript<BloodyFaceInteraction>(entity);
     }
@@ -254,7 +254,7 @@ Ref<Scene> loadLabyrinthScene() {
         auto transform = entity.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(0.0f, 1.3f, -20.0f));
         transform->setScale(vec3(1.0f));
-        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/labeeri/models/knot.obj"))), scene->ecs());
+        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/Game/models/knot.obj"))), scene->ecs());
     }
 
     {  // Knot view
@@ -271,7 +271,7 @@ Ref<Scene> loadLabyrinthScene() {
 
     scene->addScript<CameraSwitcher>(player, cameras);
 
-    scene->m_renderParameters.skybox = loadCubemap("resources/labeeri/textures/cubemaps/dikhololo_night");
+    scene->m_renderParameters.skybox = loadCubemap("resources/Game/textures/cubemaps/dikhololo_night");
     scene->m_renderParameters.fog.color = vec3(0.08f, 0.07f, 0.06f);
     scene->m_renderParameters.fog.density = 0.07f;
     scene->m_renderParameters.postprocessing.exposure = 0.6f;
