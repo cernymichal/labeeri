@@ -16,6 +16,7 @@ GLFWWindow::GLFWWindow() {
 
     glfwGetFramebufferSize(m_window, &s_frameBufferSize.x, &s_frameBufferSize.y);
     glfwGetWindowContentScale(m_window, &s_contentScale.x, &s_contentScale.y);
+
     s_minimized = glfwGetWindowAttrib(m_window, GLFW_ICONIFIED);
     glfwGetCursorPos(m_window, &s_mousePosition.x, &s_mousePosition.y);
     GLFWWindow::setVSync(true);
@@ -133,7 +134,12 @@ void GLFWWindow::setupGLFW() {
     glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
 
     // Create window with graphics context
-    m_window = glfwCreateWindow(INITIAL_WINDOW_SIZE.x, INITIAL_WINDOW_SIZE.y, "labeeri", nullptr, nullptr);
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    ivec2 workAreaOrigin;
+    ivec2 workAreaSize;
+    glfwGetMonitorWorkarea(monitor, &workAreaOrigin.x, &workAreaOrigin.y, &workAreaSize.x, &workAreaSize.y);
+
+    m_window = glfwCreateWindow(workAreaSize.x, workAreaSize.y, "labeeri", nullptr, nullptr);  // TODO editable window name
     if (!m_window) {
         glfwTerminate();
         throw std::runtime_error("glfwCreateWindow failed");
