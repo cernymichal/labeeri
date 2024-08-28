@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release LAB_DEBUG|Win32">
-      <Configuration>Release LAB_DEBUG</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release LAB_DEBUG|x64">
       <Configuration>Release LAB_DEBUG</Configuration>
       <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -29,46 +17,27 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7e8682cf-331a-43e1-a00d-1d0cb564f318}</ProjectGuid>
+    <ProjectGuid>{8a31c5dc-4488-417d-8f9c-bc8eaf8b96ea}</ProjectGuid>
     <RootNamespace>labeeri</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>labeeri</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release LAB_DEBUG|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release LAB_DEBUG|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -78,15 +47,6 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release LAB_DEBUG|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -98,22 +58,6 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release LAB_DEBUG|Win32'">
-    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
@@ -122,40 +66,12 @@
     <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>true</VcpkgEnableManifest>
-  </PropertyGroup>
-  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <VcpkgUseStatic>true</VcpkgUseStatic>
-    <VcpkgUseMD>true</VcpkgUseMD>
-    <VcpkgInstalledDir>
-    </VcpkgInstalledDir>
-    <VcpkgAdditionalInstallOptions>
-    </VcpkgAdditionalInstallOptions>
-  </PropertyGroup>
-  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <VcpkgUseStatic>true</VcpkgUseStatic>
-    <VcpkgUseMD>true</VcpkgUseMD>
-    <VcpkgInstalledDir>
-    </VcpkgInstalledDir>
-    <VcpkgAdditionalInstallOptions>
-    </VcpkgAdditionalInstallOptions>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release LAB_DEBUG|Win32'" Label="Vcpkg">
-    <VcpkgUseStatic>true</VcpkgUseStatic>
-    <VcpkgUseMD>true</VcpkgUseMD>
-    <VcpkgInstalledDir>
-    </VcpkgInstalledDir>
-    <VcpkgAdditionalInstallOptions>
-    </VcpkgAdditionalInstallOptions>
-  </PropertyGroup>
-  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <VcpkgUseStatic>true</VcpkgUseStatic>
-    <VcpkgUseMD>true</VcpkgUseMD>
-    <VcpkgInstalledDir>
-    </VcpkgInstalledDir>
-    <VcpkgAdditionalInstallOptions>
-    </VcpkgAdditionalInstallOptions>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
@@ -173,92 +89,14 @@
     <VcpkgAdditionalInstallOptions>
     </VcpkgAdditionalInstallOptions>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(SolutionDir)/engine</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <UseStandardPreprocessor>true</UseStandardPreprocessor>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(SolutionDir)/engine</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <UseStandardPreprocessor>true</UseStandardPreprocessor>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release LAB_DEBUG|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(SolutionDir)/engine</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <UseStandardPreprocessor>true</UseStandardPreprocessor>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgUseMD>true</VcpkgUseMD>
+    <VcpkgInstalledDir>
+    </VcpkgInstalledDir>
+    <VcpkgAdditionalInstallOptions>
+    </VcpkgAdditionalInstallOptions>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -266,9 +104,10 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(SolutionDir)/engine</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)labeeri</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <FloatingPointModel>Fast</FloatingPointModel>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
@@ -276,12 +115,26 @@
       <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
+    </Link>
+    <Lib>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-    </Link>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -292,9 +145,10 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(SolutionDir)/engine</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)labeeri</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <FloatingPointModel>Fast</FloatingPointModel>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
@@ -304,15 +158,18 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release LAB_DEBUG|x64'">
     <ClCompile>
@@ -323,9 +180,10 @@
       <PreprocessorDefinitions>LAB_DEBUG;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)/src;$(SolutionDir)/engine</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)labeeri</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <FloatingPointModel>Fast</FloatingPointModel>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
@@ -335,50 +193,121 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Resources\Materials.h" />
-    <ClInclude Include="src\Resources\Prefabs.h" />
-    <ClInclude Include="src\Resources\Scripts\BloodyFaceInteraction.h" />
-    <ClInclude Include="src\Resources\Scripts\CameraSwitcher.h" />
-    <ClInclude Include="src\Resources\Scripts\FlashlightController.h" />
-    <ClInclude Include="src\Resources\Scripts\FloatingMovement.h" />
-    <ClInclude Include="src\Resources\Scripts\LightBlinking.h" />
-    <ClInclude Include="src\Resources\Scripts\LightSwitchInteraction.h" />
-    <ClInclude Include="src\Resources\Scripts\MaxwellInteraction.h" />
-    <ClInclude Include="src\Resources\Scripts\RotatingMovement.h" />
-    <ClInclude Include="src\Scenes.h" />
+    <ClInclude Include="labeeri\labeeri.h" />
+    <ClInclude Include="labeeri\Application.h" />
+    <ClInclude Include="labeeri\Entities.h" />
+    <ClInclude Include="labeeri\Events\ApplicationEvent.h" />
+    <ClInclude Include="labeeri\Events\IEvent.h" />
+    <ClInclude Include="labeeri\Events\IEventReceiver.h" />
+    <ClInclude Include="labeeri\Events\Input.h" />
+    <ClInclude Include="labeeri\Events\KeyboardEvent.h" />
+    <ClInclude Include="labeeri\Events\MouseEvent.h" />
+    <ClInclude Include="labeeri\Events\SceneEvent.h" />
+    <ClInclude Include="labeeri\pch.h" />
+    <ClInclude Include="labeeri\Renderer\Framebuffer.h" />
+    <ClInclude Include="labeeri\Renderer\GLRenderer.h" />
+    <ClInclude Include="labeeri\Renderer\ImageResource.h" />
+    <ClInclude Include="labeeri\Renderer\IRenderer.h" />
+    <ClInclude Include="labeeri\Renderer\Light.h" />
+    <ClInclude Include="labeeri\Renderer\MeshResource.h" />
+    <ClInclude Include="labeeri\Renderer\RendererParameters.h" />
+    <ClInclude Include="labeeri\Renderer\ShaderResource.h" />
+    <ClInclude Include="labeeri\Renderer\TextureResource.h" />
+    <ClInclude Include="labeeri\Resources\Load.h" />
+    <ClInclude Include="labeeri\Resources\MaterialResource.h" />
+    <ClInclude Include="labeeri\Resources\ModelResource.h" />
+    <ClInclude Include="labeeri\Resources\Resources.h" />
+    <ClInclude Include="labeeri\Resources\Scripts\FlycamController.h" />
+    <ClInclude Include="labeeri\Resources\Scripts\IScript.h" />
+    <ClInclude Include="labeeri\Resources\Scripts\PlayerController.h" />
+    <ClInclude Include="labeeri\Scenes.h" />
+    <ClInclude Include="labeeri\Scene\Components\Camera.h" />
+    <ClInclude Include="labeeri\Scene\Components\Collider.h" />
+    <ClInclude Include="labeeri\Scene\Components\Components.h" />
+    <ClInclude Include="labeeri\Scene\Components\Light.h" />
+    <ClInclude Include="labeeri\Scene\Components\Model.h" />
+    <ClInclude Include="labeeri\Scene\Components\RigidBody.h" />
+    <ClInclude Include="labeeri\Scene\Components\Transform.h" />
+    <ClInclude Include="labeeri\Scene\ECS\Common.h" />
+    <ClInclude Include="labeeri\Scene\ECS\ComponentArray.h" />
+    <ClInclude Include="labeeri\Scene\ECS\ComponentManager.h" />
+    <ClInclude Include="labeeri\Scene\ECS\Entity.h" />
+    <ClInclude Include="labeeri\Scene\ECS\EntityManager.h" />
+    <ClInclude Include="labeeri\Scene\ECS\Instance.h" />
+    <ClInclude Include="labeeri\Scene\ECS\ISystem.h" />
+    <ClInclude Include="labeeri\Scene\ECS\SystemManager.h" />
+    <ClInclude Include="labeeri\Scene\Scene.h" />
+    <ClInclude Include="labeeri\Scene\Systems\CameraSystem.h" />
+    <ClInclude Include="labeeri\Scene\Systems\LightSystem.h" />
+    <ClInclude Include="labeeri\Scene\Systems\PhysicsSystem.h" />
+    <ClInclude Include="labeeri\Scene\Systems\RenderSystem.h" />
+    <ClInclude Include="labeeri\Scene\Systems\Systems.h" />
+    <ClInclude Include="labeeri\Utils\Engine.h" />
+    <ClInclude Include="labeeri\Utils\imgui.h" />
+    <ClInclude Include="labeeri\Utils\Log.h" />
+    <ClInclude Include="labeeri\Utils\Math.h" />
+    <ClInclude Include="labeeri\Utils\Ptr.h" />
+    <ClInclude Include="labeeri\Utils\Random.h" />
+    <ClInclude Include="labeeri\Utils\Scalars.h" />
+    <ClInclude Include="labeeri\WindowLayer\ImGuiLayer.h" />
+    <ClInclude Include="labeeri\WindowLayer\ImGuiWindow\EntityWindow.h" />
+    <ClInclude Include="labeeri\WindowLayer\ImGuiWindow\HelpWindow.h" />
+    <ClInclude Include="labeeri\WindowLayer\ImGuiWindow\IImGuiWindow.h" />
+    <ClInclude Include="labeeri\WindowLayer\ImGuiWindow\LogWindow.h" />
+    <ClInclude Include="labeeri\WindowLayer\ImGuiWindow\MenuWindow.h" />
+    <ClInclude Include="labeeri\WindowLayer\IWindowLayer.h" />
+    <ClInclude Include="labeeri\WindowLayer\SceneLayer.h" />
+    <ClInclude Include="labeeri\WindowLayer\ViewportLayer.h" />
+    <ClInclude Include="labeeri\Window\GLFWWindow.h" />
+    <ClInclude Include="labeeri\Window\IWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release LAB_DEBUG|Win32'">Create</PrecompiledHeader>
+    <ClCompile Include="labeeri\Application.cpp" />
+    <ClCompile Include="labeeri\Entities.cpp" />
+    <ClCompile Include="labeeri\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release LAB_DEBUG|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Resources\Materials.cpp" />
-    <ClCompile Include="src\Resources\Prefabs.cpp" />
-    <ClCompile Include="src\Scenes.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\engine\engine.vcxproj">
-      <Project>{8a31c5dc-4488-417d-8f9c-bc8eaf8b96ea}</Project>
-    </ProjectReference>
+    <ClCompile Include="labeeri\Renderer\Framebuffer.cpp" />
+    <ClCompile Include="labeeri\Renderer\GLRenderer.cpp" />
+    <ClCompile Include="labeeri\Renderer\MeshResource.cpp" />
+    <ClCompile Include="labeeri\Renderer\ShaderResource.cpp" />
+    <ClCompile Include="labeeri\Renderer\TextureResource.cpp" />
+    <ClCompile Include="labeeri\Resources\Load.cpp" />
+    <ClCompile Include="labeeri\Resources\MaterialResource.cpp" />
+    <ClCompile Include="labeeri\Resources\Resources.cpp" />
+    <ClCompile Include="labeeri\Resources\Scripts\FlycamController.cpp" />
+    <ClCompile Include="labeeri\Resources\Scripts\PlayerController.cpp" />
+    <ClCompile Include="labeeri\Scenes.cpp" />
+    <ClCompile Include="labeeri\Scene\ECS\Entity.cpp" />
+    <ClCompile Include="labeeri\Scene\Scene.cpp" />
+    <ClCompile Include="labeeri\Scene\Systems\CameraSystem.cpp" />
+    <ClCompile Include="labeeri\Scene\Systems\LightSystem.cpp" />
+    <ClCompile Include="labeeri\Scene\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="labeeri\Scene\Systems\RenderSystem.cpp" />
+    <ClCompile Include="labeeri\WindowLayer\ImGuiLayer.cpp" />
+    <ClCompile Include="labeeri\WindowLayer\ImGuiWindow\EntityWindow.cpp" />
+    <ClCompile Include="labeeri\WindowLayer\ImGuiWindow\HelpWindow.cpp" />
+    <ClCompile Include="labeeri\WindowLayer\ImGuiWindow\LogWindow.cpp" />
+    <ClCompile Include="labeeri\WindowLayer\ImGuiWindow\MenuWindow.cpp" />
+    <ClCompile Include="labeeri\WindowLayer\SceneLayer.cpp" />
+    <ClCompile Include="labeeri\WindowLayer\ViewportLayer.cpp" />
+    <ClCompile Include="labeeri\Window\GLFWWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,7 +10,7 @@
     "miniz",
     {
       "name": "glad",
-      "features": [ "gl-api-45" ]
+      "features": [ "gl-api-46" ]
     },
     {
       "name": "imgui",
