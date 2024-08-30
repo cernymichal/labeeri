@@ -20,6 +20,10 @@ public:
 private:
     const std::string m_name = "Menu";
     bool m_VSync;
+    f32 m_rollingAverageWindow = 0.5f; // seconds
+    ExponentialRollingAverage m_frameTimeAverage;
+    ExponentialRollingAverage m_frameCPUTimeAverage;
+    ExponentialRollingAverage m_frameGPUTimeAverage;
 };
 
 }  // namespace labeeri

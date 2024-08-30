@@ -29,6 +29,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/io.hpp>
 
 constexpr f64 E = 2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274;
 constexpr f64 HALF_PI = 1.5707963267948966192313216916397514420985846996875529104874722961539082031431044993140174126710585339;
@@ -90,27 +91,6 @@ MATH_CONSTEXPR MATH_FUNC_QUALIFIER glm::vec<L, bool> operator<(const glm::vec<L,
 template <int L, typename T, glm::qualifier Q>
 MATH_CONSTEXPR MATH_FUNC_QUALIFIER glm::vec<L, bool> operator<=(const glm::vec<L, T, Q>& a, const glm::vec<L, T, Q>& b) {
     return glm::lessThanEqual(a, b);
-}
-
-// Stream operators for vectors
-// TODO use glm
-
-template <typename T>
-MATH_FUNC_QUALIFIER std::ostream& operator<<(std::ostream& os, const glm::vec<2, T>& v) {
-    os << "(" << v.x << ", " << v.y << ")";
-    return os;
-}
-
-template <typename T>
-MATH_FUNC_QUALIFIER std::ostream& operator<<(std::ostream& os, const glm::vec<3, T>& v) {
-    os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
-    return os;
-}
-
-template <typename T>
-MATH_FUNC_QUALIFIER std::ostream& operator<<(std::ostream& os, const glm::vec<4, T>& v) {
-    os << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
-    return os;
 }
 
 namespace glm {
@@ -475,3 +455,50 @@ MATH_CONSTEXPR MATH_FUNC_QUALIFIER TriangleHit rayTriangleIntersectionWT(const v
     const f32 determinantInv = 1.0f / determinant;
     return {t * determinantInv, vec3(u, v, w) * determinantInv};
 }
+
+/*
+ * @brief A simple exponential rolling average
+ *
+ * @note The alpha value is the weight of the new value, with 1.0 being the new value and 0.0 being the previous average. 1/10 approximates a 10 sample rolling average.
+ */
+class ExponentialRollingAverage {
+public:
+    MATH_CONSTEXPR MATH_FUNC_QUALIFIER ExponentialRollingAverage(f32 alpha = 0.1f) : m_alpha(alpha) {}
+
+    /*
+     * @param value The new value to add to the average
+     * @return The updated average
+     */
+    MATH_CONSTEXPR MATH_FUNC_QUALIFIER f32 update(f32 value) {
+        m_average = m_alpha * value + (1.0f - m_alpha) * m_average;
+        return m_average;
+    }
+
+    /*
+     * @param value The new value to add to the average
+     * @param alpha The alpha value to use
+     * @return The updated average
+     */
+    MATH_CONSTEXPR MATH_FUNC_QUALIFIER f32 update(f32 value, f32 alpha) {
+        m_average = alpha * value + (1.0f - alpha) * m_average;
+        return m_average;
+    }
+
+    /*
+     * @param value The new value to set the average to
+     */
+    MATH_CONSTEXPR MATH_FUNC_QUALIFIER void reset(f32 value) {
+        update(value, 1.0f);
+    }
+
+    /*
+     * @return The current average
+     */
+    MATH_CONSTEXPR MATH_FUNC_QUALIFIER f32 average() const {
+        return m_average;
+    }
+
+private:
+    f32 m_alpha;
+    f32 m_average = 0.0f;
+};

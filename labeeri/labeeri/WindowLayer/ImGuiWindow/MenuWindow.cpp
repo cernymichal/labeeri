@@ -66,12 +66,20 @@ bool MenuWindow::draw() {
     if (vSyncChanged)
         LAB_WINDOW->setVSync(m_VSync);
 
-    f32 framerate = ImGui::GetIO().Framerate;
+    f32 frameTime = LAB_APP.getPreviousFrameTime();
     f32 gpuTime = LAB_RENDERER->getPreviousFrameGPUTime();
-    f32 cpuTime = LAB_APP.getPreviousFrameTime() - gpuTime;
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / framerate, framerate);
-    ImGui::Text("CPU time %.3f ms/frame", cpuTime);
-    ImGui::Text("GPU time %.3f ms/frame", gpuTime);
+    f32 cpuTime = frameTime - gpuTime;
+
+    f32 rollingAverageAlpha = frameTime / (1000.f * m_rollingAverageWindow);
+    f32 avgFrameTime = m_frameTimeAverage.update(frameTime, rollingAverageAlpha);
+    f32 avgFrameCPUTime = m_frameCPUTimeAverage.update(cpuTime, rollingAverageAlpha);
+    f32 avgFrameGPUTime = m_frameGPUTimeAverage.update(gpuTime, rollingAverageAlpha);
+
+    ImGui::Text("Average FPS: %.1f", 1000.0f / avgFrameTime);
+    ImGui::Text("\tReal: %.3f ms/frame", avgFrameTime);
+    ImGui::Text("\tCPU:  %.3f ms/frame", avgFrameCPUTime);
+    ImGui::Text("\tGPU:  %.3f ms/frame", avgFrameGPUTime);
+
     ImGui::Text("%u entities", LAB_ECS ? LAB_ECS->m_entityManager->entityCount() : 0);
 
     ImGui::End();
