@@ -82,28 +82,14 @@ Ref<MeshResource> loadMesh(const std::filesystem::path& filePath) {
 
     const aiMesh* assimpMesh = scene->mMeshes[0];
 
+    assert(assimpMesh->HasPositions());
+    assert(assimpMesh->HasFaces());
+    assert(assimpMesh->HasNormals());
+
     u32 vertexCount = assimpMesh->mNumVertices;
     u32 faceCount = assimpMesh->mNumFaces;
-    auto vertices = reinterpret_cast<f32*>(assimpMesh->mVertices);
-    f32* normals = assimpMesh->HasNormals() ? reinterpret_cast<f32*>(assimpMesh->mNormals) : nullptr;
-    f32* tangents = assimpMesh->HasTangentsAndBitangents() ? reinterpret_cast<f32*>(assimpMesh->mTangents) : nullptr;
-
-    // UVs
-    std::vector<std::vector<f32>> UVs;
-    if (assimpMesh->HasTextureCoords(0)) {
-        UVs.emplace_back();
-        UVs[0].reserve((size_t)vertexCount * 2);
-
-        for (size_t i = 0; i < vertexCount; i++) {
-            aiVector3D vector = (assimpMesh->mTextureCoords[0])[i];
-            UVs[0].push_back(vector.x);
-            UVs[0].push_back(vector.y);
-        }
-    }
-    std::vector<const f32*> uvPtrs;
-    uvPtrs.reserve(UVs.size());
-    for (const auto& map : UVs)
-        uvPtrs.push_back(map.data());
+    vec3* verticesPtr = reinterpret_cast<vec3*>(assimpMesh->mVertices);
+    vec3* normalsPtr = reinterpret_cast<vec3*>(assimpMesh->mNormals);
 
     // indices
     std::vector<u32> indices;
@@ -114,10 +100,44 @@ Ref<MeshResource> loadMesh(const std::filesystem::path& filePath) {
         indices.push_back(assimpMesh->mFaces[i].mIndices[1]);
         indices.push_back(assimpMesh->mFaces[i].mIndices[2]);
     }
+    u32* indicesPtr = indices.data();
+
+    // UVs
+    std::vector<std::vector<vec2>> UVs;
+    if (assimpMesh->HasTextureCoords(0)) {
+        UVs.emplace_back();
+        UVs[0].reserve((size_t)vertexCount * 2);
+
+        for (size_t i = 0; i < vertexCount; i++) {
+            vec2& uv = reinterpret_cast<vec2&>(assimpMesh->mTextureCoords[0][i]);
+            UVs[0].push_back(uv);
+        }
+    }
+    std::vector<const vec2*> uvPtrs;
+    uvPtrs.reserve(UVs.size());
+    for (const auto& map : UVs)
+        uvPtrs.push_back(map.data());
+
+    // tangents
+    std::vector<vec4> tangents;
+    if (assimpMesh->HasTangentsAndBitangents()) {
+        tangents.reserve(vertexCount);
+
+        for (size_t i = 0; i < vertexCount; i++) {
+            vec3& tangent = reinterpret_cast<vec3&>(assimpMesh->mTangents[i]);
+            vec3& bitangent = reinterpret_cast<vec3&>(assimpMesh->mBitangents[i]);
+            vec3& normal = reinterpret_cast<vec3&>(assimpMesh->mNormals[i]);
+
+            f32 handedness = glm::dot(glm::cross(normal, tangent), bitangent) < 0.0f ? 1.0f : -1.0f;
+
+            tangents.push_back(vec4(tangent, handedness));
+        }
+    }
+    vec4* tangentsPtr = tangents.empty() ? nullptr : tangents.data();
 
     LAB_LOG("Data loaded");
 
-    MeshResource mesh = LAB_RENDERER->createMesh(vertices, vertexCount, normals, tangents, uvPtrs, indices.data(), faceCount);
+    MeshResource mesh = LAB_RENDERER->createMesh(verticesPtr, vertexCount, normalsPtr, tangentsPtr, uvPtrs, indicesPtr, faceCount);
 
     return makeRef<MeshResource>(std::move(mesh));
 }

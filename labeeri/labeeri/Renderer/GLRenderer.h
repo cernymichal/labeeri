@@ -61,9 +61,9 @@ public:
 
     virtual void deleteShaderProgram(ShaderResource& shaderProgram) const override;
 
-    virtual MeshResource createMesh(const f32* vertices, u32 vertexCount,
-                                    const f32* normals, const f32* tangents,
-                                    const std::vector<const f32*>& uvs, const u32* indices, u32 faceCount) const override;
+    virtual MeshResource createMesh(const vec3* vertices, u32 vertexCount,
+                                    const vec3* normals, const vec4* tangents,
+                                    const std::vector<const vec2*>& uvs, const u32* indices, u32 faceCount) const override;
 
     virtual void deleteMesh(MeshResource& mesh) const override;
 

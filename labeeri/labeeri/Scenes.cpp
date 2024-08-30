@@ -40,7 +40,7 @@ Ref<Scene> Scenes::showcase() {
         ground.getComponent<Transform>(scene->ecs())->setScale(vec3(50.0));
 
         auto model = ground.addComponent<Model>(Model(clone(Resources<ModelResource>::Get("basicPlane"))), scene->ecs());
-        model->m_ref->m_material = normalTestmaterial;
+        model->m_ref->m_material = catMaterial;
     }
 
     {  // Lights
@@ -70,7 +70,7 @@ Ref<Scene> Scenes::showcase() {
         transform->setPosition(vec3(-1.0, 1.5, -2));
 
         auto model = cube.addComponent<Model>(Model(clone(Resources<ModelResource>::Get("basicCube"))), scene->ecs());
-        model->m_ref->m_material = catMaterial;
+        model->m_ref->m_material = normalTestmaterial;
 
         cube.addComponent<RigidBody>(RigidBody(), scene->ecs());
         cube.addComponent<Collider>(Collider::AABB(), scene->ecs());

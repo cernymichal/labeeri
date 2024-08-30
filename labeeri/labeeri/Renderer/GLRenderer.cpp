@@ -525,9 +525,9 @@ void GLRenderer::deleteShaderProgram(ShaderResource& shaderProgram) const {
     glDeleteProgram(shaderProgram);
 }
 
-MeshResource GLRenderer::createMesh(const f32* vertices, u32 vertexCount,
-                                    const f32* normals, const f32* tangents,
-                                    const std::vector<const f32*>& uvs, const u32* indices, u32 faceCount) const {
+MeshResource GLRenderer::createMesh(const vec3* vertices, u32 vertexCount,
+                                    const vec3* normals, const vec4* tangents,
+                                    const std::vector<const vec2*>& uvs, const u32* indices, u32 faceCount) const {
     GLuint VAO;
     GLuint VBO;
     GLuint EBO;
@@ -535,27 +535,27 @@ MeshResource GLRenderer::createMesh(const f32* vertices, u32 vertexCount,
     // VBO
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, 11 * sizeof(f32) * vertexCount, nullptr, GL_STATIC_DRAW);  // vertices, normals, tangents and UVs
+    glBufferData(GL_ARRAY_BUFFER, (2 * sizeof(vec3) + sizeof(vec4) + sizeof(vec2)) * vertexCount, nullptr, GL_STATIC_DRAW);  // vertices, normals, tangents and UVs
 
     // vertices
-    glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * sizeof(f32) * vertexCount, vertices);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vec3) * vertexCount, vertices);
     LAB_LOG("Uploaded vertices");
 
     // normals
     if (normals) {
-        glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(f32) * vertexCount, 3 * sizeof(f32) * vertexCount, normals);
+        glBufferSubData(GL_ARRAY_BUFFER, sizeof(vec3) * vertexCount, sizeof(vec3) * vertexCount, normals);
         LAB_LOG("Uploaded normals");
     }
 
     // tangents
     if (tangents) {
-        glBufferSubData(GL_ARRAY_BUFFER, 6 * sizeof(f32) * vertexCount, 3 * sizeof(f32) * vertexCount, tangents);
+        glBufferSubData(GL_ARRAY_BUFFER, (2 * sizeof(vec3)) * vertexCount, sizeof(vec4) * vertexCount, tangents);
         LAB_LOG("Uploaded tangents");
     }
 
     // UVs
-    for (const auto& map : uvs) {  // TODO more than one UV map
-        glBufferSubData(GL_ARRAY_BUFFER, 9 * sizeof(f32) * vertexCount, 2 * sizeof(f32) * vertexCount, map);
+    if (!uvs.empty()) {  // TODO more than one UV map
+        glBufferSubData(GL_ARRAY_BUFFER, (2 * sizeof(vec3) + sizeof(vec4)) * vertexCount, sizeof(vec2) * vertexCount, uvs[0]);
         LAB_LOG("Uploaded UV map");
     }
 
@@ -582,16 +582,16 @@ MeshResource GLRenderer::createMesh(const f32* vertices, u32 vertexCount,
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     glEnableVertexAttribArray(positionLocation);
-    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
 
     glEnableVertexAttribArray(normalLocation);
-    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(3 * sizeof(f32) * vertexCount));
+    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(vec3) * vertexCount));
 
     glEnableVertexAttribArray(tangentLocation);
-    glVertexAttribPointer(tangentLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(6 * sizeof(f32) * vertexCount));
+    glVertexAttribPointer(tangentLocation, 4, GL_FLOAT, GL_FALSE, 0, (void*)((2 * sizeof(vec3)) * vertexCount));
 
     glEnableVertexAttribArray(UVLocation);
-    glVertexAttribPointer(UVLocation, 2, GL_FLOAT, GL_FALSE, 0, (void*)(9 * sizeof(f32) * vertexCount));
+    glVertexAttribPointer(UVLocation, 2, GL_FLOAT, GL_FALSE, 0, (void*)((2 * sizeof(vec3) + sizeof(vec4)) * vertexCount));
 
     LAB_LOG("Attribute pointers created");
 
@@ -766,17 +766,17 @@ void GLRenderer::bindDirectionalLights() {
 }
 
 MeshResource GLRenderer::createScreenQuad() const {
-    f32 vertices[] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        1.0f, 1.0f, 0.0f,
-        -1.0f, 1.0f, 0.0f};
+    vec3 vertices[] = {
+        {-1.0f, -1.0f, 0.0f},
+        {1.0f, -1.0f, 0.0f},
+        {1.0f, 1.0f, 0.0f},
+        {-1.0f, 1.0f, 0.0f}};
 
-    f32 UVs[] = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        1.0f, 1.0f,
-        0.0f, 1.0f};
+    vec2 UVs[] = {
+        {0.0f, 0.0f},
+        {1.0f, 0.0f},
+        {1.0f, 1.0f},
+        {0.0f, 1.0f}};
 
     u32 indices[] = {
         0, 1, 2,

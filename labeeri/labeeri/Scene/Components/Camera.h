@@ -30,10 +30,7 @@ public:
      * @return The calculated view matrix.
      */
     mat4 viewMatrix(const Transform& transform) const {
-        vec3 cameraPosition = transform.worldPosition();
-        vec3 center = cameraPosition + transform.forward();
-
-        return glm::lookAt(cameraPosition, center, transform.up());
+        return transform.modelMatrixInverse();
     }
 
     /**

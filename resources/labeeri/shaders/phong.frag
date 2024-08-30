@@ -78,7 +78,7 @@ in VData {
     smooth vec3 position_ws;
     smooth vec3 position_es;
     smooth vec3 normal_ws;
-    smooth vec3 tangent_ws;
+    smooth vec4 tangent_ws;
     smooth vec2 UV;
 } v_data;
 
@@ -103,10 +103,11 @@ uniform float u_alpha;
 out vec4 frag_color;
 
 mat3 calculate_TBN_matrix() {
-    vec3 tangent = normalize(v_data.tangent_ws);
+    vec3 tangent = normalize(v_data.tangent_ws.xyz);
     vec3 normal = normalize(v_data.normal_ws);
     tangent = normalize(tangent - dot(tangent, normal) * normal);
-    vec3 bitangent = cross(normal, tangent);
+    float handedness = v_data.tangent_ws.w;
+    vec3 bitangent = handedness * cross(normal, tangent);
     
     return mat3(tangent, bitangent, normal);
 }

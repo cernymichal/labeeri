@@ -196,9 +196,9 @@ public:
      * @param faceCount The number of faces.
      * @return The mesh.
      */
-    virtual MeshResource createMesh(const f32* vertices, u32 vertexCount,
-                                    const f32* normals, const f32* tangets,
-                                    const std::vector<const f32*>& uvs, const u32* indices, u32 faceCount) const = 0;
+    virtual MeshResource createMesh(const vec3* vertices, u32 vertexCount,
+                                    const vec3* normals, const vec4* tangents,
+                                    const std::vector<const vec2*>& uvs, const u32* indices, u32 faceCount) const = 0;
 
     /**
      * @brief Deletes a mesh.
