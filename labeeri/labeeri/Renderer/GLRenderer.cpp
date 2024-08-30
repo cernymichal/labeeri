@@ -324,6 +324,11 @@ GLRenderer::GLRenderer() {
     LAB_LOG("Vendor: " << glGetString(GL_VENDOR));
     LAB_LOG("Renderer: " << glGetString(GL_RENDERER));
 
+    // Create a query object for measuring GPU time
+    glGenQueries(1, &m_frameGPUTimeQuery);
+    glBeginQuery(GL_TIME_ELAPSED, m_frameGPUTimeQuery);
+    glEndQuery(GL_TIME_ELAPSED);
+
     glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     glEnable(GL_CULL_FACE);
@@ -352,8 +357,8 @@ void GLRenderer::setClearColor(const vec4& color) {
     glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void GLRenderer::beginScene(f64 time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix, const RenderSceneParameters& parameters) {
-    m_time = time;
+void GLRenderer::beginScene(f64 currentTime, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix, const RenderSceneParameters& parameters) {
+    m_currentTime = currentTime;
     m_cameraPosition = cameraPosition;
     m_matrices.view = viewMatrix;
     m_matrices.viewInverse = glm::inverse(m_matrices.view);
@@ -371,12 +376,12 @@ void GLRenderer::beginScene(f64 time, const vec3& cameraPosition, const mat4& vi
     glDepthFunc(GL_GREATER);
     glDepthMask(GL_TRUE);
 
-    // Flush the commands and sync with the GPU - blocking
-    auto fence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-    auto status = glClientWaitSync(fence, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
-    if (status != GL_ALREADY_SIGNALED && status != GL_CONDITION_SATISFIED)
-        throw std::runtime_error("glClientWaitSync timeout");
-    glDeleteSync(fence);
+    // Wait for the previous frame to finish
+    waitForFrame();
+
+    // The gpu timer query was ended in previous drawToScreenPostprocessed call
+    glGetQueryObjectui64v(m_frameGPUTimeQuery, GL_QUERY_RESULT, &m_lastFrameGPUTime);
+    glBeginQuery(GL_TIME_ELAPSED, m_frameGPUTimeQuery);
 }
 
 void GLRenderer::endOpaque() {
@@ -420,11 +425,18 @@ void GLRenderer::drawToScreenPostprocessed(f32 crosshairScale) {
     bindUniform("u_exposure", m_sceneParameters.postprocessing.exposure);
     bindUniform("u_crosshair_scale", crosshairScale);
     drawMesh();
+
+    glEndQuery(GL_TIME_ELAPSED);
 }
 
 void GLRenderer::waitForFrame() {
-    glFlush();
-    glFinish();
+    return;
+    // Flush the commands and sync with the GPU - blocking
+    auto fence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    auto status = glClientWaitSync(fence, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+    if (status != GL_ALREADY_SIGNALED && status != GL_CONDITION_SATISFIED)
+        throw std::runtime_error("glClientWaitSync timeout");
+    glDeleteSync(fence);
 }
 
 void GLRenderer::useShaderProgram(const Ref<ShaderResource>& shaderProgram) {
@@ -434,7 +446,7 @@ void GLRenderer::useShaderProgram(const Ref<ShaderResource>& shaderProgram) {
     m_currentShaderProgram = shaderProgram;
     glUseProgram(*m_currentShaderProgram);
 
-    bindUniform("u_time", (f32)m_time);
+    bindUniform("u_time", (f32)m_currentTime);
     bindUniform("u_camera_position", m_cameraPosition);
     bindUniform("u_view_matrix", m_matrices.view);
     bindUniform("u_view_matrix_inverse", m_matrices.viewInverse);

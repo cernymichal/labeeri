@@ -44,13 +44,13 @@ public:
     /**
      * @brief Start a new scene render.
      *
-     * @param time The time in the scene.
+     * @param currentTime The time in the scene.
      * @param cameraPosition The position of the camera.
      * @param viewMatrix The view matrix of the camera.
      * @param projectionMatrix The projection matrix of the camera.
      * @param parameters The parameters of the scene.
      */
-    virtual void beginScene(f64 time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix,
+    virtual void beginScene(f64 currentTime, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix,
                             const RenderSceneParameters& parameters = RenderSceneParameters()) = 0;
 
     /**
@@ -299,6 +299,11 @@ public:
      * @param light The light to submit.
      */
     virtual void submitLight(const RendererSpotLight& light) = 0;
+
+    /*
+     * @returns The previous frame GPU time in ms.
+     */
+    virtual f32 getPreviousFrameGPUTime() const = 0;
 
     /**
      * @return The current renderer.

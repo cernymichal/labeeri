@@ -1,6 +1,7 @@
 #include "MenuWindow.h"
 
 #include "Application.h"
+#include "Renderer/IRenderer.h"
 #include "Utils/imgui.h"
 #include "Window/IWindow.h"
 #include "WindowLayer/ImGuiWindow/HelpWindow.h"
@@ -65,8 +66,12 @@ bool MenuWindow::draw() {
     if (vSyncChanged)
         LAB_WINDOW->setVSync(m_VSync);
 
-    auto framerate = ImGui::GetIO().Framerate;
+    f32 framerate = ImGui::GetIO().Framerate;
+    f32 gpuTime = LAB_RENDERER->getPreviousFrameGPUTime();
+    f32 cpuTime = LAB_APP.getPreviousFrameTime() - gpuTime;
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / framerate, framerate);
+    ImGui::Text("CPU time %.3f ms/frame", cpuTime);
+    ImGui::Text("GPU time %.3f ms/frame", gpuTime);
     ImGui::Text("%u entities", LAB_ECS ? LAB_ECS->m_entityManager->entityCount() : 0);
 
     ImGui::End();

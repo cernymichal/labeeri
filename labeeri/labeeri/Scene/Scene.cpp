@@ -37,7 +37,7 @@ void Scene::onEvent(IEvent& e) {
 }
 
 bool Scene::onUpdate(const UpdateEvent& e) {
-    m_time += e.m_deltaTime;
+    m_currentTime += e.m_deltaTime;
     m_systems.physics->update(e.m_deltaTime);
 
     return false;

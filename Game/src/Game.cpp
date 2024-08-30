@@ -3,7 +3,7 @@
 #include "Scenes.h"
 
 void Game::setup() {
-    //auto scene = loadLabyrinthScene();
+    Ref<Scene> scene = loadLabyrinthScene();
 
-    LAB_APP.setScene(labeeri::Scenes::showcase());
+    LAB_APP.setScene(scene);
 }

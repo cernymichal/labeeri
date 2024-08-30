@@ -20,7 +20,7 @@ public:
 
     virtual void setClearColor(const vec4& color) override;
 
-    virtual void beginScene(f64 time, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix,
+    virtual void beginScene(f64 currentTime, const vec3& cameraPosition, const mat4& viewMatrix, const mat4& projectionMatrix,
                             const RenderSceneParameters& parameters = RenderSceneParameters()) override;
 
     virtual void endOpaque() override;
@@ -91,15 +91,22 @@ public:
 
     virtual void submitLight(const RendererSpotLight& light) override;
 
+    virtual f32 getPreviousFrameGPUTime() const override {
+        return (f32)m_lastFrameGPUTime / 1000 / 1000;
+    }
+
 private:
     Ref<MeshResource> m_screenQuad;
     Ref<ShaderResource> m_postprocessShader;
     Ref<ShaderResource> m_skyboxShader;
 
+    u64 m_lastFrameGPUTime = 0;  // nanoseconds
+    LAB_GL_HANDLE m_frameGPUTimeQuery;
+
     Ref<Framebuffer> m_currentFramebuffer;
     Ref<ShaderResource> m_currentShaderProgram;
     Ref<MeshResource> m_currentMesh;
-    f64 m_time = 0.0;
+    f64 m_currentTime = 0.0;
     vec3 m_cameraPosition = vec3(0.0f);
     struct Matrices {
         mat4 view = mat4(1.0);

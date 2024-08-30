@@ -112,6 +112,13 @@ public:
         return m_closed;
     }
 
+    /**
+     * @return Previous frame real time in ms.
+     */
+    f32 getPreviousFrameTime() const {
+        return m_previousFrameTime;
+    }
+
 private:
     bool m_closed = false;
     ApplicationFocus m_focus = ApplicationFocus::UI;
@@ -119,6 +126,7 @@ private:
     ImGuiLayer* m_imGuiLayer = nullptr;
     ViewportLayer* m_viewportLayer = nullptr;
     SceneLayer* m_sceneLayer = nullptr;
+    f32 m_previousFrameTime = 0;  // ms
 
     /**
      * @brief Construct a new Application object. The rendrerer and window abstractions are initialized here.

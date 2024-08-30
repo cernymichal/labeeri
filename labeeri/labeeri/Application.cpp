@@ -88,6 +88,8 @@ void Application::run() {
     f64 previousUpdateTime = LAB_WINDOW->currentTime();
     f64 fixedUpdateTimeAccumulator = 0;
     while (!LAB_WINDOW->shouldClose()) {
+        auto frameStartTime = std::chrono::high_resolution_clock::now();
+
         LAB_WINDOW->pollEvents();
 
         f64 currentTime = LAB_WINDOW->currentTime();
@@ -114,6 +116,9 @@ void Application::run() {
         // emit render
         ApplicationRenderEvent renderEvent;
         emitEvent(renderEvent);
+
+        auto frameEndTime = std::chrono::high_resolution_clock::now();
+        m_previousFrameTime = std::chrono::duration_cast<std::chrono::microseconds>(frameEndTime - frameStartTime).count() / 1000.0f;
     }
 
     m_closed = true;
