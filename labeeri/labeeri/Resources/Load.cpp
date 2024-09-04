@@ -18,7 +18,7 @@
 
 namespace labeeri {
 
-static std::string loadSingleShader(const std::string& path) {
+static std::string loadSingleShader(const std::filesystem::path& path) {
     std::ifstream file(path, std::ios::in | std::ios::binary);
     std::stringstream contentBuffer;
 
@@ -32,19 +32,27 @@ static std::string loadSingleShader(const std::string& path) {
 }
 
 Ref<ShaderResource> loadShader(const std::filesystem::path& path) {
-    LAB_LOGH3("Loading shader program " << path);
+    auto resourcePath = path;
+    resourcePath.replace_extension("vert");
+    resourcePath = locateResourceFile(resourcePath);
+    if (resourcePath.empty()) {
+        LAB_LOG("Shader file not found: " << path);
+        return nullptr;
+    }
+
+    LAB_LOGH3("Loading shader program " << resourcePath.replace_extension(""));
     std::vector<std::pair<ShaderType, const char*>> shaders;
     shaders.reserve(3);
 
-    auto vertexPath = path.string() + ".vert";
+    auto vertexPath = resourcePath.replace_extension("vert");
     std::string vertexShaderSource = loadSingleShader(vertexPath);
     shaders.emplace_back(ShaderType::Vertex, vertexShaderSource.c_str());
 
-    auto fragmentPath = path.string() + ".frag";
+    auto fragmentPath = resourcePath.replace_extension("frag");
     std::string fragmentShaderSource = loadSingleShader(fragmentPath);
     shaders.emplace_back(ShaderType::Fragment, fragmentShaderSource.c_str());
 
-    auto geometryPath = path.string() + ".geom";
+    auto geometryPath = resourcePath.replace_extension("geom");
     std::string geometryShaderSource;
     if (std::filesystem::exists(geometryPath)) {
         geometryShaderSource = loadSingleShader(geometryPath);
@@ -57,18 +65,24 @@ Ref<ShaderResource> loadShader(const std::filesystem::path& path) {
 }
 
 Ref<MeshResource> loadMesh(const std::filesystem::path& filePath) {
-    LAB_LOGH3("Loading mesh " << filePath);
+    auto resourcePath = locateResourceFile(filePath);
+    if (resourcePath.empty()) {
+        LAB_LOG("Mesh file not found: " << filePath);
+        return nullptr;
+    }
+
+    LAB_LOGH3("Loading mesh " << resourcePath);
 
     Assimp::Importer importer;
 
     // normalize size
     // importer.SetPropertyInteger(AI_CONFIG_PP_PTV_NORMALIZE, 1);
 
-    const aiScene* scene = importer.ReadFile(filePath.string(), aiProcess_Triangulate                 // Triangulate polygons (if any).
-                                                                    | aiProcess_PreTransformVertices  // Transforms scene hierarchy into one root with geometry-leafs only. For more see Doc.
-                                                                    | aiProcess_GenSmoothNormals      // Calculate normals per vertex.
-                                                                    | aiProcess_CalcTangentSpace      // Calculate tangents per vertex.
-                                                                    | aiProcess_JoinIdenticalVertices);
+    const aiScene* scene = importer.ReadFile(resourcePath.string(), aiProcess_Triangulate                 // Triangulate polygons (if any).
+                                                                        | aiProcess_PreTransformVertices  // Transforms scene hierarchy into one root with geometry-leafs only. For more see Doc.
+                                                                        | aiProcess_GenSmoothNormals      // Calculate normals per vertex.
+                                                                        | aiProcess_CalcTangentSpace      // Calculate tangents per vertex.
+                                                                        | aiProcess_JoinIdenticalVertices);
 
     if (scene == nullptr) {
         LAB_LOG("assimp error: " << importer.GetErrorString());
@@ -269,12 +283,18 @@ struct EXRImageResource : ImageResource {
 };
 
 static Ref<ImageResource> loadImage(const std::filesystem::path& filePath, bool gammaCorrected, bool flip = true) {
-    LAB_LOGH3("Loading image " << filePath);
+    auto resourcePath = locateResourceFile(filePath);
+    if (resourcePath.empty()) {
+        LAB_LOG("Image file not found: " << filePath);
+        return nullptr;
+    }
 
-    if (filePath.extension() == ".exr")
-        return makeScoped<EXRImageResource>(filePath, gammaCorrected, flip);
+    LAB_LOGH3("Loading image " << resourcePath);
 
-    return makeScoped<STBImageResource>(filePath, gammaCorrected, flip);
+    if (resourcePath.extension() == ".exr")
+        return makeScoped<EXRImageResource>(resourcePath, gammaCorrected, flip);
+
+    return makeScoped<STBImageResource>(resourcePath, gammaCorrected, flip);
 }
 
 Ref<TextureResource> loadTexture(const std::filesystem::path& filePath, bool gammaCorrected, TextureType type) {
@@ -285,22 +305,28 @@ Ref<TextureResource> loadTexture(const std::filesystem::path& filePath, bool gam
 }
 
 Ref<TextureResource> loadCubemap(const std::filesystem::path& path, bool gammaCorrected) {
+    auto cubemapDir = locateResourceFile(path);
+    if (cubemapDir.empty()) {
+        LAB_LOG("Cubemap folder not found: " << path);
+        return nullptr;
+    }
+
     std::array<Ref<ImageResource>, 6> images;
 
     std::string extension;
-    for (const auto& entry : std::filesystem::directory_iterator(path)) {
+    for (const auto& entry : std::filesystem::directory_iterator(cubemapDir)) {
         if (!entry.is_directory() && entry.path().stem() == "px") {
             extension = entry.path().extension().string();
             break;
         }
     }
 
-    images[0] = loadImage((path / ("px" + extension)), gammaCorrected, false);
-    images[1] = loadImage((path / ("nx" + extension)), gammaCorrected, false);
-    images[2] = loadImage((path / ("py" + extension)), gammaCorrected, false);
-    images[3] = loadImage((path / ("ny" + extension)), gammaCorrected, false);
-    images[4] = loadImage((path / ("pz" + extension)), gammaCorrected, false);
-    images[5] = loadImage((path / ("nz" + extension)), gammaCorrected, false);
+    images[0] = loadImage((cubemapDir / ("px" + extension)), gammaCorrected, false);
+    images[1] = loadImage((cubemapDir / ("nx" + extension)), gammaCorrected, false);
+    images[2] = loadImage((cubemapDir / ("py" + extension)), gammaCorrected, false);
+    images[3] = loadImage((cubemapDir / ("ny" + extension)), gammaCorrected, false);
+    images[4] = loadImage((cubemapDir / ("pz" + extension)), gammaCorrected, false);
+    images[5] = loadImage((cubemapDir / ("nz" + extension)), gammaCorrected, false);
 
     auto texture = LAB_RENDERER->createCubemap(images);
 

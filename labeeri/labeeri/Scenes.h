@@ -6,9 +6,8 @@ namespace labeeri {
 
 namespace Scenes {
 
-/**
- * @brief Showcase scene.
- */
+void loadDefaultResources();
+
 Ref<Scene> showcase();
 
 }  // namespace Scenes

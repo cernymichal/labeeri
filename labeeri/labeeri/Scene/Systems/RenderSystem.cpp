@@ -11,7 +11,7 @@ namespace labeeri {
 static void drawModel(const Ref<ModelResource>& model, const mat4& modelMatrix) {
     auto& shader = model->m_material->m_shader;
     if (!shader)
-        shader = Resources<ShaderResource>::Get("flat");
+        shader = Resources<ShaderResource>::Get("shaders/flat");
 
     LAB_RENDERER->useShaderProgram(shader);
     LAB_RENDERER->bindMesh(model->m_mesh);
@@ -51,7 +51,7 @@ void RenderSystem::drawTransparent() const {
 }
 
 void RenderSystem::drawIds() const {
-    LAB_RENDERER->useShaderProgram(Resources<ShaderResource>::Get("id"));
+    LAB_RENDERER->useShaderProgram(Resources<ShaderResource>::Get("shaders/id"));
 
     for (Entity entity : entities()) {
         auto transform = entity.getComponent<Transform>();

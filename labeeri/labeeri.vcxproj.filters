@@ -210,10 +210,10 @@
     <ClInclude Include="labeeri\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="labeeri\Scenes.h">
+    <ClInclude Include="labeeri\Utils\imgui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="labeeri\Utils\imgui.h">
+    <ClInclude Include="labeeri\Scenes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -243,9 +243,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="labeeri\Resources\MaterialResource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="labeeri\Resources\Resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="labeeri\Scene\ECS\Entity.cpp">

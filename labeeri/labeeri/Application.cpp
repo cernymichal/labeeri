@@ -2,6 +2,8 @@
 
 #include "Events/ApplicationEvent.h"
 #include "Renderer/GLRenderer.h"
+#include "Resources/Load.h"
+#include "Resources/Resources.h"
 #include "Window/GLFWWindow.h"
 #include "WindowLayer/ImGuiLayer.h"
 #include "WindowLayer/SceneLayer.h"

@@ -578,7 +578,7 @@ MeshResource GLRenderer::createMesh(const vec3* vertices, u32 vertexCount,
 
     LAB_LOG("Uploaded " << faceCount << " faces");
 
-    auto& shader = Resources<ShaderResource>::Get("phong");
+    auto& shader = Resources<ShaderResource>::Get("shaders/phong");
     if (!shader)
         throw std::runtime_error("No phong shader for default attribute positions");
 
@@ -754,8 +754,8 @@ void GLRenderer::submitLight(const RendererSpotLight& light) {
 
 void GLRenderer::initialize() {
     m_screenQuad = makeRef<MeshResource>(createScreenQuad());
-    m_skyboxShader = Resources<ShaderResource>::Get("skybox");
-    m_postprocessShader = Resources<ShaderResource>::Get("postprocess");
+    m_skyboxShader = Resources<ShaderResource>::Get("shaders/skybox");
+    m_postprocessShader = Resources<ShaderResource>::Get("shaders/postprocess");
 }
 
 void GLRenderer::bindDirectionalLights() {

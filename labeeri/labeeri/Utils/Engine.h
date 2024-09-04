@@ -53,8 +53,4 @@ inline constexpr u32 MAX_DIRECTIONAL_LIGHTS = 1;
 inline constexpr u32 MAX_POINT_LIGHTS = 16;
 inline constexpr u32 MAX_SPOT_LIGHTS = 4;
 
-inline constexpr auto DEFAULT_SHADER_DIRECTORY = "resources/labeeri/shaders";
-inline constexpr auto DEFAULT_MESH_DIRECTORY = "resources/labeeri/models";
-inline constexpr auto DEFAULT_TEXTURE_DIRECTORY = "resources/labeeri/textures";
-
 }  // namespace labeeri

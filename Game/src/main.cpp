@@ -7,6 +7,9 @@ __declspec(dllexport) i32 AmdPowerXpressRequestHighPerformance = 1;  // AMD
 }
 
 i32 main(i32 argc, char** argv) {
+    RESOURCES_FOLDER = "./resources/";
+    ENGINE_RESOURCES_FOLDER = LAB_ENGINE_RESOURCES_FOLDER;
+
     LAB_APP.initialize();
 
     // while (!LAB_APP.closed()) {

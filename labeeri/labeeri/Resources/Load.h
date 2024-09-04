@@ -6,6 +6,25 @@
 
 namespace labeeri {
 
+inline std::filesystem::path RESOURCES_FOLDER = "./resources/";
+inline std::filesystem::path ENGINE_RESOURCES_FOLDER = "./resources/";
+
+inline std::filesystem::path locateResourceFile(const std::filesystem::path& path) {
+    auto engineResourcesPath = ENGINE_RESOURCES_FOLDER / path;
+
+    if (std::filesystem::exists(engineResourcesPath))
+        return engineResourcesPath;
+
+    auto resourcesPath = RESOURCES_FOLDER / path;
+    if (std::filesystem::exists(resourcesPath))
+        return resourcesPath;
+
+    if (std::filesystem::exists(path))
+        return path;
+
+    return std::filesystem::path();  // empty path
+}
+
 /**
  * @brief Load a shader program from a file.
  *

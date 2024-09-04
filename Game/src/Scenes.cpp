@@ -1,4 +1,4 @@
-#include "scenes.h"
+#include "Scenes.h"
 
 #include "Resources/Materials.h"
 #include "Resources/Prefabs.h"
@@ -14,6 +14,8 @@
 Ref<Scene> loadLabyrinthScene() {
     auto scene = makeRef<Scene>();
     LAB_APP.setScene(scene);
+
+    Scenes::loadDefaultResources();
 
     Entity player;
     std::vector<Entity> cameras;
@@ -56,7 +58,7 @@ Ref<Scene> loadLabyrinthScene() {
     }
 
     {  // Water
-        Resources<ModelResource>::Set("water") = makeRef<ModelResource>(makeRef<WaterMaterial>(WaterMaterial()), Resources<MeshResource>::Get("resources/Game/models/water_plane.obj"));
+        Resources<ModelResource>::Set("water") = makeRef<ModelResource>(makeRef<WaterMaterial>(WaterMaterial()), Resources<MeshResource>::Get("models/water_plane.obj"));
 
         i32 axisCount = 2;
         f32 tileSize = 25.0f;
@@ -75,9 +77,9 @@ Ref<Scene> loadLabyrinthScene() {
 
     {  // Sphere system
         auto sphereAMaterial = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
-        sphereAMaterial->m_diffuseMap = Resources<TextureResource>::Get("resources/Game/textures/slab_tiles/diffuse.png");
+        sphereAMaterial->m_diffuseMap = Resources<TextureResource>::Get("textures/slab_tiles/diffuse.png");
         sphereAMaterial->m_specular = vec3(0.4f);
-        sphereAMaterial->m_normalMap = Resources<TextureResource>::Get("resources/Game/textures/slab_tiles/normal.hdr");
+        sphereAMaterial->m_normalMap = Resources<TextureResource>::Get("textures/slab_tiles/normal.hdr");
 
         auto sphereBMaterial = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
         sphereBMaterial->m_diffuse = vec3(1.0f);
@@ -111,7 +113,7 @@ Ref<Scene> loadLabyrinthScene() {
         transformPlane->setPosition(vec3(0.6f, 1.5f, 0.12f));
         transformPlane->setRotation(vec3(glm::radians(90.0f), 0.0f, 0.0f));
         transformPlane->setParent(sphereB);
-        plane.addComponent<Model>(Model(makeRef<ModelResource>(makeRef<FlareMaterial>(), Resources<MeshResource>::Get("plane.obj"))), scene->ecs());
+        plane.addComponent<Model>(Model(makeRef<ModelResource>(makeRef<FlareMaterial>(), Resources<MeshResource>::Get("models/plane.obj"))), scene->ecs());
 
         auto sphereCHolder = Entity::Create(scene->ecs());
         auto transformCHolder = sphereCHolder.getComponent<Transform>(scene->ecs());
@@ -164,7 +166,7 @@ Ref<Scene> loadLabyrinthScene() {
         auto transform = entity.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(10.0f, 0.8f, 0.0f));
         transform->setScale(vec3(1.2f));
-        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("bunny.obj"))), scene->ecs());
+        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("models/bunny.obj"))), scene->ecs());
     }
 
     {  // Dragon
@@ -178,12 +180,12 @@ Ref<Scene> loadLabyrinthScene() {
         auto transform = entity.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(-10.0f, 1.2f, 0.0f));
         transform->setScale(vec3(1.2f));
-        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("xyzrgb_dragon.obj"))), scene->ecs());
+        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("models/xyzrgb_dragon.obj"))), scene->ecs());
     }
 
     {  // Maxwell
         auto material = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
-        material->m_diffuseMap = Resources<TextureResource>::Get("maxwell.jpg");
+        material->m_diffuseMap = Resources<TextureResource>::Get("textures/maxwell.jpg");
         material->m_specular = vec3(0.0f);
 
         auto entity = Entity::Create(scene->ecs());
@@ -192,7 +194,7 @@ Ref<Scene> loadLabyrinthScene() {
         transform->setPosition(vec3(0.0f, 0.8f, 10.0f));
         transform->rotate(vec3(0.0f, glm::radians(110.0f), 0.0f));
         transform->setScale(vec3(1.0f));
-        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("maxwell.obj"))), scene->ecs());
+        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("models/maxwell.obj"))), scene->ecs());
 
         scene->addScript<MaxwellInteraction>(entity);
     }
@@ -208,7 +210,7 @@ Ref<Scene> loadLabyrinthScene() {
         auto transform = entity.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(0.0f, 1.3f, -10.0f));
         transform->setScale(vec3(1.0f));
-        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/Game/models/ball.obj"))), scene->ecs());
+        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("models/ball.obj"))), scene->ecs());
     }
 
     {  // Dynamic ball
@@ -216,14 +218,14 @@ Ref<Scene> loadLabyrinthScene() {
         material->m_diffuse = vec3(1.0f);
         material->m_specular = vec3(0.6f);
         material->m_metallic = 0.1f;
-        material->m_metallicMap = Resources<TextureResource>::Get("checkerboard_lin.png");
+        material->m_metallicMap = Resources<TextureResource>::Get("textures/checkerboard_lin.png");
 
         auto entity = Entity::Create(scene->ecs());
 
         auto transform = entity.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(10.0f, 1.3f, 10.0f));
         transform->setScale(vec3(1.0f));
-        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/Game/models/dynamic_ball.obj"))), scene->ecs());
+        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("models/dynamic_ball.obj"))), scene->ecs());
     }
 
     {  // Head
@@ -238,7 +240,7 @@ Ref<Scene> loadLabyrinthScene() {
         auto transform = entity.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(10.0f, 1.2f, -10.0f));
         transform->setScale(vec3(2.0f));
-        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/Game/models/head.obj"))), scene->ecs());
+        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("models/head.obj"))), scene->ecs());
 
         scene->addScript<BloodyFaceInteraction>(entity);
     }
@@ -254,7 +256,7 @@ Ref<Scene> loadLabyrinthScene() {
         auto transform = entity.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(0.0f, 1.3f, -20.0f));
         transform->setScale(vec3(1.0f));
-        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("resources/Game/models/knot.obj"))), scene->ecs());
+        auto model = entity.addComponent<Model>(Model(makeRef<ModelResource>(material, Resources<MeshResource>::Get("models/knot.obj"))), scene->ecs());
     }
 
     {  // Knot view
@@ -271,7 +273,7 @@ Ref<Scene> loadLabyrinthScene() {
 
     scene->addScript<CameraSwitcher>(player, cameras);
 
-    scene->m_renderParameters.skybox = loadCubemap("resources/Game/textures/cubemaps/dikhololo_night");
+    scene->m_renderParameters.skybox = loadCubemap("textures/cubemaps/dikhololo_night");
     scene->m_renderParameters.fog.color = vec3(0.08f, 0.07f, 0.06f);
     scene->m_renderParameters.fog.density = 0.07f;
     scene->m_renderParameters.postprocessing.exposure = 0.6f;

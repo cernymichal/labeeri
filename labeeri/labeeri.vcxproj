@@ -290,7 +290,6 @@
     <ClCompile Include="labeeri\Renderer\TextureResource.cpp" />
     <ClCompile Include="labeeri\Resources\Load.cpp" />
     <ClCompile Include="labeeri\Resources\MaterialResource.cpp" />
-    <ClCompile Include="labeeri\Resources\Resources.cpp" />
     <ClCompile Include="labeeri\Resources\Scripts\FlycamController.cpp" />
     <ClCompile Include="labeeri\Resources\Scripts\PlayerController.cpp" />
     <ClCompile Include="labeeri\Scenes.cpp" />

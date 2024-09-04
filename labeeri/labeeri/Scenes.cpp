@@ -2,21 +2,38 @@
 
 #include "Application.h"
 #include "Entities.h"
+#include "Resources/Load.h"
 #include "Resources/Resources.h"
 #include "Scene/Components/Components.h"
 
 namespace labeeri {
 
+void Scenes::loadDefaultResources() {
+    Resources<MaterialResource>::Set("flatWhite") = makeRef<FlatMaterialResource>(Resources<ShaderResource>::Get("shaders/flat"), vec3(1.0f));
+    Resources<MaterialResource>::Set("gray") = makeRef<ShadedMaterialResource>(Resources<ShaderResource>::Get("shaders/phong"), vec3(0.7f));
+    Resources<MaterialResource>::Set("UVTest") = makeRef<FlatMaterialResource>(Resources<ShaderResource>::Get("shaders/flat"), Resources<TextureResource>::Get("textures/uv_test.png"));
+
+    Resources<ModelResource>::Set("whiteCube") = makeRef<ModelResource>(Resources<MaterialResource>::Get("flatWhite"), Resources<MeshResource>::Get("models/cube.obj"));
+    Resources<ModelResource>::Set("whiteSphere") = makeRef<ModelResource>(Resources<MaterialResource>::Get("flatWhite"), Resources<MeshResource>::Get("models/sphere.obj"));
+    Resources<ModelResource>::Set("whiteCone") = makeRef<ModelResource>(Resources<MaterialResource>::Get("flatWhite"), Resources<MeshResource>::Get("models/cone.obj"));
+    Resources<ModelResource>::Set("basicCube") = makeRef<ModelResource>(Resources<MaterialResource>::Get("gray"), Resources<MeshResource>::Get("models/cube.obj"));
+    Resources<ModelResource>::Set("basicSphere") = makeRef<ModelResource>(Resources<MaterialResource>::Get("gray"), Resources<MeshResource>::Get("models/sphere.obj"));
+    Resources<ModelResource>::Set("basicPlane") = makeRef<ModelResource>(Resources<MaterialResource>::Get("gray"), Resources<MeshResource>::Get("models/plane.obj"));
+    Resources<ModelResource>::Set("basicCone") = makeRef<ModelResource>(Resources<MaterialResource>::Get("gray"), Resources<MeshResource>::Get("models/cone.obj"));
+}
+
 Ref<Scene> Scenes::showcase() {
+    loadDefaultResources();
+
     auto normalTestmaterial = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
-    normalTestmaterial->m_normalMap = Resources<TextureResource>::Get("normal_test.png");
+    normalTestmaterial->m_normalMap = Resources<TextureResource>::Get("textures/normal_test.png");
 
     auto brickWallMaterial = clone(normalTestmaterial);
-    brickWallMaterial->m_diffuseMap = Resources<TextureResource>::Get("brickwall.jpg");
-    brickWallMaterial->m_normalMap = Resources<TextureResource>::Get("brickwall_normal.jpg");
+    brickWallMaterial->m_diffuseMap = Resources<TextureResource>::Get("textures/brickwall.jpg");
+    brickWallMaterial->m_normalMap = Resources<TextureResource>::Get("textures/brickwall_normal.jpg");
 
     auto catMaterial = clone(normalTestmaterial);
-    catMaterial->m_diffuseMap = Resources<TextureResource>::Get("catguy.jpg");
+    catMaterial->m_diffuseMap = Resources<TextureResource>::Get("textures/catguy.jpg");
     catMaterial->m_normalMap = nullptr;
     catMaterial->m_specular = vec3(0.6f);
     catMaterial->m_shininess = 128.0;
@@ -28,7 +45,7 @@ Ref<Scene> Scenes::showcase() {
 
     auto perlinMaterial = cloneAs<ShadedMaterialResource>(Resources<MaterialResource>::Get("gray"));
     perlinMaterial->m_diffuse = vec3(0.8f, 1.0f, 0.8f);
-    perlinMaterial->m_metallicMap = Resources<TextureResource>::Get("checkerboard_lin.png");
+    perlinMaterial->m_metallicMap = Resources<TextureResource>::Get("textures/checkerboard_lin.png");
     perlinMaterial->m_shininess = 128.0;
 
     auto scene = makeRef<Scene>();
@@ -82,7 +99,7 @@ Ref<Scene> Scenes::showcase() {
         auto transform = teapot.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(2, 1, -1));
 
-        teapot.addComponent<Model>(Model(makeRef<ModelResource>(reflectiveMaterial, Resources<MeshResource>::Get("teapot.obj"))), scene->ecs());
+        teapot.addComponent<Model>(Model(makeRef<ModelResource>(reflectiveMaterial, Resources<MeshResource>::Get("models/teapot.obj"))), scene->ecs());
     }
 
     {  // Perlin metallic teapot
@@ -91,7 +108,7 @@ Ref<Scene> Scenes::showcase() {
         auto transform = teapot.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(-1.0f, 0.5f, 0.0f));
 
-        teapot.addComponent<Model>(Model(makeRef<ModelResource>(perlinMaterial, Resources<MeshResource>::Get("teapot.obj"))), scene->ecs());
+        teapot.addComponent<Model>(Model(makeRef<ModelResource>(perlinMaterial, Resources<MeshResource>::Get("models/teapot.obj"))), scene->ecs());
     }
 
     {  // Perlin metallic dragon
@@ -100,7 +117,7 @@ Ref<Scene> Scenes::showcase() {
         auto transform = dragon.getComponent<Transform>(scene->ecs());
         transform->setPosition(vec3(1.0f, 1.5f, 0.0f));
 
-        dragon.addComponent<Model>(Model(makeRef<ModelResource>(clone(reflectiveMaterial), Resources<MeshResource>::Get("xyzrgb_dragon.obj"))), scene->ecs());
+        dragon.addComponent<Model>(Model(makeRef<ModelResource>(clone(reflectiveMaterial), Resources<MeshResource>::Get("models/xyzrgb_dragon.obj"))), scene->ecs());
     }
 
     {  // Flycam
@@ -108,7 +125,7 @@ Ref<Scene> Scenes::showcase() {
         flycam.getComponent<Transform>(scene->ecs())->move(vec3(0.0, 2.5, 0.0));
     }
 
-    scene->m_renderParameters.skybox = Resources<TextureResource>::Get("syferfontein_18d");
+    scene->m_renderParameters.skybox = loadCubemap("textures/cubemaps/syferfontein_18d");
 
     return scene;
 }
